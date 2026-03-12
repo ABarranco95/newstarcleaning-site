@@ -65,7 +65,7 @@ function GoogleAdsForm() {
         submittedAt: new Date().toISOString(),
       };
 
-      const response = await fetch("REPLACE_WITH_GHL_WEBHOOK_URL", {
+      const response = await fetch("/api/google-ads-lead", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
