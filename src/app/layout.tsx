@@ -14,11 +14,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://newstarcleaning.com"),
   title: {
-    default: "New Star Cleaning | Professional House Cleaning in Fresno, CA",
+    default: "Fresno & Clovis House Cleaning | New Star Cleaning",
     template: "%s | New Star Cleaning",
   },
   description:
-    "Professional house cleaning services in Fresno, Clovis, and the Central Valley. Book online in 60 seconds. Vetted, insured cleaners. Satisfaction guaranteed.",
+    "Professional house cleaning services in Fresno, Clovis, Madera, and the Central Valley. Book online in 60 seconds for recurring, deep, and move-out cleaning.",
   keywords: [
     "house cleaning Fresno",
     "cleaning service Fresno CA",
@@ -28,28 +28,23 @@ export const metadata: Metadata = {
     "house cleaners near me",
     "professional cleaning Central Valley",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://newstarcleaning.com",
     siteName: "New Star Cleaning",
-    title: "New Star Cleaning | Professional House Cleaning in Fresno, CA",
+    title: "Fresno & Clovis House Cleaning | New Star Cleaning",
     description:
-      "Professional house cleaning services in Fresno, Clovis, and the Central Valley. Book online in 60 seconds.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "New Star Cleaning - Professional House Cleaning",
-      },
-    ],
+      "Book professional house cleaning in Fresno, Clovis, Madera, and the Central Valley in 60 seconds.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "New Star Cleaning | Professional House Cleaning in Fresno, CA",
+    title: "Fresno & Clovis House Cleaning | New Star Cleaning",
     description:
-      "Professional house cleaning services in Fresno, Clovis, and the Central Valley. Book online in 60 seconds.",
+      "Book professional house cleaning in Fresno, Clovis, Madera, and the Central Valley in 60 seconds.",
   },
   robots: {
     index: true,

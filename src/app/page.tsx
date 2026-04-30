@@ -1,4 +1,5 @@
 import Link from "next/link";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
 
 const faqItems = [
@@ -37,38 +38,55 @@ export default function Home() {
           <div className="absolute top-20 left-10 w-72 h-72 bg-accent rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-              A Spotless Home,{" "}
-              <span className="text-accent">Without the Stress</span>
-            </h1>
-            <p className="mt-6 text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl">
-              Professional house cleaning in Fresno, Clovis, and the Central
-              Valley. Book online in 60 seconds. Vetted, insured cleaners you
-              can trust.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/book-now"
-                className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-              >
-                Book Your Cleaning
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="max-w-3xl">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/15">
+                <span className="text-accent">★</span>
+                Fresno & Central Valley house cleaning · same-week availability
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                A Spotless Home,{" "}
+                <span className="text-accent">Without the Stress</span>
+              </h1>
+              <p className="mt-6 text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl">
+                Professional house cleaning in Fresno, Clovis, and the Central
+                Valley. Get a fast quote or book online in 60 seconds. Vetted,
+                insured cleaners you can trust.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <a
+                  href="#quote"
+                  className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </Link>
+                  Get a Fast Quote
+                  <svg
+                    className="w-5 h-5 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </a>
+                <Link
+                  href="/book-now"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/25 px-8 py-4 text-lg font-bold text-white transition-all hover:bg-white/10"
+                >
+                  Book Online
+                </Link>
+              </div>
+              <div className="mt-6">
+                <TrustBadges />
+              </div>
             </div>
+
+            <QuickQuoteForm />
           </div>
 
           {/* Stats Bar */}
@@ -101,7 +119,7 @@ export default function Home() {
               Our Cleaning Services
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              From weekly maintenance to one-time deep cleans, we've got your
+              From weekly maintenance to one-time deep cleans, we&apos;ve got your
               home covered.
             </p>
           </div>
@@ -467,7 +485,7 @@ export default function Home() {
               Frequently Asked Questions
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Got questions? We've got answers.
+              Got questions? We&apos;ve got answers.
             </p>
           </div>
 

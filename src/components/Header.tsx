@@ -63,9 +63,21 @@ export default function Header() {
             >
               Service Areas
             </Link>
+            <a
+              href="tel:+15597852822"
+              className="text-gray-600 hover:text-primary font-semibold transition-colors"
+            >
+              Call (559) 785-2822
+            </a>
+            <Link
+              href="/#quote"
+              className="bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-md hover:shadow-lg"
+            >
+              Get Quote
+            </Link>
             <Link
               href="/book-now"
-              className="bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-md hover:shadow-lg"
+              className="bg-primary hover:bg-primary-light text-white font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-md hover:shadow-lg"
             >
               Book Now
             </Link>

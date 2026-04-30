@@ -7,11 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "madera")!;
 export const metadata: Metadata = {
   title: "House Cleaning Services in Madera, CA",
   description:
-    "Professional house cleaning in Madera, CA. Standard recurring, deep cleaning, and move-in/move-out services. Vetted, insured cleaners. Book online in 60 seconds.",
+    "Professional house cleaning in Madera, CA and the Central Valley. Standard recurring, deep, and move-in/move-out cleaning from vetted, insured cleaners.",
+  alternates: {
+    canonical: "/cleaning-services-madera",
+  },
   openGraph: {
     title: "House Cleaning Services in Madera, CA | New Star Cleaning",
     description:
-      "Professional house cleaning in Madera, CA. Book online in 60 seconds. Satisfaction guaranteed.",
+      "Local Central Valley house cleaning in Madera, CA. Book vetted, insured cleaners online in 60 seconds.",
     url: "https://newstarcleaning.com/cleaning-services-madera",
   },
 };

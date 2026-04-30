@@ -7,11 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "sanger")!;
 export const metadata: Metadata = {
   title: "House Cleaning Services in Sanger, CA",
   description:
-    "Professional house cleaning in Sanger, CA. Standard recurring, deep cleaning, and move-in/move-out services. Vetted, insured cleaners. Book online in 60 seconds.",
+    "Professional house cleaning in Sanger, CA and the Central Valley. Standard recurring, deep, and move-in/move-out cleaning from vetted, insured cleaners.",
+  alternates: {
+    canonical: "/cleaning-services-sanger",
+  },
   openGraph: {
     title: "House Cleaning Services in Sanger, CA | New Star Cleaning",
     description:
-      "Professional house cleaning in Sanger, CA. Book online in 60 seconds. Satisfaction guaranteed.",
+      "Local Central Valley house cleaning in Sanger, CA. Book vetted, insured cleaners online in 60 seconds.",
     url: "https://newstarcleaning.com/cleaning-services-sanger",
   },
 };

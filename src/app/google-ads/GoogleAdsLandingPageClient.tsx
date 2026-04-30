@@ -62,6 +62,7 @@ function GoogleAdsForm() {
       const payload = {
         ...formData,
         ...utmParams,
+        page: window.location.pathname,
         submittedAt: new Date().toISOString(),
       };
 
@@ -76,10 +77,15 @@ function GoogleAdsForm() {
       if (response.ok) {
         setIsSuccess(true);
       } else {
-        throw new Error("Failed to submit form");
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.details?.[0] || data?.error || "Failed to submit form");
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again or call us directly.");
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Something went wrong. Please try again or call us directly."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -104,11 +110,11 @@ function GoogleAdsForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-          <input type="text" id="name" name="name" required value={formData.name} onChange={handleChange} placeholder="John Smith" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
+          <input type="text" id="name" name="name" required minLength={2} value={formData.name} onChange={handleChange} placeholder="John Smith" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
         </div>
         <div>
           <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-          <input type="tel" id="phone" name="phone" required value={formData.phone} onChange={handleChange} placeholder="(559) 123-4567" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
+          <input type="tel" id="phone" name="phone" required minLength={10} value={formData.phone} onChange={handleChange} placeholder="(559) 123-4567" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
         </div>
       </div>
 

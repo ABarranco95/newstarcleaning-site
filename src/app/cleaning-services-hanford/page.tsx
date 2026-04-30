@@ -7,11 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "hanford")!;
 export const metadata: Metadata = {
   title: "House Cleaning Services in Hanford, CA",
   description:
-    "Professional house cleaning in Hanford, CA. Standard recurring, deep cleaning, and move-in/move-out services. Vetted, insured cleaners. Book online in 60 seconds.",
+    "Professional house cleaning in Hanford, CA and the Central Valley. Standard recurring, deep, and move-in/move-out cleaning from vetted, insured cleaners.",
+  alternates: {
+    canonical: "/cleaning-services-hanford",
+  },
   openGraph: {
     title: "House Cleaning Services in Hanford, CA | New Star Cleaning",
     description:
-      "Professional house cleaning in Hanford, CA. Book online in 60 seconds. Satisfaction guaranteed.",
+      "Local Central Valley house cleaning in Hanford, CA. Book vetted, insured cleaners online in 60 seconds.",
     url: "https://newstarcleaning.com/cleaning-services-hanford",
   },
 };

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
 import type { ServiceArea } from "@/lib/serviceAreas";
 
@@ -6,37 +7,53 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary to-primary-light py-16 lg:py-24">
+      <section className="bg-gradient-to-br from-primary to-primary-light py-14 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm text-white/80 mb-6">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {area.county} · {area.population} residents
-            </div>
-            <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-              Professional House Cleaning in{" "}
-              <span className="text-accent">{area.name}, CA</span>
-            </h1>
-            <p className="mt-6 text-lg text-white/80 leading-relaxed">
-              {area.description}
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/book-now"
-                className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl"
-              >
-                Book {area.name} Cleaning
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm text-white/80 mb-6">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-              </Link>
+                {area.county} · {area.population} residents
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
+                Professional House Cleaning in{" "}
+                <span className="text-accent">{area.name}, CA</span>
+              </h1>
+              <p className="mt-6 text-lg text-white/80 leading-relaxed">
+                {area.description}
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <a
+                  href="#quote"
+                  className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl"
+                >
+                  Get a {area.name} Quote
+                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
+                <Link
+                  href="/book-now"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/25 px-8 py-4 text-lg font-bold text-white transition-all hover:bg-white/10"
+                >
+                  Book Online
+                </Link>
+              </div>
+              <div className="mt-8">
+                <TrustBadges />
+              </div>
             </div>
-            <div className="mt-8">
-              <TrustBadges />
-            </div>
+
+            <QuickQuoteForm
+              title={`Get a ${area.name} Cleaning Quote`}
+              subtitle={`Tell us what you need in ${area.name}. We will follow up quickly with availability, pricing, and the best next step.`}
+              defaultCity={area.name}
+              source={`organic_${area.slug}_service_area`}
+              compact
+            />
           </div>
         </div>
       </section>

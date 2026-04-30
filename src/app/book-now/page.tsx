@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import TrustBadges from "@/components/TrustBadges";
 
+const APEX_CRM_BASE_URL = (
+  process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL ||
+  "https://apex-crm-abarranco95-s-team.vercel.app"
+).replace(/\/$/, "");
+const APEX_BOOKING_URL = `${APEX_CRM_BASE_URL}/book`;
+
 export const metadata: Metadata = {
   title: "Book Your Cleaning",
   description:
@@ -22,7 +28,7 @@ export default function BookNow() {
             Book Your Cleaning
           </h1>
           <p className="mt-3 text-lg text-white/80">
-            Choose your service, pick a date, and you're all set. It takes less
+            Choose your service, pick a date, and you&apos;re all set. It takes less
             than 60 seconds.
           </p>
           <div className="mt-6">
@@ -33,10 +39,10 @@ export default function BookNow() {
 
       <section className="py-12 lg:py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Booking Koala Embed */}
+          {/* Apex CRM Booking Embed */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
             <iframe
-              src="https://newstarcleaning.bookingkoala.com"
+              src={APEX_BOOKING_URL}
               className="w-full border-0"
               style={{ minHeight: "800px", height: "100vh", maxHeight: "1200px" }}
               title="Book a Cleaning with New Star Cleaning"
@@ -51,7 +57,7 @@ export default function BookNow() {
               Having trouble with the booking form above?
             </p>
             <a
-              href="https://newstarcleaning.bookingkoala.com"
+              href={APEX_BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl"
