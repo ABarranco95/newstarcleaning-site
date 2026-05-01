@@ -43,44 +43,45 @@ export default function BookNow() {
 
       <section className="py-12 lg:py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Apex CRM Booking Embed */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <iframe
-              src={APEX_BOOKING_URL}
-              className="w-full border-0"
-              style={{ minHeight: "800px", height: "100vh", maxHeight: "1200px" }}
-              title="Book a Cleaning with New Star Cleaning"
-              loading="lazy"
-              allow="payment"
-            />
-          </div>
-
-          {/* Fallback CTA */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-500 text-sm mb-4">
-              Having trouble with the booking form above?
-            </p>
-            <a
-              href={APEX_BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl"
-            >
-              Open Booking Page
-              <svg
-                className="w-5 h-5 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="px-6 py-10 text-center sm:px-10 lg:px-14">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-accent">
+                Secure booking portal
+              </p>
+              <h2 className="mt-4 text-2xl font-bold text-gray-950 sm:text-3xl">
+                Continue to New Star&apos;s booking page
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-gray-600">
+                Our scheduling portal opens in a new tab so your quote and
+                payment details stay inside the secure booking experience.
+              </p>
+              <a
+                href={APEX_BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-accent px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-accent-hover hover:shadow-xl sm:w-auto"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
+                Start my booking
+                <svg
+                  className="ml-2 h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </a>
+              <p className="mt-4 text-sm text-gray-500">
+                Prefer to talk first? Call or text us and we&apos;ll help set up the
+                right clean.
+              </p>
+            </div>
           </div>
 
           {/* SMS Consent Notice */}
