@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -253,9 +254,9 @@ export default function TermsOfService() {
                 <p className="text-gray-600 text-sm">
                   Your phone number and personal information collected through
                   our SMS program are subject to our{" "}
-                  <a href="/privacy" className="text-primary underline">
+                  <Link href="/privacy" className="text-primary underline">
                     Privacy Policy
-                  </a>
+                  </Link>
                   . We do not sell, rent, or share your phone number or opt-in
                   information with any third parties for marketing purposes.
                 </p>

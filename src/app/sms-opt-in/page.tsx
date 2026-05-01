@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import SmsOptInForm from "./SmsOptInForm";
 
 export const metadata: Metadata = {
@@ -57,13 +58,13 @@ export default function SmsOptIn() {
                   (559) 785-2822
                 </a>
                 . See our{" "}
-                <a href="/privacy" className="text-primary underline">
+                <Link href="/privacy" className="text-primary underline">
                   Privacy Policy
-                </a>{" "}
+                </Link>{" "}
                 and{" "}
-                <a href="/terms" className="text-primary underline">
+                <Link href="/terms" className="text-primary underline">
                   Terms of Service
-                </a>{" "}
+                </Link>{" "}
                 for more details.
               </p>
             </div>

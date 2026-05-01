@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
 
 const APEX_CRM_BASE_URL = (
@@ -90,13 +91,13 @@ export default function BookNow() {
               including confirmations, reminders, and follow-ups. Message and
               data rates may apply. Message frequency varies. Reply STOP to opt
               out at any time. Reply HELP for assistance. View our{" "}
-              <a href="/privacy" className="text-primary underline">
+              <Link href="/privacy" className="text-primary underline">
                 Privacy Policy
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="/terms" className="text-primary underline">
+              <Link href="/terms" className="text-primary underline">
                 Terms of Service
-              </a>
+              </Link>
               .
             </p>
           </div>

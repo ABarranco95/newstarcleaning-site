@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 type FormState = {
@@ -173,13 +174,13 @@ export default function SmsOptInForm() {
             Message and data rates may apply. Consent is not a condition of
             purchase. Reply <strong>STOP</strong> to opt out at any time. Reply{" "}
             <strong>HELP</strong> for assistance. View our{" "}
-            <a href="/privacy" className="text-primary underline font-semibold">
+            <Link href="/privacy" className="text-primary underline font-semibold">
               Privacy Policy
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a href="/terms" className="text-primary underline font-semibold">
+            <Link href="/terms" className="text-primary underline font-semibold">
               Terms of Service
-            </a>
+            </Link>
             .
           </span>
         </label>
