@@ -8,13 +8,16 @@ const APEX_CRM_BASE_URL = (
 const APEX_BOOKING_URL = `${APEX_CRM_BASE_URL}/book`;
 
 export const metadata: Metadata = {
-  title: "Book Your Cleaning",
+  title: "Book Now — Schedule Your Cleaning Online",
   description:
-    "Book professional house cleaning in Fresno, CA in under 60 seconds. Choose your service, pick a date, and we'll handle the rest. Satisfaction guaranteed.",
+    "Serving Fresno, Clovis & Madera. Professional, background-checked cleaners. Book online in 60 seconds.",
+  alternates: {
+    canonical: "/book-now",
+  },
   openGraph: {
-    title: "Book Your Cleaning | New Star Cleaning",
+    title: "Book Now — Schedule Your Cleaning Online | New Star Cleaning",
     description:
-      "Book professional house cleaning in Fresno, CA in under 60 seconds.",
+      "Serving Fresno, Clovis & Madera. Professional, background-checked cleaners. Book online in 60 seconds.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
