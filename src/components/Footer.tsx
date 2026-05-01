@@ -15,18 +15,22 @@ const serviceAreas = [
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white pb-20 lg:pb-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+    <footer className="relative overflow-hidden bg-primary-dark text-white pb-20 lg:pb-0">
+      <div className="absolute inset-0 ns-mesh opacity-90" aria-hidden="true" />
+      <div className="absolute inset-0 ns-grid-bg opacity-30" aria-hidden="true" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12">
+          {/* Brand block */}
+          <div className="lg:col-span-4">
+            <div className="flex items-center gap-2.5">
+              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] ring-1 ring-white/15">
                 <svg
-                  className="w-6 h-6 text-accent"
+                  className="h-5 w-5 text-accent"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -36,96 +40,117 @@ export default function Footer() {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-bold">New Star Cleaning</span>
+              <span className="font-display text-2xl">New Star Cleaning</span>
             </div>
-            <p className="text-white/70 text-sm leading-relaxed">
-              Professional house cleaning services in Fresno, CA and the
-              surrounding Central Valley. Vetted, insured, and satisfaction
-              guaranteed.
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
+              Professional, vetted house cleaning across Fresno and the Central
+              Valley. Insured. Background-checked. Satisfaction guaranteed.
             </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/book-now"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
+              >
+                Book online
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+              <a
+                href="tel:+15597852822"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                (559) 785-2822
+              </a>
+            </div>
           </div>
 
           {/* Services */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Services</h3>
-            <ul className="space-y-2 text-white/70 text-sm">
+          <div className="lg:col-span-2">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Services
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">
-                  Standard Recurring Cleaning
+                <Link href="/#services" className="transition-colors hover:text-accent-light">
+                  Recurring cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">
-                  Deep Cleaning
+                <Link href="/#services" className="transition-colors hover:text-accent-light">
+                  Deep cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">
-                  Move-In/Move-Out Cleaning
+                <Link href="/#services" className="transition-colors hover:text-accent-light">
+                  Move-in / move-out
+                </Link>
+              </li>
+              <li>
+                <Link href="/book-now" className="transition-colors hover:text-accent-light">
+                  Book online
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Service Areas */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Service Areas</h3>
-            <ul className="space-y-2 text-white/70 text-sm">
+          {/* Service areas */}
+          <div className="lg:col-span-3">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Service areas
+            </h3>
+            <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-white/75">
               {serviceAreas.map((area) => (
                 <li key={area.slug}>
                   <Link
                     href={`/cleaning-services-${area.slug}`}
-                    className="hover:text-white transition-colors"
+                    className="transition-colors hover:text-accent-light"
                   >
-                    {area.name}, CA
+                    {area.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Legal */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Company</h3>
-            <ul className="space-y-2 text-white/70 text-sm">
-              <li>
-                <Link href="/book-now" className="hover:text-white transition-colors">
-                  Book Online
-                </Link>
-              </li>
+          {/* Company */}
+          <div className="lg:col-span-3">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
+              Company
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
               <li>
                 <Link
                   href="https://g.page/r/CZnoJYR4LIauEBM/review"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="transition-colors hover:text-accent-light"
                 >
-                  Leave a Review
+                  Leave a Google review
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-white transition-colors">
-                  Privacy Policy
+                <Link href="/privacy" className="transition-colors hover:text-accent-light">
+                  Privacy policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-white transition-colors">
-                  Terms of Service
+                <Link href="/terms" className="transition-colors hover:text-accent-light">
+                  Terms of service
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/50 text-sm">
-            © {new Date().getFullYear()} NEW STAR CLEANING LLC. All rights
-            reserved.
-          </p>
-          <div className="flex items-center gap-4 text-white/50 text-sm">
+        <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-8 text-sm text-white/45 md:flex-row md:items-center">
+          <p>© {new Date().getFullYear()} NEW STAR CLEANING LLC · All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>Fresno, CA</span>
-            <span>•</span>
-            <span>Licensed & Insured</span>
+            <span className="hidden h-3 w-px bg-white/20 md:block" />
+            <span>Licensed & insured</span>
+            <span className="hidden h-3 w-px bg-white/20 md:block" />
+            <span>Built locally, with care.</span>
           </div>
         </div>
       </div>
