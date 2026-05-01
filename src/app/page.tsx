@@ -202,12 +202,12 @@ export default function Home() {
               </div>
 
               {/* Stat strip */}
-              <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
+              <dl className="mt-12 hidden gap-x-6 gap-y-6 sm:grid sm:grid-cols-4">
                 {[
                   { k: "500+", v: "Homes cleaned" },
                   { k: "4.9★", v: "Google rating" },
                   { k: "100%", v: "Satisfaction" },
-                  { k: "Same wk.", v: "Availability" },
+                  { k: "Same-week", v: "Availability" },
                 ].map((s) => (
                   <div key={s.v} className="border-l border-white/15 pl-4">
                     <dt className="font-display text-2xl text-white">{s.k}</dt>
@@ -220,7 +220,7 @@ export default function Home() {
             </div>
 
             {/* Quote form, lifted with a soft halo */}
-            <div className="relative">
+            <div className="relative mt-10 lg:mt-0">
               <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl" aria-hidden="true" />
               <QuickQuoteForm />
             </div>
