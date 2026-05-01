@@ -48,6 +48,26 @@ export default function ContactPage() {
                 our 100% satisfaction guarantee. Background-checked and insured professionals
                 serving Fresno, Clovis, Madera &amp; the Central Valley.
               </p>
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-white/80">
+                <a
+                  href="tel:+15597852822"
+                  className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 font-medium backdrop-blur-sm transition hover:bg-white/10"
+                >
+                  <svg className="h-4 w-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  (559) 785-2822
+                </a>
+                <a
+                  href="mailto:support@newstarcleaning.com"
+                  className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 font-medium backdrop-blur-sm transition hover:bg-white/10"
+                >
+                  <svg className="h-4 w-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  support@newstarcleaning.com
+                </a>
+              </div>
             </div>
             <div className="relative">
               <div
@@ -58,7 +78,6 @@ export default function ContactPage() {
                 title="Get in touch"
                 subtitle="Tell us a bit about what you need. We'll get back to you with availability and pricing."
                 source="contact_page"
-                compact
                 extended
               />
             </div>
