@@ -101,13 +101,13 @@ export default function Header() {
           <div className="lg:hidden flex items-center gap-2">
             <Link
               href="/book-now"
-              className="rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft"
+              className="inline-flex min-h-11 items-center rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft"
             >
               Book
             </Link>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-white text-ink"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-ink"
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
             >
