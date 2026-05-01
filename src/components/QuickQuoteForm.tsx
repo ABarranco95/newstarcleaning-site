@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type QuickQuoteFormProps = {
@@ -8,6 +9,8 @@ type QuickQuoteFormProps = {
   source?: string;
   defaultCity?: string;
   compact?: boolean;
+  /** Show calculator-style fields (frequency, beds, baths, sqft) + SMS consent copy */
+  extended?: boolean;
 };
 
 type FormState = {
@@ -17,6 +20,10 @@ type FormState = {
   city: string;
   service: string;
   message: string;
+  frequency: string;
+  bedrooms: string;
+  bathrooms: string;
+  sqft: string;
 };
 
 const services = [
@@ -36,6 +43,10 @@ function initialForm(defaultCity?: string): FormState {
     city: defaultCity || "",
     service: "",
     message: "",
+    frequency: "",
+    bedrooms: "",
+    bathrooms: "",
+    sqft: "",
   };
 }
 
@@ -48,6 +59,7 @@ export default function QuickQuoteForm({
   source = "organic_website",
   defaultCity,
   compact = false,
+  extended = false,
 }: QuickQuoteFormProps) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity));
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -255,6 +267,86 @@ export default function QuickQuoteForm({
           </select>
         </div>
 
+        {extended && (
+          <>
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
+              <div>
+                <label htmlFor="quote-frequency" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  How often?
+                </label>
+                <select
+                  id="quote-frequency"
+                  name="frequency"
+                  value={formData.frequency}
+                  onChange={(event) => updateField("frequency", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select…</option>
+                  <option value="one-time">One-Time</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="bi-weekly">Bi-Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quote-bedrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Bedrooms
+                </label>
+                <select
+                  id="quote-bedrooms"
+                  name="bedrooms"
+                  value={formData.bedrooms}
+                  onChange={(event) => updateField("bedrooms", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select…</option>
+                  {["1","2","3","4","5","6+"].map((v) => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quote-bathrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Bathrooms
+                </label>
+                <select
+                  id="quote-bathrooms"
+                  name="bathrooms"
+                  value={formData.bathrooms}
+                  onChange={(event) => updateField("bathrooms", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select…</option>
+                  {["1","1.5","2","2.5","3","3.5","4+"].map((v) => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quote-sqft" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Approx. sq ft
+                </label>
+                <select
+                  id="quote-sqft"
+                  name="sqft"
+                  value={formData.sqft}
+                  onChange={(event) => updateField("sqft", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select…</option>
+                  <option value="under-1000">Under 1,000</option>
+                  <option value="1000-1499">1,000 – 1,499</option>
+                  <option value="1500-1999">1,500 – 1,999</option>
+                  <option value="2000-2499">2,000 – 2,499</option>
+                  <option value="2500-2999">2,500 – 2,999</option>
+                  <option value="3000-3499">3,000 – 3,499</option>
+                  <option value="3500+">3,500+</option>
+                </select>
+              </div>
+            </div>
+          </>
+        )}
+
         {!compact && (
           <div>
             <label htmlFor="quote-message" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
@@ -298,6 +390,15 @@ export default function QuickQuoteForm({
         <p className="text-center text-xs leading-relaxed text-mute">
           No spam. We&apos;ll follow up quickly with availability and pricing.
         </p>
+        {extended && (
+          <p className="text-center text-xs leading-relaxed text-mute/70">
+            By submitting, you consent to receive SMS/text messages from New Star Cleaning
+            regarding your inquiry. Message frequency varies. Msg &amp; data rates may apply.
+            Reply STOP to cancel, HELP for help. Consent is not required to purchase services.
+            &nbsp;·&nbsp;
+            <Link href="/privacy" className="underline hover:text-mute">Privacy Policy</Link>
+          </p>
+        )}
       </form>
     </div>
   );

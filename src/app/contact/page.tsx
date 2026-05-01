@@ -43,6 +43,11 @@ export default function ContactPage() {
               <div className="mt-8">
                 <TrustBadges />
               </div>
+              <p className="mt-6 text-sm leading-relaxed text-white/60">
+                5-star rated on Google, trusted by hundreds of homeowners, backed by
+                our 100% satisfaction guarantee. Background-checked and insured professionals
+                serving Fresno, Clovis, Madera &amp; the Central Valley.
+              </p>
             </div>
             <div className="relative">
               <div
@@ -54,6 +59,7 @@ export default function ContactPage() {
                 subtitle="Tell us a bit about what you need. We'll get back to you with availability and pricing."
                 source="contact_page"
                 compact
+                extended
               />
             </div>
           </div>
