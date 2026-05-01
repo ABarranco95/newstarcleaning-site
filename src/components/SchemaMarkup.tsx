@@ -12,6 +12,7 @@ export default function SchemaMarkup() {
     { "@type": "City", name: "Visalia", addressRegion: "CA" },
     { "@type": "City", name: "Tulare", addressRegion: "CA" },
     { "@type": "City", name: "Hanford", addressRegion: "CA" },
+    { "@type": "City", name: "Lemoore", addressRegion: "CA" },
   ];
   const cleaningServices = [
     {
