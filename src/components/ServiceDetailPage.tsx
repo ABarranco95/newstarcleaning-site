@@ -195,6 +195,28 @@ export default function ServiceDetailPage({
                 >
                   Book your {service.shortName.toLowerCase()} &rarr;
                 </Link>
+                {service.slug === "move-out-cleaning" && (
+                  <>
+                    <Link
+                      href="/checklist"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
+                    >
+                      Our cleaning checklist &rarr;
+                    </Link>
+                    <Link
+                      href="/cleaning-services-fresno"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
+                    >
+                      Fresno service area &rarr;
+                    </Link>
+                    <Link
+                      href="/services/deep-cleaning"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
+                    >
+                      Deep cleaning service &rarr;
+                    </Link>
+                  </>
+                )}
                 {service.slug === "deep-cleaning" && (
                   <>
                     <Link

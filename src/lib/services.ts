@@ -187,36 +187,120 @@ export const services: ServiceDefinition[] = [
       "Move-out cleaning is tuned to landlord and property-manager checklists. We empty, scrub, and detail the home so it shows like new — helping tenants get their deposit back and landlords turn the unit faster.",
     whatsIncluded: [
       {
-        title: "Whole-home reset",
+        title: "Kitchen",
         items: [
-          "Empty home cleaning, every room",
+          "Inside oven — racks, walls, and door glass scraped and wiped",
+          "Inside microwave — turntable, walls, and grease",
+          "Inside refrigerator — shelves, drawers, and door bins",
           "Cabinets and drawers wiped inside and out",
-          "Inside oven, microwave, refrigerator",
-          "Baseboards, vents, switch plates",
+          "Counters, sink, and backsplash scrubbed",
+          "All appliance exteriors wiped (dishwasher, range hood)",
+          "Floors swept, mopped, and edges detailed",
         ],
       },
       {
         title: "Bathrooms",
         items: [
-          "Tub, shower, tile and grout detailed",
-          "Toilet inside and out",
-          "Mirrors and fixtures shined",
+          "Tub, shower, tile, and grout scrubbed",
+          "Toilet cleaned inside, behind, and around the base",
+          "Sink, vanity, and counters disinfected",
+          "Mirrors and chrome fixtures polished",
+          "Floors mopped corner to corner",
+        ],
+      },
+      {
+        title: "Whole-home detail",
+        items: [
+          "Empty home cleaning — every room, every surface",
+          "Baseboards wiped down by hand",
+          "Light fixtures, vent covers, and fan blades dusted",
+          "Door frames, light switches, and outlet covers wiped",
+          "Window sills and tracks vacuumed",
+          "Closets wiped out — shelves, rods, and baseboards",
+          "Cobwebs removed from ceilings and corners",
         ],
       },
       {
         title: "Floors",
         items: [
           "Hard floors mopped corner to corner",
-          "Carpets vacuumed (steam cleaning available on request)",
+          "Carpets vacuumed edge to edge",
+          "Steam carpet cleaning available on request",
+        ],
+      },
+      {
+        title: "On request",
+        items: [
+          "Interior window glass",
+          "Garage sweeping",
+          "Patio or balcony rinse",
+          "Blind wiping",
         ],
       },
     ],
     bestFor: [
-      "Tenants moving out",
-      "Landlords turning units",
+      "Tenants moving out — get your deposit back",
+      "Landlords and property managers turning units",
       "Buyers and sellers between closing dates",
+      "Property management companies with regular turnovers",
     ],
     schemaServiceType: "HouseCleaning",
+    processSteps: [
+      {
+        title: "Schedule and confirm",
+        description:
+          "Book online or call us. We confirm the date, property size, and any special requests. Same-week availability is common in Fresno and Clovis.",
+      },
+      {
+        title: "Walk-through and checklist",
+        description:
+          "Your crew arrives on time and walks through the empty property with you (or your property manager). We confirm priority areas and note any damage — then work through our room-by-room move-out checklist.",
+      },
+      {
+        title: "Full detail clean",
+        description:
+          "We start with the kitchen and bathrooms (appliances inside and out, grout, fixtures), then move through bedrooms, living areas, closets, and hallways. Every surface, baseboard, vent, and corner is cleaned to inspection standard.",
+      },
+      {
+        title: "Final inspection and photos",
+        description:
+          "After the clean, we do our own walk-through and text you photos of the finished rooms. If anything was missed, we handle it on the spot — no second trip needed.",
+      },
+    ],
+    faqs: [
+      {
+        question: "How long does a move-out cleaning take?",
+        answer:
+          "A standard 3-bedroom home in Fresno or Clovis typically takes 4–6 hours with one cleaner, or 2.5–3.5 hours with a two-person crew. Larger homes, heavy buildup, or add-ons like steam cleaning can add time. We give you a time estimate when you book.",
+      },
+      {
+        question: "Will this help me get my security deposit back?",
+        answer:
+          "Our move-out cleaning follows the same checklist that landlords and property managers use for move-out inspections. We clean inside appliances, scrub grout, wipe baseboards, and detail every surface. Many tenants tell us they received their full deposit back after our clean. We can also send before-and-after photos for your records.",
+      },
+      {
+        question: "Do you clean inside the oven, fridge, and cabinets?",
+        answer:
+          "Yes — inside the oven, microwave, and refrigerator are all included by default. Cabinets and drawers are wiped inside and out. This is standard for our move-out service, not an extra charge.",
+      },
+      {
+        question: "Can I book a move-out cleaning for a rental property I manage?",
+        answer:
+          "Absolutely. We work with landlords and property managers across Fresno, Clovis, and Madera for regular unit turnovers. We can provide recurring service, before-and-after photos, and consistent scheduling. Contact us for property-management pricing.",
+      },
+      {
+        question: "Do you offer steam carpet cleaning with a move-out?",
+        answer:
+          "Yes, steam carpet cleaning is available as an add-on. Standard vacuuming is included in the base service. If your lease or landlord requires professional carpet cleaning, let us know when you book and we'll include it in your quote.",
+      },
+      {
+        question: "What if I'm not satisfied with the clean?",
+        answer:
+          "If anything was missed, let us know within 24 hours and we'll send a cleaner back to re-do that area at no extra charge. Your satisfaction matters to us.",
+      },
+    ],
+    localNotes:
+      "New Star Cleaning provides move-out cleaning across Fresno, Clovis, Madera, Sanger, Selma, Kerman, Visalia, and the broader Central Valley. Most move-out jobs are scheduled within 3–5 business days. We background-check every cleaner and carry general liability insurance. Property managers and landlords — ask about our recurring turnover pricing.",
   },
 ];
 
