@@ -56,6 +56,57 @@ export const services: ServiceDefinition[] = [
       "Anyone who wants the home consistently maintained",
     ],
     schemaServiceType: "HouseCleaning",
+    processSteps: [
+      {
+        title: "Book and confirm",
+        description:
+          "Book online or call us. We confirm your date, frequency, and any special instructions. Most clients in Fresno, Clovis, and Madera can be scheduled within a few business days.",
+      },
+      {
+        title: "Your cleaner arrives",
+        description:
+          "A consistent cleaner — when possible — arrives on time with their own supplies and equipment. They introduce themselves, confirm any priorities, and get to work.",
+      },
+      {
+        title: "Room-by-room checklist",
+        description:
+          "Your cleaner follows our thorough room-by-room checklist: kitchen counters and sink, bathroom fixtures, all floors vacuumed and mopped, surfaces dusted, mirrors cleaned, and trash removed.",
+      },
+      {
+        title: "Final walk-through",
+        description:
+          "Your cleaner does a quick final check, tops off any supplies left in the home (paper towels, toilet paper), and texts you a summary when they're done. You're home the whole time — no waiting on a second visit.",
+      },
+    ],
+    faqs: [
+      {
+        question: "How long does a standard cleaning take?",
+        answer:
+          "A standard cleaning for a 3-bedroom home in Fresno or Clovis typically takes 2–3 hours with one cleaner. Larger homes, extra bathrooms, or homes with pets may take 3–4 hours. We give you a time estimate when you book.",
+      },
+      {
+        question: "What's the difference between standard and deep cleaning?",
+        answer:
+          "Standard cleaning covers the day-to-day maintenance: surfaces, sinks, mirrors, floors, and visible areas. Deep cleaning adds the detail layer: inside the oven, baseboards by hand, grout scrubbing, fan blades, vent covers, door frames, and high ledges. Most clients start with a deep clean and then switch to recurring standard service to maintain it.",
+      },
+      {
+        question: "Do I need to be home during the cleaning?",
+        answer:
+          "No — most clients give us a spare key, hide a key, or leave the gate code. Your cleaner confirms access at the start of the job via text. You're free to come and go as you like.",
+      },
+      {
+        question: "Will I get the same cleaner each time?",
+        answer:
+          "Whenever possible, yes. Consistency is one of the things that sets New Star apart — your cleaner learns your home, your preferences, and your priorities over time. If your regular cleaner is unavailable, we'll let you know in advance and send a qualified replacement.",
+      },
+      {
+        question: "What if I'm not satisfied with the clean?",
+        answer:
+          "If anything was missed, let us know within 24 hours and we'll send a cleaner back to re-do that area at no extra charge. We want your home to feel right every time.",
+      },
+    ],
+    localNotes:
+      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Recurring weekly and bi-weekly slots fill up fast — most clients lock in their day and time for the month. We background-check every cleaner and carry general liability insurance.",
   },
   {
     slug: "deep-cleaning",
