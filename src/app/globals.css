@@ -6,9 +6,10 @@
   --color-primary-light: #1a3a63;
   --color-primary-dark: #081a33;
 
-  --color-accent: #ef6a37;
-  --color-accent-hover: #d4561f;
-  --color-accent-light: #f88a5e;
+  /* Darkened from #ef6a37/#d4561f/#f88a5e for WCAG AA contrast on white/cream backgrounds. */
+  --color-accent: #c2511a;
+  --color-accent-hover: #a44514;
+  --color-accent-light: #dc6028;
 
   /* Warm neutrals — replaces the cool gray look. */
   --color-cream: #fbf6ee;
