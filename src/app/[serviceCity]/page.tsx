@@ -71,7 +71,7 @@ export async function generateMetadata({
 
   const { service, cityName } = parsed;
   const title = `${service.shortName} in ${cityName}, CA | New Star Cleaning`;
-  const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Background-checked, insured cleaners. Get a free quote in 60 seconds.`;
+  const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Background-checked, insured cleaners. Request a fast quote online.`;
 
   return {
     title,
@@ -222,7 +222,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
             <span className="italic text-accent-light"> {cityName}</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Get a free quote in 60 seconds. We&apos;ll match you with a
+            Request a fast quote in about 60 seconds. We&apos;ll match you with a
             background-checked cleaner and fit your schedule.
           </p>
           <div className="mt-8">

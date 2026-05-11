@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title:
     "Standard House Cleaning in Fresno, CA | Recurring Professional Cleaning",
   description:
-    "Weekly or biweekly standard cleaning for Fresno homes. Trusted, background-checked cleaners. Get a free quote in 60 seconds.",
+    "Weekly or biweekly standard cleaning for Fresno homes. Trusted, background-checked cleaners. Request a fast quote online.",
   alternates: {
     canonical: "/services/standard-cleaning",
   },

@@ -7,14 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "fig-garden")!;
 export const metadata: Metadata = {
   title: "House Cleaning in Fig Garden, Fresno",
   description:
-    "White-glove house cleaning in Old Fig Garden, Fresno. Recurring, deep, and move-out cleaning from background-checked, insured teams. Book in 60 seconds.",
+    "White-glove house cleaning in Old Fig Garden, Fresno. Recurring, deep, and move-out cleaning from background-checked, insured teams. Request a fast quote online.",
   alternates: {
     canonical: "/cleaning-services-fig-garden",
   },
   openGraph: {
     title: "House Cleaning in Fig Garden, Fresno | New Star Cleaning",
     description:
-      "Reliable house cleaning in Old Fig Garden, Fresno. Vetted, insured cleaners. Book online in 60 seconds.",
+      "Reliable house cleaning in Old Fig Garden, Fresno. Vetted, insured cleaners. Request a fast quote online.",
     url: "https://newstarcleaning.com/cleaning-services-fig-garden",
   },
 };

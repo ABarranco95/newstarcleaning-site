@@ -141,7 +141,7 @@ export default function AboutPage() {
             <span className="italic text-accent-light"> trust</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-white/75">
-            Get a free quote in 60 seconds. Same-week availability across the
+            Request a fast quote online. Same-week availability across the
             Central Valley.
           </p>
           <div className="mt-8">

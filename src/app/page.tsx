@@ -80,7 +80,7 @@ const reviews = [
   {
     name: "Maria L.",
     location: "Madera, CA",
-    text: "The 60-second booking was no joke — so easy. The deep clean was a total game-changer. My kitchen and bathrooms have never looked better.",
+    text: "The quote request was quick and easy. The deep clean was a total game-changer. My kitchen and bathrooms have never looked better.",
     rating: 5,
   },
 ];
@@ -157,17 +157,17 @@ export default function Home() {
               </h1>
 
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
-                Vetted, insured house cleaners across the Central Valley. Get a real
-                quote in 60 seconds, or book a recurring, deep, or move-out clean
-                online — same-week availability.
+                Vetted, insured house cleaners across the Central Valley. Request a
+                fast quote in 60 seconds, or book a recurring, deep, or move-out
+                clean online — same-week availability.
               </p>
 
               {/* Inline rating + proof microcopy */}
               <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <div className="flex items-center gap-2">
                   <StarRow />
-                  <span className="text-sm font-semibold text-white">4.9</span>
-                  <span className="text-sm text-white/60">on Google · 500+ homes</span>
+                  <span className="text-sm font-semibold text-white">5.0</span>
+                  <span className="text-sm text-white/60">on Google · 22 reviews</span>
                 </div>
                 <div className="hidden h-4 w-px bg-white/15 sm:block" />
                 <div className="flex items-center gap-2 text-sm text-white/75">
@@ -205,7 +205,7 @@ export default function Home() {
               <dl className="mt-12 hidden gap-x-6 gap-y-6 sm:grid sm:grid-cols-4">
                 {[
                   { k: "500+", v: "Homes cleaned" },
-                  { k: "4.9★", v: "Google rating" },
+                  { k: "5.0★", v: "Google rating" },
                   { k: "100%", v: "Satisfaction" },
                   { k: "Same-week", v: "Availability" },
                 ].map((s) => (
@@ -234,7 +234,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-center text-sm text-ink-soft">
             <div className="flex items-center gap-2">
               <StarRow />
-              <span className="font-semibold text-ink">4.9 on Google</span>
+              <span className="font-semibold text-ink">5.0 on Google · 22 reviews</span>
             </div>
             <span className="hidden h-4 w-px bg-line sm:block" />
             <span className="font-medium">Background-checked cleaners</span>
@@ -336,8 +336,8 @@ export default function Home() {
           <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                title: "Book in 60 seconds",
-                desc: "Online quote and booking — no callbacks required, no surprise pricing later.",
+                title: "Fast quote request",
+                desc: "Tell us what you need in about 60 seconds. We follow up with clear pricing and availability before anything is booked.",
               },
               {
                 title: "Vetted professionals",
@@ -433,8 +433,8 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-3 rounded-full border border-line bg-cream px-5 py-2.5 shadow-soft">
               <StarRow />
-              <span className="font-semibold text-ink">4.9</span>
-              <span className="text-sm text-ink-soft">average on Google</span>
+              <span className="font-semibold text-ink">5.0</span>
+              <span className="text-sm text-ink-soft">on Google · 22 reviews</span>
             </div>
           </div>
 
@@ -556,8 +556,8 @@ export default function Home() {
             <span className="italic text-accent-light"> sparkles?</span>
           </h2>
           <p className="mt-6 mx-auto max-w-2xl text-lg text-white/75">
-            Join 500+ Central Valley homeowners who trust New Star Cleaning. Book in
-            60 seconds, or grab a quote and we&apos;ll follow up fast.
+            Join 500+ Central Valley homeowners who trust New Star Cleaning. Request
+            a quote in about 60 seconds, or book online when you&apos;re ready.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link

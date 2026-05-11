@@ -90,7 +90,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
               <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
-                  { k: "4.9★", v: "Google rating" },
+                  { k: "5.0★", v: "Google rating" },
                   { k: "500+", v: "Homes cleaned" },
                   { k: "100%", v: "Satisfaction" },
                 ].map((s) => (
@@ -207,8 +207,8 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             <span className="italic text-accent-light"> {area.name}</span> home?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Join hundreds of {area.name} homeowners who trust New Star Cleaning.
-            Book in 60 seconds.
+            Join homeowners across {area.name} who trust New Star Cleaning.
+            Request a fast quote or book online when you&apos;re ready.
           </p>
           <div className="mt-8">
             <Link

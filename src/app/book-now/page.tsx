@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
+import BookingPortalLink from "@/components/BookingPortalLink";
 
 const APEX_CRM_BASE_URL = (
   process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL ||
@@ -11,14 +13,14 @@ const APEX_BOOKING_URL = `${APEX_CRM_BASE_URL}/book`;
 export const metadata: Metadata = {
   title: "Book Now — Schedule Your Cleaning Online",
   description:
-    "Serving Fresno, Clovis & Madera. Professional, background-checked cleaners. Book online in 60 seconds.",
+    "Serving Fresno, Clovis & Madera. Professional, background-checked cleaners. Book through our secure online portal.",
   alternates: {
     canonical: "/book-now",
   },
   openGraph: {
     title: "Book Now — Schedule Your Cleaning Online | New Star Cleaning",
     description:
-      "Serving Fresno, Clovis & Madera. Professional, background-checked cleaners. Book online in 60 seconds.",
+      "Serving Fresno, Clovis & Madera. Professional, background-checked cleaners. Book through our secure online portal.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
@@ -55,28 +57,9 @@ export default function BookNow() {
                 Our scheduling portal opens in a new tab so your quote and
                 payment details stay inside the secure booking experience.
               </p>
-              <a
-                href={APEX_BOOKING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-accent px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-accent-hover hover:shadow-xl sm:w-auto"
-              >
-                Start my booking
-                <svg
-                  className="ml-2 h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
+              <Suspense fallback={null}>
+                <BookingPortalLink baseUrl={APEX_BOOKING_URL} />
+              </Suspense>
               <p className="mt-4 text-sm text-gray-500">
                 Prefer to talk first? Call or text us and we&apos;ll help set up the
                 right clean.

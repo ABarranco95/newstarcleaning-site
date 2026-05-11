@@ -7,7 +7,7 @@ const service = getService("deep-cleaning")!;
 export const metadata: Metadata = {
   title: "Deep House Cleaning in Fresno, CA | One-Time Deep Clean",
   description:
-    "Thorough deep cleaning for Fresno homes. Oven, baseboards, inside appliances, ceiling fans, and more. Book online in 60 seconds.",
+    "Thorough deep cleaning for Fresno homes. Oven, baseboards, inside appliances, ceiling fans, and more. Request a fast quote online.",
   alternates: {
     canonical: "/services/deep-cleaning",
   },

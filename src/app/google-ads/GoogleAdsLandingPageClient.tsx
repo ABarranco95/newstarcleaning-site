@@ -264,7 +264,7 @@ export default function GoogleAdsLandingPageClient() {
 
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
               <h3 className="text-2xl font-bold text-primary mb-1 text-center">Get Your Free Quote</h3>
-              <p className="text-gray-500 text-center mb-6 text-sm">Book online in 60 seconds — no phone call needed</p>
+              <p className="text-gray-500 text-center mb-6 text-sm">Request a fast quote — no phone call needed</p>
               <div id="booking-form">
                 <Suspense fallback={<div className="animate-pulse bg-gray-100 h-64 rounded-lg"></div>}>
                   <FormWithParams />
@@ -322,7 +322,7 @@ export default function GoogleAdsLandingPageClient() {
             <div className="text-center">
               <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">1</div>
               <h3 className="text-lg font-bold text-primary mb-2">Book Online</h3>
-              <p className="text-gray-600 text-sm">Complete our simple booking form or call (559) 785-2822. Get your instant quote in 60 seconds.</p>
+              <p className="text-gray-600 text-sm">Complete our simple booking form or call (559) 785-2822. We follow up quickly with clear pricing.</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">2</div>
@@ -400,7 +400,7 @@ export default function GoogleAdsLandingPageClient() {
       <section className="py-16 lg:py-20 bg-green-50 text-center">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">Ready for a Cleaner Home?</h2>
-          <p className="text-gray-600 mb-8">Book online in 60 seconds or call us now</p>
+          <p className="text-gray-600 mb-8">Request a quote online or call us now</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a href="tel:+15597852822" className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-lg rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-lg">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" /></svg>

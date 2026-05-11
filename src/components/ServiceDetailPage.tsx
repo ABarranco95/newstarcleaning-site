@@ -309,8 +309,8 @@ export default function ServiceDetailPage({
             ?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Get a free quote in 60 seconds. We&apos;ll match you with the right
-            cleaner and fit your schedule.
+            Request a fast quote in about 60 seconds. We&apos;ll match you with the
+            right cleaner and fit your schedule.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
