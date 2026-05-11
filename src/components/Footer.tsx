@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const serviceAreas = [
@@ -23,23 +24,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12">
           {/* Brand block */}
           <div className="lg:col-span-4">
-            <div className="flex items-center gap-2.5">
-              <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] ring-1 ring-white/15">
-                <svg
-                  className="h-5 w-5 text-accent"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                  />
-                </svg>
-              </div>
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-1 ring-white/25">
+                <Image
+                  src="/favicon.png"
+                  alt="New Star Cleaning logo"
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </span>
               <span className="font-display text-2xl">New Star Cleaning</span>
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">

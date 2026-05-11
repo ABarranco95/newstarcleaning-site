@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "House Cleaning Services in Kingsburg, CA | New Star Cleaning",
     description:
-      "Local Central Valley house cleaning in Kingsburg, CA. Book vetted, insured cleaners online in 60 seconds.",
+      "Local Central Valley house cleaning in Kingsburg, CA. Request a fast quote from vetted, insured cleaners.",
     url: "https://newstarcleaning.com/cleaning-services-kingsburg",
   },
 };

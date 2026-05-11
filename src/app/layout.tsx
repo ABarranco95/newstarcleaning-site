@@ -46,13 +46,27 @@ export const metadata: Metadata = {
     siteName: "New Star Cleaning",
     title: "Fresno & Clovis House Cleaning | New Star Cleaning",
     description:
-      "Book professional house cleaning in Fresno, Clovis, Madera, and the Central Valley in 60 seconds.",
+      "Request a fast quote for professional house cleaning in Fresno, Clovis, Madera, and the Central Valley.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "New Star Cleaning logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Fresno & Clovis House Cleaning | New Star Cleaning",
     description:
-      "Book professional house cleaning in Fresno, Clovis, Madera, and the Central Valley in 60 seconds.",
+      "Request a fast quote for professional house cleaning in Fresno, Clovis, Madera, and the Central Valley.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   robots: {
     index: true,

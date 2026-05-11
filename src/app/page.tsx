@@ -158,8 +158,8 @@ export default function Home() {
 
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
                 Vetted, insured house cleaners across the Central Valley. Request a
-                fast quote in 60 seconds, or book a recurring, deep, or move-out
-                clean online — same-week availability.
+                fast quote online, then we follow up with clear pricing and
+                availability before anything is booked.
               </p>
 
               {/* Inline rating + proof microcopy */}
@@ -204,7 +204,7 @@ export default function Home() {
               {/* Stat strip */}
               <dl className="mt-12 hidden gap-x-6 gap-y-6 sm:grid sm:grid-cols-4">
                 {[
-                  { k: "500+", v: "Homes cleaned" },
+                  { k: "22", v: "Google reviews" },
                   { k: "5.0★", v: "Google rating" },
                   { k: "100%", v: "Satisfaction" },
                   { k: "Same-week", v: "Availability" },
@@ -392,8 +392,8 @@ export default function Home() {
               {[
                 {
                   step: "1",
-                  title: "Book online",
-                  desc: "Pick your service, the date and time that work for you, and book in under 60 seconds — no phone tag.",
+                  title: "Request online",
+                  desc: "Tell us what you need, your preferred timing, and the best way to reach you. We follow up with clear pricing and availability.",
                 },
                 {
                   step: "2",
@@ -428,7 +428,7 @@ export default function Home() {
             <div className="max-w-xl">
               <span className="eyebrow eyebrow-dot">Real homes, real reviews</span>
               <h2 className="mt-4 text-4xl lg:text-5xl text-ink">
-                Trusted by 500+ Central Valley homes.
+                Trusted by local Central Valley homeowners.
               </h2>
             </div>
             <div className="flex items-center gap-3 rounded-full border border-line bg-cream px-5 py-2.5 shadow-soft">
@@ -556,8 +556,8 @@ export default function Home() {
             <span className="italic text-accent-light"> sparkles?</span>
           </h2>
           <p className="mt-6 mx-auto max-w-2xl text-lg text-white/75">
-            Join 500+ Central Valley homeowners who trust New Star Cleaning. Request
-            a quote in about 60 seconds, or book online when you&apos;re ready.
+            Join Central Valley homeowners who trust New Star Cleaning. Request
+            a fast quote online, or start your booking when you&apos;re ready.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link

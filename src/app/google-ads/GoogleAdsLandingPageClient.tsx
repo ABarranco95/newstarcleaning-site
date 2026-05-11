@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -100,7 +101,7 @@ function GoogleAdsForm() {
           </svg>
         </div>
         <h3 className="text-2xl font-bold text-primary mb-2">Thank You!</h3>
-        <p className="text-gray-600">We&apos;ve received your request and will contact you within 2 hours during business hours.</p>
+        <p className="text-gray-600">We&apos;ve received your request and will text or call shortly during business hours.</p>
       </div>
     );
   }
@@ -224,7 +225,9 @@ export default function GoogleAdsLandingPageClient() {
       <header className="bg-white sticky top-0 z-40 shadow-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center"><span className="text-white text-xl font-bold">★</span></div>
+            <span className="relative h-11 w-11 overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200 shadow-sm">
+              <Image src="/favicon.png" alt="New Star Cleaning logo" fill sizes="44px" className="object-cover" priority />
+            </span>
             <span className="text-xl font-extrabold text-primary">New Star Cleaning</span>
           </div>
           <a href="tel:+15597852822" className="flex items-center gap-2 text-primary font-semibold hover:text-accent transition-colors">
@@ -242,10 +245,10 @@ export default function GoogleAdsLandingPageClient() {
             <div className="text-white">
               <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full font-semibold mb-6">
                 <div className="flex">{[...Array(5)].map((_, i) => <span key={i} className="text-yellow-400">★</span>)}</div>
-                5.0 ★ (26 Reviews)
+                5.0 ★ (22 Reviews)
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">Professional House Cleaning in Fresno</h1>
-              <p className="text-lg sm:text-xl opacity-90 mb-6">Background-checked cleaners, 100% satisfaction guarantee, and same-week availability. Book your clean in just 60 seconds.</p>
+              <p className="text-lg sm:text-xl opacity-90 mb-6">Background-checked cleaners, 100% satisfaction guarantee, and same-week availability. Request a fast quote online.</p>
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2 bg-white/15 px-3 py-2 rounded-lg backdrop-blur-sm">
                   <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
@@ -289,7 +292,7 @@ export default function GoogleAdsLandingPageClient() {
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">Standard Cleaning</h3>
               <p className="text-gray-600 text-sm">Regular weekly, bi-weekly, or monthly cleaning to keep your home consistently fresh and clean.</p>
-              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Get Instant Quote →</a></div>
+              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 text-center">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
@@ -297,7 +300,7 @@ export default function GoogleAdsLandingPageClient() {
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">Deep Cleaning</h3>
               <p className="text-gray-600 text-sm">Thorough top-to-bottom cleaning for those times when standard cleaning isn&apos;t enough.</p>
-              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Get Instant Quote →</a></div>
+              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 text-center sm:col-span-2 lg:col-span-1">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
@@ -305,7 +308,7 @@ export default function GoogleAdsLandingPageClient() {
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">Move-In/Move-Out</h3>
               <p className="text-gray-600 text-sm">Get your deposit back or start fresh. Complete cleaning for vacating or new homes.</p>
-              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Get Instant Quote →</a></div>
+              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
             </div>
           </div>
         </div>
@@ -344,11 +347,11 @@ export default function GoogleAdsLandingPageClient() {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">500+</div>
-                <div className="text-sm opacity-90">Homes Cleaned</div>
+                <div className="text-4xl font-extrabold text-accent mb-1">5.0★</div>
+                <div className="text-sm opacity-90">Google Rating</div>
               </div>
               <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">26</div>
+                <div className="text-4xl font-extrabold text-accent mb-1">22</div>
                 <div className="text-sm opacity-90">5-Star Reviews</div>
               </div>
               <div className="bg-white/10 rounded-xl p-6 text-center">

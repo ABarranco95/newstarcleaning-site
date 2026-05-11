@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -25,27 +26,20 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-soft">
-              <svg
-                className="h-5 w-5 text-accent"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                />
-              </svg>
-              <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-accent ring-2 ring-cream" />
-            </div>
-            <div className="flex items-baseline gap-1.5">
+          <Link href="/" className="flex items-center gap-2.5" aria-label="New Star Cleaning home">
+            <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-1 ring-line shadow-soft">
+              <Image
+                src="/favicon.png"
+                alt="New Star Cleaning logo"
+                fill
+                sizes="44px"
+                className="object-cover"
+                priority
+              />
+            </span>
+            <div className="flex flex-col leading-none">
               <span className="font-display text-xl text-ink">New Star</span>
-              <span className="text-xs uppercase tracking-[0.2em] text-mute">
+              <span className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-mute">
                 Cleaning
               </span>
             </div>

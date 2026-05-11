@@ -44,7 +44,7 @@ export default function ContactPage() {
                 <TrustBadges />
               </div>
               <p className="mt-6 text-sm leading-relaxed text-white/60">
-                5-star rated on Google, trusted by hundreds of homeowners, backed by
+                5.0 on Google with 22 public reviews, backed by
                 our 100% satisfaction guarantee. Background-checked and insured professionals
                 serving Fresno, Clovis, Madera &amp; the Central Valley.
               </p>

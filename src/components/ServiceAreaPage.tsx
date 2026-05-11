@@ -91,7 +91,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
               <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
                   { k: "5.0★", v: "Google rating" },
-                  { k: "500+", v: "Homes cleaned" },
+                  { k: "22", v: "Google reviews" },
                   { k: "100%", v: "Satisfaction" },
                 ].map((s) => (
                   <div

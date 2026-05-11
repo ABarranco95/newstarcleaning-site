@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "House Cleaning Services in Lemoore, CA | New Star Cleaning",
     description:
-      "Local Kings County house cleaning in Lemoore, CA. Book vetted, insured cleaners online in 60 seconds.",
+      "Local Kings County house cleaning in Lemoore, CA. Request a fast quote from vetted, insured cleaners.",
     url: "https://newstarcleaning.com/cleaning-services-lemoore",
   },
 };
