@@ -7,7 +7,7 @@ const service = getService("move-out-cleaning")!;
 export const metadata: Metadata = {
   title: "Move-Out Cleaning in Fresno, CA | Move-In Cleaning",
   description:
-    "Comprehensive move-out cleaning for Fresno landlords and tenants. Deposit-back-quality service. Book same-week.",
+    "Comprehensive move-out cleaning for Fresno landlords and tenants. Deposit-back-quality service. Request same-week availability.",
   alternates: {
     canonical: "/services/move-out-cleaning",
   },

@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 
-const DEFAULT_APEX_CRM_BASE_URL = "https://apex-crm-abarranco95-s-team.vercel.app";
-
 const APEX_CRM_BASE_URL = (
   process.env.APEX_CRM_BASE_URL ||
   process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL ||
-  DEFAULT_APEX_CRM_BASE_URL
+  ""
 ).replace(/\/$/, "");
 
 const APEX_INCOMING_URL =

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | New Star Cleaning",
   },
   description:
-    "Professional house cleaning services in Fresno, Clovis, Madera, and the Central Valley. Request a fast quote or book recurring, deep, and move-out cleaning online.",
+    "Professional house cleaning services in Fresno, Clovis, Madera, and the Central Valley. Request fast pricing and availability for recurring, deep, and move-out cleaning.",
   keywords: [
     "house cleaning Fresno",
     "cleaning service Fresno CA",

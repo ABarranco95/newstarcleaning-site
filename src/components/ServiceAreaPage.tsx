@@ -3,6 +3,10 @@ import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
 import type { ServiceArea } from "@/lib/serviceAreas";
 
+function serviceAreaSlug(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   return (
     <>
@@ -19,8 +23,8 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 {area.county} · {area.population} residents
               </span>
               <h1 className="mt-5 text-4xl lg:text-[3.5rem] leading-[1.05]">
-                Professional house cleaning in
-                <span className="italic text-accent-light"> {area.name}, CA</span>
+                Professional house cleaning in{" "}
+                <span className="italic text-accent-light">{area.name}, CA</span>
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-white/75">
                 {area.description}
@@ -45,7 +49,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                   href="/book-now"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
                 >
-                  Book online
+                  Request quote
                 </Link>
               </div>
 
@@ -92,7 +96,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 {[
                   { k: "5.0★", v: "Google rating" },
                   { k: "22", v: "Google reviews" },
-                  { k: "100%", v: "Satisfaction" },
+                  { k: "24-hour", v: "Re-clean promise" },
                 ].map((s) => (
                   <div
                     key={s.v}
@@ -208,14 +212,14 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
             Join homeowners across {area.name} who trust New Star Cleaning.
-            Request a fast quote or book online when you&apos;re ready.
+            Request a fast quote and confirm only when pricing and timing make sense.
           </p>
           <div className="mt-8">
             <Link
               href="/book-now"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
             >
-              Book your {area.name} cleaning
+              Request your {area.name} quote
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
@@ -237,7 +241,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             {area.nearbyAreas.map((nearby) => (
               <Link
                 key={nearby}
-                href={`/cleaning-services-${nearby.toLowerCase()}`}
+                href={`/cleaning-services-${serviceAreaSlug(nearby)}`}
                 className="group inline-flex items-center gap-2 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-primary hover:text-primary"
               >
                 Cleaning in {nearby}, CA

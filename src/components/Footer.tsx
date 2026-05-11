@@ -38,14 +38,14 @@ export default function Footer() {
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
               Professional, vetted house cleaning across Fresno and the Central
-              Valley. Insured. Background-checked. Satisfaction guaranteed.
+              Valley. Clear pricing before booking. Insured New Star Cleaning LLC.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/book-now"
                 className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
               >
-                Book online
+                Request quote
                 <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -82,7 +82,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/book-now" className="transition-colors hover:text-accent-light">
-                  Book online
+                  Request quote
                 </Link>
               </li>
             </ul>
@@ -140,11 +140,11 @@ export default function Footer() {
         <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-8 text-sm text-white/45 md:flex-row md:items-center">
           <p>© {new Date().getFullYear()} NEW STAR CLEANING LLC · All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>Fresno, CA</span>
+            <span>132 W Nees Ave Unit 106, Fresno, CA 93720</span>
             <span className="hidden h-3 w-px bg-white/20 md:block" />
-            <span>Licensed & insured</span>
+            <span>Mon-Sat 8am-6pm</span>
             <span className="hidden h-3 w-px bg-white/20 md:block" />
-            <span>Built locally, with care.</span>
+            <span>Insured New Star Cleaning LLC</span>
           </div>
         </div>
       </div>

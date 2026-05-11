@@ -8,7 +8,7 @@ const faqItems = [
   },
   {
     q: "How do I reschedule or cancel a cleaning?",
-    a: "You can reschedule or cancel through your Booking Koala account or by contacting us directly. We ask for at least 24 hours notice for cancellations to avoid a cancellation fee.",
+    a: "Contact us directly by call, text, or email and we will help move the appointment. We ask for at least 24 hours notice for cancellations so the cleaner is not already on the route.",
   },
   {
     q: "Are your cleaners background checked?",
@@ -24,7 +24,7 @@ const faqItems = [
   },
   {
     q: "What if I'm not satisfied with the cleaning?",
-    a: "We offer a 100% satisfaction guarantee. If you're not happy with any part of the cleaning, contact us within 24 hours and we'll come back to make it right — at no additional cost.",
+    a: "If you're not happy with any part of the cleaning, contact us within 24 hours and we'll come back to make it right — at no additional cost.",
   },
 ];
 
@@ -151,15 +151,15 @@ export default function Home() {
               </span>
 
               <h1 className="mt-5 text-[2.6rem] sm:text-5xl lg:text-[4rem] leading-[1.04]">
-                A spotless home,
+                House cleaning services
                 <br className="hidden sm:block" />
-                <span className="italic text-accent-light"> kept that way.</span>
+                <span className="italic text-accent-light"> in Fresno & Clovis.</span>
               </h1>
 
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
-                Vetted, insured house cleaners across the Central Valley. Request a
-                fast quote online, then we follow up with clear pricing and
-                availability before anything is booked.
+                A spotless home, kept that way — with vetted, insured local cleaners,
+                clear pricing before booking, and service across Fresno, Clovis,
+                Madera, and nearby Central Valley cities.
               </p>
 
               {/* Inline rating + proof microcopy */}
@@ -174,7 +174,7 @@ export default function Home() {
                   <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
-                  Insured · background checked · satisfaction-guaranteed
+                  Insured New Star Cleaning LLC · background-checked cleaners
                 </div>
               </div>
 
@@ -197,7 +197,7 @@ export default function Home() {
                   href="/book-now"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
                 >
-                  Book online
+                  How quotes work
                 </Link>
               </div>
 
@@ -206,11 +206,11 @@ export default function Home() {
                 {[
                   { k: "22", v: "Google reviews" },
                   { k: "5.0★", v: "Google rating" },
-                  { k: "100%", v: "Satisfaction" },
+                  { k: "24-hour", v: "Re-clean promise" },
                   { k: "Same-week", v: "Availability" },
                 ].map((s) => (
                   <div key={s.v} className="border-l border-white/15 pl-4">
-                    <dt className="font-display text-2xl text-white">{s.k}</dt>
+                    <dt className="font-display whitespace-nowrap text-2xl text-white">{s.k}</dt>
                     <dd className="mt-1 text-xs uppercase tracking-wider text-white/55">
                       {s.v}
                     </dd>
@@ -239,9 +239,9 @@ export default function Home() {
             <span className="hidden h-4 w-px bg-line sm:block" />
             <span className="font-medium">Background-checked cleaners</span>
             <span className="hidden h-4 w-px bg-line sm:block" />
-            <span className="font-medium">Fully insured · LLC</span>
+            <span className="font-medium">Insured New Star Cleaning LLC</span>
             <span className="hidden h-4 w-px bg-line sm:block" />
-            <span className="font-medium">100% satisfaction or we re-clean</span>
+            <span className="font-medium">Clear pricing before booking</span>
           </div>
         </div>
       </section>
@@ -299,7 +299,7 @@ export default function Home() {
                   href="/book-now"
                   className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent"
                 >
-                  Book this service
+                  Get this service quote
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -337,7 +337,7 @@ export default function Home() {
             {[
               {
                 title: "Fast quote request",
-                desc: "Tell us what you need in about 60 seconds. We follow up with clear pricing and availability before anything is booked.",
+                desc: "Tell us what you need. We follow up with clear pricing and availability before anything is booked.",
               },
               {
                 title: "Vetted professionals",
@@ -374,13 +374,13 @@ export default function Home() {
                 Three steps. <em className="not-italic text-accent">That&apos;s it.</em>
               </h2>
               <p className="mt-5 text-ink-soft">
-                Designed to be the easiest cleaning booking in the Central Valley.
+                Designed to make pricing, scheduling, and home access clear before a cleaner is sent.
               </p>
               <Link
                 href="/book-now"
                 className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-soft transition-all hover:bg-primary-light"
               >
-                Start your booking
+                Request pricing & availability
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -403,7 +403,7 @@ export default function Home() {
                 {
                   step: "3",
                   title: "You relax",
-                  desc: "Come home to a spotless space. Recurring? Lock in your cleaner and your cadence in one click.",
+                  desc: "Come home to a spotless space. Recurring clients can keep the same cleaner and cadence whenever scheduling allows.",
                 },
               ].map((item) => (
                 <li key={item.step} className="relative pl-16 lg:pl-20">
@@ -552,19 +552,18 @@ export default function Home() {
             Same-week availability
           </span>
           <h2 className="mt-5 text-4xl lg:text-6xl text-white">
-            Ready for a home that
-            <span className="italic text-accent-light"> sparkles?</span>
+            Ready for reliable Fresno-area
+            <span className="italic text-accent-light"> house cleaning?</span>
           </h2>
           <p className="mt-6 mx-auto max-w-2xl text-lg text-white/75">
-            Join Central Valley homeowners who trust New Star Cleaning. Request
-            a fast quote online, or start your booking when you&apos;re ready.
+            Request a quote with clear pricing and availability before anything is booked. No no-shows, no surprise handoff, no vague next step.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/book-now"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
             >
-              Book your cleaning
+              Request your quote
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
@@ -573,15 +572,15 @@ export default function Home() {
               href="#quote"
               className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
             >
-              Or get a quote first
+              Jump to quote form
             </a>
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/60">
-            <span>Insured · LLC</span>
+            <span>Insured New Star Cleaning LLC</span>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
             <span>Background-checked teams</span>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
-            <span>100% re-clean guarantee</span>
+            <span>24-hour re-clean promise</span>
           </div>
         </div>
       </section>
@@ -657,7 +656,7 @@ export default function Home() {
               {
                 title: "10 cleaning hacks that save hours every week",
                 excerpt:
-                  "Time-saving tricks our pros actually use on the job — most of them take less than 60 seconds.",
+                  "Time-saving habits our pros actually use on the job — practical, repeatable, and safe for busy homes.",
                 category: "Tips & Tricks",
                 tone: "from-accent/30 to-accent/0",
               },

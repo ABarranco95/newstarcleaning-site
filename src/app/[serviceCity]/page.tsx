@@ -62,6 +62,12 @@ function parseSlug(slug: string): ParsedSlug | null {
   return null;
 }
 
+function quoteFormService(service: ServiceDefinition) {
+  return service.slug === "standard-cleaning"
+    ? "Standard recurring cleaning"
+    : service.shortName;
+}
+
 export async function generateMetadata({
   params,
 }: RouteParams): Promise<Metadata> {
@@ -70,7 +76,7 @@ export async function generateMetadata({
   if (!parsed) return {};
 
   const { service, cityName } = parsed;
-  const title = `${service.shortName} in ${cityName}, CA | New Star Cleaning`;
+  const title = `${service.shortName} in ${cityName}, CA`;
   const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Background-checked, insured cleaners. Request a fast quote online.`;
 
   return {
@@ -110,8 +116,8 @@ export default async function ServiceCityPage({ params }: RouteParams) {
                 {cityName}, CA · {service.shortName}
               </span>
               <h1 className="mt-5 text-4xl lg:text-[3.25rem] leading-[1.05]">
-                {service.shortName} in
-                <span className="italic text-accent-light"> {cityName}, CA</span>
+                {`${service.shortName} in `}
+                <span className="italic text-accent-light">{cityName}, CA</span>
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-white/75">
                 {intro}
@@ -129,6 +135,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
                 title={`Get a ${cityName} ${service.shortName.toLowerCase()} quote`}
                 subtitle={`Tell us about your ${cityName} home. We'll follow up with availability and pricing.`}
                 defaultCity={cityName}
+                defaultService={quoteFormService(service)}
                 source={`organic_${service.slug}_${citySlug}`}
                 compact
               />
@@ -218,19 +225,18 @@ export default async function ServiceCityPage({ params }: RouteParams) {
             Same-week availability
           </span>
           <h2 className="mt-5 text-3xl lg:text-5xl text-white">
-            Ready to book {service.shortName.toLowerCase()} in
-            <span className="italic text-accent-light"> {cityName}</span>?
+            {`Ready to get pricing for ${service.shortName.toLowerCase()} in `}
+            <span className="italic text-accent-light">{cityName}</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Request a fast quote in about 60 seconds. We&apos;ll match you with a
-            background-checked cleaner and fit your schedule.
+            Request clear pricing and availability before anything is booked. We&apos;ll match the scope to a background-checked cleaner and fit your schedule.
           </p>
           <div className="mt-8">
             <Link
               href="/book-now"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
             >
-              Book your {cityName} cleaning
+              Request your {cityName} quote
             </Link>
           </div>
         </div>

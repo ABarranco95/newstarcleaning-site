@@ -4,15 +4,14 @@ import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
 
 export const metadata: Metadata = {
-  title: "Contact Us — Get in Touch With New Star Cleaning",
+  title: "Contact Fresno House Cleaners",
   description:
-    "Contact New Star Cleaning in Fresno, CA. Call, text, or book online. Serving Fresno, Clovis, Madera and the Central Valley.",
+    "Contact New Star Cleaning in Fresno, CA. Call, text, or request pricing and availability online. Serving Fresno, Clovis, Madera and the Central Valley.",
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
-    title:
-      "Contact Us — Get in Touch With New Star Cleaning | New Star Cleaning",
+    title: "Contact Fresno House Cleaners | New Star Cleaning",
     description:
       "Reach New Star Cleaning. Serving Fresno, Clovis, Madera and the Central Valley.",
     url: "https://newstarcleaning.com/contact",
@@ -45,7 +44,7 @@ export default function ContactPage() {
               </div>
               <p className="mt-6 text-sm leading-relaxed text-white/60">
                 5.0 on Google with 22 public reviews, backed by
-                our 100% satisfaction guarantee. Background-checked and insured professionals
+                our 24-hour re-clean promise. Background-checked and insured professionals
                 serving Fresno, Clovis, Madera &amp; the Central Valley.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-white/80">
@@ -101,25 +100,23 @@ export default function ContactPage() {
               <span className="eyebrow eyebrow-dot">Hours</span>
               <h2 className="mt-3 text-xl text-ink">Office availability</h2>
               <p className="mt-3 text-ink-soft leading-relaxed">
-                Monday – Friday: 8 AM – 6 PM
-                <br />
-                Saturday: 9 AM – 2 PM
+                Monday – Saturday: 8 AM – 6 PM
                 <br />
                 Sunday: closed
               </p>
             </div>
             <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-              <span className="eyebrow eyebrow-dot">Faster path</span>
-              <h2 className="mt-3 text-xl text-ink">Book online</h2>
+              <span className="eyebrow eyebrow-dot">Quote path</span>
+              <h2 className="mt-3 text-xl text-ink">Request pricing</h2>
               <p className="mt-3 text-ink-soft leading-relaxed">
-                Already know what you need? Book a cleaning online in under 60
-                seconds.
+                Already know what you need? Send the service details and we&apos;ll
+                reply with clear pricing and availability before anything is booked.
               </p>
               <Link
                 href="/book-now"
                 className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover"
               >
-                Book now
+                Request quote
               </Link>
             </div>
           </div>

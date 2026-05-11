@@ -19,7 +19,7 @@ const COMBO_CITY_SLUGS = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://newstarcleaning.com";
-  const lastModified = new Date("2026-05-01");
+  const lastModified = new Date();
 
   const top: MetadataRoute.Sitemap = [
     {

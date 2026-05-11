@@ -204,7 +204,7 @@ export default function ChecklistPage() {
                     href="/book-now"
                     className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover"
                   >
-                    Book a cleaning
+                    Request a cleaning quote
                   </Link>
                   <Link
                     href="/services/standard-cleaning"

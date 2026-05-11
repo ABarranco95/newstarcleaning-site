@@ -3,6 +3,12 @@ import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
 import type { ServiceDefinition } from "@/lib/services";
 
+function quoteFormService(service: ServiceDefinition) {
+  return service.slug === "standard-cleaning"
+    ? "Standard recurring cleaning"
+    : service.shortName;
+}
+
 export default function ServiceDetailPage({
   service,
   h1,
@@ -42,7 +48,7 @@ export default function ServiceDetailPage({
                   href="/book-now"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
                 >
-                  Book online
+                  How quotes work
                 </Link>
               </div>
               <div className="mt-8">
@@ -58,6 +64,7 @@ export default function ServiceDetailPage({
                 title={`Get a ${service.shortName.toLowerCase()} quote`}
                 subtitle={`Tell us what you need. We'll follow up quickly with availability and pricing.`}
                 source={`organic_${service.slug}_service`}
+                defaultService={quoteFormService(service)}
                 compact
               />
             </div>
@@ -193,7 +200,7 @@ export default function ServiceDetailPage({
                   href="/book-now"
                   className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
                 >
-                  Book your {service.shortName.toLowerCase()} &rarr;
+                  Get a {service.shortName.toLowerCase()} quote &rarr;
                 </Link>
                 {service.slug === "move-out-cleaning" && (
                   <>
@@ -301,7 +308,7 @@ export default function ServiceDetailPage({
             Same-week availability
           </span>
           <h2 className="mt-5 text-3xl lg:text-5xl text-white">
-            Ready to book your
+            Ready to price your
             <span className="italic text-accent-light">
               {" "}
               {service.shortName.toLowerCase()}
@@ -309,15 +316,14 @@ export default function ServiceDetailPage({
             ?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Request a fast quote in about 60 seconds. We&apos;ll match you with the
-            right cleaner and fit your schedule.
+            Request clear pricing and availability before anything is booked. We&apos;ll match the scope to the right cleaner and schedule.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/book-now"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
             >
-              Book your cleaning
+              Request your quote
             </Link>
             <Link
               href="/cleaning-services-fresno"
@@ -353,6 +359,14 @@ export default function ServiceDetailPage({
               { "@type": "City", name: "Fresno", addressRegion: "CA" },
               { "@type": "City", name: "Clovis", addressRegion: "CA" },
               { "@type": "City", name: "Madera", addressRegion: "CA" },
+              { "@type": "City", name: "Sanger", addressRegion: "CA" },
+              { "@type": "City", name: "Selma", addressRegion: "CA" },
+              { "@type": "City", name: "Kingsburg", addressRegion: "CA" },
+              { "@type": "City", name: "Reedley", addressRegion: "CA" },
+              { "@type": "City", name: "Visalia", addressRegion: "CA" },
+              { "@type": "City", name: "Tulare", addressRegion: "CA" },
+              { "@type": "City", name: "Hanford", addressRegion: "CA" },
+              { "@type": "City", name: "Lemoore", addressRegion: "CA" },
             ],
           }),
         }}

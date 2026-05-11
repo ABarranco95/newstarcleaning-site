@@ -57,7 +57,7 @@ export default function AboutPage() {
                 homeowners about hiring help: no-shows, generic cleaning that
                 misses the details, and cleaners who don&apos;t feel
                 accountable. We hire fewer, better cleaners, train them in our
-                checklist, and back every job with a satisfaction guarantee.
+                checklist, and back every job with a 24-hour re-clean promise.
               </p>
             </div>
 
@@ -84,8 +84,9 @@ export default function AboutPage() {
                   room-by-room standard so nothing slips through.
                 </li>
                 <li>
-                  <strong>Satisfaction guarantee.</strong> If something
-                  isn&apos;t right, we make it right — fast.
+                  <strong>24-hour re-clean promise.</strong> If something
+                  included in the cleaning scope is missed, tell us within 24
+                  hours and we&apos;ll make it right.
                 </li>
               </ul>
             </div>
@@ -137,7 +138,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 text-center text-white">
           <h2 className="text-3xl lg:text-4xl">
-            Ready to book a cleaner you can
+            Ready to get a quote from cleaners you can
             <span className="italic text-accent-light"> trust</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-white/75">
@@ -149,7 +150,7 @@ export default function AboutPage() {
               href="/book-now"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
             >
-              Book your cleaning
+              Request pricing & availability
             </Link>
           </div>
         </div>

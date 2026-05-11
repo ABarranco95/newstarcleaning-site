@@ -78,16 +78,10 @@ export default function Header() {
               (559) 785-2822
             </a>
             <Link
-              href="/#quote"
-              className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-primary shadow-soft transition-colors hover:border-primary"
-            >
-              Get quote
-            </Link>
-            <Link
               href="/book-now"
               className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:bg-primary-light"
             >
-              Book now
+              Request quote
             </Link>
           </nav>
 
@@ -97,7 +91,7 @@ export default function Header() {
               href="/book-now"
               className="inline-flex min-h-11 items-center rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft"
             >
-              Book
+              Quote
             </Link>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}

@@ -8,6 +8,7 @@ type QuickQuoteFormProps = {
   subtitle?: string;
   source?: string;
   defaultCity?: string;
+  defaultService?: string;
   compact?: boolean;
   /** Show calculator-style fields (frequency, beds, baths, sqft) + SMS consent copy */
   extended?: boolean;
@@ -35,13 +36,13 @@ const services = [
   "Not sure yet",
 ];
 
-function initialForm(defaultCity?: string): FormState {
+function initialForm(defaultCity?: string, defaultService?: string): FormState {
   return {
     name: "",
     phone: "",
     email: "",
     city: defaultCity || "",
-    service: "",
+    service: defaultService || "",
     message: "",
     frequency: "",
     bedrooms: "",
@@ -54,22 +55,27 @@ const fieldClass =
   "w-full rounded-xl border border-line bg-white px-4 py-3 text-ink placeholder:text-mute/70 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10";
 
 export default function QuickQuoteForm({
-  title = "Get a fast cleaning quote",
+  title = "Get pricing & availability",
   subtitle = "Tell us where to send availability and pricing — we'll follow up quickly with the best next step for your home.",
   source = "organic_website",
   defaultCity,
+  defaultService,
   compact = false,
   extended = false,
 }: QuickQuoteFormProps) {
-  const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity));
+  const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    setFormData((current) => ({ ...current, city: current.city || defaultCity || "" }));
-  }, [defaultCity]);
+    setFormData((current) => ({
+      ...current,
+      city: current.city || defaultCity || "",
+      service: current.service || defaultService || "",
+    }));
+  }, [defaultCity, defaultService]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -93,7 +99,7 @@ export default function QuickQuoteForm({
 
   const submitLabel = useMemo(() => {
     if (isSubmitting) return "Sending…";
-    return compact ? "Get my quote" : "Get my free quote";
+    return compact ? "Get my quote" : "Get pricing & availability";
   }, [compact, isSubmitting]);
 
   const updateField = (field: keyof FormState, value: string) => {
@@ -124,7 +130,7 @@ export default function QuickQuoteForm({
       }
 
       setIsSuccess(true);
-      setFormData(initialForm(defaultCity));
+      setFormData(initialForm(defaultCity, defaultService));
     } catch (submitError) {
       setError(
         submitError instanceof Error

@@ -58,9 +58,9 @@ export const services: ServiceDefinition[] = [
     schemaServiceType: "HouseCleaning",
     processSteps: [
       {
-        title: "Book and confirm",
+        title: "Quote and confirm",
         description:
-          "Book online or call us. We confirm your date, frequency, and any special instructions. Most clients in Fresno, Clovis, and Madera can be scheduled within a few business days.",
+          "Request a quote online or call us. We confirm your date, frequency, and any special instructions. Most clients in Fresno, Clovis, and Madera can be scheduled within a few business days.",
       },
       {
         title: "Your cleaner arrives",
@@ -220,7 +220,7 @@ export const services: ServiceDefinition[] = [
           "Yes. Interior window glass, inside the refrigerator, inside cabinets, and garage sweeping are available as add-ons. Just let us know when you book or mention it during the walk-through.",
       },
       {
-        question: "Is there a satisfaction guarantee?",
+        question: "What is the 24-hour re-clean promise?",
         answer:
           "If anything was missed, let us know within 24 hours and we'll send a cleaner back to re-do that area at no extra charge. We want your home to feel right.",
       },
@@ -300,7 +300,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Schedule and confirm",
         description:
-          "Book online or call us. We confirm the date, property size, and any special requests. Same-week availability is common in Fresno and Clovis.",
+          "Request a quote online or call us. We confirm the date, property size, and any special requests. Same-week availability is common in Fresno and Clovis.",
       },
       {
         title: "Walk-through and checklist",

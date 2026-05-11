@@ -15,7 +15,7 @@ export const blogPosts: BlogPost[] = [
     slug: "how-often-should-you-deep-clean-your-house",
     title: "How Often Should You Deep Clean Your House?",
     metaTitle:
-      "How Often Should You Deep Clean Your House? | New Star Cleaning",
+      "How Often Should You Deep Clean Your House?",
     metaDescription:
       "How often should a Fresno home be deep cleaned? Our cleaners share a realistic cadence for kitchens, bathrooms, and whole-home resets.",
     excerpt:
@@ -53,7 +53,7 @@ export const blogPosts: BlogPost[] = [
     slug: "house-cleaning-vs-deep-cleaning-whats-the-difference",
     title: "House Cleaning vs. Deep Cleaning — What's the Difference?",
     metaTitle:
-      "House Cleaning vs. Deep Cleaning — What's the Difference? | New Star Cleaning",
+      "House Cleaning vs. Deep Cleaning — What's the Difference?",
     metaDescription:
       "Standard cleaning vs. deep cleaning — which one do you need? A clear breakdown for Fresno homeowners from a local cleaning team.",
     excerpt:
@@ -91,7 +91,7 @@ export const blogPosts: BlogPost[] = [
     slug: "move-out-cleaning-checklist-get-your-deposit-back",
     title: "Move-Out Cleaning Checklist: Get Your Deposit Back",
     metaTitle:
-      "Move-Out Cleaning Checklist: Get Your Deposit Back | New Star Cleaning",
+      "Move-Out Cleaning Checklist: Get Your Deposit Back",
     metaDescription:
       "Exactly what landlords inspect — and what your move-out cleaning needs to cover to get your full deposit back.",
     excerpt:
@@ -135,7 +135,7 @@ export const blogPosts: BlogPost[] = [
     slug: "how-to-prepare-your-home-for-a-cleaning-service",
     title: "How to Prepare Your Home for a Cleaning Service",
     metaTitle:
-      "How to Prepare Your Home for a Cleaning Service | New Star Cleaning",
+      "How to Prepare Your Home for a Cleaning Service",
     metaDescription:
       "Get the most out of your house cleaning. Simple prep steps that help your cleaner work faster and more thoroughly.",
     excerpt:
@@ -173,7 +173,7 @@ export const blogPosts: BlogPost[] = [
     slug: "is-professional-house-cleaning-worth-it",
     title: "Is Professional House Cleaning Worth It?",
     metaTitle:
-      "Is Professional House Cleaning Worth It? | New Star Cleaning",
+      "Is Professional House Cleaning Worth It?",
     metaDescription:
       "An honest look at whether hiring a professional cleaning service is worth it for Fresno homeowners.",
     excerpt:

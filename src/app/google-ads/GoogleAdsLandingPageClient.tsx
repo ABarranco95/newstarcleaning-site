@@ -120,8 +120,8 @@ function GoogleAdsForm() {
       </div>
 
       <div className="mt-4">
-        <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
-        <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange} placeholder="you@example.com" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
+        <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email Address <span className="font-normal text-gray-400">(optional)</span></label>
+        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -146,8 +146,8 @@ function GoogleAdsForm() {
       </div>
 
       <div className="mt-4">
-        <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1">Preferred Date</label>
-        <input type="date" id="date" name="date" required value={formData.date} onChange={handleChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
+        <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1">Preferred Date <span className="font-normal text-gray-400">(optional)</span></label>
+        <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
       </div>
 
       <div className="mt-4">
@@ -166,7 +166,7 @@ function GoogleAdsForm() {
       {error && <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">{error}</div>}
 
       <button type="submit" disabled={isSubmitting} className="w-full mt-6 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-lg rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-        {isSubmitting ? "Submitting..." : "Get My Free Quote"}
+        {isSubmitting ? "Submitting..." : "Get Pricing & Availability"}
       </button>
     </form>
   );
@@ -176,8 +176,8 @@ function FAQAccordion() {
   const faqs = [
     { question: "Do you bring your own cleaning supplies?", answer: "Yes! Our background-checked cleaners arrive with all necessary supplies and equipment. Just provide access to water and electrical outlets." },
     { question: "Are your cleaners background-checked?", answer: "Absolutely. Every cleaner undergoes a thorough background check before joining our team. Your safety and security are our priority." },
-    { question: "What's your satisfaction guarantee?", answer: "If you're not satisfied with our cleaning for any reason, simply contact us within 24 hours and we'll return to re-clean at no additional charge." },
-    { question: "How soon can you come?", answer: "We offer same-week availability for most cleaning services. Book online or call (559) 785-2822 to schedule your preferred date." },
+    { question: "What's your 24-hour re-clean promise?", answer: "If something included in your cleaning scope is missed, contact us within 24 hours and we'll return to re-clean that area at no additional charge." },
+    { question: "How soon can you come?", answer: "We offer same-week availability for most cleaning services. Request a quote or call (559) 785-2822 to confirm pricing and timing." },
     { question: "Do you require contracts?", answer: "No contracts required! We offer one-time, weekly, bi-weekly, or monthly services with no long-term commitment. Cancel anytime." },
   ];
 
@@ -208,7 +208,7 @@ function StickyMobileCTA() {
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" /></svg>
           Call Now
         </a>
-        <a href="#booking-form" className="flex-1 py-3 bg-primary text-white text-center font-bold rounded-lg">Book Online</a>
+        <a href="#booking-form" className="flex-1 py-3 bg-primary text-white text-center font-bold rounded-lg">Request Quote</a>
       </div>
     </div>
   );
@@ -245,10 +245,10 @@ export default function GoogleAdsLandingPageClient() {
             <div className="text-white">
               <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full font-semibold mb-6">
                 <div className="flex">{[...Array(5)].map((_, i) => <span key={i} className="text-yellow-400">★</span>)}</div>
-                5.0 ★ (22 Reviews)
+                5.0 ★ (22 Google reviews)
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">Professional House Cleaning in Fresno</h1>
-              <p className="text-lg sm:text-xl opacity-90 mb-6">Background-checked cleaners, 100% satisfaction guarantee, and same-week availability. Request a fast quote online.</p>
+              <p className="text-lg sm:text-xl opacity-90 mb-6">Background-checked cleaners, 24-hour re-clean promise, and same-week availability. Request a fast quote online.</p>
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2 bg-white/15 px-3 py-2 rounded-lg backdrop-blur-sm">
                   <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
@@ -260,20 +260,53 @@ export default function GoogleAdsLandingPageClient() {
                 </div>
                 <div className="flex items-center gap-2 bg-white/15 px-3 py-2 rounded-lg backdrop-blur-sm">
                   <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
-                  <span className="text-sm font-medium">Satisfaction Guarantee</span>
+                  <span className="text-sm font-medium">24-Hour Re-Clean</span>
                 </div>
               </div>
             </div>
 
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
-              <h3 className="text-2xl font-bold text-primary mb-1 text-center">Get Your Free Quote</h3>
-              <p className="text-gray-500 text-center mb-6 text-sm">Request a fast quote — no phone call needed</p>
+              <h3 className="text-2xl font-bold text-primary mb-1 text-center">Get Pricing & Availability</h3>
+              <p className="text-gray-500 text-center mb-6 text-sm">Send the basics. We follow up with clear pricing before anything is booked.</p>
               <div id="booking-form">
                 <Suspense fallback={<div className="animate-pulse bg-gray-100 h-64 rounded-lg"></div>}>
                   <FormWithParams />
                 </Suspense>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quote Process Section */}
+      <section className="py-12 bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                step: "1",
+                title: "Request pricing",
+                copy: "Tell us your service type, home size, and best contact number.",
+              },
+              {
+                step: "2",
+                title: "We confirm details",
+                copy: "We text or call with clear pricing, timing, and any questions needed to price it right.",
+              },
+              {
+                step: "3",
+                title: "You decide",
+                copy: "You only confirm once the scope, price, and schedule make sense.",
+              },
+            ].map((item) => (
+              <div key={item.step} className="rounded-2xl border border-gray-100 bg-gray-50 p-6 shadow-sm">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg font-extrabold text-white">
+                  {item.step}
+                </div>
+                <h2 className="text-lg font-bold text-primary">{item.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.copy}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -319,13 +352,13 @@ export default function GoogleAdsLandingPageClient() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-3">How It Works</h2>
-            <p className="text-gray-600">Get your home cleaned in three simple steps</p>
+            <p className="text-gray-600">Get pricing, scheduling, and cleaning in three simple steps</p>
           </div>
           <div className="grid sm:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">1</div>
-              <h3 className="text-lg font-bold text-primary mb-2">Book Online</h3>
-              <p className="text-gray-600 text-sm">Complete our simple booking form or call (559) 785-2822. We follow up quickly with clear pricing.</p>
+              <h3 className="text-lg font-bold text-primary mb-2">Request Quote</h3>
+              <p className="text-gray-600 text-sm">Complete our simple quote form or call (559) 785-2822. We follow up quickly with clear pricing.</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">2</div>
@@ -355,20 +388,20 @@ export default function GoogleAdsLandingPageClient() {
                 <div className="text-sm opacity-90">5-Star Reviews</div>
               </div>
               <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">100%</div>
-                <div className="text-sm opacity-90">Satisfaction</div>
+                <div className="text-4xl font-extrabold text-accent mb-1">24-hour</div>
+                <div className="text-sm opacity-90">Re-Clean Promise</div>
               </div>
               <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">24hr</div>
-                <div className="text-sm opacity-90">Re-Clean Guarantee</div>
+                <div className="text-4xl font-extrabold text-accent mb-1">Same-week</div>
+                <div className="text-sm opacity-90">Availability</div>
               </div>
             </div>
             <div className="bg-white/10 rounded-2xl p-8 border-2 border-accent">
               <h3 className="text-xl font-bold text-accent flex items-center gap-2 mb-4">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
-                Our Satisfaction Guarantee
+                Our 24-Hour Re-Clean Promise
               </h3>
-              <p className="opacity-90 leading-relaxed">We&apos;re confident you&apos;ll love our service. If you&apos;re not completely satisfied with any aspect of our cleaning, simply let us know within 24 hours and we&apos;ll return to re-clean — absolutely free. Your happiness is our top priority.</p>
+              <p className="opacity-90 leading-relaxed">If anything is off, tell us within 24 hours and we&apos;ll come back to make it right at no additional cost. Simple, clear, and handled by a local team.</p>
             </div>
           </div>
         </div>
@@ -410,7 +443,7 @@ export default function GoogleAdsLandingPageClient() {
               Call (559) 785-2822
             </a>
             <a href="#booking-form" className="inline-flex items-center justify-center px-6 py-4 bg-white border-2 border-primary text-primary font-bold text-lg rounded-xl hover:bg-primary hover:text-white transition-all">
-              Book Online
+              Request Quote
             </a>
           </div>
         </div>
