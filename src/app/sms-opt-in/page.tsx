@@ -54,7 +54,7 @@ export default function SmsOptIn() {
                   support@newstarcleaning.com
                 </a>{" "}
                 or call{" "}
-                <a href="tel:5597852822" className="text-primary underline">
+                <a href="tel:+15597852822" className="text-primary underline">
                   (559) 785-2822
                 </a>
                 . See our{" "}

@@ -224,11 +224,24 @@ export default function GoogleAdsLandingPageClient() {
       {/* Header */}
       <header className="bg-white sticky top-0 z-40 shadow-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="relative h-11 w-11 overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200 shadow-sm">
-              <Image src="/favicon.png" alt="New Star Cleaning logo" fill sizes="44px" className="object-cover" priority />
-            </span>
-            <span className="text-xl font-extrabold text-primary">New Star Cleaning</span>
+          <div className="flex min-w-0 items-center gap-3">
+            <Image
+              src="/brand/star-ink-mono.png"
+              alt=""
+              width={50}
+              height={48}
+              sizes="50px"
+              className="h-11 w-auto shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)]"
+              priority
+            />
+            <div className="flex min-w-0 flex-col leading-none">
+              <span className="font-sans text-lg font-black tracking-[-0.07em] text-primary sm:text-[1.32rem]">
+                New Star Cleaning
+              </span>
+              <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block">
+                Fresno · Clovis · Central Valley
+              </span>
+            </div>
           </div>
           <a href="tel:+15597852822" className="flex items-center gap-2 text-primary font-semibold hover:text-accent transition-colors">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" /></svg>

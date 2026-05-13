@@ -25,16 +25,22 @@ export default function Footer() {
           {/* Brand block */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3">
-              <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-1 ring-white/25">
-                <Image
-                  src="/favicon.png"
-                  alt="New Star Cleaning logo"
-                  fill
-                  sizes="48px"
-                  className="object-cover"
-                />
-              </span>
-              <span className="font-display text-2xl">New Star Cleaning</span>
+              <Image
+                src="/brand/star-warm-white.png"
+                alt=""
+                width={52}
+                height={50}
+                sizes="52px"
+                className="h-12 w-auto shrink-0 drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)]"
+              />
+              <div className="flex flex-col leading-none">
+                <span className="font-sans text-2xl font-black tracking-[-0.07em] text-white">
+                  New Star Cleaning
+                </span>
+                <span className="mt-1.5 text-[0.58rem] font-black uppercase tracking-[0.28em] text-accent-light">
+                  Residential cleaning
+                </span>
+              </div>
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/65">
               Professional, vetted house cleaning across Fresno and the Central

@@ -26,21 +26,22 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5" aria-label="New Star Cleaning home">
-            <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white ring-1 ring-line shadow-soft">
-              <Image
-                src="/favicon.png"
-                alt="New Star Cleaning logo"
-                fill
-                sizes="44px"
-                className="object-cover"
-                priority
-              />
-            </span>
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-xl text-ink">New Star</span>
-              <span className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-mute">
-                Cleaning
+          <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3 lg:gap-3.5" aria-label="New Star Cleaning home">
+            <Image
+              src="/brand/star-ink-mono.png"
+              alt=""
+              width={58}
+              height={56}
+              sizes="58px"
+              className="h-11 w-auto shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)] lg:h-12 xl:h-14"
+              priority
+            />
+            <div className="flex min-w-0 flex-col leading-none">
+              <span className="font-sans text-[1.08rem] font-black tracking-[-0.07em] text-primary sm:text-xl lg:text-[1.32rem]">
+                New Star Cleaning
+              </span>
+              <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block lg:text-[0.58rem]">
+                Fresno · Clovis · Central Valley
               </span>
             </div>
           </Link>
@@ -89,7 +90,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center gap-2">
             <Link
               href="/book-now"
-              className="inline-flex min-h-11 items-center rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft"
+              className="hidden min-h-11 items-center rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft sm:inline-flex"
             >
               Quote
             </Link>

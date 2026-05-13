@@ -150,7 +150,7 @@ export default function Home() {
                 Fresno · Clovis · Central Valley
               </span>
 
-              <h1 className="mt-5 text-[2.6rem] sm:text-5xl lg:text-[4rem] leading-[1.04]">
+              <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[4rem] leading-[1.04]">
                 House cleaning services
                 <br className="hidden sm:block" />
                 <span className="italic text-accent-light"> in Fresno & Clovis.</span>
