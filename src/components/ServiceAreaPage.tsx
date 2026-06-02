@@ -1,5 +1,6 @@
 import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
+import ContactForm from "@/components/ContactForm";
 import type { ServiceArea } from "@/lib/serviceAreas";
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
@@ -147,6 +148,23 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 {n}
               </span>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quote Form */}
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
+              Get a {area.name} Cleaning Quote
+            </h2>
+            <p className="mt-3 text-gray-600">
+              Free, no-obligation quote. We respond within 15 minutes.
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100">
+            <ContactForm source={`${area.name} Service Page`} />
           </div>
         </div>
       </section>

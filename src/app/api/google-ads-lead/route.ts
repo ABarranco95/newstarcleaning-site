@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const GHL_API_KEY = process.env.GHL_API_KEY;
-const GHL_LOCATION_ID = process.env.GHL_LOCATION_ID || "HR4vKZ2GkN3e72ToQtMi";
-const GHL_PIPELINE_ID = process.env.GHL_PIPELINE_ID || "4N811cjlNEpVy2atgt2b";
-const GHL_STAGE_ID = process.env.GHL_STAGE_ID || "fe9090c6-348c-4fbd-b910-b513d7763020";
+const GHL_LOCATION_ID = process.env.GHL_LOCATION_ID;
+const GHL_PIPELINE_ID = process.env.GHL_PIPELINE_ID;
+const GHL_STAGE_ID = process.env.GHL_STAGE_ID;
 
 const GHL_BASE = "https://services.leadconnectorhq.com";
 const GHL_HEADERS = {
@@ -15,7 +15,7 @@ const GHL_HEADERS = {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, phone, email, service, homesize, date, referral, utm_source, utm_medium, utm_campaign, utm_content } = body;
+    const { name, phone, email, service, homesize, date, utm_source, utm_medium, utm_campaign, utm_content } = body;
 
     if (!name || !phone) {
       return NextResponse.json({ error: "Name and phone are required" }, { status: 400 });

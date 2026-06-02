@@ -1,5 +1,6 @@
 import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
+import ContactForm from "@/components/ContactForm";
 
 const faqItems = [
   {
@@ -239,6 +240,23 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Get Quote Form */}
+      <section className="py-20 lg:py-28 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+              Get Your Free Quote
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Tell us about your home and we'll get back to you within 15 minutes. No obligation, no pressure.
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100">
+            <ContactForm source="Homepage Quote Form" />
           </div>
         </div>
       </section>

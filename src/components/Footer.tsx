@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ContactForm from "@/components/ContactForm";
 
 const serviceAreas = [
   { name: "Fresno", slug: "fresno" },
@@ -117,7 +118,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-white/10 mt-12 pt-8">
+          <div className="max-w-lg mx-auto mb-8">
+            <h3 className="text-lg font-semibold text-white text-center mb-4">Get a Free Quote</h3>
+            <ContactForm source="Footer" compact />
+          </div>
+        </div>
+
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/50 text-sm">
             © {new Date().getFullYear()} NEW STAR CLEANING LLC. All rights
             reserved.
