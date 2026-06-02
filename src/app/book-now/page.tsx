@@ -1,14 +1,27 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import Link from "next/link";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
+import BookingPortalLink from "@/components/BookingPortalLink";
+
+const rawPortalBaseUrl = process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL?.replace(/\/$/, "") ?? "";
+const rawPortalHostname = rawPortalBaseUrl ? new URL(rawPortalBaseUrl).hostname : "";
+const isDeploymentHostname = rawPortalHostname.endsWith(["vercel", "app"].join("."));
+const isPublicPortalUrl = rawPortalBaseUrl && !isDeploymentHostname;
+const apexBookingUrl = isPublicPortalUrl ? `${rawPortalBaseUrl}/book` : null;
 
 export const metadata: Metadata = {
-  title: "Book Your Cleaning",
+  title: "Request Cleaning Pricing & Availability",
   description:
-    "Book professional house cleaning in Fresno, CA in under 60 seconds. Choose your service, pick a date, and we'll handle the rest. Satisfaction guaranteed.",
+    "Request pricing and availability for New Star Cleaning in Fresno, Clovis, Madera, and the Central Valley. Clear quote before anything is booked.",
+  alternates: {
+    canonical: "/book-now",
+  },
   openGraph: {
-    title: "Book Your Cleaning | New Star Cleaning",
+    title: "Request Cleaning Pricing & Availability | New Star Cleaning",
     description:
-      "Book professional house cleaning in Fresno, CA in under 60 seconds.",
+      "Get clear pricing and availability before confirming your Central Valley house cleaning.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
@@ -16,81 +29,116 @@ export const metadata: Metadata = {
 export default function BookNow() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary to-primary-light py-12 lg:py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl lg:text-4xl font-bold text-white">
-            Book Your Cleaning
+      <section className="relative overflow-hidden bg-primary-dark py-14 lg:py-20">
+        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
+        <div className="absolute inset-0 ns-grid-bg opacity-30" aria-hidden="true" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <span className="eyebrow eyebrow-dot text-accent-light">
+            Fresno · Clovis · Central Valley
+          </span>
+          <h1 className="mt-5 text-4xl lg:text-5xl leading-tight">
+            Request cleaning pricing & availability
           </h1>
-          <p className="mt-3 text-lg text-white/80">
-            Choose your service, pick a date, and you're all set. It takes less
-            than 60 seconds.
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/75">
+            Tell us what your home needs. We send clear pricing and available
+            times before anything is booked, with no surprise portal handoff.
           </p>
-          <div className="mt-6">
+          <div className="mt-7 flex justify-center">
             <TrustBadges />
           </div>
         </div>
       </section>
 
-      <section className="py-12 lg:py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Booking Koala Embed */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <iframe
-              src="https://newstarcleaning.bookingkoala.com"
-              className="w-full border-0"
-              style={{ minHeight: "800px", height: "100vh", maxHeight: "1200px" }}
-              title="Book a Cleaning with New Star Cleaning"
-              loading="lazy"
-              allow="payment"
-            />
-          </div>
+      <section className="ns-section bg-cream">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8">
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-line bg-white p-8 shadow-soft">
+              <span className="eyebrow eyebrow-dot">What happens next</span>
+              <h2 className="mt-4 text-3xl text-ink">
+                Quote first. Then you decide.
+              </h2>
+              <ol className="mt-6 space-y-5 text-ink-soft">
+                <li className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-display text-white">
+                    1
+                  </span>
+                  <span>
+                    Send your city, service type, and any notes about the home.
+                  </span>
+                </li>
+                <li className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-display text-white">
+                    2
+                  </span>
+                  <span>
+                    We text or call back with pricing, availability, and any
+                    follow-up questions needed to price it correctly.
+                  </span>
+                </li>
+                <li className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary font-display text-white">
+                    3
+                  </span>
+                  <span>
+                    You confirm only when the scope, price, and schedule make
+                    sense. No payment or commitment on this form.
+                  </span>
+                </li>
+              </ol>
+            </div>
 
-          {/* Fallback CTA */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-500 text-sm mb-4">
-              Having trouble with the booking form above?
-            </p>
-            <a
-              href="https://newstarcleaning.bookingkoala.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl"
-            >
-              Open Booking Page
-              <svg
-                className="w-5 h-5 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="rounded-3xl border border-line bg-white p-8 shadow-soft">
+              <h2 className="text-2xl text-ink">Prefer to talk first?</h2>
+              <p className="mt-3 text-ink-soft">
+                Call or text New Star Cleaning directly. We serve Fresno,
+                Clovis, Madera, Sanger, Selma, Kingsburg, Reedley, Visalia,
+                Tulare, Hanford, and nearby Central Valley homes.
+              </p>
+              <a
+                href="tel:+15597852822"
+                className="mt-5 inline-flex rounded-full border border-line bg-cream px-5 py-3 text-sm font-semibold text-primary transition-colors hover:border-primary"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
+                Call or text (559) 785-2822
+              </a>
+            </div>
+
+            {apexBookingUrl ? (
+              <div className="rounded-3xl border border-line bg-white p-8 shadow-soft">
+                <h2 className="text-2xl text-ink">Already have your quote?</h2>
+                <p className="mt-3 text-ink-soft">
+                  Continue to the secure scheduling portal. Your tracking
+                  source is preserved for reporting.
+                </p>
+                <Suspense fallback={null}>
+                  <BookingPortalLink baseUrl={apexBookingUrl} />
+                </Suspense>
+              </div>
+            ) : null}
           </div>
 
-          {/* SMS Consent Notice */}
-          <div className="mt-8 bg-white rounded-xl p-6 border border-gray-100">
-            <p className="text-xs text-gray-500 leading-relaxed">
-              By booking a cleaning service, you agree to receive automated text
-              messages from New Star Cleaning related to your appointment,
-              including confirmations, reminders, and follow-ups. Message and
-              data rates may apply. Message frequency varies. Reply STOP to opt
-              out at any time. Reply HELP for assistance. View our{" "}
-              <a href="/privacy" className="text-primary underline">
-                Privacy Policy
-              </a>{" "}
-              and{" "}
-              <a href="/terms" className="text-primary underline">
-                Terms of Service
-              </a>
-              .
-            </p>
-          </div>
+          <QuickQuoteForm
+            title="Get pricing & availability"
+            subtitle="No spam. We use your phone only to confirm details, pricing, and available cleaning times."
+            source="organic_quote_page"
+          />
+        </div>
+      </section>
+
+      <section className="bg-white py-8">
+        <div className="mx-auto max-w-4xl px-4 text-xs leading-relaxed text-mute sm:px-6 lg:px-8">
+          By requesting a quote, you agree to receive text messages from New Star
+          Cleaning related to your quote, appointment, confirmations, reminders,
+          and follow-ups. Message and data rates may apply. Message frequency
+          varies. Reply STOP to opt out at any time. Reply HELP for assistance.
+          View our{" "}
+          <Link href="/privacy" className="text-primary underline">
+            Privacy Policy
+          </Link>{" "}
+          and{" "}
+          <Link href="/terms" className="text-primary underline">
+            Terms of Service
+          </Link>
+          .
         </div>
       </section>
     </>

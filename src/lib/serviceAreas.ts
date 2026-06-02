@@ -206,4 +206,79 @@ export const serviceAreas: ServiceArea[] = [
     localContent:
       "Hanford homeowners take pride in their community, and we take pride in helping them maintain beautiful, clean homes. From the historic downtown area to newer residential developments, our cleaning service covers all of Hanford with the professionalism and care you expect.",
   },
+  {
+    slug: "lemoore",
+    name: "Lemoore",
+    county: "Kings County",
+    population: "27,000+",
+    isPrimary: false,
+    description:
+      "Home to NAS Lemoore and a tight-knit family community, Lemoore deserves a cleaning service that's reliable, flexible, and respectful of busy military and working-family schedules. New Star Cleaning serves Lemoore homeowners with the same trusted, background-checked teams we send across the Central Valley.",
+    neighborhoods: [
+      "Downtown Lemoore",
+      "West Lemoore",
+      "East Lemoore",
+      "Lemoore Station area",
+      "North Lemoore",
+    ],
+    nearbyAreas: ["Hanford", "Visalia", "Fresno"],
+    localContent:
+      "Lemoore families — from Navy households at NAS Lemoore to long-time Kings County residents — count on services that show up on time and leave the home spotless. Our Lemoore cleaning team handles standard recurring, deep, and move-in/move-out cleans with the same consistency we deliver in Fresno and Hanford.",
+  },
+  {
+    slug: "tower-district",
+    name: "Tower District",
+    county: "Fresno County",
+    population: "Fresno neighborhood",
+    isPrimary: false,
+    description:
+      "The Tower District is Fresno's historic arts and entertainment heart, full of bungalows, vintage homes, and walk-up duplexes. New Star Cleaning offers Tower District residents detail-oriented house cleaning that respects older homes and tight neighborhood streets.",
+    neighborhoods: [
+      "Olive Avenue corridor",
+      "Wishon Avenue",
+      "Echo Avenue",
+      "Palm Avenue",
+      "Wilson Island",
+    ],
+    nearbyAreas: ["Fresno", "Fig Garden", "Woodward Park", "Clovis"],
+    localContent:
+      "Tower District homes have character — original hardwoods, vintage tile, and detail you don't want a generic crew touching. Our cleaners work carefully through older Fresno homes, focusing on the spots that matter and leaving the period details intact while still delivering a true top-to-bottom clean.",
+  },
+  {
+    slug: "fig-garden",
+    name: "Fig Garden",
+    county: "Fresno County",
+    population: "Fresno neighborhood",
+    isPrimary: false,
+    description:
+      "Old Fig Garden's tree-lined streets and estate homes call for a cleaning team that's careful, thorough, and consistent. New Star Cleaning serves Fig Garden households with white-glove standard, deep, and move-out cleaning.",
+    neighborhoods: [
+      "Old Fig Garden",
+      "Van Ness Boulevard",
+      "Palm & Shaw",
+      "Bullard corridor",
+    ],
+    nearbyAreas: ["Fresno", "Tower District", "Woodward Park", "Clovis"],
+    localContent:
+      "Fig Garden homeowners expect quiet, reliable service. Our teams know how to move through larger Fresno estates without disrupting the household, keeping every room polished, every surface dusted, and every detail handled — week after week.",
+  },
+  {
+    slug: "woodward-park",
+    name: "Woodward Park",
+    county: "Fresno County",
+    population: "Fresno neighborhood",
+    isPrimary: false,
+    description:
+      "Woodward Park is one of Fresno's most-loved residential areas — modern homes, family parks, and easy access to the bluffs. New Star Cleaning serves Woodward Park families with consistent recurring cleaning and deep cleans tuned to busy households.",
+    neighborhoods: [
+      "Woodward Lake",
+      "Copper River",
+      "Friant Road corridor",
+      "Champlain Drive",
+      "Riverpark",
+    ],
+    nearbyAreas: ["Fresno", "Clovis", "Fig Garden", "Madera"],
+    localContent:
+      "Woodward Park families live full schedules — school, work, soccer, the bluffs trail, weekend Riverpark runs. Our Woodward Park cleaners keep up: reliable recurring service, the same trusted cleaner each visit, and deep cleans that reset the home top-to-bottom when life gets busy.",
+  },
 ];

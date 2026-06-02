@@ -1,96 +1,112 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-200 ${
+        scrolled
+          ? "bg-cream/85 backdrop-blur-md border-b border-line shadow-[0_1px_0_rgba(14,22,38,0.04)]"
+          : "bg-cream/0 border-b border-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                />
-              </svg>
-            </div>
-            <div>
-              <span className="text-xl font-bold text-primary">
-                New Star
+          <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3 lg:gap-3.5" aria-label="New Star Cleaning home">
+            <Image
+              src="/brand/star-ink-mono.png"
+              alt=""
+              width={58}
+              height={56}
+              sizes="58px"
+              className="h-11 w-auto shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)] lg:h-12 xl:h-14"
+              priority
+            />
+            <div className="flex min-w-0 flex-col leading-none">
+              <span className="font-sans text-[1.08rem] font-black tracking-[-0.07em] text-primary sm:text-xl lg:text-[1.32rem]">
+                New Star Cleaning
               </span>
-              <span className="text-xl font-light text-gray-600 ml-1">
-                Cleaning
+              <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block lg:text-[0.58rem]">
+                Fresno · Clovis · Central Valley
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-7">
             <Link
               href="/#services"
-              className="text-gray-600 hover:text-primary font-medium transition-colors"
+              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
             >
               Services
             </Link>
             <Link
               href="/#how-it-works"
-              className="text-gray-600 hover:text-primary font-medium transition-colors"
+              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
             >
-              How It Works
+              How it works
             </Link>
             <Link
               href="/#reviews"
-              className="text-gray-600 hover:text-primary font-medium transition-colors"
+              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
             >
               Reviews
             </Link>
             <Link
               href="/#areas"
-              className="text-gray-600 hover:text-primary font-medium transition-colors"
+              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
             >
-              Service Areas
+              Service areas
             </Link>
+            <a
+              href="tel:+15597852822"
+              className="text-sm font-semibold text-ink transition-colors hover:text-accent"
+            >
+              (559) 785-2822
+            </a>
             <Link
               href="/book-now"
-              className="bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-md hover:shadow-lg"
+              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:bg-primary-light"
             >
-              Book Now
+              Request quote
             </Link>
           </nav>
 
           {/* Mobile menu button */}
-          <div className="lg:hidden flex items-center gap-3">
+          <div className="lg:hidden flex items-center gap-2">
             <Link
               href="/book-now"
-              className="bg-accent hover:bg-accent-hover text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors"
+              className="hidden min-h-11 items-center rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft sm:inline-flex"
             >
-              Book Now
+              Quote
             </Link>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2 text-gray-600"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-ink"
               aria-label="Toggle menu"
+              aria-expanded={mobileOpen}
             >
               {mobileOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />
                 </svg>
               )}
             </button>
@@ -99,36 +115,29 @@ export default function Header() {
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <div className="lg:hidden pb-4 border-t border-gray-100">
-            <nav className="flex flex-col gap-2 pt-4">
-              <Link
-                href="/#services"
-                onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg font-medium"
+          <div className="lg:hidden pb-5 pt-2 border-t border-line">
+            <nav className="flex flex-col gap-1 pt-3">
+              {[
+                { href: "/#services", label: "Services" },
+                { href: "/#how-it-works", label: "How it works" },
+                { href: "/#reviews", label: "Reviews" },
+                { href: "/#areas", label: "Service areas" },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-4 py-3 text-base font-medium text-ink-soft hover:bg-cream-2 hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <a
+                href="tel:+15597852822"
+                className="mt-2 rounded-lg px-4 py-3 text-base font-semibold text-primary"
               >
-                Services
-              </Link>
-              <Link
-                href="/#how-it-works"
-                onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg font-medium"
-              >
-                How It Works
-              </Link>
-              <Link
-                href="/#reviews"
-                onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg font-medium"
-              >
-                Reviews
-              </Link>
-              <Link
-                href="/#areas"
-                onClick={() => setMobileOpen(false)}
-                className="px-4 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-lg font-medium"
-              >
-                Service Areas
-              </Link>
+                Call (559) 785-2822
+              </a>
             </nav>
           </div>
         )}

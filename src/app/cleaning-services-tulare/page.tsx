@@ -7,11 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "tulare")!;
 export const metadata: Metadata = {
   title: "House Cleaning Services in Tulare, CA",
   description:
-    "Professional house cleaning in Tulare, CA. Standard recurring, deep cleaning, and move-in/move-out services. Vetted, insured cleaners. Book online in 60 seconds.",
+    "Professional house cleaning in Tulare, CA and the Central Valley. Standard recurring, deep, and move-in/move-out cleaning from vetted, insured cleaners.",
+  alternates: {
+    canonical: "/cleaning-services-tulare",
+  },
   openGraph: {
     title: "House Cleaning Services in Tulare, CA | New Star Cleaning",
     description:
-      "Professional house cleaning in Tulare, CA. Book online in 60 seconds. Satisfaction guaranteed.",
+      "Local Central Valley house cleaning in Tulare, CA. Request a fast quote from vetted, insured cleaners.",
     url: "https://newstarcleaning.com/cleaning-services-tulare",
   },
 };

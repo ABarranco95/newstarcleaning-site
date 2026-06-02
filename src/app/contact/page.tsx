@@ -1,0 +1,162 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
+import TrustBadges from "@/components/TrustBadges";
+
+export const metadata: Metadata = {
+  title: "Contact Fresno House Cleaners",
+  description:
+    "Contact New Star Cleaning in Fresno, CA. Call, text, or request pricing and availability online. Serving Fresno, Clovis, Madera and the Central Valley.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact Fresno House Cleaners | New Star Cleaning",
+    description:
+      "Reach New Star Cleaning. Serving Fresno, Clovis, Madera and the Central Valley.",
+    url: "https://newstarcleaning.com/contact",
+  },
+};
+
+export default function ContactPage() {
+  return (
+    <>
+      <section className="relative overflow-hidden bg-primary-dark">
+        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
+        <div className="absolute inset-0 ns-grid-bg opacity-40" aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+            <div className="max-w-2xl text-white">
+              <span className="eyebrow eyebrow-dot text-accent-light">
+                Talk to us
+              </span>
+              <h1 className="mt-5 text-4xl lg:text-[3.25rem] leading-[1.05]">
+                Let&apos;s get your home
+                <span className="italic text-accent-light"> sparkling</span>
+              </h1>
+              <p className="mt-6 text-lg leading-relaxed text-white/75">
+                Send us a quick message and we&apos;ll follow up with
+                availability, pricing, and the best next step. We respond fast
+                — usually same-day during business hours.
+              </p>
+              <div className="mt-8">
+                <TrustBadges />
+              </div>
+              <p className="mt-6 text-sm leading-relaxed text-white/60">
+                5.0 on Google with 22 public reviews, backed by
+                our 24-hour re-clean promise. Background-checked and insured professionals
+                serving Fresno, Clovis, Madera &amp; the Central Valley.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-white/80">
+                <a
+                  href="tel:+15597852822"
+                  className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 font-medium backdrop-blur-sm transition hover:bg-white/10"
+                >
+                  <svg className="h-4 w-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  (559) 785-2822
+                </a>
+                <a
+                  href="mailto:support@newstarcleaning.com"
+                  className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 font-medium backdrop-blur-sm transition hover:bg-white/10"
+                >
+                  <svg className="h-4 w-4 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  support@newstarcleaning.com
+                </a>
+              </div>
+            </div>
+            <div className="relative">
+              <div
+                className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl"
+                aria-hidden="true"
+              />
+              <QuickQuoteForm
+                title="Get in touch"
+                subtitle="Tell us a bit about what you need. We'll get back to you with availability and pricing."
+                source="contact_page"
+                extended
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="ns-section bg-cream">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-3">
+            <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
+              <span className="eyebrow eyebrow-dot">Service area</span>
+              <h2 className="mt-3 text-xl text-ink">Where we serve</h2>
+              <p className="mt-3 text-ink-soft leading-relaxed">
+                Fresno, Clovis, Madera, Sanger, Selma, Kingsburg, Reedley,
+                Visalia, Tulare, Hanford, Lemoore, plus Tower District, Fig
+                Garden, and Woodward Park.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
+              <span className="eyebrow eyebrow-dot">Hours</span>
+              <h2 className="mt-3 text-xl text-ink">Office availability</h2>
+              <p className="mt-3 text-ink-soft leading-relaxed">
+                Monday – Saturday: 8 AM – 6 PM
+                <br />
+                Sunday: closed
+              </p>
+            </div>
+            <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
+              <span className="eyebrow eyebrow-dot">Quote path</span>
+              <h2 className="mt-3 text-xl text-ink">Request pricing</h2>
+              <p className="mt-3 text-ink-soft leading-relaxed">
+                Already know what you need? Send the service details and we&apos;ll
+                reply with clear pricing and availability before anything is booked.
+              </p>
+              <Link
+                href="/book-now"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover"
+              >
+                Request quote
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            url: "https://newstarcleaning.com/contact",
+            name: "Contact New Star Cleaning",
+            mainEntity: {
+              "@type": "LocalBusiness",
+              name: "New Star Cleaning",
+              areaServed: [
+                "Fresno",
+                "Clovis",
+                "Madera",
+                "Sanger",
+                "Selma",
+                "Kingsburg",
+                "Reedley",
+                "Visalia",
+                "Tulare",
+                "Hanford",
+                "Lemoore",
+              ],
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Fresno",
+                addressRegion: "CA",
+                addressCountry: "US",
+              },
+            },
+          }),
+        }}
+      />
+    </>
+  );
+}

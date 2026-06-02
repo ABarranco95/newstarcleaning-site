@@ -1,17 +1,128 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1e3a5f;
-  --color-primary-light: #2a4a73;
-  --color-primary-dark: #152d4a;
-  --color-accent: #f59e0b;
-  --color-accent-hover: #d97706;
-  --color-accent-light: #fbbf24;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Brand: deeper, inkier navy paired with a warm coral accent and a cream surface. */
+  --color-primary: #0e2747;
+  --color-primary-light: #1a3a63;
+  --color-primary-dark: #081a33;
+
+  /* Darkened from #ef6a37/#d4561f/#f88a5e for WCAG AA contrast on white/cream backgrounds. */
+  --color-accent: #c2511a;
+  --color-accent-hover: #a44514;
+  --color-accent-light: #dc6028;
+
+  /* Warm neutrals — replaces the cool gray look. */
+  --color-cream: #fbf6ee;
+  --color-cream-2: #f5ecdd;
+  --color-ink: #0e1626;
+  --color-ink-soft: #2c3447;
+  --color-mute: #6b7184;
+  --color-line: #e8e2d4;
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+
+  --shadow-soft: 0 1px 2px rgba(14, 22, 38, 0.04), 0 8px 24px -12px rgba(14, 22, 38, 0.12);
+  --shadow-elev: 0 12px 40px -12px rgba(14, 22, 38, 0.25), 0 2px 4px rgba(14, 22, 38, 0.04);
+  --shadow-ring: 0 0 0 1px rgba(14, 22, 38, 0.06);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 1023px) {
+    body {
+      padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-feature-settings: "ss01", "ss02";
+    letter-spacing: -0.015em;
+  }
+
+  h1 {
+    font-weight: 500;
+  }
+  h2,
+  h3 {
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .eyebrow-dot::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: currentColor;
+    display: inline-block;
+  }
+
+  .ns-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  @media (min-width: 1024px) {
+    .ns-section {
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+  }
+
+  .ns-card {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .ns-divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(to right, transparent, var(--color-line), transparent);
+  }
+
+  .ns-grid-bg {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.08) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+
+  .ns-mesh {
+    background:
+      radial-gradient(60% 40% at 12% 18%, rgba(239, 106, 55, 0.22) 0%, transparent 60%),
+      radial-gradient(50% 38% at 88% 12%, rgba(255, 255, 255, 0.18) 0%, transparent 65%),
+      radial-gradient(70% 60% at 50% 100%, rgba(8, 26, 51, 0.55) 0%, transparent 70%);
   }
 }
