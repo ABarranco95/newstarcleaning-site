@@ -102,7 +102,7 @@ export default function Home() {
               Our Cleaning Services
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              From weekly maintenance to one-time deep cleans, we've got your
+              From weekly maintenance to one-time deep cleans, we&apos;ve got your
               home covered.
             </p>
           </div>
@@ -252,7 +252,7 @@ export default function Home() {
               Get Your Free Quote
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Tell us about your home and we'll get back to you within 15 minutes. No obligation, no pressure.
+              Tell us about your home and we&apos;ll get back to you within 15 minutes. No obligation, no pressure.
             </p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100">
@@ -485,7 +485,7 @@ export default function Home() {
               Frequently Asked Questions
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Got questions? We've got answers.
+              Got questions? We&apos;ve got answers.
             </p>
           </div>
 

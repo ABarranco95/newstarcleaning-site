@@ -43,7 +43,7 @@ export default function ContactPage() {
                 <TrustBadges />
               </div>
               <p className="mt-6 text-sm leading-relaxed text-white/60">
-                5.0 on Google with 22 public reviews, backed by
+                5.0 on Google with 23 public reviews, backed by
                 our 24-hour re-clean promise. Background-checked and insured professionals
                 serving Fresno, Clovis, Madera &amp; the Central Valley.
               </p>
