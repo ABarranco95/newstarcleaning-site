@@ -5,12 +5,34 @@ export interface ServiceDefinition {
   tagline: string;
   description: string;
   whatsIncluded: { title: string; items: string[] }[];
+  availableAddOns: { title: string; description: string }[];
+  notIncluded: string[];
+  scopeNotes: string[];
   bestFor: string[];
   schemaServiceType: string;
   faqs?: { question: string; answer: string }[];
   processSteps?: { title: string; description: string }[];
   localNotes?: string;
 }
+
+export const serviceLimitations = [
+  "Laundry, folding, ironing, or changing linens",
+  "Washing dishes, loading dishwashers, or clearing sinks full of dishes",
+  "Organizing, decluttering, sorting belongings, packing, or unpacking",
+  "Making beds or arranging personal items",
+  "Moving heavy furniture, appliances, or items over 25 pounds",
+  "Biohazards, pest waste, mold remediation, hoarding cleanup, or bodily fluids",
+  "Exterior windows, pressure washing, carpet shampooing, or restoration work",
+  "Wall washing, paint removal, ceiling washing, or ladder work above normal reach",
+];
+
+export const clientPrepChecklist = [
+  "Pick up clothes, toys, paperwork, and loose items before the appointment.",
+  "Clear sinks and counters enough for the cleaner to access the surfaces.",
+  "Put away valuables, fragile items, personal documents, and medications.",
+  "Let us know about pets, gate codes, alarms, parking, and priority rooms.",
+  "Request add-ons before the visit so the quote and time window are accurate.",
+];
 
 export const services: ServiceDefinition[] = [
   {
@@ -20,338 +42,399 @@ export const services: ServiceDefinition[] = [
     tagline:
       "Recurring weekly, bi-weekly, or monthly cleaning to keep your home consistently fresh.",
     description:
-      "Our standard cleaning is designed to keep your home consistently clean week after week. We follow a thorough room-by-room checklist so nothing gets missed, and we send the same trusted cleaner whenever possible.",
+      "Standard cleaning is maintenance cleaning for a home that is already in livable condition. We clean visible, accessible surfaces room by room. It is not a household organizing, laundry, dishes, or bed-making service.",
     whatsIncluded: [
       {
         title: "Kitchen",
         items: [
-          "Counters wiped and disinfected",
-          "Stovetop, microwave, sink",
+          "Counters and backsplashes wiped where cleared",
+          "Stovetop and exterior appliance surfaces wiped",
+          "Microwave interior wiped if empty and accessible",
+          "Sink scrubbed and fixtures shined",
           "Cabinet fronts spot-cleaned",
-          "Floors swept and mopped",
+          "Floors vacuumed or swept and mopped",
+          "Trash emptied from accessible bins",
         ],
       },
       {
         title: "Bathrooms",
         items: [
-          "Toilet, tub, shower scrubbed",
-          "Sink and counters",
-          "Mirrors and fixtures shined",
-          "Floors mopped",
+          "Toilet scrubbed and disinfected",
+          "Tub and shower surfaces cleaned",
+          "Sink, counters, mirrors, and fixtures cleaned",
+          "Cabinet fronts spot-cleaned",
+          "Floors vacuumed or swept and mopped",
+          "Trash emptied from accessible bins",
         ],
       },
       {
-        title: "Bedrooms & living areas",
+        title: "Bedrooms and living areas",
         items: [
-          "Surfaces dusted",
-          "Mirrors and glass cleaned",
-          "Floors vacuumed and mopped",
-          "Beds made (linens left as-is)",
+          "Accessible surfaces dusted",
+          "Mirrors and reachable glass cleaned",
+          "Visible cobwebs removed within normal reach",
+          "Floors vacuumed or swept and mopped",
+          "Trash emptied from accessible bins",
         ],
       },
     ],
+    availableAddOns: [
+      {
+        title: "Inside oven",
+        description:
+          "Interior oven cleaning can be added when the oven is cool, empty, and safe to clean.",
+      },
+      {
+        title: "Inside refrigerator",
+        description:
+          "Interior refrigerator cleaning can be added when food is removed or clearly consolidated before arrival.",
+      },
+      {
+        title: "Inside cabinets or drawers",
+        description:
+          "Interior cabinet or drawer wipe-outs can be added when they are empty before the visit.",
+      },
+      {
+        title: "Interior window glass",
+        description:
+          "Reachable interior window glass can be added. Tracks, screens, exterior windows, and ladder work are not included.",
+      },
+      {
+        title: "Extra pet hair detail",
+        description:
+          "Additional vacuuming and lint detail can be added for heavy pet hair homes when quoted ahead of time.",
+      },
+    ],
+    notIncluded: serviceLimitations,
+    scopeNotes: [
+      "Standard cleaning is priced for visible, accessible surfaces.",
+      "Add-ons must be requested before the appointment so time and pricing are accurate.",
+      "Heavy buildup, neglected areas, or a first-time reset may require deep cleaning instead of standard cleaning.",
+    ],
     bestFor: [
-      "Busy households",
-      "Families with kids and pets",
-      "Anyone who wants the home consistently maintained",
+      "Busy households that want consistent cleaning",
+      "Families with kids or pets who need floors, kitchens, and bathrooms maintained",
+      "Clients whose home is picked up enough for surfaces to be accessible",
     ],
     schemaServiceType: "HouseCleaning",
     processSteps: [
       {
         title: "Quote and confirm",
         description:
-          "Request a quote online or call us. We confirm your date, frequency, and any special instructions. Most clients in Fresno, Clovis, and Madera can be scheduled within a few business days.",
+          "Request a quote online or call us. We confirm your service type, frequency, add-ons, access details, and priority rooms before the visit.",
       },
       {
-        title: "Your cleaner arrives",
+        title: "Cleaner arrives",
         description:
-          "A consistent cleaner — when possible — arrives on time with their own supplies and equipment. They introduce themselves, confirm any priorities, and get to work.",
+          "Your cleaner arrives with supplies and equipment, confirms any priority areas, and starts the agreed cleaning scope.",
       },
       {
-        title: "Room-by-room checklist",
+        title: "Room-by-room clean",
         description:
-          "Your cleaner follows our thorough room-by-room checklist: kitchen counters and sink, bathroom fixtures, all floors vacuumed and mopped, surfaces dusted, mirrors cleaned, and trash removed.",
+          "We work through the kitchen, bathrooms, bedrooms, living areas, and floors based on the standard cleaning checklist.",
       },
       {
-        title: "Final walk-through",
+        title: "Final check",
         description:
-          "Your cleaner does a quick final check, tops off any supplies left in the home (paper towels, toilet paper), and texts you a summary when they're done. You're home the whole time — no waiting on a second visit.",
+          "Your cleaner does a final pass before leaving. If something in the agreed scope was missed, let us know within 24 hours.",
       },
     ],
     faqs: [
       {
-        question: "How long does a standard cleaning take?",
+        question: "Is standard cleaning the same as maid service?",
         answer:
-          "A standard cleaning for a 3-bedroom home in Fresno or Clovis typically takes 2–3 hours with one cleaner. Larger homes, extra bathrooms, or homes with pets may take 3–4 hours. We give you a time estimate when you book.",
+          "No. New Star Cleaning provides cleaning service, not maid or household helper service. We clean accessible surfaces, bathrooms, kitchens, floors, and dusting areas. We do not do laundry, dishes, organizing, bed making, packing, or personal household tasks.",
       },
       {
-        question: "What's the difference between standard and deep cleaning?",
+        question: "Do you wash dishes, do laundry, or make beds?",
         answer:
-          "Standard cleaning covers the day-to-day maintenance: surfaces, sinks, mirrors, floors, and visible areas. Deep cleaning adds the detail layer: inside the oven, baseboards by hand, grout scrubbing, fan blades, vent covers, door frames, and high ledges. Most clients start with a deep clean and then switch to recurring standard service to maintain it.",
+          "No. Dishes, laundry, folding, ironing, bed making, changing linens, and organizing belongings are not included in our services.",
       },
       {
-        question: "Do I need to be home during the cleaning?",
+        question: "Can I add inside oven, fridge, cabinets, or windows?",
         answer:
-          "No — most clients give us a spare key, hide a key, or leave the gate code. Your cleaner confirms access at the start of the job via text. You're free to come and go as you like.",
+          "Yes, some detail items can be added when requested before the appointment. Add-ons are priced separately and need enough time on the schedule.",
       },
       {
-        question: "Will I get the same cleaner each time?",
+        question: "How should I prepare for a standard cleaning?",
         answer:
-          "Whenever possible, yes. Consistency is one of the things that sets New Star apart — your cleaner learns your home, your preferences, and your priorities over time. If your regular cleaner is unavailable, we'll let you know in advance and send a qualified replacement.",
+          "Please pick up clutter, clothing, toys, paperwork, and personal items before we arrive. We clean around items left out, but we do not organize or move belongings to create access.",
       },
       {
-        question: "What if I'm not satisfied with the clean?",
+        question: "What if my home needs more than standard cleaning?",
         answer:
-          "If anything was missed, let us know within 24 hours and we'll send a cleaner back to re-do that area at no extra charge. We want your home to feel right every time.",
+          "If there is heavy buildup, neglected areas, or first-time detail work, we may recommend a deep cleaning so the cleaner has enough time to reset the home properly.",
       },
     ],
     localNotes:
-      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Recurring weekly and bi-weekly slots fill up fast — most clients lock in their day and time for the month. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Recurring weekly and bi-weekly slots fill up fast. We background-check every cleaner and carry general liability insurance.",
   },
   {
     slug: "deep-cleaning",
     name: "Deep House Cleaning",
     shortName: "Deep cleaning",
     tagline:
-      "A meticulous top-to-bottom reset for your home — perfect for a fresh start or seasonal refresh.",
+      "A detailed reset for accessible surfaces, buildup, baseboards, fixtures, and first-time cleans.",
     description:
-      "Deep cleaning is a one-time, detail-focused service that resets every room. Everything in our standard checklist plus oven interiors, baseboards, vents, fan blades, door frames, and grout.",
+      "Deep cleaning is a more detailed cleaning reset than standard cleaning. It includes the standard cleaning scope plus extra attention to reachable detail areas like baseboards, doors, fixtures, vents, and bathroom buildup. It does not automatically include every add-on or household task.",
     whatsIncluded: [
       {
         title: "Kitchen detail",
         items: [
-          "Counters, stovetop, and sink scrubbed and disinfected",
-          "Inside oven — racks, walls, and door glass",
-          "Inside microwave — turntable, walls, and vents",
+          "Counters, sink, backsplash, and stovetop scrubbed",
+          "Exterior appliance surfaces detailed",
+          "Microwave interior wiped if empty and accessible",
           "Cabinet fronts and handles spot-cleaned",
-          "Small appliances wiped (toaster, coffee maker, blender)",
-          "Backsplash scrubbed and degreased",
-          "Floors swept, mopped, and edges detailed",
+          "Small appliance exteriors wiped where accessible",
+          "Floor edges and corners detailed",
         ],
       },
       {
         title: "Bathroom detail",
         items: [
-          "Toilet scrubbed inside, behind, and around the base",
-          "Tub and shower — tile, grout lines, fixtures, and glass doors",
-          "Sink and vanity — counters, basin, chrome, and mirrors",
-          "Baseboards, vent covers, and light fixtures dusted",
-          "Floors mopped corner to corner, including behind the toilet",
+          "Toilet cleaned behind and around the base",
+          "Tub, shower, tile, glass, and fixtures cleaned",
+          "Sink, vanity, counters, mirrors, and chrome polished",
+          "Light bathroom buildup and reachable grout detail",
+          "Floor edges and corners detailed",
         ],
       },
       {
         title: "Whole-home detail",
         items: [
-          "All baseboards wiped down by hand",
-          "Ceiling fan blades cleaned top and bottom",
-          "Light fixtures and vent covers dusted",
-          "Door frames, light switches, and outlet covers wiped",
-          "Window sills and tracks vacuumed",
-          "Crown molding and high ledges dusted",
-          "Behind and under furniture where accessible",
-        ],
-      },
-      {
-        title: "Floors and surfaces",
-        items: [
-          "Hard floors vacuumed and mopped edge to edge",
-          "Carpets vacuumed including under moveable furniture",
-          "Upholstered furniture vacuumed or lint-rolled",
-        ],
-      },
-      {
-        title: "On request",
-        items: [
-          "Inside refrigerator — shelves, drawers, and door bins",
-          "Inside cabinets and pantry shelves",
-          "Interior window glass",
-          "Garage sweeping or patio rinse",
+          "Baseboards wiped where accessible",
+          "Ceiling fan blades dusted within normal reach",
+          "Vent covers, switch plates, door frames, and trim wiped",
+          "Window sills dusted or wiped within normal reach",
+          "Reachable high ledges dusted within normal reach",
+          "Under furniture vacuumed where accessible without heavy moving",
         ],
       },
     ],
+    availableAddOns: [
+      {
+        title: "Inside oven",
+        description:
+          "Interior oven cleaning is available as an add-on and must be requested before the visit.",
+      },
+      {
+        title: "Inside refrigerator",
+        description:
+          "Interior refrigerator cleaning is available as an add-on when food is removed or consolidated.",
+      },
+      {
+        title: "Inside cabinets or pantry shelves",
+        description:
+          "Interior cabinet or pantry shelf wipe-outs are available only when emptied before the appointment.",
+      },
+      {
+        title: "Interior window glass",
+        description:
+          "Reachable interior window glass can be added. Exterior windows, screens, tracks, and ladder work are not included.",
+      },
+      {
+        title: "Heavy pet hair detail",
+        description:
+          "Heavy pet hair removal requires extra time and must be quoted before the visit.",
+      },
+    ],
+    notIncluded: serviceLimitations,
+    scopeNotes: [
+      "Deep cleaning is not restoration cleaning. Heavy grease, hard-water damage, mold, paint, or permanent staining may not fully come off.",
+      "Inside appliances, cabinets, and interior windows are add-ons unless the quote specifically includes them.",
+      "The home still needs to be picked up enough for surfaces to be accessible.",
+    ],
     bestFor: [
       "First-time clients starting recurring service",
-      "Spring cleaning or seasonal allergy reset",
-      "Pre-holiday prep or post-construction cleanup",
-      "Homes with pets — dander and fur deep removal",
+      "Seasonal resets and homes that need more detail than standard cleaning",
+      "Homes with buildup on reachable surfaces, fixtures, baseboards, and floors",
     ],
     schemaServiceType: "HouseCleaning",
     processSteps: [
       {
-        title: "Walk-through and priorities",
+        title: "Scope review",
         description:
-          "Your cleaner arrives, introduces themselves, and walks through your home with you. You point out any priority areas — a stubborn oven, a bathroom that needs extra grout work, or a room you'd like them to focus on first.",
+          "We confirm the rooms, buildup level, add-ons, and priority areas before the visit so expectations match the scheduled time.",
       },
       {
-        title: "Kitchen and bathrooms first",
+        title: "Kitchen and bathrooms",
         description:
-          "We start with the highest-touch, highest-germ rooms. Oven interiors are scraped and wiped, bathroom grout is scrubbed, and fixtures are polished. These rooms get the most detail time.",
+          "We focus first on high-use rooms, cleaning accessible surfaces, fixtures, sinks, tubs, showers, toilets, and floor edges.",
       },
       {
-        title: "Whole-home detail pass",
+        title: "Detail pass",
         description:
-          "Baseboards, fan blades, vent covers, door frames, switch plates, and high ledges are hand-wiped room by room. This is the layer that separates a deep clean from a standard clean.",
+          "Baseboards, reachable fan blades, vent covers, door frames, switch plates, sills, and trim are cleaned where accessible.",
       },
       {
         title: "Floors and final check",
         description:
-          "All hard floors are mopped edge to edge and carpets are vacuumed including under accessible furniture. Your cleaner does a final walk-through and texts you photos of the finished rooms.",
+          "Floors are vacuumed or swept and mopped, then the cleaner does a final check against the agreed scope.",
       },
     ],
     faqs: [
       {
-        question: "How long does a deep cleaning take?",
+        question: "Does deep cleaning include inside the oven, fridge, and cabinets?",
         answer:
-          "Most deep cleans for a 3-bedroom home in Fresno or Clovis take 4–6 hours with one cleaner, or 2.5–3.5 hours with a two-person crew. Larger homes, heavy buildup, or add-on items like inside the refrigerator can add 1–2 hours.",
+          "Not automatically. Deep cleaning includes more detail than standard cleaning, but inside oven, inside refrigerator, inside cabinets, and interior windows are add-ons unless your quote specifically includes them.",
       },
       {
-        question: "What's the difference between standard and deep cleaning?",
+        question: "Is deep cleaning good for cluttered homes?",
         answer:
-          "Standard cleaning covers surfaces, sinks, mirrors, floors, and visible areas on a regular basis. Deep cleaning adds the detail layer: inside the oven, baseboards by hand, grout scrubbing, fan blades, vent covers, door frames, behind furniture, and high ledges. Most clients start with a deep clean and then switch to recurring standard service.",
+          "Deep cleaning is for cleaning accessible surfaces, not organizing. Clothes, toys, paperwork, dishes, and personal items need to be picked up before we arrive so the cleaner can reach the areas being cleaned.",
       },
       {
-        question: "Do I need a deep clean before starting recurring service?",
+        question: "Will deep cleaning remove permanent stains or damage?",
         answer:
-          "We recommend it, especially for first-time clients. A deep clean resets the baseline so your recurring cleaner can maintain it efficiently. If your home has been professionally cleaned recently, a standard clean may be enough — we'll let you know during the walk-through.",
+          "We remove normal buildup where possible, but deep cleaning is not restoration. Permanent stains, damaged grout, mold, heavy grease damage, hard-water etching, paint, and worn surfaces may not fully come clean.",
       },
       {
-        question: "Can I add interior windows or inside the fridge?",
+        question: "How long does deep cleaning take?",
         answer:
-          "Yes. Interior window glass, inside the refrigerator, inside cabinets, and garage sweeping are available as add-ons. Just let us know when you book or mention it during the walk-through.",
+          "Most 3-bedroom homes take several hours depending on buildup, bathrooms, pets, and add-ons. We confirm the expected time window when we quote the job.",
       },
       {
-        question: "What is the 24-hour re-clean promise?",
+        question: "What is not included in deep cleaning?",
         answer:
-          "If anything was missed, let us know within 24 hours and we'll send a cleaner back to re-do that area at no extra charge. We want your home to feel right.",
+          "Laundry, dishes, bed making, organizing, heavy furniture moving, biohazards, exterior windows, carpet shampooing, and restoration work are not included.",
       },
     ],
     localNotes:
-      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Same-week deep cleaning availability is common — most homes are scheduled within 3–5 business days. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Same-week deep cleaning availability is common when the scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
   },
   {
     slug: "move-out-cleaning",
     name: "Move-Out Cleaning",
     shortName: "Move-out cleaning",
     tagline:
-      "Inspection-grade cleaning for a smooth move-out, deposit return, or move-in.",
+      "Empty-home cleaning for move-outs, move-ins, sellers, landlords, and property turnovers.",
     description:
-      "Move-out cleaning is tuned to landlord and property-manager checklists. We empty, scrub, and detail the home so it shows like new — helping tenants get their deposit back and landlords turn the unit faster.",
+      "Move-out cleaning is for empty or mostly empty homes where surfaces, appliances, cabinets, bathrooms, floors, and closets need to be cleaned for the next person. It does not include hauling trash, packing, organizing, repairs, carpet shampooing, or guaranteeing a deposit decision.",
     whatsIncluded: [
       {
         title: "Kitchen",
         items: [
-          "Inside oven — racks, walls, and door glass scraped and wiped",
-          "Inside microwave — turntable, walls, and grease",
-          "Inside refrigerator — shelves, drawers, and door bins",
-          "Cabinets and drawers wiped inside and out",
-          "Counters, sink, and backsplash scrubbed",
-          "All appliance exteriors wiped (dishwasher, range hood)",
-          "Floors swept, mopped, and edges detailed",
+          "Counters, sink, backsplash, and exterior appliances cleaned",
+          "Inside oven cleaned when empty, cool, and accessible",
+          "Inside microwave cleaned when empty and accessible",
+          "Inside refrigerator cleaned when empty and accessible",
+          "Empty cabinets and drawers wiped inside and out",
+          "Floors vacuumed or swept and mopped",
         ],
       },
       {
         title: "Bathrooms",
         items: [
-          "Tub, shower, tile, and grout scrubbed",
           "Toilet cleaned inside, behind, and around the base",
-          "Sink, vanity, and counters disinfected",
-          "Mirrors and chrome fixtures polished",
-          "Floors mopped corner to corner",
+          "Tub, shower, tile, glass, and fixtures cleaned",
+          "Sink, vanity, counters, mirrors, and chrome cleaned",
+          "Empty cabinets and drawers wiped",
+          "Floors vacuumed or swept and mopped",
         ],
       },
       {
-        title: "Whole-home detail",
+        title: "Empty-home detail",
         items: [
-          "Empty home cleaning — every room, every surface",
-          "Baseboards wiped down by hand",
-          "Light fixtures, vent covers, and fan blades dusted",
-          "Door frames, light switches, and outlet covers wiped",
-          "Window sills and tracks vacuumed",
-          "Closets wiped out — shelves, rods, and baseboards",
-          "Cobwebs removed from ceilings and corners",
-        ],
-      },
-      {
-        title: "Floors",
-        items: [
-          "Hard floors mopped corner to corner",
-          "Carpets vacuumed edge to edge",
-          "Steam carpet cleaning available on request",
-        ],
-      },
-      {
-        title: "On request",
-        items: [
-          "Interior window glass",
-          "Garage sweeping",
-          "Patio or balcony rinse",
-          "Blind wiping",
+          "Baseboards wiped where accessible",
+          "Door frames, switch plates, vent covers, and reachable trim wiped",
+          "Closet shelves and rods wiped when empty",
+          "Window sills dusted or wiped within normal reach",
+          "Cobwebs removed within normal reach",
+          "Floors vacuumed edge to edge where accessible",
         ],
       },
     ],
+    availableAddOns: [
+      {
+        title: "Interior window glass",
+        description:
+          "Reachable interior window glass can be added. Exterior windows, screens, and ladder work are not included.",
+      },
+      {
+        title: "Garage sweeping",
+        description:
+          "Basic garage sweeping can be added when the garage is empty or mostly empty.",
+      },
+      {
+        title: "Patio or balcony sweeping",
+        description:
+          "Basic sweeping can be added for accessible patios or balconies. Pressure washing is not included.",
+      },
+      {
+        title: "Extra blind detail",
+        description:
+          "Light blind dusting can be added. Heavily soiled, fragile, or damaged blinds may not be serviceable.",
+      },
+      {
+        title: "Heavy buildup time",
+        description:
+          "Extra time may be quoted for heavy grease, heavy dust, or long-neglected empty homes.",
+      },
+    ],
+    notIncluded: serviceLimitations,
+    scopeNotes: [
+      "Move-out cleaning assumes the home is empty or mostly empty before we arrive.",
+      "We do not haul trash, move furniture, pack belongings, repair damage, or guarantee a landlord deposit decision.",
+      "Appliances and cabinets must be emptied before interior cleaning.",
+    ],
     bestFor: [
-      "Tenants moving out — get your deposit back",
+      "Tenants moving out",
       "Landlords and property managers turning units",
       "Buyers and sellers between closing dates",
-      "Property management companies with regular turnovers",
+      "Empty homes that need surfaces reset before move-in",
     ],
     schemaServiceType: "HouseCleaning",
     processSteps: [
       {
         title: "Schedule and confirm",
         description:
-          "Request a quote online or call us. We confirm the date, property size, and any special requests. Same-week availability is common in Fresno and Clovis.",
+          "We confirm the date, home size, empty-home status, appliance/cabinet access, add-ons, and deadline before the visit.",
       },
       {
-        title: "Walk-through and checklist",
+        title: "Access and priorities",
         description:
-          "Your crew arrives on time and walks through the empty property with you (or your property manager). We confirm priority areas and note any damage — then work through our room-by-room move-out checklist.",
+          "Your cleaner confirms access, priority rooms, and any quoted add-ons before starting the move-out checklist.",
       },
       {
-        title: "Full detail clean",
+        title: "Full empty-home clean",
         description:
-          "We start with the kitchen and bathrooms (appliances inside and out, grout, fixtures), then move through bedrooms, living areas, closets, and hallways. Every surface, baseboard, vent, and corner is cleaned to inspection standard.",
+          "We clean kitchens, bathrooms, empty cabinets, closets, accessible trim, fixtures, and floors based on the agreed scope.",
       },
       {
-        title: "Final inspection and photos",
+        title: "Final scope check",
         description:
-          "After the clean, we do our own walk-through and text you photos of the finished rooms. If anything was missed, we handle it on the spot — no second trip needed.",
+          "The cleaner checks the completed work against the agreed move-out scope. Anything outside the quote can be reviewed separately.",
       },
     ],
     faqs: [
       {
-        question: "How long does a move-out cleaning take?",
+        question: "Does move-out cleaning include inside the oven, fridge, and cabinets?",
         answer:
-          "A standard 3-bedroom home in Fresno or Clovis typically takes 4–6 hours with one cleaner, or 2.5–3.5 hours with a two-person crew. Larger homes, heavy buildup, or add-ons like steam cleaning can add time. We give you a time estimate when you book.",
+          "Yes, for move-out cleaning those interiors are included when they are empty, accessible, safe to clean, and part of the confirmed move-out scope.",
       },
       {
-        question: "Will this help me get my security deposit back?",
+        question: "Do you remove trash, furniture, or leftover belongings?",
         answer:
-          "Our move-out cleaning follows the same checklist that landlords and property managers use for move-out inspections. We clean inside appliances, scrub grout, wipe baseboards, and detail every surface. Many tenants tell us they received their full deposit back after our clean. We can also send before-and-after photos for your records.",
+          "No. We clean surfaces; we do not haul trash, move furniture, pack, unpack, or remove personal belongings. The home should be empty or mostly empty before we arrive.",
       },
       {
-        question: "Do you clean inside the oven, fridge, and cabinets?",
+        question: "Can you guarantee I get my deposit back?",
         answer:
-          "Yes — inside the oven, microwave, and refrigerator are all included by default. Cabinets and drawers are wiped inside and out. This is standard for our move-out service, not an extra charge.",
+          "No cleaning company can guarantee a landlord or property manager's deposit decision. We clean against a clear move-out scope, but damage, wear, repairs, paint, carpet condition, and lease rules are outside our control.",
       },
       {
-        question: "Can I book a move-out cleaning for a rental property I manage?",
+        question: "Do you shampoo carpets or repair walls?",
         answer:
-          "Absolutely. We work with landlords and property managers across Fresno, Clovis, and Madera for regular unit turnovers. We can provide recurring service, before-and-after photos, and consistent scheduling. Contact us for property-management pricing.",
+          "No. Carpet shampooing, repairs, paint touch-ups, wall washing, and restoration work are not part of our cleaning service.",
       },
       {
-        question: "Do you offer steam carpet cleaning with a move-out?",
+        question: "What should be done before a move-out cleaning?",
         answer:
-          "Yes, steam carpet cleaning is available as an add-on. Standard vacuuming is included in the base service. If your lease or landlord requires professional carpet cleaning, let us know when you book and we'll include it in your quote.",
-      },
-      {
-        question: "What if I'm not satisfied with the clean?",
-        answer:
-          "If anything was missed, let us know within 24 hours and we'll send a cleaner back to re-do that area at no extra charge. Your satisfaction matters to us.",
+          "Remove belongings, trash, dishes, food, and loose items. Empty appliances, cabinets, drawers, closets, and rooms so the cleaner can access the surfaces.",
       },
     ],
     localNotes:
-      "New Star Cleaning provides move-out cleaning across Fresno, Clovis, Madera, Sanger, Selma, Kerman, Visalia, and the broader Central Valley. Most move-out jobs are scheduled within 3–5 business days. We background-check every cleaner and carry general liability insurance. Property managers and landlords — ask about our recurring turnover pricing.",
+      "New Star Cleaning provides move-out cleaning across Fresno, Clovis, Madera, Sanger, Selma, Kerman, Visalia, and the broader Central Valley. Most move-out jobs are scheduled within 3-5 business days when the empty-home scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
   },
 ];
 

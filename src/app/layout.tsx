@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   keywords: [
     "house cleaning Fresno",
     "cleaning service Fresno CA",
-    "maid service Clovis",
+    "recurring house cleaning Clovis",
     "deep cleaning Fresno",
     "move out cleaning Fresno",
     "house cleaners near me",

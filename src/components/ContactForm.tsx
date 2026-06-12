@@ -164,7 +164,7 @@ export default function ContactForm({ source = "Website Contact Form", className
             <option value="standard-recurring">Standard Recurring Cleaning</option>
             <option value="deep-cleaning">Deep Cleaning</option>
             <option value="move-out">Move-In / Move-Out Cleaning</option>
-            <option value="commercial">Commercial Cleaning</option>
+            <option value="not-sure">Not Sure Yet</option>
           </select>
         </div>
         <div>

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "verify:lead-routing": "node scripts/verify-lead-routing.mjs",
-    "verify:seo-readiness": "node scripts/verify-seo-readiness.mjs"
+    "verify:seo-readiness": "node scripts/verify-seo-readiness.mjs",
+    "verify:service-scope": "node scripts/verify-service-scope.mjs"
   },
   "dependencies": {
     "next": "^16.2.6",

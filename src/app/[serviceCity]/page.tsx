@@ -160,6 +160,12 @@ export default async function ServiceCityPage({ params }: RouteParams) {
               <p className="mt-5 text-ink-soft leading-relaxed">
                 {service.description}
               </p>
+              <p className="mt-4 text-ink-soft leading-relaxed">
+                Add-ons are quoted separately unless they are listed in your
+                confirmed scope. Laundry, dishes, bed making, organizing,
+                packing, and personal household tasks are not part of our
+                cleaning service.
+              </p>
               {area ? (
                 <p className="mt-4 text-ink-soft leading-relaxed">
                   We serve {cityName} households across {area.neighborhoods
@@ -173,6 +179,12 @@ export default async function ServiceCityPage({ params }: RouteParams) {
                   className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft hover:border-primary hover:text-primary"
                 >
                   Full {service.shortName.toLowerCase()} details
+                </Link>
+                <Link
+                  href="/checklist"
+                  className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft hover:border-primary hover:text-primary"
+                >
+                  Service checklist
                 </Link>
                 <Link
                   href={`/cleaning-services-${citySlug}`}
@@ -215,6 +227,38 @@ export default async function ServiceCityPage({ params }: RouteParams) {
                   </ul>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="mt-12 grid gap-5 lg:grid-cols-2">
+            <div>
+              <h3 className="text-xl text-ink">Available add-ons</h3>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {service.availableAddOns.map((addOn) => (
+                  <div
+                    key={addOn.title}
+                    className="rounded-2xl border border-line bg-white p-5 shadow-soft"
+                  >
+                    <h4 className="font-semibold text-ink">{addOn.title}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                      {addOn.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xl text-ink">Not included</h3>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {service.notIncluded.slice(0, 8).map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

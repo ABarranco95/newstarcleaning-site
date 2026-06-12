@@ -21,11 +21,15 @@ const faqItems = [
   },
   {
     q: "What's included in a standard cleaning vs. deep cleaning?",
-    a: "A standard cleaning covers all living areas — vacuuming, mopping, dusting, kitchen and bathroom surfaces, and general tidying. A deep cleaning includes everything in a standard cleaning plus baseboards, inside appliances, window sills, ceiling fans, and detailed scrubbing of showers and tubs.",
+    a: "A standard cleaning covers accessible surfaces, floors, dusting, kitchen surfaces, and bathrooms. A deep cleaning adds more reachable detail such as baseboards, vents, door frames, fixtures, sills, and buildup areas. Inside oven, refrigerator, cabinets, and interior windows are add-ons unless your quote includes them.",
+  },
+  {
+    q: "Do you do laundry, dishes, organizing, or bed making?",
+    a: "No. We provide cleaning service, not household task service. Laundry, dishes, bed making, changing linens, organizing, packing, unpacking, and personal item handling are not included.",
   },
   {
     q: "What if I'm not satisfied with the cleaning?",
-    a: "We offer a 100% satisfaction guarantee. If you're not happy with any part of the cleaning, contact us within 24 hours and we'll come back to make it right — at no additional cost.",
+    a: "If something included in the agreed cleaning scope was missed, contact us within 24 hours and we'll review it and return to re-clean that area when appropriate. Requests outside the original scope are quoted separately.",
   },
 ];
 
@@ -120,7 +124,7 @@ export default function Home() {
                 ),
                 features: [
                   "Weekly, bi-weekly, or monthly",
-                  "All rooms cleaned & refreshed",
+                  "Accessible rooms cleaned",
                   "Consistent, trusted cleaners",
                   "Flexible scheduling",
                 ],
@@ -128,16 +132,16 @@ export default function Home() {
               {
                 title: "Deep Cleaning",
                 href: "/services/deep-cleaning",
-                desc: "A thorough, top-to-bottom clean that tackles every corner, crevice, and surface. Perfect for a fresh start or seasonal refresh.",
+                desc: "A more detailed cleaning reset for reachable buildup, baseboards, fixtures, floors, kitchens, and bathrooms. Perfect for a fresh start or seasonal refresh.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                   </svg>
                 ),
                 features: [
-                  "Every surface deep-scrubbed",
-                  "Inside appliances & cabinets",
-                  "Baseboards, fans, & vents",
+                  "Reachable detail areas",
+                  "Baseboards, fans, and vents",
+                  "Add-ons quoted separately",
                   "One-time or add to recurring",
                 ],
               },
@@ -151,9 +155,9 @@ export default function Home() {
                   </svg>
                 ),
                 features: [
-                  "Full property cleaning",
-                  "Get your deposit back",
-                  "Landlord & tenant friendly",
+                  "Empty-home cleaning",
+                  "Appliances and empty cabinets",
+                  "Clear move-out scope",
                   "Available same week",
                 ],
               },
@@ -227,7 +231,7 @@ export default function Home() {
               },
               {
                 title: "Guaranteed Results",
-                desc: "Not satisfied? We'll come back and make it right, free of charge. That's our 100% satisfaction guarantee.",
+                desc: "If something in the agreed cleaning scope is missed, contact us within 24 hours and we'll review it quickly.",
                 icon: "⭐",
               },
             ].map((item) => (
@@ -340,7 +344,7 @@ export default function Home() {
               {
                 name: "David R.",
                 location: "Clovis, CA",
-                text: "Had them do a move-out cleaning on our rental property. The place looked brand new — got our full $1,800 deposit back. Worth every penny. Will definitely use again.",
+                text: "Had them do a move-out cleaning on our rental property. The place looked ready for inspection and the scope was clear from the start. Worth every penny.",
                 rating: 5,
               },
               {
@@ -569,10 +573,10 @@ export default function Home() {
                 category: "Guides",
               },
               {
-                title: "Move-Out Cleaning Checklist: Get Your Full Deposit Back",
-                href: "/blog/move-out-cleaning-checklist-get-your-deposit-back",
+                title: "Move-Out Cleaning Checklist Before Inspection",
+                href: "/blog/move-out-cleaning-checklist-before-inspection",
                 excerpt:
-                  "The complete checklist landlords use to inspect properties — and how to pass with flying colors.",
+                  "The cleaning areas tenants, landlords, and sellers usually check before keys are handed over.",
                 category: "Checklists",
               },
             ].map((post) => (

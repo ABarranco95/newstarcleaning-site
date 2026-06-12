@@ -73,6 +73,12 @@ export default function Header() {
             >
               Service areas
             </Link>
+            <Link
+              href="/checklist"
+              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
+            >
+              Checklist
+            </Link>
             <a
               href="tel:+15597852822"
               className="text-sm font-semibold text-ink transition-colors hover:text-accent"
@@ -123,6 +129,7 @@ export default function Header() {
                 { href: "/#how-it-works", label: "How it works" },
                 { href: "/#reviews", label: "Reviews" },
                 { href: "/service-areas", label: "Service areas" },
+                { href: "/checklist", label: "Checklist" },
               ].map((link) => (
                 <Link
                   key={link.href}

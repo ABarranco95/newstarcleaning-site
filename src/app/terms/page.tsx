@@ -20,7 +20,7 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="text-gray-500 mb-12">
-          Last Updated: March 8, 2026
+          Last Updated: June 12, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -46,8 +46,8 @@ export default function TermsOfService() {
             </h2>
             <p className="text-gray-600 leading-relaxed mb-3">
               New Star Cleaning provides professional residential cleaning
-              services in Fresno, CA and the surrounding Central Valley area,
-              including but not limited to:
+              services in Fresno, CA and the surrounding Central Valley area.
+              Our core residential services are:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-600">
               <li>
@@ -64,6 +64,30 @@ export default function TermsOfService() {
                 cleaning for properties being vacated or newly occupied
               </li>
             </ul>
+            <p className="mt-4 text-gray-600 leading-relaxed">
+              The service scope is limited to the work confirmed in your quote,
+              booking, or written communication before the appointment. Add-ons
+              are included only when they are specifically requested and
+              confirmed before service.
+            </p>
+            <p className="mt-4 text-gray-600 leading-relaxed">
+              New Star Cleaning is a cleaning service, not a household task,
+              organizing, moving, or restoration service. Unless expressly
+              confirmed in writing, we do not provide laundry, folding,
+              ironing, changing linens, bed making, washing dishes, loading
+              dishwashers, organizing, decluttering, packing, unpacking,
+              hauling trash, moving heavy furniture or appliances, carpet
+              shampooing, exterior window cleaning, pressure washing, mold
+              remediation, pest waste cleanup, biohazard cleanup, repairs, paint
+              removal, or restoration work.
+            </p>
+            <p className="mt-4 text-gray-600 leading-relaxed">
+              Move-in and move-out cleaning does not guarantee any landlord,
+              property manager, buyer, seller, or deposit decision. We clean
+              against the agreed scope; damage, repairs, paint, carpet
+              condition, lease terms, and third-party inspection decisions are
+              outside our control.
+            </p>
           </section>
 
           <section>

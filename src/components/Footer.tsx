@@ -42,8 +42,8 @@ export default function Footer() {
             </div>
             <p className="text-white/70 text-sm leading-relaxed">
               Professional house cleaning services in Fresno, CA and the
-              surrounding Central Valley. Vetted, insured, and satisfaction
-              guaranteed.
+              surrounding Central Valley. Vetted, insured, and backed by a
+              clear cleaning scope.
             </p>
           </div>
 
@@ -81,6 +81,14 @@ export default function Footer() {
                   className="hover:text-white transition-colors"
                 >
                   Move-In/Move-Out Cleaning
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/checklist"
+                  className="hover:text-white transition-colors"
+                >
+                  Service Checklist
                 </Link>
               </li>
             </ul>

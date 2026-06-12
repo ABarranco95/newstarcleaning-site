@@ -26,10 +26,10 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
     {
       title: "Deep cleaning",
       href: "/services/deep-cleaning",
-      desc: `A meticulous top-to-bottom reset for your ${area.name} home, built for seasonal resets, first-time cleans, and homes that need detail work.`,
+      desc: `A detailed reset for your ${area.name} home, built for seasonal resets, first-time cleans, and homes that need reachable detail work.`,
       features: [
-        "Every surface deep-scrubbed",
-        "Inside appliances and cabinets",
+        "Reachable detail areas",
+        "Add-ons quoted separately",
         "Baseboards, fans, trim, and vents",
       ],
     },
@@ -38,7 +38,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       href: "/services/move-out-cleaning",
       desc: `Moving in or out of a ${area.name} property? We clean empty homes against the details landlords, buyers, and sellers actually inspect.`,
       features: [
-        "Full property cleaning",
+        "Empty-home cleaning",
         "Appliance and cabinet interiors",
         "Same-week availability when routes allow",
       ],
@@ -160,7 +160,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
               <p className="mt-4 leading-relaxed text-ink-soft">
                 New Star Cleaning provides professional house cleaning throughout
                 {" "}{area.name}, CA — recurring (weekly, bi-weekly, or monthly),
-                one-time deep cleans, and inspection-grade move-in/move-out
+                one-time deep cleans, and clear-scope move-in/move-out
                 cleaning. Every cleaner is background-checked, fully insured, and
                 committed to delivering a spotless result every time.
               </p>

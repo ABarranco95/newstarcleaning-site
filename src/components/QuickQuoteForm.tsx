@@ -37,8 +37,6 @@ const services = [
   "Standard recurring cleaning",
   "Deep cleaning",
   "Move-in / move-out cleaning",
-  "Post-construction cleaning",
-  "Vacation rental / Airbnb cleaning",
   "Not sure yet",
 ];
 

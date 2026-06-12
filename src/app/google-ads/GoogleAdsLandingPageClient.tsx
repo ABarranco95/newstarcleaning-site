@@ -192,6 +192,8 @@ function FAQAccordion() {
     { question: "Do you bring your own cleaning supplies?", answer: "Yes! Our background-checked cleaners arrive with all necessary supplies and equipment. Just provide access to water and electrical outlets." },
     { question: "Are your cleaners background-checked?", answer: "Absolutely. Every cleaner undergoes a thorough background check before joining our team. Your safety and security are our priority." },
     { question: "What's your 24-hour re-clean promise?", answer: "If something included in your cleaning scope is missed, contact us within 24 hours and we'll return to re-clean that area at no additional charge." },
+    { question: "Do you do laundry, dishes, organizing, or bed making?", answer: "No. We provide cleaning service, not household task service. Laundry, dishes, organizing, changing linens, bed making, packing, and unpacking are not included." },
+    { question: "Are oven, fridge, cabinets, and windows included?", answer: "Those items depend on the service and quote. Standard and deep cleaning treat many detail items as add-ons. Move-out cleaning can include empty appliance and cabinet interiors when confirmed in the scope." },
     { question: "How soon can you come?", answer: "We offer same-week availability for most cleaning services. Request a quote or call (559) 785-2822 to confirm pricing and timing." },
     { question: "Do you require contracts?", answer: "No contracts required! We offer one-time, weekly, bi-weekly, or monthly services with no long-term commitment. Cancel anytime." },
   ];
@@ -361,7 +363,7 @@ export default function GoogleAdsLandingPageClient() {
                 <svg className="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z" /></svg>
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">Deep Cleaning</h3>
-              <p className="text-gray-600 text-sm">Thorough top-to-bottom cleaning for those times when standard cleaning isn&apos;t enough.</p>
+              <p className="text-gray-600 text-sm">Detailed cleaning for reachable buildup, baseboards, fixtures, kitchens, bathrooms, and floors.</p>
               <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 text-center sm:col-span-2 lg:col-span-1">
@@ -369,7 +371,7 @@ export default function GoogleAdsLandingPageClient() {
                 <svg className="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" /></svg>
               </div>
               <h3 className="text-xl font-bold text-primary mb-3">Move-In/Move-Out</h3>
-              <p className="text-gray-600 text-sm">Get your deposit back or start fresh. Complete cleaning for vacating or new homes.</p>
+              <p className="text-gray-600 text-sm">Empty-home cleaning for vacating or new homes, with clear scope before booking.</p>
               <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
             </div>
           </div>
@@ -392,12 +394,12 @@ export default function GoogleAdsLandingPageClient() {
             <div className="text-center">
               <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">2</div>
               <h3 className="text-lg font-bold text-primary mb-2">We Clean</h3>
-              <p className="text-gray-600 text-sm">Our background-checked professionals arrive on time and clean your home top to bottom.</p>
+              <p className="text-gray-600 text-sm">Our background-checked professionals arrive on time and clean the agreed scope.</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">3</div>
               <h3 className="text-lg font-bold text-primary mb-2">You Relax</h3>
-              <p className="text-gray-600 text-sm">Enjoy your sparkling clean home. Not satisfied? We re-clean FREE within 24 hours.</p>
+              <p className="text-gray-600 text-sm">Enjoy your clean home. If something in scope is missed, contact us within 24 hours.</p>
             </div>
           </div>
         </div>

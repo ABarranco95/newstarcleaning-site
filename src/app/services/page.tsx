@@ -49,7 +49,7 @@ const comparisonRows = [
     label: "Detail level",
     values: [
       "Visible surfaces, floors, bathrooms, kitchen, and dusting",
-      "Baseboards, fans, vents, oven, grout, and buildup",
+      "Baseboards, reachable fans, vents, trim, fixtures, and light buildup",
       "Inside appliances, cabinets, closets, baseboards, and full empty-home detail",
     ],
   },
@@ -99,6 +99,12 @@ export default function ServicesPage() {
                 >
                   See service areas
                 </Link>
+                <Link
+                  href="/checklist"
+                  className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+                >
+                  Service checklist
+                </Link>
               </div>
             </div>
             <QuickQuoteForm
@@ -122,6 +128,12 @@ export default function ServicesPage() {
               The right service depends on how lived-in the home is, whether it
               is empty, and how much detail work is needed. These are the core
               services we quote most often for Fresno and Clovis households.
+            </p>
+            <p className="mt-4 leading-relaxed text-ink-soft">
+              Add-ons such as inside oven, refrigerator, cabinets, and interior
+              window glass are separate unless your quote specifically includes
+              them. Laundry, dishes, organizing, bed making, packing, and
+              personal household tasks are not part of our cleaning service.
             </p>
           </div>
 

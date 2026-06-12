@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog/move-out-cleaning-checklist-get-your-deposit-back",
+        destination: "/blog/move-out-cleaning-checklist-before-inspection",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

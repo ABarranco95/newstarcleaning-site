@@ -87,6 +87,28 @@ export default function ServiceDetailPage({
               <p className="mt-5 text-ink-soft leading-relaxed">
                 {service.description}
               </p>
+              <div className="mt-7 rounded-2xl border border-primary/15 bg-white p-6 shadow-soft">
+                <h3 className="text-lg font-semibold text-ink">
+                  Clear scope before we book
+                </h3>
+                <ul className="mt-4 space-y-2">
+                  {service.scopeNotes.map((note) => (
+                    <li
+                      key={note}
+                      className="flex gap-2 text-sm leading-relaxed text-ink-soft"
+                    >
+                      <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                      <span>{note}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/checklist"
+                  className="mt-5 inline-flex text-sm font-semibold text-primary transition-colors hover:text-accent"
+                >
+                  View the full service checklist &rarr;
+                </Link>
+              </div>
             </div>
             <div className="space-y-4">
               {service.whatsIncluded.map((group) => (
@@ -121,6 +143,71 @@ export default function ServiceDetailPage({
                   </ul>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Scope boundaries */}
+      <section className="ns-section bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+            <div>
+              <span className="eyebrow eyebrow-dot">Scope protection</span>
+              <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
+                Add-ons are separate from the base cleaning
+              </h2>
+              <p className="mt-5 leading-relaxed text-ink-soft">
+                We price cleaning by the work agreed before the visit. Optional
+                detail items can be added when there is enough time on the
+                schedule, but they are not automatically included unless your
+                quote says so.
+              </p>
+              <div className="mt-6 rounded-2xl border border-line bg-cream p-5">
+                <h3 className="text-base font-semibold text-ink">
+                  Cleaning service, not household task service
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                  We focus on cleaning reachable surfaces, rooms, appliances,
+                  fixtures, and floors. Laundry, dishes, organizing, bed
+                  making, packing, and personal item handling are outside our
+                  service scope.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <h3 className="text-xl text-ink">Available add-ons</h3>
+                <div className="mt-4 space-y-3">
+                  {service.availableAddOns.map((addOn) => (
+                    <div
+                      key={addOn.title}
+                      className="rounded-2xl border border-line bg-cream p-5"
+                    >
+                      <h4 className="font-semibold text-ink">{addOn.title}</h4>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                        {addOn.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-xl text-ink">Not included</h3>
+                <ul className="mt-4 space-y-2 rounded-2xl border border-line bg-cream p-5">
+                  {service.notIncluded.map((item) => (
+                    <li
+                      key={item}
+                      className="flex gap-2 text-sm leading-relaxed text-ink-soft"
+                    >
+                      <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

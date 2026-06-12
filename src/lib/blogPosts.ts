@@ -76,7 +76,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Deep cleaning",
         paragraphs: [
-          "Deep cleaning is everything in the standard, plus detail work — inside appliances, baseboards, vents, fans, grout, and tight corners. It's the right call for a first-time clean, a seasonal reset, or after construction or moving.",
+          "Deep cleaning includes the standard scope plus extra reachable detail work such as baseboards, vents, fans, trim, fixtures, bathroom buildup, and tight corners. Inside oven, refrigerator, cabinets, and interior windows are add-ons unless the quote specifically includes them.",
         ],
       },
       {
@@ -88,27 +88,27 @@ export const blogPosts: BlogPost[] = [
     ],
   },
   {
-    slug: "move-out-cleaning-checklist-get-your-deposit-back",
-    title: "Move-Out Cleaning Checklist: Get Your Deposit Back",
+    slug: "move-out-cleaning-checklist-before-inspection",
+    title: "Move-Out Cleaning Checklist Before Inspection",
     metaTitle:
-      "Move-Out Cleaning Checklist: Get Your Deposit Back",
+      "Move-Out Cleaning Checklist Before Inspection",
     metaDescription:
-      "Exactly what landlords inspect — and what your move-out cleaning needs to cover to get your full deposit back.",
+      "A realistic move-out cleaning checklist for tenants, sellers, buyers, and landlords before the final walkthrough.",
     excerpt:
-      "The exact checklist landlords look at, room by room, when they decide what to deduct from your deposit.",
+      "Room-by-room cleaning areas to review before keys are handed over, without promising a landlord's final decision.",
     category: "Move-out",
     publishedAt: "2026-03-30",
     readMinutes: 6,
     body: [
       {
         paragraphs: [
-          "Most disputed deposit deductions come down to cleaning. Here's the room-by-room checklist landlords actually inspect — and how to make sure your move-out is inspection-grade.",
+          "Move-out cleaning is about making an empty home ready for walkthrough, move-in, or turnover. This checklist focuses on cleaning scope only; repairs, carpet condition, paint, and deposit decisions are separate from our service.",
         ],
       },
       {
         heading: "Kitchen",
         paragraphs: [
-          "Inside the oven, behind the stove if it pulls out, cabinet interiors, microwave, refrigerator (inside and behind), sink and faucet, and floors corner-to-corner.",
+          "Inside the oven, cabinet interiors when empty, microwave, refrigerator when empty, sink and faucet, visible appliance exteriors, and floors corner-to-corner. We do not move heavy appliances or clean unsafe areas behind them.",
         ],
       },
       {
@@ -120,13 +120,13 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Bedrooms and living areas",
         paragraphs: [
-          "Closets emptied and wiped, baseboards, door frames, switch plates, light fixtures and ceiling fans, blinds, and window sills. Carpets vacuumed; spot-treated where needed.",
+          "Closets emptied and wiped, baseboards, door frames, switch plates, reachable fixtures and ceiling fans, light blind dusting, and window sills. Carpet shampooing and repairs are not part of our cleaning service.",
         ],
       },
       {
         heading: "Final pass",
         paragraphs: [
-          "All trash out, no personal items, all doors and windows closed, and a final walkthrough with the unit empty so you can spot anything missed.",
+          "All trash out, no personal items, no dishes or food left behind, and a final walkthrough with the unit empty so any cleaning misses can be seen clearly.",
         ],
       },
     ],

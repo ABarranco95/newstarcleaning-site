@@ -400,7 +400,7 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Fresno", "Fig Garden", "Woodward Park", "Clovis"],
     localContent:
-      "Tower District homes have character — original hardwoods, vintage tile, and detail you don't want a generic crew touching. Our cleaners work carefully through older Fresno homes, focusing on the spots that matter and leaving the period details intact while still delivering a true top-to-bottom clean.",
+      "Tower District homes have character — original hardwoods, vintage tile, and detail you don't want a generic crew touching. Our cleaners work carefully through older Fresno homes, focusing on the spots that matter and leaving the period details intact while staying inside a clear cleaning scope.",
     localProof:
       "Tower District is close to our Fresno base and needs a different cleaning approach than newer subdivisions: careful detail work, older finishes, and tighter access.",
     homeProfiles: [
@@ -465,7 +465,7 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Fresno", "Clovis", "Fig Garden", "Madera"],
     localContent:
-      "Woodward Park families live full schedules — school, work, soccer, the bluffs trail, weekend Riverpark runs. Our Woodward Park cleaners keep up: reliable recurring service, the same trusted cleaner each visit, and deep cleans that reset the home top-to-bottom when life gets busy.",
+      "Woodward Park families live full schedules — school, work, soccer, the bluffs trail, weekend Riverpark runs. Our Woodward Park cleaners keep up: reliable recurring service, the same trusted cleaner each visit, and deep cleans that reset reachable detail areas when life gets busy.",
     localProof:
       "Woodward Park and north Fresno routes are a strong fit for same-week quotes, larger home scopes, and recurring cleaning with cleaner consistency.",
     homeProfiles: [
