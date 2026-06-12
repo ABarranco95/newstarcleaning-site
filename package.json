@@ -9,7 +9,8 @@
     "lint": "eslint",
     "verify:lead-routing": "node scripts/verify-lead-routing.mjs",
     "verify:seo-readiness": "node scripts/verify-seo-readiness.mjs",
-    "verify:service-scope": "node scripts/verify-service-scope.mjs"
+    "verify:service-scope": "node scripts/verify-service-scope.mjs",
+    "verify:lead-ux": "node scripts/verify-lead-ux.mjs"
   },
   "dependencies": {
     "next": "^16.2.6",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
-import QuickQuoteForm from "@/components/QuickQuoteForm";
+import QuotePathPanel from "@/components/QuotePathPanel";
 import { serviceAreas } from "@/lib/serviceAreas";
 
 const siteUrl = "https://newstarcleaning.com";
@@ -114,11 +114,10 @@ export default function ServiceAreasPage() {
                 </Link>
               </div>
             </div>
-            <QuickQuoteForm
+            <QuotePathPanel
               title="Check your service area"
-              subtitle="Tell us your city and what you need cleaned. We will confirm availability and route timing."
+              body="Start with your city page, then request availability when you are ready. The quote page asks only for the basics."
               source="organic_service_areas_hub"
-              compact
             />
           </div>
         </div>

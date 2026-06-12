@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
-import QuickQuoteForm from "@/components/QuickQuoteForm";
+import QuotePathPanel from "@/components/QuotePathPanel";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services } from "@/lib/services";
 
@@ -107,11 +107,10 @@ export default function ServicesPage() {
                 </Link>
               </div>
             </div>
-            <QuickQuoteForm
-              title="Get a cleaning quote"
-              subtitle="Tell us about your home and the service you are considering. We will follow up with pricing and availability."
+            <QuotePathPanel
+              title="Choose first, quote second"
+              body="Compare the services here, then use the quote page when you are ready for pricing. We keep the form short and confirm details by text or call."
               source="organic_services_hub"
-              compact
             />
           </div>
         </div>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import QuickQuoteForm from "@/components/QuickQuoteForm";
+import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceDefinition } from "@/lib/services";
@@ -45,13 +45,13 @@ export default function ServiceDetailPage({
                   href="#quote"
                   className="group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:bg-accent-hover hover:-translate-y-0.5"
                 >
-                  Get a free quote
+                  Request pricing
                 </a>
                 <Link
-                  href="/book-now"
+                  href="/checklist"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
                 >
-                  How quotes work
+                  See the checklist
                 </Link>
               </div>
               <div className="mt-8 hidden sm:block">
@@ -63,12 +63,11 @@ export default function ServiceDetailPage({
                 className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl"
                 aria-hidden="true"
               />
-              <QuickQuoteForm
-                title={`Get a ${service.shortName.toLowerCase()} quote`}
-                subtitle={`Tell us what you need. We'll follow up quickly with availability and pricing.`}
+              <QuotePathPanel
+                title={`Price ${service.shortName.toLowerCase()}`}
+                body="We keep service pages focused on scope. When you are ready, the quote page asks only for the basics and preselects this service."
                 source={`organic_${service.slug}_service`}
-                defaultService={quoteFormService(service)}
-                compact
+                service={quoteFormService(service)}
               />
             </div>
           </div>

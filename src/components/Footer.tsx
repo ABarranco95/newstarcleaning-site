@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ContactForm from "@/components/ContactForm";
 
 const serviceAreas = [
   { name: "Fresno", slug: "fresno" },
@@ -17,7 +16,7 @@ const serviceAreas = [
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white pb-20 lg:pb-0">
+    <footer className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -125,7 +124,7 @@ export default function Footer() {
             <ul className="space-y-2 text-white/70 text-sm">
               <li>
                 <Link href="/book-now" className="hover:text-white transition-colors">
-                  Book Online
+                  Request Pricing
                 </Link>
               </li>
               <li>
@@ -153,9 +152,30 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8">
-          <div className="max-w-lg mx-auto mb-8">
-            <h3 className="text-lg font-semibold text-white text-center mb-4">Get a Free Quote</h3>
-            <ContactForm source="Footer" compact />
+          <div className="mx-auto grid max-w-3xl gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-center sm:grid-cols-[1fr_auto] sm:items-center sm:text-left">
+            <div>
+              <h3 className="text-lg font-semibold text-white">
+                Need pricing or route availability?
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/65">
+                Use the short quote page or call us directly. We confirm scope
+                and pricing before anything is booked.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Link
+                href="/book-now"
+                className="inline-flex justify-center rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+              >
+                Request pricing
+              </Link>
+              <a
+                href="tel:+15597852822"
+                className="inline-flex justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                Call
+              </a>
+            </div>
           </div>
         </div>
 

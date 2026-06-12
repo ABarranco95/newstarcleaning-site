@@ -1,7 +1,6 @@
 import Link from "next/link";
-import QuickQuoteForm from "@/components/QuickQuoteForm";
+import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
-import ContactForm from "@/components/ContactForm";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceArea } from "@/lib/serviceAreas";
 
@@ -131,14 +130,13 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
               </div>
             </div>
 
-            <div className="relative">
+            <div id="quote" className="relative scroll-mt-24">
               <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl" aria-hidden="true" />
-              <QuickQuoteForm
-                title={`Get a ${area.name} cleaning quote`}
-                subtitle={`Tell us what you need in ${area.name}. We'll follow up quickly with availability, pricing, and the best next step.`}
-                defaultCity={area.name}
+              <QuotePathPanel
+                title={`Check availability in ${area.name}`}
+                body="Review the local route notes here, then use the short quote page when you are ready for pricing."
+                city={area.name}
                 source={`organic_${area.slug}_service_area`}
-                compact
               />
             </div>
           </div>
@@ -371,23 +369,6 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 </div>
               </details>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Quote Form */}
-      <section id="quote" className="scroll-mt-24 py-16 lg:py-24 bg-white">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-              Get a {area.name} Cleaning Quote
-            </h2>
-            <p className="mt-3 text-gray-600">
-              Free, no-obligation quote. We respond within 15 minutes.
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100">
-            <ContactForm source={`${area.name} Service Page`} />
           </div>
         </div>
       </section>

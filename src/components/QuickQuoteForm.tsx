@@ -40,6 +40,25 @@ const services = [
   "Not sure yet",
 ];
 
+function normalizeServiceParam(value: string | null) {
+  if (!value) return "";
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "standard-cleaning" || normalized === "standard") {
+    return "Standard recurring cleaning";
+  }
+  if (normalized === "deep-cleaning" || normalized === "deep") {
+    return "Deep cleaning";
+  }
+  if (
+    normalized === "move-out-cleaning" ||
+    normalized === "move-out" ||
+    normalized === "moveinout"
+  ) {
+    return "Move-in / move-out cleaning";
+  }
+  return services.includes(value) ? value : "";
+}
+
 function initialForm(defaultCity?: string, defaultService?: string): FormState {
   return {
     name: "",
@@ -104,6 +123,16 @@ export default function QuickQuoteForm({
     });
     if (document.referrer) capture.referrer = document.referrer;
     setTracking(capture);
+
+    const city = params.get("city");
+    const service = normalizeServiceParam(params.get("service"));
+    if (city || service) {
+      setFormData((current) => ({
+        ...current,
+        city: current.city || city || "",
+        service: current.service || service || "",
+      }));
+    }
   }, []);
 
   const submitLabel = useMemo(() => {

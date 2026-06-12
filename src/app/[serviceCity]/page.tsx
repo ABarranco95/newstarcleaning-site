@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import QuickQuoteForm from "@/components/QuickQuoteForm";
+import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services, type ServiceDefinition } from "@/lib/services";
@@ -135,13 +135,12 @@ export default async function ServiceCityPage({ params }: RouteParams) {
                 className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl"
                 aria-hidden="true"
               />
-              <QuickQuoteForm
-                title={`Get a ${cityName} ${service.shortName.toLowerCase()} quote`}
-                subtitle={`Tell us about your ${cityName} home. We'll follow up with availability and pricing.`}
-                defaultCity={cityName}
-                defaultService={quoteFormService(service)}
+              <QuotePathPanel
+                title={`Price ${service.shortName.toLowerCase()} in ${cityName}`}
+                body="We will keep this page focused on local scope and route notes. The quote page preselects this city and service."
+                city={cityName}
+                service={quoteFormService(service)}
                 source={`organic_${service.slug}_${citySlug}`}
-                compact
               />
             </div>
           </div>

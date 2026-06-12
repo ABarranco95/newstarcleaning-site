@@ -1,6 +1,5 @@
 import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
-import ContactForm from "@/components/ContactForm";
 
 const faqItems = [
   {
@@ -50,15 +49,15 @@ export default function Home() {
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl">
               Professional house cleaning in Fresno, Clovis, and the Central
-              Valley. Book online in 60 seconds. Vetted, insured cleaners you
-              can trust.
+              Valley. Request clear pricing before anything is booked. Vetted,
+              insured cleaners you can trust.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Link
                 href="/book-now"
                 className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
-                Book Your Cleaning
+                Request pricing
                 <svg
                   className="w-5 h-5 ml-2"
                   fill="none"
@@ -81,7 +80,7 @@ export default function Home() {
             {[
               { stat: "500+", label: "Homes Cleaned" },
               { stat: "4.9★", label: "Average Rating" },
-              { stat: "100%", label: "Satisfaction Guarantee" },
+              { stat: "24-hour", label: "Re-clean Promise" },
               { stat: "Same Week", label: "Availability" },
             ].map((item) => (
               <div
@@ -215,8 +214,8 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                title: "Book in 60 Seconds",
-                desc: "Our simple online booking lets you schedule your cleaning in under a minute. Pick your date, choose your service, done.",
+                title: "Short Quote Path",
+                desc: "Send the basics, then we confirm service scope, pricing, and availability before anything is booked.",
                 icon: "⚡",
               },
               {
@@ -251,19 +250,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Get Quote Form */}
+      {/* Quote CTA */}
       <section className="py-20 lg:py-28 bg-white">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-              Get Your Free Quote
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Tell us about your home and we&apos;ll get back to you within 15 minutes. No obligation, no pressure.
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100">
-            <ContactForm source="Homepage Quote Form" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 rounded-2xl border border-gray-100 bg-gray-50 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+                Quote path
+              </span>
+              <h2 className="mt-3 text-3xl lg:text-4xl font-bold text-gray-900">
+                Get pricing without a long form
+              </h2>
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
+                The quote page asks for the basics only. We follow up by text
+                or call to confirm scope, add-ons, timing, and price before
+                anything is booked.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Link
+                href="/book-now"
+                className="inline-flex justify-center rounded-full bg-accent px-7 py-4 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
+              >
+                Request pricing
+              </Link>
+              <a
+                href="tel:+15597852822"
+                className="inline-flex justify-center rounded-full border border-gray-200 bg-white px-7 py-4 text-base font-bold text-primary transition-colors hover:border-primary"
+              >
+                Call or text
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -284,18 +301,18 @@ export default function Home() {
             {[
               {
                 step: "1",
-                title: "Book Online",
-                desc: "Choose your service, pick a date and time that works for you, and book in under 60 seconds.",
+                title: "Request Pricing",
+                desc: "Choose the service, city, and best number so we can confirm the right scope.",
               },
               {
                 step: "2",
-                title: "We Clean",
-                desc: "Our vetted, professional cleaning team arrives on time and gets to work making your home sparkle.",
+                title: "We Confirm",
+                desc: "We text or call with pricing, timing, and any questions needed to quote it correctly.",
               },
               {
                 step: "3",
-                title: "You Relax",
-                desc: "Come home to a spotless house. Enjoy your free time doing the things you actually love.",
+                title: "You Decide",
+                desc: "You book only when the service scope, price, and schedule make sense.",
               },
             ].map((item) => (
               <div key={item.step} className="relative text-center">
@@ -315,7 +332,7 @@ export default function Home() {
               href="/book-now"
               className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl"
             >
-              Get Started — Book Now
+              Get pricing
             </Link>
           </div>
         </div>
@@ -474,7 +491,7 @@ export default function Home() {
               href="/book-now"
               className="inline-flex items-center justify-center bg-accent hover:bg-accent-hover text-white font-bold px-10 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              Book Your Cleaning Now
+              Request pricing
               <svg
                 className="w-5 h-5 ml-2"
                 fill="none"

@@ -38,14 +38,14 @@ export default function BookNow() {
         <div className="absolute inset-0 ns-grid-bg opacity-30" aria-hidden="true" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <span className="eyebrow eyebrow-dot text-accent-light">
-            Fresno · Clovis · Central Valley
+            Fresno / Clovis / Central Valley
           </span>
           <h1 className="mt-5 text-4xl lg:text-5xl leading-tight">
             Request cleaning pricing & availability
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/75">
             Tell us what your home needs. We send clear pricing and available
-            times before anything is booked, with no surprise portal handoff.
+            times before anything is booked.
           </p>
           <div className="mt-7 flex justify-center">
             <TrustBadges />
@@ -124,7 +124,6 @@ export default function BookNow() {
             title="Get pricing & availability"
             subtitle="No spam. We use your phone only to confirm details, pricing, and available cleaning times."
             source="organic_quote_page"
-            extended
           />
         </div>
       </section>

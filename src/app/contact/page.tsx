@@ -77,7 +77,6 @@ export default function ContactPage() {
                 title="Get in touch"
                 subtitle="Tell us a bit about what you need. We'll get back to you with availability and pricing."
                 source="contact_page"
-                extended
               />
             </div>
           </div>
