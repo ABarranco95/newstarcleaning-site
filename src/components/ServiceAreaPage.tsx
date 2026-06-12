@@ -2,7 +2,10 @@ import Link from "next/link";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
 import ContactForm from "@/components/ContactForm";
+import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceArea } from "@/lib/serviceAreas";
+
+const siteUrl = "https://newstarcleaning.com";
 
 function serviceAreaSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -56,6 +59,25 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
     {
       title: "Route and booking notes",
       body: area.bookingNote,
+    },
+  ];
+
+  const areaFaqs = [
+    {
+      question: `Do you provide house cleaning in ${area.name}, CA?`,
+      answer: `Yes. New Star Cleaning serves ${area.name}, CA with standard recurring cleaning, deep cleaning, and move-in/move-out cleaning. ${area.localProof}`,
+    },
+    {
+      question: `Which ${area.name} neighborhoods do you serve?`,
+      answer: `We serve ${area.neighborhoods.slice(0, 4).join(", ")} and nearby parts of ${area.county}. If your exact neighborhood is not listed, request a quote and we will confirm route availability.`,
+    },
+    {
+      question: `What cleaning services are available in ${area.name}?`,
+      answer: `${area.name} clients can request recurring standard cleaning, one-time deep cleaning, and move-in/move-out cleaning. Common local requests include ${area.commonJobs.slice(0, 2).join(" and ")}.`,
+    },
+    {
+      question: `How quickly can I book a cleaner in ${area.name}?`,
+      answer: area.bookingNote,
     },
   ];
 
@@ -312,6 +334,47 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         </div>
       </section>
 
+      {/* Local FAQs */}
+      <section className="ns-section bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <span className="eyebrow eyebrow-dot">Local FAQs</span>
+            <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
+              Questions about cleaning in {area.name}
+            </h2>
+          </div>
+          <div className="mt-10 space-y-4">
+            {areaFaqs.map((faq) => (
+              <details
+                key={faq.question}
+                className="group rounded-2xl border border-line bg-cream shadow-soft"
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 p-6 text-lg font-medium text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden list-none">
+                  <span>{faq.question}</span>
+                  <svg
+                    className="h-5 w-5 flex-shrink-0 text-ink-soft transition-transform group-open:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div className="px-6 pb-6 pt-0 text-ink-soft leading-relaxed">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Quote Form */}
       <section id="quote" className="scroll-mt-24 py-16 lg:py-24 bg-white">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -386,6 +449,16 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       </section>
 
       {/* Schema */}
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: siteUrl },
+          { name: "Service Areas", url: `${siteUrl}/service-areas` },
+          {
+            name: `${area.name} Cleaning Services`,
+            url: `${siteUrl}/cleaning-services-${area.slug}`,
+          },
+        ]}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -441,6 +514,23 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 },
               ],
             },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: areaFaqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
           }),
         }}
       />

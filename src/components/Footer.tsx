@@ -53,6 +53,14 @@ export default function Footer() {
             <ul className="space-y-2 text-white/70 text-sm">
               <li>
                 <Link
+                  href="/services"
+                  className="hover:text-white transition-colors"
+                >
+                  All Cleaning Services
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/services/standard-cleaning"
                   className="hover:text-white transition-colors"
                 >
@@ -82,6 +90,14 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Service Areas</h3>
             <ul className="space-y-2 text-white/70 text-sm">
+              <li>
+                <Link
+                  href="/service-areas"
+                  className="hover:text-white transition-colors"
+                >
+                  All Service Areas
+                </Link>
+              </li>
               {serviceAreas.map((area) => (
                 <li key={area.slug}>
                   <Link

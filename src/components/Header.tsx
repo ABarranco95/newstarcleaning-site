@@ -50,7 +50,7 @@ export default function Header() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-7">
             <Link
-              href="/#services"
+              href="/services"
               className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
             >
               Services
@@ -68,7 +68,7 @@ export default function Header() {
               Reviews
             </Link>
             <Link
-              href="/#areas"
+              href="/service-areas"
               className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
             >
               Service areas
@@ -119,10 +119,10 @@ export default function Header() {
           <div className="lg:hidden pb-5 pt-2 border-t border-line">
             <nav className="flex flex-col gap-1 pt-3">
               {[
-                { href: "/#services", label: "Services" },
+                { href: "/services", label: "Services" },
                 { href: "/#how-it-works", label: "How it works" },
                 { href: "/#reviews", label: "Reviews" },
-                { href: "/#areas", label: "Service areas" },
+                { href: "/service-areas", label: "Service areas" },
               ].map((link) => (
                 <Link
                   key={link.href}

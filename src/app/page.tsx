@@ -444,6 +444,14 @@ export default function Home() {
               </Link>
             ))}
           </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/service-areas"
+              className="inline-flex rounded-full border border-line bg-white px-6 py-3 text-sm font-semibold text-primary shadow-soft transition-colors hover:border-primary"
+            >
+              View all service areas
+            </Link>
+          </div>
         </div>
       </section>
 

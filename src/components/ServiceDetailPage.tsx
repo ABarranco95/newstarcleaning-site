@@ -1,7 +1,10 @@
 import Link from "next/link";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import TrustBadges from "@/components/TrustBadges";
+import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceDefinition } from "@/lib/services";
+
+const siteUrl = "https://newstarcleaning.com";
 
 function quoteFormService(service: ServiceDefinition) {
   return service.slug === "standard-cleaning"
@@ -336,6 +339,16 @@ export default function ServiceDetailPage({
       </section>
 
       {/* Schema — Service */}
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: siteUrl },
+          { name: "Services", url: `${siteUrl}/services` },
+          {
+            name: service.name,
+            url: `${siteUrl}/services/${service.slug}`,
+          },
+        ]}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -347,11 +360,16 @@ export default function ServiceDetailPage({
             description: service.description,
             provider: {
               "@type": "LocalBusiness",
+              "@id": `${siteUrl}/#localbusiness`,
               name: "New Star Cleaning",
+              url: siteUrl,
+              telephone: "+1-559-785-2822",
               address: {
                 "@type": "PostalAddress",
+                streetAddress: "132 W Nees Ave Unit 106",
                 addressLocality: "Fresno",
                 addressRegion: "CA",
+                postalCode: "93720",
                 addressCountry: "US",
               },
             },

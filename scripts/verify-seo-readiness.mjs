@@ -22,6 +22,10 @@ const sitemap = read("src/app/sitemap.ts");
 const serviceCityPage = read("src/app/[serviceCity]/page.tsx");
 const schemaMarkup = read("src/components/SchemaMarkup.tsx");
 const serviceAreaPage = read("src/components/ServiceAreaPage.tsx");
+const serviceDetailPage = read("src/components/ServiceDetailPage.tsx");
+const servicesHub = read("src/app/services/page.tsx");
+const serviceAreasHub = read("src/app/service-areas/page.tsx");
+const header = read("src/components/Header.tsx");
 const footer = read("src/components/Footer.tsx");
 const robots = read("src/app/robots.ts");
 
@@ -59,6 +63,11 @@ assert(
 );
 
 assert(
+  sitemap.includes("/services") && sitemap.includes("/service-areas"),
+  "organic services and service-area hubs are included in the XML sitemap",
+);
+
+assert(
   /robots:\s*{[\s\S]*index:\s*false[\s\S]*follow:\s*true[\s\S]*}/.test(
     serviceCityPage,
   ),
@@ -73,18 +82,50 @@ assert(
 assert(
   serviceAreaPage.includes("Local service notes") &&
     serviceAreaPage.includes("Google profile") &&
+    serviceAreaPage.includes("Local FAQs") &&
+    serviceAreaPage.includes("FAQPage") &&
+    serviceAreaPage.includes("BreadcrumbSchema") &&
     serviceAreaPage.includes("homeProfiles") &&
     serviceAreaPage.includes("commonJobs") &&
     serviceAreaPage.includes("bookingNote"),
-  "service-area pages render local proof, request types, route notes, and profile link",
+  "service-area pages render local proof, local FAQs, breadcrumbs, route notes, and profile link",
+);
+
+assert(
+  serviceDetailPage.includes("BreadcrumbSchema") &&
+    serviceDetailPage.includes("/services") &&
+    serviceDetailPage.includes("FAQPage"),
+  "service detail pages include service breadcrumbs and visible FAQ schema",
+);
+
+assert(
+  servicesHub.includes("Compare services") &&
+    servicesHub.includes("ItemList") &&
+    servicesHub.includes("/services/standard-cleaning") &&
+    servicesHub.includes("/service-areas"),
+  "services hub links service details and service-area hub",
+);
+
+assert(
+  serviceAreasHub.includes("Cities we serve") &&
+    serviceAreasHub.includes("Fresno neighborhoods") &&
+    serviceAreasHub.includes("ItemList") &&
+    serviceAreasHub.includes("/cleaning-services-"),
+  "service-area hub links local city and neighborhood pages",
 );
 
 for (const href of [
+  "/services",
   "/services/standard-cleaning",
   "/services/deep-cleaning",
   "/services/move-out-cleaning",
+  "/service-areas",
 ]) {
   assert(footer.includes(`href="${href}"`), `footer links ${href}`);
+}
+
+for (const href of ["/services", "/service-areas"]) {
+  assert(header.includes(`href="${href}"`), `header links ${href}`);
 }
 
 assert(
