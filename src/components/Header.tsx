@@ -33,7 +33,8 @@ export default function Header() {
               width={58}
               height={56}
               sizes="58px"
-              className="h-11 w-auto shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)] lg:h-12 xl:h-14"
+              className="h-auto w-11 shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)] lg:w-12 xl:w-14"
+              style={{ height: "auto" }}
               priority
             />
             <div className="flex min-w-0 flex-col leading-none">

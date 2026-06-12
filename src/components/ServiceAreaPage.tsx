@@ -9,6 +9,56 @@ function serviceAreaSlug(value: string) {
 }
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
+  const serviceCards = [
+    {
+      title: "Standard recurring cleaning",
+      href: "/services/standard-cleaning",
+      desc: `Keep your ${area.name} home consistently clean with weekly, bi-weekly, or monthly visits. Same trusted cleaner whenever scheduling allows.`,
+      features: [
+        "Weekly, bi-weekly, or monthly",
+        "All rooms refreshed each visit",
+        "Consistent cleaner notes and preferences",
+      ],
+    },
+    {
+      title: "Deep cleaning",
+      href: "/services/deep-cleaning",
+      desc: `A meticulous top-to-bottom reset for your ${area.name} home, built for seasonal resets, first-time cleans, and homes that need detail work.`,
+      features: [
+        "Every surface deep-scrubbed",
+        "Inside appliances and cabinets",
+        "Baseboards, fans, trim, and vents",
+      ],
+    },
+    {
+      title: "Move-in / move-out cleaning",
+      href: "/services/move-out-cleaning",
+      desc: `Moving in or out of a ${area.name} property? We clean empty homes against the details landlords, buyers, and sellers actually inspect.`,
+      features: [
+        "Full property cleaning",
+        "Appliance and cabinet interiors",
+        "Same-week availability when routes allow",
+      ],
+    },
+  ];
+
+  const localPanels: Array<
+    { title: string; items: string[] } | { title: string; body: string }
+  > = [
+    {
+      title: `Homes we clean in ${area.name}`,
+      items: area.homeProfiles,
+    },
+    {
+      title: "Common local requests",
+      items: area.commonJobs,
+    },
+    {
+      title: "Route and booking notes",
+      body: area.bookingNote,
+    },
+  ];
+
   return (
     <>
       {/* Hero */}
@@ -54,7 +104,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 </Link>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-8 hidden sm:block">
                 <TrustBadges />
               </div>
             </div>
@@ -95,8 +145,8 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
               <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
-                  { k: "5.0★", v: "Google rating" },
-                  { k: "23", v: "Google reviews" },
+                  { k: "Local", v: "Fresno-based routes" },
+                  { k: "Insured", v: "Vetted cleaners" },
                   { k: "24-hour", v: "Re-clean promise" },
                 ].map((s) => (
                   <div
@@ -118,40 +168,19 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 Services available in {area.name}
               </h2>
               <div className="mt-8 space-y-4">
-                {[
-                  {
-                    title: "Standard recurring cleaning",
-                    desc: `Keep your ${area.name} home consistently clean with weekly, bi-weekly, or monthly visits. Same trusted cleaner, flexible scheduling.`,
-                    features: [
-                      "Weekly, bi-weekly, or monthly",
-                      "All rooms refreshed each visit",
-                      "Consistent cleaner assigned",
-                    ],
-                  },
-                  {
-                    title: "Deep cleaning",
-                    desc: `A meticulous, top-to-bottom reset for your ${area.name} home. Perfect for a fresh start or seasonal refresh.`,
-                    features: [
-                      "Every surface deep-scrubbed",
-                      "Inside appliances & cabinets",
-                      "Baseboards, fans, and trim",
-                    ],
-                  },
-                  {
-                    title: "Move-in / move-out cleaning",
-                    desc: `Moving in or out of a ${area.name} property? We'll make it inspection-ready and spotless.`,
-                    features: [
-                      "Full property cleaning",
-                      "Tuned to landlord checklists",
-                      "Same-week availability",
-                    ],
-                  },
-                ].map((service) => (
+                {serviceCards.map((service) => (
                   <div
                     key={service.title}
                     className="rounded-2xl border border-line bg-white p-6 shadow-soft"
                   >
-                    <h3 className="text-xl text-ink">{service.title}</h3>
+                    <h3 className="text-xl text-ink">
+                      <Link
+                        href={service.href}
+                        className="transition-colors hover:text-primary"
+                      >
+                        {service.title}
+                      </Link>
+                    </h3>
                     <p className="mt-2 text-sm leading-relaxed text-ink-soft">
                       {service.desc}
                     </p>
@@ -167,6 +196,90 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                     </ul>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-14">
+            <div className="max-w-3xl">
+              <span className="eyebrow eyebrow-dot">Local service notes</span>
+              <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
+                Built around real {area.name} homes and cleaning needs
+              </h2>
+              <p className="mt-5 leading-relaxed text-ink-soft">
+                {area.localProof}
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 lg:grid-cols-3">
+              {localPanels.map((panel) => (
+                <div
+                  key={panel.title}
+                  className="rounded-2xl border border-line bg-white p-6 shadow-soft"
+                >
+                  <h3 className="text-lg font-semibold text-ink">
+                    {panel.title}
+                  </h3>
+                  {"items" in panel ? (
+                    <ul className="mt-4 space-y-2">
+                      {panel.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-2 text-sm leading-relaxed text-ink-soft"
+                        >
+                          <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+                      {panel.body}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 grid gap-4 rounded-2xl border border-line bg-primary-dark p-6 text-white shadow-soft md:grid-cols-3">
+              <div>
+                <div className="text-sm uppercase tracking-wider text-white/50">
+                  Local business
+                </div>
+                <div className="mt-2 font-semibold">NEW STAR CLEANING LLC</div>
+                <div className="mt-1 text-sm text-white/65">
+                  Fresno-based house cleaning for the Central Valley.
+                </div>
+              </div>
+              <div>
+                <div className="text-sm uppercase tracking-wider text-white/50">
+                  Call or text
+                </div>
+                <a
+                  href="tel:+15597852822"
+                  className="mt-2 block font-semibold text-accent-light hover:text-white"
+                >
+                  (559) 785-2822
+                </a>
+                <div className="mt-1 text-sm text-white/65">
+                  Monday-Saturday, 8:00 AM-6:00 PM
+                </div>
+              </div>
+              <div>
+                <div className="text-sm uppercase tracking-wider text-white/50">
+                  Google profile
+                </div>
+                <Link
+                  href="https://www.google.com/maps?cid=12575787905603463321"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 block font-semibold text-accent-light hover:text-white"
+                >
+                  View New Star Cleaning on Google
+                </Link>
+                <div className="mt-1 text-sm text-white/65">
+                  Reviews, photos, directions, and business details.
+                </div>
               </div>
             </div>
           </div>
@@ -200,7 +313,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       </section>
 
       {/* Quote Form */}
-      <section className="py-16 lg:py-24 bg-white">
+      <section id="quote" className="scroll-mt-24 py-16 lg:py-24 bg-white">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
@@ -283,11 +396,16 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             description: area.description,
             provider: {
               "@type": "LocalBusiness",
+              "@id": "https://newstarcleaning.com/#localbusiness",
               name: "New Star Cleaning",
+              url: "https://newstarcleaning.com",
+              telephone: "+1-559-785-2822",
               address: {
                 "@type": "PostalAddress",
+                streetAddress: "132 W Nees Ave Unit 106",
                 addressLocality: "Fresno",
                 addressRegion: "CA",
+                postalCode: "93720",
                 addressCountry: "US",
               },
             },

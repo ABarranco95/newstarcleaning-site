@@ -3,20 +3,6 @@ import { serviceAreas } from "@/lib/serviceAreas";
 import { services } from "@/lib/services";
 import { blogPosts } from "@/lib/blogPosts";
 
-const COMBO_CITY_SLUGS = [
-  "fresno",
-  "clovis",
-  "madera",
-  "sanger",
-  "selma",
-  "kingsburg",
-  "reedley",
-  "visalia",
-  "tulare",
-  "hanford",
-  "lemoore",
-] as const;
-
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://newstarcleaning.com";
   const lastModified = new Date();
@@ -74,18 +60,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const comboPages: MetadataRoute.Sitemap = [];
-  for (const service of services) {
-    for (const city of COMBO_CITY_SLUGS) {
-      comboPages.push({
-        url: `${baseUrl}/${service.slug}-${city}`,
-        lastModified,
-        changeFrequency: "monthly",
-        priority: 0.7,
-      });
-    }
-  }
-
   const blogIndexPosts: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.publishedAt),
@@ -97,7 +71,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...top,
     ...cityPages,
     ...servicePages,
-    ...comboPages,
     ...blogIndexPosts,
   ];
 }

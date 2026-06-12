@@ -111,6 +111,7 @@ export default function Home() {
             {[
               {
                 title: "Standard Recurring",
+                href: "/services/standard-cleaning",
                 desc: "Keep your home consistently clean with weekly, bi-weekly, or monthly service. We handle the routine so you can enjoy your space.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,6 +127,7 @@ export default function Home() {
               },
               {
                 title: "Deep Cleaning",
+                href: "/services/deep-cleaning",
                 desc: "A thorough, top-to-bottom clean that tackles every corner, crevice, and surface. Perfect for a fresh start or seasonal refresh.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,6 +143,7 @@ export default function Home() {
               },
               {
                 title: "Move-In / Move-Out",
+                href: "/services/move-out-cleaning",
                 desc: "Moving is stressful enough. We'll make sure the place is spotless — whether you're moving in or handing back the keys.",
                 icon: (
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,10 +182,10 @@ export default function Home() {
                   ))}
                 </ul>
                 <Link
-                  href="/book-now"
+                  href={service.href}
                   className="inline-flex items-center text-primary font-semibold hover:text-accent transition-colors"
                 >
-                  Book This Service
+                  View Service Details
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -416,6 +419,10 @@ export default function Home() {
               { name: "Visalia", slug: "visalia" },
               { name: "Tulare", slug: "tulare" },
               { name: "Hanford", slug: "hanford" },
+              { name: "Lemoore", slug: "lemoore" },
+              { name: "Tower District", slug: "tower-district" },
+              { name: "Fig Garden", slug: "fig-garden" },
+              { name: "Woodward Park", slug: "woodward-park" },
             ].map((area) => (
               <Link
                 key={area.slug}
@@ -540,26 +547,30 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: "10 Cleaning Hacks That Save Hours Every Week",
+                title: "How to Prepare Your Home for a Cleaning Service",
+                href: "/blog/how-to-prepare-your-home-for-a-cleaning-service",
                 excerpt:
-                  "Professional cleaners share their favorite time-saving tricks that'll change how you clean forever.",
+                  "Simple prep steps that help your cleaner work faster and leave a better result.",
                 category: "Tips & Tricks",
               },
               {
                 title: "How Often Should You Deep Clean Your Home?",
+                href: "/blog/how-often-should-you-deep-clean-your-house",
                 excerpt:
                   "A room-by-room guide to deep cleaning frequency, straight from our expert cleaning team.",
                 category: "Guides",
               },
               {
                 title: "Move-Out Cleaning Checklist: Get Your Full Deposit Back",
+                href: "/blog/move-out-cleaning-checklist-get-your-deposit-back",
                 excerpt:
                   "The complete checklist landlords use to inspect properties — and how to pass with flying colors.",
                 category: "Checklists",
               },
             ].map((post) => (
-              <div
+              <Link
                 key={post.title}
+                href={post.href}
                 className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
               >
                 <div className="h-48 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
@@ -588,7 +599,7 @@ export default function Home() {
                     {post.excerpt}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

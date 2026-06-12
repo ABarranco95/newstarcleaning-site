@@ -51,11 +51,11 @@ export default function ServiceDetailPage({
                   How quotes work
                 </Link>
               </div>
-              <div className="mt-8">
+              <div className="mt-8 hidden sm:block">
                 <TrustBadges />
               </div>
             </div>
-            <div className="relative">
+            <div id="quote" className="relative scroll-mt-24">
               <div
                 className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl"
                 aria-hidden="true"

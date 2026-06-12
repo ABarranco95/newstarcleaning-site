@@ -12,6 +12,7 @@ const serviceAreas = [
   { name: "Visalia", slug: "visalia" },
   { name: "Tulare", slug: "tulare" },
   { name: "Hanford", slug: "hanford" },
+  { name: "Lemoore", slug: "lemoore" },
 ];
 
 export default function Footer() {
@@ -51,17 +52,26 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-4">Services</h3>
             <ul className="space-y-2 text-white/70 text-sm">
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">
+                <Link
+                  href="/services/standard-cleaning"
+                  className="hover:text-white transition-colors"
+                >
                   Standard Recurring Cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">
+                <Link
+                  href="/services/deep-cleaning"
+                  className="hover:text-white transition-colors"
+                >
                   Deep Cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">
+                <Link
+                  href="/services/move-out-cleaning"
+                  className="hover:text-white transition-colors"
+                >
                   Move-In/Move-Out Cleaning
                 </Link>
               </li>

@@ -246,7 +246,8 @@ export default function GoogleAdsLandingPageClient() {
               width={50}
               height={48}
               sizes="50px"
-              className="h-11 w-auto shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)]"
+              className="h-auto w-11 shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)]"
+              style={{ height: "auto" }}
               priority
             />
             <div className="flex min-w-0 flex-col leading-none">

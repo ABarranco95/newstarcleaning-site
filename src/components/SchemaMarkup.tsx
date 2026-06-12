@@ -88,11 +88,6 @@ export default function SchemaMarkup() {
           },
         ],
         sameAs: [googleMapsUrl, "https://www.facebook.com/newstarcleaning/"],
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: "5.0",
-          reviewCount: "23",
-        },
         hasOfferCatalog: offerCatalog,
       },
       {
