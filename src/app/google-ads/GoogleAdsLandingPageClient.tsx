@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { trackLeadConversion } from "@/lib/conversionTracking";
 
 interface FormData {
   name: string;
@@ -84,6 +85,12 @@ function GoogleAdsForm() {
       });
 
       if (response.ok) {
+        trackLeadConversion({
+          source: "google_ads",
+          service: formData.service,
+          page: window.location.pathname,
+          leadType: "paid_search_quote_request",
+        });
         setIsSuccess(true);
       } else {
         const data = await response.json().catch(() => null);

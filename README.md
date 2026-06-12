@@ -34,6 +34,27 @@ NEXT_PUBLIC_DIRECT_BOOKING_URL=https://your-booking-url.example
 NEXT_PUBLIC_BOOKINGKOALA_URL=https://your-bookingkoala-url.example
 ```
 
+## Paid Traffic Tracking
+
+Lead forms fire conversion events only after Apex accepts the lead. Configure
+these before meaningful Google Ads or Meta spend:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://newstarcleaning.com
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID=AW-XXXXXXXXXX
+NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL=xxxxxxxxxxxxxxxx
+NEXT_PUBLIC_META_PIXEL_ID=000000000000000
+NEXT_PUBLIC_CLARITY_ID=xxxxxxxxxx
+```
+
+The safe readiness endpoint returns booleans only:
+
+```text
+https://newstarcleaning.com/api/ad-readiness
+```
+
 Optional secondary fallback:
 
 ```bash

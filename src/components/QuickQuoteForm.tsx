@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { trackLeadConversion } from "@/lib/conversionTracking";
 
 type QuickQuoteFormProps = {
   title?: string;
@@ -142,6 +143,13 @@ export default function QuickQuoteForm({
         throw new Error(data?.details?.[0] || data?.error || "Could not send your quote request.");
       }
 
+      trackLeadConversion({
+        source,
+        service: formData.service,
+        city: formData.city,
+        page: window.location.pathname,
+        leadType: formData.bookingIntent || "quote_request",
+      });
       setIsSuccess(true);
       setFormData(initialForm(defaultCity, defaultService));
     } catch (submitError) {

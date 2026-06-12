@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { trackLeadConversion } from "@/lib/conversionTracking";
 
 interface ContactFormProps {
   source?: string;
@@ -68,6 +69,12 @@ export default function ContactForm({ source = "Website Contact Form", className
       const result = await res.json();
 
       if (res.ok && result.success) {
+        trackLeadConversion({
+          source,
+          service: payload.service,
+          page: window.location.pathname,
+          leadType: "contact_form",
+        });
         setStatus("success");
         form.reset();
       } else {
