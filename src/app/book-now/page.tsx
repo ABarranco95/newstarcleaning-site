@@ -10,6 +10,10 @@ const rawPortalHostname = rawPortalBaseUrl ? new URL(rawPortalBaseUrl).hostname 
 const isDeploymentHostname = rawPortalHostname.endsWith(["vercel", "app"].join("."));
 const isPublicPortalUrl = rawPortalBaseUrl && !isDeploymentHostname;
 const apexBookingUrl = isPublicPortalUrl ? `${rawPortalBaseUrl}/book` : null;
+const directBookingUrl =
+  process.env.NEXT_PUBLIC_DIRECT_BOOKING_URL ||
+  process.env.NEXT_PUBLIC_BOOKINGKOALA_URL ||
+  apexBookingUrl;
 
 export const metadata: Metadata = {
   title: "Request Cleaning Pricing & Availability",
@@ -102,7 +106,7 @@ export default function BookNow() {
               </a>
             </div>
 
-            {apexBookingUrl ? (
+            {directBookingUrl ? (
               <div className="rounded-3xl border border-line bg-white p-8 shadow-soft">
                 <h2 className="text-2xl text-ink">Already have your quote?</h2>
                 <p className="mt-3 text-ink-soft">
@@ -110,7 +114,7 @@ export default function BookNow() {
                   source is preserved for reporting.
                 </p>
                 <Suspense fallback={null}>
-                  <BookingPortalLink baseUrl={apexBookingUrl} />
+                  <BookingPortalLink baseUrl={directBookingUrl} />
                 </Suspense>
               </div>
             ) : null}
@@ -120,6 +124,7 @@ export default function BookNow() {
             title="Get pricing & availability"
             subtitle="No spam. We use your phone only to confirm details, pricing, and available cleaning times."
             source="organic_quote_page"
+            extended
           />
         </div>
       </section>

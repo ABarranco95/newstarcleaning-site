@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileCTABar from "@/components/MobileCTABar";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import AnalyticsTags from "@/components/AnalyticsTags";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -82,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} ${fraunces.variable}`}>
       <body className="font-sans antialiased text-ink bg-cream">
+        <AnalyticsTags />
         <SchemaMarkup />
         <Header />
         <main className="min-h-screen">{children}</main>

@@ -7,12 +7,17 @@ const APEX_CRM_BASE_URL = (
 ).replace(/\/$/, "");
 
 const APEX_INCOMING_URL =
+  process.env.APEX_LEAD_URL ||
+  process.env.APEX_CRM_PUBLIC_LEAD_URL ||
   process.env.APEX_CRM_INCOMING_URL ||
-  (APEX_CRM_BASE_URL ? `${APEX_CRM_BASE_URL}/api/incoming` : "");
+  (APEX_CRM_BASE_URL ? `${APEX_CRM_BASE_URL}/api/public/lead` : "");
 
 const GHL_FALLBACK_WEBHOOK_URL = process.env.GHL_FALLBACK_WEBHOOK_URL || "";
+const APEX_LEAD_INTAKE_SECRET =
+  process.env.APEX_LEAD_INTAKE_SECRET || process.env.APEX_PUBLIC_API_KEY || "";
 
 type LeadPayload = {
+  [key: string]: unknown;
   firstName: string;
   lastName?: string;
   phone: string;
@@ -118,13 +123,27 @@ export function validateLeadPayload(payload: LeadPayload) {
   };
 }
 
-function forwardedHeaders(sourceHeaders?: Headers) {
+function baseForwardedHeaders(sourceHeaders?: Headers) {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   const forwardedFor = sourceHeaders?.get("x-forwarded-for");
   const realIp = sourceHeaders?.get("x-real-ip");
+  const userAgent = sourceHeaders?.get("user-agent");
 
   if (forwardedFor) headers["x-forwarded-for"] = forwardedFor;
   if (realIp) headers["x-real-ip"] = realIp;
+  if (userAgent) headers["x-source-user-agent"] = userAgent;
+
+  return headers;
+}
+
+function apexForwardedHeaders(sourceHeaders?: Headers) {
+  const headers = baseForwardedHeaders(sourceHeaders);
+
+  if (APEX_LEAD_INTAKE_SECRET) {
+    headers.Authorization = `Bearer ${APEX_LEAD_INTAKE_SECRET}`;
+  } else {
+    headers.Origin = "https://newstarcleaning.com";
+  }
 
   return headers;
 }
@@ -150,7 +169,7 @@ async function submitToGhlFallback(payload: LeadPayload, sourceHeaders?: Headers
   try {
     const response = await fetch(GHL_FALLBACK_WEBHOOK_URL, {
       method: "POST",
-      headers: forwardedHeaders(sourceHeaders),
+      headers: baseForwardedHeaders(sourceHeaders),
       body: JSON.stringify(payload),
     });
 
@@ -203,7 +222,7 @@ export async function submitLeadToApex(
   try {
     const response = await fetch(APEX_INCOMING_URL, {
       method: "POST",
-      headers: forwardedHeaders(sourceHeaders),
+      headers: apexForwardedHeaders(sourceHeaders),
       body: JSON.stringify(validation.payload),
     });
     apexStatus = response.status;

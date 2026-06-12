@@ -25,6 +25,11 @@ type FormState = {
   bedrooms: string;
   bathrooms: string;
   sqft: string;
+  timeline: string;
+  contactPreference: string;
+  preferredTime: string;
+  bookingIntent: string;
+  company: string;
 };
 
 const services = [
@@ -48,6 +53,11 @@ function initialForm(defaultCity?: string, defaultService?: string): FormState {
     bedrooms: "",
     bathrooms: "",
     sqft: "",
+    timeline: "",
+    contactPreference: "",
+    preferredTime: "",
+    bookingIntent: "",
+    company: "",
   };
 }
 
@@ -121,6 +131,9 @@ export default function QuickQuoteForm({
           source,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),
+          smsConsent: "service_related_quote_follow_up",
+          consentText:
+            "By requesting a quote, the visitor agreed to receive service-related calls/texts about pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out.",
         }),
       });
 
@@ -253,6 +266,18 @@ export default function QuickQuoteForm({
           </div>
         </div>
 
+        <div className="hidden" aria-hidden="true">
+          <label htmlFor="quote-company">Company</label>
+          <input
+            id="quote-company"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            value={formData.company}
+            onChange={(event) => updateField("company", event.target.value)}
+          />
+        </div>
+
         <div>
           <label htmlFor="quote-service" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
             Service needed
@@ -275,6 +300,61 @@ export default function QuickQuoteForm({
 
         {extended && (
           <>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label htmlFor="quote-timeline" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Timeline
+                </label>
+                <select
+                  id="quote-timeline"
+                  name="timeline"
+                  value={formData.timeline}
+                  onChange={(event) => updateField("timeline", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select...</option>
+                  <option value="as-soon-as-possible">ASAP</option>
+                  <option value="this-week">This week</option>
+                  <option value="next-week">Next week</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quote-contact-preference" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Contact
+                </label>
+                <select
+                  id="quote-contact-preference"
+                  name="contactPreference"
+                  value={formData.contactPreference}
+                  onChange={(event) => updateField("contactPreference", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Best way?</option>
+                  <option value="text">Text</option>
+                  <option value="call">Call</option>
+                  <option value="either">Either</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quote-booking-intent" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Intent
+                </label>
+                <select
+                  id="quote-booking-intent"
+                  name="bookingIntent"
+                  value={formData.bookingIntent}
+                  onChange={(event) => updateField("bookingIntent", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select...</option>
+                  <option value="ready-after-quote">Ready after quote</option>
+                  <option value="comparing-options">Comparing options</option>
+                  <option value="just-researching">Just researching</option>
+                </select>
+              </div>
+            </div>
+
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
               <div>
                 <label htmlFor="quote-frequency" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
@@ -349,6 +429,21 @@ export default function QuickQuoteForm({
                   <option value="3500+">3,500+</option>
                 </select>
               </div>
+            </div>
+
+            <div>
+              <label htmlFor="quote-preferred-time" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                Best time to reach you
+              </label>
+              <input
+                id="quote-preferred-time"
+                name="preferredTime"
+                type="text"
+                value={formData.preferredTime}
+                onChange={(event) => updateField("preferredTime", event.target.value)}
+                placeholder="Example: today after 3 PM"
+                className={fieldClass}
+              />
             </div>
           </>
         )}

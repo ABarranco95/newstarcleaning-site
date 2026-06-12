@@ -12,6 +12,26 @@ export default function ContactForm({ source = "Website Contact Form", className
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  function captureTracking() {
+    const params = new URLSearchParams(window.location.search);
+    const capture: Record<string, string> = {};
+    [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "gclid",
+      "gbraid",
+      "wbraid",
+    ].forEach((key) => {
+      const value = params.get(key);
+      if (value) capture[key] = value;
+    });
+    if (document.referrer) capture.referrer = document.referrer;
+    return capture;
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
@@ -29,9 +49,13 @@ export default function ContactForm({ source = "Website Contact Form", className
       preferredDate: data.get("preferredDate") as string || undefined,
       message: data.get("message") as string || undefined,
       source,
-      utm_source: data.get("utm_source") as string || undefined,
-      utm_medium: data.get("utm_medium") as string || undefined,
-      utm_campaign: data.get("utm_campaign") as string || undefined,
+      company: data.get("company") as string || undefined,
+      ...captureTracking(),
+      page: window.location.pathname,
+      submittedAt: new Date().toISOString(),
+      smsConsent: "service_related_quote_follow_up",
+      consentText:
+        "By submitting, the visitor agreed to receive service-related calls/texts and emails about their cleaning service. Reply STOP to opt out.",
     };
 
     try {
@@ -184,10 +208,10 @@ export default function ContactForm({ source = "Website Contact Form", className
         </div>
       )}
 
-      {/* Hidden UTM fields */}
-      <input type="hidden" name="utm_source" />
-      <input type="hidden" name="utm_medium" />
-      <input type="hidden" name="utm_campaign" />
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="lead-company">Company</label>
+        <input id="lead-company" name="company" tabIndex={-1} autoComplete="off" />
+      </div>
 
       <button
         type="submit"
@@ -213,7 +237,7 @@ export default function ContactForm({ source = "Website Contact Form", className
       </button>
 
       {status === "error" && (
-        <p className="text-red-600 text-sm mt-2">{errorMessage || "Something went wrong. Please call us at (559) XXX-XXXX."}</p>
+        <p className="text-red-600 text-sm mt-2">{errorMessage || "Something went wrong. Please call or text us at (559) 785-2822."}</p>
       )}
 
       <p className="text-xs text-gray-400 mt-3">

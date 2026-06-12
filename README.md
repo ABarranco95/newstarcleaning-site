@@ -18,13 +18,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Lead Routing
 
-Website lead capture routes send to Apex CRM through an environment-configured
-incoming URL. Configure one of these values in the deployment environment:
+Website lead capture routes send to Apex CRM through a server-side proxy so
+browser forms never expose the Apex shared secret. Configure:
 
 ```bash
-APEX_CRM_BASE_URL=https://your-apex-crm-host.example
-# or, to bypass base URL joining:
-APEX_CRM_INCOMING_URL=https://your-apex-crm-host.example/api/incoming
+APEX_LEAD_URL=https://apex-crm-abarranco95-s-team.vercel.app/api/public/lead
+APEX_LEAD_INTAKE_SECRET=<same value as Apex LEAD_INTAKE_SHARED_SECRET>
+```
+
+Optional direct booking/self-booking CTA:
+
+```bash
+NEXT_PUBLIC_DIRECT_BOOKING_URL=https://your-booking-url.example
+# or
+NEXT_PUBLIC_BOOKINGKOALA_URL=https://your-bookingkoala-url.example
 ```
 
 Optional secondary fallback:
