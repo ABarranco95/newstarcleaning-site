@@ -71,8 +71,24 @@ assert(
 assert(
   quickQuoteForm.includes("normalizeServiceParam") &&
     quickQuoteForm.includes('params.get("city")') &&
-    quickQuoteForm.includes('params.get("service")'),
-  "quote form supports service/city query prefill",
+    quickQuoteForm.includes('params.get("service")') &&
+    quickQuoteForm.includes('homeSize: formData.sqft'),
+  "quote form supports prefill and forwards the home-size signal",
+);
+
+assert(
+  quickQuoteForm.includes('id="quote-city"') &&
+    quickQuoteForm.includes('id="quote-service"') &&
+    quickQuoteForm.includes('id="quote-timeline"') &&
+    quickQuoteForm.includes('id="quote-sqft"') &&
+    quickQuoteForm.includes('service-related calls/texts'),
+  "quote form captures the lean required routing fields with visible SMS consent",
+);
+
+assert(
+  read("src/app/google-ads/GoogleAdsLandingPageClient.tsx").includes('source="google-ads"') &&
+    read("src/app/google-ads/GoogleAdsLandingPageClient.tsx").includes("QuickQuoteForm"),
+  "Google Ads landing page uses the shared quote form with paid-source attribution",
 );
 
 assert(

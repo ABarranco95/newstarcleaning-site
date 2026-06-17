@@ -25,10 +25,12 @@ includes("src/lib/apexCrm.ts", "headers: baseForwardedHeaders(sourceHeaders)", "
 includes("src/components/QuickQuoteForm.tsx", "bookingIntent", "quote form must capture booking intent");
 includes("src/components/QuickQuoteForm.tsx", "contactPreference", "quote form must capture contact preference");
 includes("src/components/QuickQuoteForm.tsx", "smsConsent", "quote form must preserve SMS consent context");
+includes("src/components/QuickQuoteForm.tsx", "homeSize: formData.sqft", "quote form must forward home-size signal to Apex");
 includes("src/components/QuickQuoteForm.tsx", "quote-company", "quote form must include honeypot field");
 includes("src/components/ContactForm.tsx", "new URLSearchParams(window.location.search)", "contact form must capture tracking params");
-includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "gclid", "Google Ads form must capture gclid");
-includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "gbraid", "Google Ads form must capture gbraid");
+includes("src/components/QuickQuoteForm.tsx", "gclid", "shared quote form must capture gclid for paid traffic");
+includes("src/components/QuickQuoteForm.tsx", "gbraid", "shared quote form must capture gbraid for paid traffic");
+includes("src/components/QuickQuoteForm.tsx", "wbraid", "shared quote form must capture wbraid for paid traffic");
 includes("src/app/book-now/page.tsx", "NEXT_PUBLIC_DIRECT_BOOKING_URL", "book-now page must support direct booking CTA URL");
 includes("src/components/AnalyticsTags.tsx", "NEXT_PUBLIC_GTM_ID", "analytics tags must support GTM");
 includes("src/components/AnalyticsTags.tsx", "NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID", "analytics tags must support Google Ads conversion config");
@@ -37,7 +39,9 @@ includes("src/lib/conversionTracking.ts", "generate_lead", "conversion tracker m
 includes("src/lib/conversionTracking.ts", "NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL", "conversion tracker must support Google Ads lead conversion label");
 includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "quote form must track successful lead conversions");
 includes("src/components/ContactForm.tsx", "trackLeadConversion", "contact form must track successful lead conversions");
-includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "trackLeadConversion", "Google Ads form must track successful lead conversions");
+includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "shared quote form must track successful paid lead conversions");
+includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "QuickQuoteForm", "Google Ads landing page must use the shared quote form");
+includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "source=\"google-ads\"", "Google Ads landing page must tag leads as google-ads");
 includes("src/app/api/ad-readiness/route.ts", "readyForPaidTraffic", "site must expose safe ad readiness status");
 includes("src/app/api/ad-readiness/route.ts", "APEX_LEAD_INTAKE_SECRET", "site ad readiness must confirm Apex lead secret is configured");
 includes("next.config.ts", "X-Frame-Options", "site must send basic security headers");

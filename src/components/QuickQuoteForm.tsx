@@ -156,6 +156,7 @@ export default function QuickQuoteForm({
         body: JSON.stringify({
           ...formData,
           ...tracking,
+          homeSize: formData.sqft,
           source,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),
@@ -286,16 +287,17 @@ export default function QuickQuoteForm({
           </div>
           <div>
             <label htmlFor="quote-city" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              City
+              City or ZIP <span className="text-accent">*</span>
             </label>
             <input
               id="quote-city"
               name="city"
               type="text"
+              required
               value={formData.city}
               onChange={(event) => updateField("city", event.target.value)}
               autoComplete="address-level2"
-              placeholder="Fresno"
+              placeholder="Fresno or 93720"
               className={fieldClass}
             />
           </div>
@@ -315,11 +317,12 @@ export default function QuickQuoteForm({
 
         <div>
           <label htmlFor="quote-service" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-            Service needed
+            Service needed <span className="text-accent">*</span>
           </label>
           <select
             id="quote-service"
             name="service"
+            required
             value={formData.service}
             onChange={(event) => updateField("service", event.target.value)}
             className={fieldClass}
@@ -333,27 +336,53 @@ export default function QuickQuoteForm({
           </select>
         </div>
 
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="quote-timeline" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+              Timeline <span className="text-accent">*</span>
+            </label>
+            <select
+              id="quote-timeline"
+              name="timeline"
+              required
+              value={formData.timeline}
+              onChange={(event) => updateField("timeline", event.target.value)}
+              className={fieldClass}
+            >
+              <option value="">Select timing…</option>
+              <option value="as-soon-as-possible">ASAP</option>
+              <option value="this-week">This week</option>
+              <option value="next-week">Next week</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="quote-sqft" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+              Approx. sq ft <span className="text-accent">*</span>
+            </label>
+            <select
+              id="quote-sqft"
+              name="sqft"
+              required
+              value={formData.sqft}
+              onChange={(event) => updateField("sqft", event.target.value)}
+              className={fieldClass}
+            >
+              <option value="">Select size…</option>
+              <option value="under-1000">Under 1,000</option>
+              <option value="1000-1499">1,000 – 1,499</option>
+              <option value="1500-1999">1,500 – 1,999</option>
+              <option value="2000-2499">2,000 – 2,499</option>
+              <option value="2500-2999">2,500 – 2,999</option>
+              <option value="3000-3499">3,000 – 3,499</option>
+              <option value="3500+">3,500+</option>
+            </select>
+          </div>
+        </div>
+
         {extended && (
           <>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div>
-                <label htmlFor="quote-timeline" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Timeline
-                </label>
-                <select
-                  id="quote-timeline"
-                  name="timeline"
-                  value={formData.timeline}
-                  onChange={(event) => updateField("timeline", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select...</option>
-                  <option value="as-soon-as-possible">ASAP</option>
-                  <option value="this-week">This week</option>
-                  <option value="next-week">Next week</option>
-                  <option value="flexible">Flexible</option>
-                </select>
-              </div>
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="quote-contact-preference" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
                   Contact
@@ -390,7 +419,7 @@ export default function QuickQuoteForm({
               </div>
             </div>
 
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-4">
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3">
               <div>
                 <label htmlFor="quote-frequency" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
                   How often?
@@ -441,27 +470,6 @@ export default function QuickQuoteForm({
                   {["1","1.5","2","2.5","3","3.5","4+"].map((v) => (
                     <option key={v} value={v}>{v}</option>
                   ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="quote-sqft" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Approx. sq ft
-                </label>
-                <select
-                  id="quote-sqft"
-                  name="sqft"
-                  value={formData.sqft}
-                  onChange={(event) => updateField("sqft", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select…</option>
-                  <option value="under-1000">Under 1,000</option>
-                  <option value="1000-1499">1,000 – 1,499</option>
-                  <option value="1500-1999">1,500 – 1,999</option>
-                  <option value="2000-2499">2,000 – 2,499</option>
-                  <option value="2500-2999">2,500 – 2,999</option>
-                  <option value="3000-3499">3,000 – 3,499</option>
-                  <option value="3500+">3,500+</option>
                 </select>
               </div>
             </div>
@@ -523,18 +531,11 @@ export default function QuickQuoteForm({
             </svg>
           )}
         </button>
-        <p className="text-center text-xs leading-relaxed text-mute">
-          No spam. We&apos;ll follow up quickly with availability and pricing.
+        <p className="text-center text-xs leading-relaxed text-mute/80">
+          By submitting, you consent to service-related calls/texts from New Star Cleaning about your quote, pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out. Consent is not required to purchase services.
+          &nbsp;·&nbsp;
+          <Link href="/privacy" className="underline hover:text-mute">Privacy Policy</Link>
         </p>
-        {extended && (
-          <p className="text-center text-xs leading-relaxed text-mute/70">
-            By submitting, you consent to receive SMS/text messages from New Star Cleaning
-            regarding your inquiry. Message frequency varies. Msg &amp; data rates may apply.
-            Reply STOP to cancel, HELP for help. Consent is not required to purchase services.
-            &nbsp;·&nbsp;
-            <Link href="/privacy" className="underline hover:text-mute">Privacy Policy</Link>
-          </p>
-        )}
       </form>
     </div>
   );

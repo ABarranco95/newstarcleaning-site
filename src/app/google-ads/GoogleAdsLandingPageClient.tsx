@@ -1,191 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { trackLeadConversion } from "@/lib/conversionTracking";
-
-interface FormData {
-  name: string;
-  phone: string;
-  email: string;
-  service: string;
-  homesize: string;
-  date: string;
-  referral: string;
-}
-
-interface UTMParams {
-  utm_source?: string;
-  utm_medium?: string;
-  utm_campaign?: string;
-  utm_content?: string;
-  utm_term?: string;
-  gclid?: string;
-  gbraid?: string;
-  wbraid?: string;
-}
-
-function GoogleAdsForm() {
-  const searchParams = useSearchParams();
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    phone: "",
-    email: "",
-    service: "",
-    homesize: "",
-    date: "",
-    referral: "",
-  });
-  const [utmParams, setUtmParams] = useState<UTMParams>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const utm: UTMParams = {
-      utm_source: searchParams.get("utm_source") || undefined,
-      utm_medium: searchParams.get("utm_medium") || undefined,
-      utm_campaign: searchParams.get("utm_campaign") || undefined,
-      utm_content: searchParams.get("utm_content") || undefined,
-      utm_term: searchParams.get("utm_term") || undefined,
-      gclid: searchParams.get("gclid") || undefined,
-      gbraid: searchParams.get("gbraid") || undefined,
-      wbraid: searchParams.get("wbraid") || undefined,
-    };
-    setUtmParams(utm);
-  }, [searchParams]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError("");
-
-    try {
-      const payload = {
-        ...formData,
-        ...utmParams,
-        page: window.location.pathname,
-        submittedAt: new Date().toISOString(),
-      };
-
-      const response = await fetch("/api/google-ads-lead", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        trackLeadConversion({
-          source: "google_ads",
-          service: formData.service,
-          page: window.location.pathname,
-          leadType: "paid_search_quote_request",
-        });
-        setIsSuccess(true);
-      } else {
-        const data = await response.json().catch(() => null);
-        throw new Error(data?.details?.[0] || data?.error || "Failed to submit form");
-      }
-    } catch (submitError) {
-      setError(
-        submitError instanceof Error
-          ? submitError.message
-          : "Something went wrong. Please try again or call us directly."
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  if (isSuccess) {
-    return (
-      <div className="text-center py-8">
-        <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <h3 className="text-2xl font-bold text-primary mb-2">Thank You!</h3>
-        <p className="text-gray-600">We&apos;ve received your request and will text or call shortly during business hours.</p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-          <input type="text" id="name" name="name" required minLength={2} value={formData.name} onChange={handleChange} placeholder="John Smith" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
-        </div>
-        <div>
-          <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-          <input type="tel" id="phone" name="phone" required minLength={10} value={formData.phone} onChange={handleChange} placeholder="(559) 123-4567" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email Address <span className="font-normal text-gray-400">(optional)</span></label>
-        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label htmlFor="service" className="block text-sm font-semibold text-gray-700 mb-1">Service Type</label>
-          <select id="service" name="service" required value={formData.service} onChange={handleChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all bg-white">
-            <option value="">Select service...</option>
-            <option value="standard">Standard Cleaning</option>
-            <option value="deep">Deep Cleaning</option>
-            <option value="moveinout">Move-In/Move-Out</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="homesize" className="block text-sm font-semibold text-gray-700 mb-1">Home Size</label>
-          <select id="homesize" name="homesize" required value={formData.homesize} onChange={handleChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all bg-white">
-            <option value="">Select size...</option>
-            <option value="1-2">1-2 Bedrooms</option>
-            <option value="3">3 Bedrooms</option>
-            <option value="4+">4+ Bedrooms</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="date" className="block text-sm font-semibold text-gray-700 mb-1">Preferred Date <span className="font-normal text-gray-400">(optional)</span></label>
-        <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all" />
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="referral" className="block text-sm font-semibold text-gray-700 mb-1">How did you hear about us?</label>
-        <select id="referral" name="referral" value={formData.referral} onChange={handleChange} className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all bg-white">
-          <option value="">Select...</option>
-          <option value="google">Google Search</option>
-          <option value="referral">Friend/Family Referral</option>
-          <option value="facebook">Facebook</option>
-          <option value="nextdoor">Nextdoor</option>
-          <option value="yelp">Yelp</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
-      {error && <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">{error}</div>}
-
-      <button type="submit" disabled={isSubmitting} className="w-full mt-6 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-lg rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-        {isSubmitting ? "Submitting..." : "Get Pricing & Availability"}
-      </button>
-    </form>
-  );
-}
+import { Suspense, useState } from "react";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
 
 function FAQAccordion() {
   const faqs = [
@@ -232,7 +49,13 @@ function StickyMobileCTA() {
 }
 
 function FormWithParams() {
-  return <GoogleAdsForm />;
+  return (
+    <QuickQuoteForm
+      source="google-ads"
+      title="Get pricing & availability"
+      subtitle="Send the key details once. We route this as a paid-search lead and follow up with clear pricing during business hours."
+    />
+  );
 }
 
 export default function GoogleAdsLandingPageClient() {
