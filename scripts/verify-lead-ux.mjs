@@ -21,6 +21,7 @@ const layout = read("src/app/layout.tsx");
 const footer = read("src/components/Footer.tsx");
 const home = read("src/app/page.tsx");
 const quickQuoteForm = read("src/components/QuickQuoteForm.tsx");
+const contactForm = read("src/components/ContactForm.tsx");
 const quotePathPanel = read("src/components/QuotePathPanel.tsx");
 const bookNow = read("src/app/book-now/page.tsx");
 const contact = read("src/app/contact/page.tsx");
@@ -89,6 +90,11 @@ assert(
   read("src/app/google-ads/GoogleAdsLandingPageClient.tsx").includes('source="google-ads"') &&
     read("src/app/google-ads/GoogleAdsLandingPageClient.tsx").includes("QuickQuoteForm"),
   "Google Ads landing page uses the shared quote form with paid-source attribution",
+);
+
+assert(
+  contactForm.includes("QuickQuoteForm") && !contactForm.includes('fetch("/api/lead"'),
+  "legacy ContactForm delegates to the shared quote form instead of maintaining a second payload shape",
 );
 
 assert(

@@ -27,7 +27,7 @@ includes("src/components/QuickQuoteForm.tsx", "contactPreference", "quote form m
 includes("src/components/QuickQuoteForm.tsx", "smsConsent", "quote form must preserve SMS consent context");
 includes("src/components/QuickQuoteForm.tsx", "homeSize: formData.sqft", "quote form must forward home-size signal to Apex");
 includes("src/components/QuickQuoteForm.tsx", "quote-company", "quote form must include honeypot field");
-includes("src/components/ContactForm.tsx", "new URLSearchParams(window.location.search)", "contact form must capture tracking params");
+includes("src/components/ContactForm.tsx", "QuickQuoteForm", "legacy contact form component must delegate to the shared quote form");
 includes("src/components/QuickQuoteForm.tsx", "gclid", "shared quote form must capture gclid for paid traffic");
 includes("src/components/QuickQuoteForm.tsx", "gbraid", "shared quote form must capture gbraid for paid traffic");
 includes("src/components/QuickQuoteForm.tsx", "wbraid", "shared quote form must capture wbraid for paid traffic");
@@ -38,7 +38,7 @@ includes("src/lib/conversionTracking.ts", "lead_submit", "conversion tracker mus
 includes("src/lib/conversionTracking.ts", "generate_lead", "conversion tracker must emit GA4 generate_lead");
 includes("src/lib/conversionTracking.ts", "NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL", "conversion tracker must support Google Ads lead conversion label");
 includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "quote form must track successful lead conversions");
-includes("src/components/ContactForm.tsx", "trackLeadConversion", "contact form must track successful lead conversions");
+includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "shared quote form must track contact and paid lead conversions");
 includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "shared quote form must track successful paid lead conversions");
 includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "QuickQuoteForm", "Google Ads landing page must use the shared quote form");
 includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "source=\"google-ads\"", "Google Ads landing page must tag leads as google-ads");
