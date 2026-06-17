@@ -48,8 +48,9 @@ export const services: ServiceDefinition[] = [
         title: "Kitchen",
         items: [
           "Counters and backsplashes wiped where cleared",
-          "Stovetop and exterior appliance surfaces wiped",
+          "Stovetop, knobs, and range hood cleaned",
           "Microwave interior wiped if empty and accessible",
+          "Dishwasher exterior wiped",
           "Sink scrubbed and fixtures shined",
           "Cabinet fronts spot-cleaned",
           "Floors vacuumed or swept and mopped",
@@ -71,6 +72,7 @@ export const services: ServiceDefinition[] = [
         title: "Bedrooms and living areas",
         items: [
           "Accessible surfaces dusted",
+          "Light fixtures and ceiling fans dusted within normal reach",
           "Mirrors and reachable glass cleaned",
           "Visible cobwebs removed within normal reach",
           "Floors vacuumed or swept and mopped",
@@ -176,7 +178,7 @@ export const services: ServiceDefinition[] = [
     tagline:
       "A detailed reset for accessible surfaces, buildup, baseboards, fixtures, and first-time cleans.",
     description:
-      "Deep cleaning is a more detailed cleaning reset than standard cleaning. It includes the standard cleaning scope plus extra attention to reachable detail areas like baseboards, doors, fixtures, vents, and bathroom buildup. It does not automatically include every add-on or household task.",
+      "Deep cleaning includes everything in our standard cleaning scope, plus extra attention to detail areas most people miss: baseboards, door frames, vent covers, ceiling fan blades, light fixtures, reachable grout, and buildup around fixtures. It is the right choice for first-time cleans, seasonal resets, or homes that need more than surface maintenance.",
     whatsIncluded: [
       {
         title: "Kitchen detail",
@@ -202,11 +204,13 @@ export const services: ServiceDefinition[] = [
       {
         title: "Whole-home detail",
         items: [
+          "Everything in standard cleaning, plus:",
           "Baseboards wiped where accessible",
-          "Ceiling fan blades dusted within normal reach",
+          "Ceiling fan blades and light fixtures detailed within normal reach",
           "Vent covers, switch plates, door frames, and trim wiped",
           "Window sills dusted or wiped within normal reach",
-          "Reachable high ledges dusted within normal reach",
+          "Reachable high ledges and shelf tops dusted within normal reach",
+          "Door fronts spot-cleaned where accessible",
           "Under furniture vacuumed where accessible without heavy moving",
         ],
       },
@@ -309,17 +313,20 @@ export const services: ServiceDefinition[] = [
     tagline:
       "Empty-home cleaning for move-outs, move-ins, sellers, landlords, and property turnovers.",
     description:
-      "Move-out cleaning is for empty or mostly empty homes where surfaces, appliances, cabinets, bathrooms, floors, and closets need to be cleaned for the next person. It does not include hauling trash, packing, organizing, repairs, carpet shampooing, or guaranteeing a deposit decision.",
+      "Move-out cleaning is our most comprehensive service. It includes everything in deep cleaning, plus interior cleaning of the oven, refrigerator, microwave, and empty cabinets and drawers. It is designed for empty or mostly empty homes being turned over for the next tenant, buyer, or landlord inspection.",
     whatsIncluded: [
       {
         title: "Kitchen",
         items: [
-          "Counters, sink, backsplash, and exterior appliances cleaned",
+          "Everything in deep cleaning, plus:",
           "Inside oven cleaned when empty, cool, and accessible",
           "Inside microwave cleaned when empty and accessible",
           "Inside refrigerator cleaned when empty and accessible",
+          "Dishwasher interior and filter checked when accessible",
           "Empty cabinets and drawers wiped inside and out",
-          "Floors vacuumed or swept and mopped",
+          "Range hood and filter degreased where accessible",
+          "Counters, sink, backsplash, and exterior appliances detailed",
+          "Floors vacuumed edge to edge and mopped",
         ],
       },
       {
@@ -327,8 +334,8 @@ export const services: ServiceDefinition[] = [
         items: [
           "Toilet cleaned inside, behind, and around the base",
           "Tub, shower, tile, glass, and fixtures cleaned",
-          "Sink, vanity, counters, mirrors, and chrome cleaned",
-          "Empty cabinets and drawers wiped",
+          "Sink, vanity, counters, mirrors, and chrome polished",
+          "Empty cabinets, drawers, and vanity interiors wiped",
           "Floors vacuumed or swept and mopped",
         ],
       },
@@ -337,8 +344,10 @@ export const services: ServiceDefinition[] = [
         items: [
           "Baseboards wiped where accessible",
           "Door frames, switch plates, vent covers, and reachable trim wiped",
+          "Blinds dusted where accessible and safe to handle",
           "Closet shelves and rods wiped when empty",
           "Window sills dusted or wiped within normal reach",
+          "Ceiling fans and light fixtures detailed within normal reach",
           "Cobwebs removed within normal reach",
           "Floors vacuumed edge to edge where accessible",
         ],

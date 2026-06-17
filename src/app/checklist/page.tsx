@@ -69,6 +69,45 @@ const faqs = [
   },
 ];
 
+const comparisonRows = [
+  { label: "Kitchen surfaces, sink, stovetop", standard: true, deep: true, moveOut: true },
+  { label: "Bathrooms (toilet, tub, shower, vanity)", standard: true, deep: true, moveOut: true },
+  { label: "Floors vacuumed and mopped", standard: true, deep: true, moveOut: true },
+  { label: "Dusting of accessible surfaces", standard: true, deep: true, moveOut: true },
+  { label: "Light fixtures & ceiling fans dusted", standard: true, deep: true, moveOut: true },
+  { label: "Trash emptied", standard: true, deep: true, moveOut: true },
+  { label: "Baseboards wiped", standard: false, deep: true, moveOut: true },
+  { label: "Vent covers, switch plates, trim wiped", standard: false, deep: true, moveOut: true },
+  { label: "Door frames & fronts detailed", standard: false, deep: true, moveOut: true },
+  { label: "Reachable grout & buildup detail", standard: false, deep: true, moveOut: true },
+  { label: "Under furniture vacuumed", standard: false, deep: true, moveOut: true },
+  { label: "Floor edges & corners detailed", standard: false, deep: true, moveOut: true },
+  { label: "Inside oven", standard: false, deep: false, moveOut: true },
+  { label: "Inside refrigerator", standard: false, deep: false, moveOut: true },
+  { label: "Inside microwave (deep wipe)", standard: false, deep: false, moveOut: true },
+  { label: "Inside empty cabinets & drawers", standard: false, deep: false, moveOut: true },
+  { label: "Blinds dusted", standard: false, deep: false, moveOut: true },
+  { label: "Closet shelves & rods wiped", standard: false, deep: false, moveOut: true },
+  { label: "Dishwasher interior checked", standard: false, deep: false, moveOut: true },
+  { label: "Range hood & filter degreased", standard: false, deep: false, moveOut: true },
+];
+
+function ComparisonCheck() {
+  return (
+    <svg className="inline h-4 w-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+function ComparisonDash() {
+  return (
+    <svg className="inline h-4 w-4 text-ink-soft/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14" />
+    </svg>
+  );
+}
+
 function CheckIcon() {
   return (
     <svg
@@ -157,6 +196,50 @@ export default function ChecklistPage() {
               available add-ons. If an add-on is not listed in your quote, it is
               not included in that appointment.
             </p>
+          </div>
+
+          {/* ── Quick comparison table ── */}
+          <div className="mt-8 overflow-x-auto">
+            <div className="min-w-[640px] overflow-hidden rounded-2xl border border-line">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-primary-dark text-white">
+                    <th className="px-4 py-3 text-left font-semibold">What&apos;s included</th>
+                    <th className="px-4 py-3 text-center font-semibold">Standard</th>
+                    <th className="px-4 py-3 text-center font-semibold">Deep</th>
+                    <th className="px-4 py-3 text-center font-semibold">Move-Out</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-line">
+                  {comparisonRows.map((row) => (
+                    <tr key={row.label} className="bg-white">
+                      <td className="px-4 py-2.5 text-left font-medium text-ink">{row.label}</td>
+                      <td className="px-4 py-2.5 text-center">{row.standard ? <ComparisonCheck /> : <ComparisonDash />}</td>
+                      <td className="px-4 py-2.5 text-center">{row.deep ? <ComparisonCheck /> : <ComparisonDash />}</td>
+                      <td className="px-4 py-2.5 text-center">{row.moveOut ? <ComparisonCheck /> : <ComparisonDash />}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* ── When to choose ── */}
+          <div className="mt-6 grid gap-4 lg:grid-cols-3">
+            {[
+              { tier: "Standard", price: "from $165", desc: "Weekly, bi-weekly, or monthly maintenance for a home that is already in good shape.", when: "Choose this if your home is picked up and you mainly need surfaces, kitchen, bathrooms, and floors maintained." },
+              { tier: "Deep", price: "from $235", desc: "Includes everything in Standard plus baseboards, vents, fans, light fixtures, trim, and detail edges.", when: "Choose this for first-time cleans, seasonal resets, or homes with visible buildup on reachable surfaces." },
+              { tier: "Move-Out", price: "from $245", desc: "Includes everything in Deep plus inside oven, fridge, microwave, empty cabinets, blinds, and closet interiors.", when: "Choose this for empty homes, rental turnover, move-ins, or landlord walkthroughs where every surface matters." },
+            ].map((card) => (
+              <div key={card.tier} className="rounded-2xl border border-line bg-white p-5 shadow-soft">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-semibold text-ink">{card.tier}</span>
+                  <span className="text-sm font-medium text-primary">{card.price}</span>
+                </div>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{card.desc}</p>
+                <p className="mt-3 text-xs leading-relaxed text-ink-soft/70">{card.when}</p>
+              </div>
+            ))}
           </div>
 
           <div className="mt-12 space-y-16">
