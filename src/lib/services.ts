@@ -450,3 +450,72 @@ export const services: ServiceDefinition[] = [
 export function getService(slug: string): ServiceDefinition | undefined {
   return services.find((s) => s.slug === slug);
 }
+
+/**
+ * Returns the full cascading "what's included" list for a service.
+ * Deep cleaning includes all standard items + deep-specific items.
+ * Move-out includes all standard + deep + move-out items.
+ */
+export function getFullIncludedList(slug: string) {
+  const standard = services.find((s) => s.slug === "standard-cleaning");
+  const deep = services.find((s) => s.slug === "deep-cleaning");
+  const moveOut = services.find((s) => s.slug === "move-out-cleaning");
+
+  if (slug === "standard-cleaning" || !standard) {
+    return standard?.whatsIncluded || [];
+  }
+
+  if (slug === "deep-cleaning" || !deep) {
+    // Merge standard rooms with deep rooms
+    // Standard rooms: Kitchen, Bathrooms, Bedrooms and living areas
+    // Deep rooms: Kitchen detail, Bathroom detail, Whole-home detail
+    // We want to show standard items PLUS deep items
+    const merged: { title: string; items: string[] }[] = [];
+
+    // Add standard rooms first with their original titles
+    if (standard) {
+      for (const room of standard.whatsIncluded) {
+        merged.push({ ...room, title: room.title });
+      }
+    }
+
+    // Add deep-specific rooms (skip the "Everything in standard cleaning, plus:" pseudo-item)
+    if (deep) {
+      for (const room of deep.whatsIncluded) {
+        const cleanItems = room.items.filter((item) => !item.startsWith("Everything in standard"));
+        merged.push({ title: room.title, items: cleanItems });
+      }
+    }
+
+    return merged;
+  }
+
+  if (slug === "move-out-cleaning" || !moveOut) {
+    // Move-out includes standard + deep + move-out items
+    const merged: { title: string; items: string[] }[] = [];
+
+    if (standard) {
+      for (const room of standard.whatsIncluded) {
+        merged.push({ ...room });
+      }
+    }
+
+    if (deep) {
+      for (const room of deep.whatsIncluded) {
+        const cleanItems = room.items.filter((item) => !item.startsWith("Everything in"));
+        merged.push({ title: room.title, items: cleanItems });
+      }
+    }
+
+    if (moveOut) {
+      for (const room of moveOut.whatsIncluded) {
+        const cleanItems = room.items.filter((item) => !item.startsWith("Everything in"));
+        merged.push({ title: room.title, items: cleanItems });
+      }
+    }
+
+    return merged;
+  }
+
+  return [];
+}

@@ -3,6 +3,7 @@ import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceDefinition } from "@/lib/services";
+import { getFullIncludedList } from "@/lib/services";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -10,6 +11,25 @@ function quoteFormService(service: ServiceDefinition) {
   return service.slug === "standard-cleaning"
     ? "Standard recurring cleaning"
     : service.shortName;
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2.4}
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
+  );
 }
 
 export default function ServiceDetailPage({
@@ -21,6 +41,8 @@ export default function ServiceDetailPage({
   h1: string;
   intro?: string;
 }) {
+  const fullIncluded = getFullIncludedList(service.slug);
+
   return (
     <>
       {/* Hero */}
@@ -47,12 +69,12 @@ export default function ServiceDetailPage({
                 >
                   Request pricing
                 </a>
-                <Link
-                  href="/checklist"
+                <a
+                  href="#whats-included"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
                 >
-                  See the checklist
-                </Link>
+                  See what&apos;s included
+                </a>
               </div>
               <div className="mt-8 hidden sm:block">
                 <TrustBadges />
@@ -74,14 +96,14 @@ export default function ServiceDetailPage({
         </div>
       </section>
 
-      {/* What's included */}
-      <section className="ns-section bg-cream">
+      {/* What's included — FULL cascading list */}
+      <section id="whats-included" className="ns-section bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
               <span className="eyebrow eyebrow-dot">What&apos;s included</span>
               <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
-                {service.name}: room by room
+                {service.name}: complete room-by-room scope
               </h2>
               <p className="mt-5 text-ink-soft leading-relaxed">
                 {service.description}
@@ -101,16 +123,10 @@ export default function ServiceDetailPage({
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/checklist"
-                  className="mt-5 inline-flex text-sm font-semibold text-primary transition-colors hover:text-accent"
-                >
-                  View the full service checklist &rarr;
-                </Link>
               </div>
             </div>
             <div className="space-y-4">
-              {service.whatsIncluded.map((group) => (
+              {fullIncluded.map((group) => (
                 <div
                   key={group.title}
                   className="rounded-2xl border border-line bg-white p-6 shadow-soft"
@@ -122,20 +138,7 @@ export default function ServiceDetailPage({
                         key={item}
                         className="flex items-start gap-2 text-sm text-ink-soft"
                       >
-                        <svg
-                          className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2.4}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                        <CheckIcon />
                         {item}
                       </li>
                     ))}
@@ -280,55 +283,33 @@ export default function ServiceDetailPage({
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
-                  href="/cleaning-services-fresno"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
-                >
-                  Fresno service area &rarr;
-                </Link>
-                <Link
                   href="/book-now"
                   className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
                 >
                   Get a {service.shortName.toLowerCase()} quote &rarr;
                 </Link>
                 {service.slug === "move-out-cleaning" && (
-                  <>
-                    <Link
-                      href="/checklist"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
-                    >
-                      Our cleaning checklist &rarr;
-                    </Link>
-                    <Link
-                      href="/services/deep-cleaning"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
-                    >
-                      Deep cleaning service &rarr;
-                    </Link>
-                  </>
-                )}
-                {service.slug === "deep-cleaning" && (
-                  <>
-                    <Link
-                      href="/blog/how-often-should-you-deep-clean-your-house"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
-                    >
-                      How often to deep clean &rarr;
-                    </Link>
-                    <Link
-                      href="/blog/house-cleaning-vs-deep-cleaning-whats-the-difference"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
-                    >
-                      Standard vs. deep cleaning &rarr;
-                    </Link>
-                  </>
+                  <Link
+                    href="/services/deep-cleaning"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
+                  >
+                    Compare deep cleaning &rarr;
+                  </Link>
                 )}
                 {service.slug === "deep-cleaning" && (
                   <Link
-                    href="/checklist"
+                    href="/services/standard-cleaning"
                     className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
                   >
-                    Our cleaning checklist &rarr;
+                    Compare standard cleaning &rarr;
+                  </Link>
+                )}
+                {service.slug === "standard-cleaning" && (
+                  <Link
+                    href="/services/deep-cleaning"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
+                  >
+                    Compare deep cleaning &rarr;
                   </Link>
                 )}
               </div>
@@ -413,12 +394,6 @@ export default function ServiceDetailPage({
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
             >
               Request your quote
-            </Link>
-            <Link
-              href="/cleaning-services-fresno"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
-            >
-              See Fresno service area
             </Link>
           </div>
         </div>
