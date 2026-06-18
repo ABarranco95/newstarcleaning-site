@@ -452,70 +452,72 @@ export function getService(slug: string): ServiceDefinition | undefined {
 }
 
 /**
+ * Maps a room title to a canonical category for merging across tiers.
+ */
+function roomCategory(title: string): "kitchen" | "bathroom" | "general" {
+  const lower = title.toLowerCase();
+  if (lower.includes("kitchen")) return "kitchen";
+  if (lower.includes("bathroom")) return "bathroom";
+  return "general";
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  kitchen: "Kitchen",
+  bathroom: "Bathrooms",
+  general: "Bedrooms, living areas & whole-home detail",
+};
+
+/**
  * Returns the full cascading "what's included" list for a service.
- * Deep cleaning includes all standard items + deep-specific items.
- * Move-out includes all standard + deep + move-out items.
+ * Deep cleaning includes all standard items + deep-specific items, merged
+ * into one clean list per room category with no duplicates.
+ * Move-out includes all standard + deep + move-out items, merged the same way.
  */
 export function getFullIncludedList(slug: string) {
   const standard = services.find((s) => s.slug === "standard-cleaning");
   const deep = services.find((s) => s.slug === "deep-cleaning");
   const moveOut = services.find((s) => s.slug === "move-out-cleaning");
 
-  if (slug === "standard-cleaning" || !standard) {
+  // Standard is simple — just return as-is
+  if (slug === "standard-cleaning") {
     return standard?.whatsIncluded || [];
   }
 
-  if (slug === "deep-cleaning" || !deep) {
-    // Merge standard rooms with deep rooms
-    // Standard rooms: Kitchen, Bathrooms, Bedrooms and living areas
-    // Deep rooms: Kitchen detail, Bathroom detail, Whole-home detail
-    // We want to show standard items PLUS deep items
-    const merged: { title: string; items: string[] }[] = [];
-
-    // Add standard rooms first with their original titles
-    if (standard) {
-      for (const room of standard.whatsIncluded) {
-        merged.push({ ...room, title: room.title });
-      }
-    }
-
-    // Add deep-specific rooms (skip the "Everything in standard cleaning, plus:" pseudo-item)
-    if (deep) {
-      for (const room of deep.whatsIncluded) {
-        const cleanItems = room.items.filter((item) => !item.startsWith("Everything in standard"));
-        merged.push({ title: room.title, items: cleanItems });
-      }
-    }
-
-    return merged;
+  // For deep and move-out, collect all applicable tier data
+  const tiers: ServiceDefinition[] = [];
+  if (slug === "deep-cleaning") {
+    if (standard) tiers.push(standard);
+    if (deep) tiers.push(deep);
+  } else if (slug === "move-out-cleaning") {
+    if (standard) tiers.push(standard);
+    if (deep) tiers.push(deep);
+    if (moveOut) tiers.push(moveOut);
+  } else {
+    return [];
   }
 
-  if (slug === "move-out-cleaning" || !moveOut) {
-    // Move-out includes standard + deep + move-out items
-    const merged: { title: string; items: string[] }[] = [];
+  // Merge all items by category, deduplicating
+  const categoryItems: Record<string, Set<string>> = {
+    kitchen: new Set(),
+    bathroom: new Set(),
+    general: new Set(),
+  };
 
-    if (standard) {
-      for (const room of standard.whatsIncluded) {
-        merged.push({ ...room });
+  for (const tier of tiers) {
+    for (const room of tier.whatsIncluded) {
+      const cat = roomCategory(room.title);
+      for (const item of room.items) {
+        // Skip the pseudo-instruction lines
+        if (item.startsWith("Everything in")) continue;
+        categoryItems[cat].add(item);
       }
     }
-
-    if (deep) {
-      for (const room of deep.whatsIncluded) {
-        const cleanItems = room.items.filter((item) => !item.startsWith("Everything in"));
-        merged.push({ title: room.title, items: cleanItems });
-      }
-    }
-
-    if (moveOut) {
-      for (const room of moveOut.whatsIncluded) {
-        const cleanItems = room.items.filter((item) => !item.startsWith("Everything in"));
-        merged.push({ title: room.title, items: cleanItems });
-      }
-    }
-
-    return merged;
   }
 
-  return [];
+  // Build output in logical order: kitchen, bathroom, general
+  return [
+    { title: CATEGORY_LABELS.kitchen, items: Array.from(categoryItems.kitchen) },
+    { title: CATEGORY_LABELS.bathroom, items: Array.from(categoryItems.bathroom) },
+    { title: CATEGORY_LABELS.general, items: Array.from(categoryItems.general) },
+  ];
 }
