@@ -1,0 +1,75 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "zai-coding/glm-5.2",
+  "small_model": "zai-coding/glm-4.5-air",
+  "instructions": [
+    "AGENTS.md",
+    "README.md"
+  ],
+  "share": "disabled",
+  "autoupdate": "notify",
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 20000
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".next/**",
+      ".git/**",
+      "coverage/**",
+      "dist/**",
+      "playwright-report/**",
+      "test-results/**"
+    ]
+  },
+  "permission": {
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "edit": "allow",
+    "grep": "allow",
+    "glob": "allow",
+    "lsp": "allow",
+    "task": "allow",
+    "skill": {
+      "*": "allow"
+    },
+    "webfetch": "allow",
+    "websearch": "ask",
+    "question": "ask",
+    "bash": {
+      "*": "ask",
+      "pwd": "allow",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git branch*": "allow",
+      "git rev-parse*": "allow",
+      "npm run lint*": "allow",
+      "npm run build*": "allow",
+      "npm run verify:lead-routing*": "allow",
+      "npm run verify:seo-readiness*": "allow",
+      "npm run verify:service-scope*": "allow",
+      "npm run verify:lead-ux*": "allow",
+      "npx tsc*": "allow",
+      "npm install*": "ask",
+      "npm update*": "ask",
+      "vercel *": "deny",
+      "npm run deploy*": "deny",
+      "git push*": "deny",
+      "git reset*": "deny",
+      "git checkout*": "ask",
+      "git switch*": "ask",
+      "rm *": "deny",
+      "del *": "deny",
+      "rmdir *": "deny"
+    },
+    "external_directory": "ask",
+    "doom_loop": "ask"
+  }
+}
