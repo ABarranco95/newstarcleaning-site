@@ -26,10 +26,10 @@ export async function GET(req: NextRequest) {
     metaPixel: hasEnv("NEXT_PUBLIC_META_PIXEL_ID"),
     clarity: hasEnv("NEXT_PUBLIC_CLARITY_ID"),
   };
+  const googleAdsWebsiteConversionReady =
+    analytics.googleAdsConversionId && analytics.googleAdsLeadConversionLabel;
   const conversionTrackingReady =
-    (analytics.gtm || analytics.ga4) &&
-    analytics.googleAdsConversionId &&
-    analytics.googleAdsLeadConversionLabel;
+    googleAdsWebsiteConversionReady || Boolean(analytics.gtm || analytics.ga4);
   const leadRouting = {
     apexLeadUrlConfigured: hasEnv("APEX_LEAD_URL"),
     apexLeadSecretConfigured: hasEnv("APEX_LEAD_INTAKE_SECRET"),
