@@ -169,7 +169,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Recurring weekly and bi-weekly slots fill up fast. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning serves Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Recurring weekly and bi-weekly slots fill up fast. We background-check every cleaner and carry general liability insurance.",
   },
   {
     slug: "deep-cleaning",
@@ -304,7 +304,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning serves Fresno, Clovis, Madera, Sanger, Selma, Kerman, and the broader Central Valley. Same-week deep cleaning availability is common when the scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning serves Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Same-week deep cleaning availability is common when the scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
   },
   {
     slug: "move-out-cleaning",
@@ -443,7 +443,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning provides move-out cleaning across Fresno, Clovis, Madera, Sanger, Selma, Kerman, Visalia, and the broader Central Valley. Most move-out jobs are scheduled within 3-5 business days when the empty-home scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning provides move-out cleaning across Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Most move-out jobs are scheduled within 3-5 business days when the empty-home scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
   },
 ];
 

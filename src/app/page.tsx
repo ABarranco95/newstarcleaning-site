@@ -346,7 +346,7 @@ export default function Home() {
               What Our Clients Say
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Real reviews from real homeowners in the Central Valley.
+              Real reviews from real homeowners in Fresno, Clovis, and Madera.
             </p>
           </div>
 
@@ -420,11 +420,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-              Serving the Central Valley
+              Serving Fresno, Clovis & Madera
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Professional house cleaning across Fresno and the surrounding
-              communities.
+              Professional house cleaning across Fresno, Clovis, Madera,
+              and close-in Fresno neighborhoods.
             </p>
           </div>
 
@@ -432,15 +432,7 @@ export default function Home() {
             {[
               { name: "Fresno", slug: "fresno", primary: true },
               { name: "Clovis", slug: "clovis", primary: true },
-              { name: "Madera", slug: "madera" },
-              { name: "Sanger", slug: "sanger" },
-              { name: "Selma", slug: "selma" },
-              { name: "Kingsburg", slug: "kingsburg" },
-              { name: "Reedley", slug: "reedley" },
-              { name: "Visalia", slug: "visalia" },
-              { name: "Tulare", slug: "tulare" },
-              { name: "Hanford", slug: "hanford" },
-              { name: "Lemoore", slug: "lemoore" },
+              { name: "Madera", slug: "madera", primary: true },
               { name: "Tower District", slug: "tower-district" },
               { name: "Fig Garden", slug: "fig-garden" },
               { name: "Woodward Park", slug: "woodward-park" },
@@ -483,8 +475,8 @@ export default function Home() {
             Ready for a Home That Sparkles?
           </h2>
           <p className="mt-4 text-lg text-white/80 max-w-2xl mx-auto">
-            Join 500+ homeowners in the Central Valley who trust New Star
-            Cleaning. Book your first cleaning today and see the difference.
+            Join Fresno, Clovis, and Madera homeowners who trust New Star
+            Cleaning. Request pricing and see if our route fits your home.
           </p>
           <div className="mt-8">
             <Link

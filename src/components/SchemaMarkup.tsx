@@ -8,14 +8,9 @@ export default function SchemaMarkup() {
     { "@type": "City", name: "Fresno", addressRegion: "CA" },
     { "@type": "City", name: "Clovis", addressRegion: "CA" },
     { "@type": "City", name: "Madera", addressRegion: "CA" },
-    { "@type": "City", name: "Sanger", addressRegion: "CA" },
-    { "@type": "City", name: "Selma", addressRegion: "CA" },
-    { "@type": "City", name: "Kingsburg", addressRegion: "CA" },
-    { "@type": "City", name: "Reedley", addressRegion: "CA" },
-    { "@type": "City", name: "Visalia", addressRegion: "CA" },
-    { "@type": "City", name: "Tulare", addressRegion: "CA" },
-    { "@type": "City", name: "Hanford", addressRegion: "CA" },
-    { "@type": "City", name: "Lemoore", addressRegion: "CA" },
+    { "@type": "Place", name: "Tower District, Fresno", addressRegion: "CA" },
+    { "@type": "Place", name: "Fig Garden, Fresno", addressRegion: "CA" },
+    { "@type": "Place", name: "Woodward Park, Fresno", addressRegion: "CA" },
   ];
   const cleaningServices = [
     {
@@ -58,7 +53,7 @@ export default function SchemaMarkup() {
         name: "New Star Cleaning",
         legalName: "NEW STAR CLEANING LLC",
         description:
-          "Professional house cleaning services in Fresno, Clovis, Madera, and the surrounding Central Valley. Standard recurring cleaning, deep cleaning, and move-in/move-out cleaning.",
+          "Professional house cleaning services in Fresno, Clovis, Madera, and nearby Fresno neighborhoods. Standard recurring cleaning, deep cleaning, and move-in/move-out cleaning.",
         url: siteUrl,
         image: `${siteUrl}/og-image.png`,
         logo: `${siteUrl}/logo.png`,
@@ -114,7 +109,7 @@ export default function SchemaMarkup() {
         name: "House Cleaning Services",
         serviceType: "House cleaning",
         description:
-          "Recurring, deep, and move-in/move-out house cleaning services for homes in Fresno, Clovis, Madera, and nearby Central Valley cities.",
+          "Recurring, deep, and move-in/move-out house cleaning services for homes in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
         provider: { "@id": localBusinessId },
         areaServed,
         hasOfferCatalog: offerCatalog,

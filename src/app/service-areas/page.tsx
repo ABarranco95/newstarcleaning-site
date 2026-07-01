@@ -7,35 +7,23 @@ import { serviceAreas } from "@/lib/serviceAreas";
 const siteUrl = "https://newstarcleaning.com";
 
 export const metadata: Metadata = {
-  title: "House Cleaning Service Areas in Fresno & Central Valley",
+  title: "House Cleaning Service Areas in Fresno, Clovis & Madera",
   description:
-    "See every New Star Cleaning service area across Fresno, Clovis, Madera, Sanger, Selma, Visalia, Hanford, Lemoore, and nearby neighborhoods.",
+    "See New Star Cleaning service areas across Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
   alternates: {
     canonical: "/service-areas",
   },
   openGraph: {
     title:
-      "House Cleaning Service Areas in Fresno & Central Valley | New Star Cleaning",
+      "House Cleaning Service Areas in Fresno, Clovis & Madera | New Star Cleaning",
     description:
-      "Local house cleaning routes for Fresno, Clovis, Madera, Sanger, Selma, Visalia, Hanford, Lemoore, and nearby Central Valley communities.",
+      "Local house cleaning routes for Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
     url: `${siteUrl}/service-areas`,
   },
 };
 
 const primaryCities = serviceAreas.filter((area) =>
-  [
-    "fresno",
-    "clovis",
-    "madera",
-    "sanger",
-    "selma",
-    "kingsburg",
-    "reedley",
-    "visalia",
-    "tulare",
-    "hanford",
-    "lemoore",
-  ].includes(area.slug),
+  ["fresno", "clovis", "madera"].includes(area.slug),
 );
 
 const fresnoNeighborhoods = serviceAreas.filter((area) =>
@@ -88,14 +76,14 @@ export default function ServiceAreasPage() {
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <div className="max-w-2xl text-white">
               <span className="eyebrow eyebrow-dot text-accent-light">
-                Fresno and Central Valley routes
+                Fresno, Clovis, and Madera routes
               </span>
               <h1 className="mt-5 text-4xl lg:text-[3.5rem] leading-[1.05]">
                 House cleaning service areas near Fresno
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-white/75">
                 New Star Cleaning is based in Fresno and routes vetted cleaners
-                across nearby Central Valley cities. Each area page explains
+                across the Fresno, Clovis, and Madera area. Each area page explains
                 what we commonly clean there, how scheduling works, and which
                 neighborhoods we serve.
               </p>
@@ -128,13 +116,13 @@ export default function ServiceAreasPage() {
           <div className="max-w-3xl">
             <span className="eyebrow eyebrow-dot">Cities we serve</span>
             <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
-              Local cleaning routes across the Central Valley
+              Local cleaning routes in our real service area
             </h2>
             <p className="mt-5 leading-relaxed text-ink-soft">
-              Start with your city to see local route notes, common cleaning
-              requests, and nearby neighborhoods. Fresno and Clovis have the
-              strongest route density; farther cities are scheduled with clear
-              travel windows.
+              Start with your city or Fresno neighborhood to see local route
+              notes, common cleaning requests, and nearby neighborhoods. Fresno
+              and Clovis have the strongest route density; Madera is scheduled
+              with clear route windows.
             </p>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -176,9 +164,9 @@ export default function ServiceAreasPage() {
             <p className="mt-4 leading-relaxed text-ink-soft">
               We would rather give a clear window than overpromise a time we
               cannot keep. Fresno and Clovis appointments are easiest to fill
-              quickly. Madera, Sanger, Selma, Kingsburg, Reedley, Visalia,
-              Tulare, Hanford, and Lemoore are scheduled around grouped route
-              days so the cleaner has enough time for the full scope.
+              quickly. Madera appointments are scheduled with route planning so
+              the cleaner has enough time for the full scope. We do not
+              advertise farther cities we cannot reliably cover.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link

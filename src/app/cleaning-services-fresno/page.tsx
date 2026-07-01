@@ -7,14 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "fresno")!;
 export const metadata: Metadata = {
   title: "House Cleaning Services in Fresno, CA",
   description:
-    "Professional house cleaning in Fresno, CA and the Central Valley. Standard recurring, deep, and move-in/move-out cleaning from vetted, insured cleaners.",
+    "Professional house cleaning in Fresno, CA and nearby Fresno-area homes. Standard recurring, deep, and move-in/move-out cleaning from vetted, insured cleaners.",
   alternates: {
     canonical: "/cleaning-services-fresno",
   },
   openGraph: {
     title: "House Cleaning Services in Fresno, CA | New Star Cleaning",
     description:
-      "Local Central Valley house cleaning in Fresno, CA. Request a fast quote from vetted, insured cleaners.",
+      "Local Fresno-area house cleaning in Fresno, CA. Request a fast quote from vetted, insured cleaners.",
     url: "https://newstarcleaning.com/cleaning-services-fresno",
   },
 };

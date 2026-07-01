@@ -6,14 +6,14 @@ import TrustBadges from "@/components/TrustBadges";
 export const metadata: Metadata = {
   title: "Contact Fresno House Cleaners",
   description:
-    "Contact New Star Cleaning in Fresno, CA. Call, text, or request pricing and availability online. Serving Fresno, Clovis, Madera and the Central Valley.",
+    "Contact New Star Cleaning in Fresno, CA. Call, text, or request pricing and availability online. Serving Fresno, Clovis, Madera and nearby Fresno neighborhoods.",
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
     title: "Contact Fresno House Cleaners | New Star Cleaning",
     description:
-      "Reach New Star Cleaning. Serving Fresno, Clovis, Madera and the Central Valley.",
+      "Reach New Star Cleaning. Serving Fresno, Clovis, Madera and nearby Fresno neighborhoods.",
     url: "https://newstarcleaning.com/contact",
   },
 };
@@ -45,7 +45,7 @@ export default function ContactPage() {
               <p className="mt-6 text-sm leading-relaxed text-white/60">
                 5.0 on Google with 23 public reviews, backed by
                 our 24-hour re-clean promise. Background-checked and insured professionals
-                serving Fresno, Clovis, Madera &amp; the Central Valley.
+                serving Fresno, Clovis, Madera &amp; nearby Fresno neighborhoods.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-white/80">
                 <a
@@ -90,9 +90,8 @@ export default function ContactPage() {
               <span className="eyebrow eyebrow-dot">Service area</span>
               <h2 className="mt-3 text-xl text-ink">Where we serve</h2>
               <p className="mt-3 text-ink-soft leading-relaxed">
-                Fresno, Clovis, Madera, Sanger, Selma, Kingsburg, Reedley,
-                Visalia, Tulare, Hanford, Lemoore, plus Tower District, Fig
-                Garden, and Woodward Park.
+                Fresno, Clovis, Madera, plus close-in Fresno neighborhoods
+                including Tower District, Fig Garden, and Woodward Park.
               </p>
             </div>
             <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
@@ -137,14 +136,9 @@ export default function ContactPage() {
                 "Fresno",
                 "Clovis",
                 "Madera",
-                "Sanger",
-                "Selma",
-                "Kingsburg",
-                "Reedley",
-                "Visalia",
-                "Tulare",
-                "Hanford",
-                "Lemoore",
+                "Tower District",
+                "Fig Garden",
+                "Woodward Park",
               ],
               address: {
                 "@type": "PostalAddress",

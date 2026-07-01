@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title:
     "About New Star Cleaning — Fresno's Trusted House Cleaning Company",
   description:
-    "New Star Cleaning is a locally owned, background-checked cleaning service serving Fresno, Clovis, Madera and the Central Valley. Meet our team.",
+    "New Star Cleaning is a locally owned, background-checked cleaning service serving Fresno, Clovis, Madera and nearby Fresno neighborhoods. Meet our team.",
   alternates: {
     canonical: "/about",
   },
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title:
       "About New Star Cleaning — Fresno's Trusted House Cleaning Company | New Star Cleaning",
     description:
-      "Locally owned, background-checked cleaning service for Fresno, Clovis, Madera and the Central Valley.",
+      "Locally owned, background-checked cleaning service for Fresno, Clovis, Madera and nearby Fresno neighborhoods.",
     url: "https://newstarcleaning.com/about",
   },
 };
@@ -33,7 +33,7 @@ export default function AboutPage() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-white/75">
             New Star Cleaning is a locally owned house cleaning company serving
-            Fresno, Clovis, Madera, and the surrounding Central Valley. We
+            Fresno, Clovis, Madera, and nearby Fresno neighborhoods. We
             built this business around one idea: home is sacred — and the
             people who clean it should be careful, consistent, and someone you
             actually want in your space.
@@ -97,11 +97,10 @@ export default function AboutPage() {
                 Where we clean
               </h2>
               <p className="mt-5">
-                We serve homeowners across the Central Valley, with primary
-                coverage in Fresno, Clovis, and Madera, plus regular service
-                in Sanger, Selma, Kingsburg, Reedley, Visalia, Tulare,
-                Hanford, Lemoore, and Fresno neighborhoods including Tower
-                District, Fig Garden, and Woodward Park.
+                We serve homeowners in Fresno, Clovis, Madera, and close-in
+                Fresno neighborhoods including Tower District, Fig Garden,
+                and Woodward Park. We keep the public service area honest so
+                customers outside our route are not misled.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
@@ -122,12 +121,6 @@ export default function AboutPage() {
                 >
                   Madera
                 </Link>
-                <Link
-                  href="/cleaning-services-visalia"
-                  className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft hover:border-primary hover:text-primary"
-                >
-                  Visalia
-                </Link>
               </div>
             </div>
           </div>
@@ -142,8 +135,8 @@ export default function AboutPage() {
             <span className="italic text-accent-light"> trust</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-white/75">
-            Request a fast quote online. Same-week availability across the
-            Central Valley.
+            Request a fast quote online. Same-week availability is strongest in Fresno and Clovis;
+            Madera is scheduled around route availability.
           </p>
           <div className="mt-8">
             <Link

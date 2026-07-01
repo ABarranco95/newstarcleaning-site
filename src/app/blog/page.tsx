@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cleaning Tips & Guides — New Star Cleaning Blog | New Star Cleaning",
     description:
-      "Local Central Valley cleaning advice from the New Star Cleaning team.",
+      "Local Fresno-area cleaning advice from the New Star Cleaning team.",
     url: "https://newstarcleaning.com/blog",
   },
 };

@@ -42,7 +42,7 @@ export default function Header() {
                 New Star Cleaning
               </span>
               <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block lg:text-[0.58rem]">
-                Fresno · Clovis · Central Valley
+                Fresno · Clovis · Madera
               </span>
             </div>
           </Link>

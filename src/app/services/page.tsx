@@ -10,14 +10,14 @@ const siteUrl = "https://newstarcleaning.com";
 export const metadata: Metadata = {
   title: "House Cleaning Services in Fresno & Clovis, CA",
   description:
-    "Compare New Star Cleaning's recurring, deep, and move-in/move-out cleaning services for Fresno, Clovis, and Central Valley homes.",
+    "Compare New Star Cleaning's recurring, deep, and move-in/move-out cleaning services for Fresno, Clovis, and Madera homes.",
   alternates: {
     canonical: "/services",
   },
   openGraph: {
     title: "House Cleaning Services in Fresno & Clovis, CA | New Star Cleaning",
     description:
-      "Compare local house cleaning services, what is included, and where New Star Cleaning serves across the Central Valley.",
+      "Compare local house cleaning services, what is included, and where New Star Cleaning serves across Fresno, Clovis, and Madera.",
     url: `${siteUrl}/services`,
   },
 };
@@ -56,14 +56,7 @@ const comparisonRows = [
 ];
 
 const primaryAreas = serviceAreas.filter((area) =>
-  [
-    "fresno",
-    "clovis",
-    "madera",
-    "sanger",
-    "selma",
-    "visalia",
-  ].includes(area.slug),
+  ["fresno", "clovis", "madera"].includes(area.slug),
 );
 
 export default function ServicesPage() {
@@ -79,7 +72,7 @@ export default function ServicesPage() {
                 Fresno house cleaning services
               </span>
               <h1 className="mt-5 text-4xl lg:text-[3.5rem] leading-[1.05]">
-                House cleaning built for real Central Valley homes
+                House cleaning built for real Fresno-area homes
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-white/75">
                 Compare recurring, deep, and move-in/move-out cleaning before
@@ -208,9 +201,9 @@ export default function ServicesPage() {
               Popular service areas for house cleaning
             </h2>
             <p className="mt-5 leading-relaxed text-ink-soft">
-              We route cleaners from our Fresno base across the Central Valley.
-              Start with your city page to see local notes, route timing, and
-              the types of homes we commonly clean nearby.
+              We route cleaners from our Fresno base across Fresno, Clovis,
+              Madera, and nearby Fresno neighborhoods. Start with your area
+              page to see local notes and route timing.
             </p>
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -232,7 +225,7 @@ export default function ServicesPage() {
               href="/service-areas"
               className="inline-flex rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-primary shadow-soft transition-colors hover:border-primary"
             >
-              View every service area
+              View service areas
             </Link>
           </div>
         </div>

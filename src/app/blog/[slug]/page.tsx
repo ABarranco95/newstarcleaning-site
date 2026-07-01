@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
             </h3>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
               New Star Cleaning serves Fresno, Clovis, Madera, and the rest of
-              the Central Valley with background-checked, insured cleaners.
+              Fresno, Clovis, and Madera with background-checked, insured cleaners.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link

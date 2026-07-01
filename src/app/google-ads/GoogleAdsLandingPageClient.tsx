@@ -80,7 +80,7 @@ export default function GoogleAdsLandingPageClient() {
                 New Star Cleaning
               </span>
               <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block">
-                Fresno · Clovis · Central Valley
+                Fresno · Clovis · Madera
               </span>
             </div>
           </div>
@@ -266,10 +266,10 @@ export default function GoogleAdsLandingPageClient() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-3">Service Areas</h2>
-            <p className="text-gray-600">Proudly serving Fresno and surrounding Central Valley communities</p>
+            <p className="text-gray-600">Serving Fresno, Clovis, Madera, and close-in Fresno neighborhoods</p>
           </div>
           <div className="flex flex-wrap justify-center gap-3">
-            {["Fresno", "Clovis", "Madera", "Sanger", "Selma", "Kingsburg", "Reedley", "Visalia", "Tulare", "Hanford"].map((area) => (
+            {["Fresno", "Clovis", "Madera", "Tower District", "Fig Garden", "Woodward Park"].map((area) => (
               <span key={area} className="bg-white px-5 py-3 rounded-full font-semibold text-primary shadow-md hover:bg-primary hover:text-white transition-colors cursor-default">{area}</span>
             ))}
           </div>

@@ -268,7 +268,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 </div>
                 <div className="mt-2 font-semibold">NEW STAR CLEANING LLC</div>
                 <div className="mt-1 text-sm text-white/65">
-                  Fresno-based house cleaning for the Central Valley.
+                  Fresno-based house cleaning for our core route area.
                 </div>
               </div>
               <div>

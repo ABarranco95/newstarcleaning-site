@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title:
       "Service Checklist: Included, Add-Ons, Not Included | New Star Cleaning",
     description:
-      "Clear room-by-room cleaning scope for Fresno and Central Valley homes, including what is not part of our cleaning service.",
+      "Clear room-by-room cleaning scope for Fresno, Clovis, and Madera homes, including what is not part of our cleaning service.",
     url: `${siteUrl}/checklist`,
   },
 };

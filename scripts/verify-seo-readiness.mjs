@@ -35,9 +35,25 @@ const areaSlugs = [
 const uniqueAreaSlugs = new Set(areaSlugs);
 
 assert(
-  areaSlugs.length === uniqueAreaSlugs.size && areaSlugs.length >= 10,
-  `service area data has ${areaSlugs.length} unique local pages`,
+  areaSlugs.length === uniqueAreaSlugs.size && areaSlugs.length === 6,
+  `service area data has exactly ${areaSlugs.length} honest local pages`,
 );
+
+const expectedAreaSlugs = ["fresno", "clovis", "madera", "tower-district", "fig-garden", "woodward-park"];
+const removedAreaSlugs = ["sanger", "selma", "kingsburg", "reedley", "visalia", "tulare", "hanford", "lemoore"];
+
+assert(
+  expectedAreaSlugs.every((slug) => uniqueAreaSlugs.has(slug)) &&
+    areaSlugs.every((slug) => expectedAreaSlugs.includes(slug)),
+  "service area data is restricted to Fresno, Clovis, Madera, and close-in Fresno neighborhoods",
+);
+
+for (const slug of removedAreaSlugs) {
+  assert(!uniqueAreaSlugs.has(slug), `out-of-range city removed from service area data: ${slug}`);
+  assert(!existsSync(path.join(root, `src/app/cleaning-services-${slug}/page.tsx`)), `out-of-range city page removed: ${slug}`);
+  assert(!footer.includes(`cleaning-services-${slug}`), `footer does not link out-of-range city: ${slug}`);
+}
+
 
 for (const field of [
   "localProof",

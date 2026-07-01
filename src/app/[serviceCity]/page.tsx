@@ -10,14 +10,9 @@ const COMBO_CITY_SLUGS = [
   "fresno",
   "clovis",
   "madera",
-  "sanger",
-  "selma",
-  "kingsburg",
-  "reedley",
-  "visalia",
-  "tulare",
-  "hanford",
-  "lemoore",
+  "tower-district",
+  "fig-garden",
+  "woodward-park",
 ] as const;
 
 interface RouteParams {
@@ -104,7 +99,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
 
   const { service, citySlug, cityName } = parsed;
   const area = serviceAreas.find((a) => a.slug === citySlug);
-  const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Background-checked, insured cleaners and the same trusted standard we deliver across the Central Valley.`;
+  const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Background-checked, insured cleaners and the same trusted standard we deliver across our Fresno-area routes.`;
 
   return (
     <>

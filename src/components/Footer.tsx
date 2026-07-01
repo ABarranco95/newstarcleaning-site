@@ -4,14 +4,9 @@ const serviceAreas = [
   { name: "Fresno", slug: "fresno" },
   { name: "Clovis", slug: "clovis" },
   { name: "Madera", slug: "madera" },
-  { name: "Sanger", slug: "sanger" },
-  { name: "Selma", slug: "selma" },
-  { name: "Kingsburg", slug: "kingsburg" },
-  { name: "Reedley", slug: "reedley" },
-  { name: "Visalia", slug: "visalia" },
-  { name: "Tulare", slug: "tulare" },
-  { name: "Hanford", slug: "hanford" },
-  { name: "Lemoore", slug: "lemoore" },
+  { name: "Tower District", slug: "tower-district" },
+  { name: "Fig Garden", slug: "fig-garden" },
+  { name: "Woodward Park", slug: "woodward-park" },
 ];
 
 export default function Footer() {
@@ -40,8 +35,8 @@ export default function Footer() {
               <span className="text-xl font-bold">New Star Cleaning</span>
             </div>
             <p className="text-white/70 text-sm leading-relaxed">
-              Professional house cleaning services in Fresno, CA and the
-              surrounding Central Valley. Vetted, insured, and backed by a
+              Professional house cleaning services in Fresno, Clovis,
+              Madera, and nearby Fresno neighborhoods. Vetted, insured, and backed by a
               clear cleaning scope.
             </p>
           </div>

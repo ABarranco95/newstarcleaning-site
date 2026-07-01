@@ -20,6 +20,46 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/cleaning-services-sanger",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-selma",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-kingsburg",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-reedley",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-visalia",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-tulare",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-hanford",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
+        source: "/cleaning-services-lemoore",
+        destination: "/service-areas",
+        permanent: true,
+      },
+      {
         source: "/blog/move-out-cleaning-checklist-get-your-deposit-back",
         destination: "/blog/move-out-cleaning-checklist-before-inspection",
         permanent: true,

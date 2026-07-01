@@ -176,6 +176,12 @@ export default function ServiceDetailPage({
                   service scope.
                 </p>
               </div>
+              <Link
+                href="/checklist"
+                className="mt-5 inline-flex items-center rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft transition-colors hover:border-primary hover:text-primary"
+              >
+                Review the full service checklist
+              </Link>
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
@@ -276,7 +282,7 @@ export default function ServiceDetailPage({
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="rounded-2xl border border-line bg-white p-8 shadow-soft">
               <h2 className="text-2xl text-ink">
-                Serving the Central Valley
+                Serving Fresno, Clovis & Madera
               </h2>
               <p className="mt-4 text-ink-soft leading-relaxed">
                 {service.localNotes}
@@ -438,14 +444,9 @@ export default function ServiceDetailPage({
               { "@type": "City", name: "Fresno", addressRegion: "CA" },
               { "@type": "City", name: "Clovis", addressRegion: "CA" },
               { "@type": "City", name: "Madera", addressRegion: "CA" },
-              { "@type": "City", name: "Sanger", addressRegion: "CA" },
-              { "@type": "City", name: "Selma", addressRegion: "CA" },
-              { "@type": "City", name: "Kingsburg", addressRegion: "CA" },
-              { "@type": "City", name: "Reedley", addressRegion: "CA" },
-              { "@type": "City", name: "Visalia", addressRegion: "CA" },
-              { "@type": "City", name: "Tulare", addressRegion: "CA" },
-              { "@type": "City", name: "Hanford", addressRegion: "CA" },
-              { "@type": "City", name: "Lemoore", addressRegion: "CA" },
+              { "@type": "Place", name: "Tower District, Fresno", addressRegion: "CA" },
+              { "@type": "Place", name: "Fig Garden, Fresno", addressRegion: "CA" },
+              { "@type": "Place", name: "Woodward Park, Fresno", addressRegion: "CA" },
             ],
           }),
         }}

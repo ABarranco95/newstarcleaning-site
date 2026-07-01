@@ -18,14 +18,14 @@ const directBookingUrl =
 export const metadata: Metadata = {
   title: "Request Cleaning Pricing & Availability",
   description:
-    "Request pricing and availability for New Star Cleaning in Fresno, Clovis, Madera, and the Central Valley. Clear quote before anything is booked.",
+    "Request pricing and availability for New Star Cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods. Clear quote before anything is booked.",
   alternates: {
     canonical: "/book-now",
   },
   openGraph: {
     title: "Request Cleaning Pricing & Availability | New Star Cleaning",
     description:
-      "Get clear pricing and availability before confirming your Central Valley house cleaning.",
+      "Get clear pricing and availability before confirming your Fresno-area house cleaning.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
@@ -38,7 +38,7 @@ export default function BookNow() {
         <div className="absolute inset-0 ns-grid-bg opacity-30" aria-hidden="true" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
           <span className="eyebrow eyebrow-dot text-accent-light">
-            Fresno / Clovis / Central Valley
+            Fresno / Clovis / Madera
           </span>
           <h1 className="mt-5 text-4xl lg:text-5xl leading-tight">
             Request cleaning pricing & availability
@@ -95,8 +95,8 @@ export default function BookNow() {
               <h2 className="text-2xl text-ink">Prefer to talk first?</h2>
               <p className="mt-3 text-ink-soft">
                 Call or text New Star Cleaning directly. We serve Fresno,
-                Clovis, Madera, Sanger, Selma, Kingsburg, Reedley, Visalia,
-                Tulare, Hanford, and nearby Central Valley homes.
+                Clovis, Madera, and nearby Fresno neighborhoods including
+                Tower District, Fig Garden, and Woodward Park.
               </p>
               <a
                 href="tel:+15597852822"

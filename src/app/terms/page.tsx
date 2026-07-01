@@ -46,7 +46,7 @@ export default function TermsOfService() {
             </h2>
             <p className="text-gray-600 leading-relaxed mb-3">
               New Star Cleaning provides professional residential cleaning
-              services in Fresno, CA and the surrounding Central Valley area.
+              services in Fresno, CA and the Fresno, Clovis, and Madera area.
               Our core residential services are:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-600">
