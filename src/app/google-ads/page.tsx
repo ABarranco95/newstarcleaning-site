@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import GoogleAdsLandingPageClient from "./GoogleAdsLandingPageClient";
 
 export const metadata: Metadata = {
-  title: "Professional House Cleaning Fresno | 5.0★ Rated",
-  description: "Professional house cleaning in Fresno. 5.0★ Google rating, background-checked cleaners, 24-hour re-clean promise. Request a fast quote online.",
+  title: "Paid Search Cleaning Quote | New Star Cleaning",
+  description:
+    "Request clear pricing for move-out, deep, or recurring house cleaning in Fresno, Clovis, and Madera. Scope confirmed before booking.",
   robots: {
     index: false,
     follow: false,
@@ -14,5 +16,9 @@ export const metadata: Metadata = {
 };
 
 export default function GoogleAdsLandingPage() {
-  return <GoogleAdsLandingPageClient />;
+  return (
+    <Suspense fallback={null}>
+      <GoogleAdsLandingPageClient />
+    </Suspense>
+  );
 }

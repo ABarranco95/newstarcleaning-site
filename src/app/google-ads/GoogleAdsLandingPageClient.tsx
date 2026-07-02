@@ -1,32 +1,305 @@
 "use client";
 
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import Link from "next/link";
+import { useMemo, useState, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 
-function FAQAccordion() {
-  const faqs = [
-    { question: "Do you bring your own cleaning supplies?", answer: "Yes! Our background-checked cleaners arrive with all necessary supplies and equipment. Just provide access to water and electrical outlets." },
-    { question: "Are your cleaners background-checked?", answer: "Absolutely. Every cleaner undergoes a thorough background check before joining our team. Your safety and security are our priority." },
-    { question: "What's your 24-hour re-clean promise?", answer: "If something included in your cleaning scope is missed, contact us within 24 hours and we'll return to re-clean that area at no additional charge." },
-    { question: "Do you do laundry, dishes, organizing, or bed making?", answer: "No. We provide cleaning service, not household task service. Laundry, dishes, organizing, changing linens, bed making, packing, and unpacking are not included." },
-    { question: "Are oven, fridge, cabinets, and windows included?", answer: "Those items depend on the service and quote. Standard and deep cleaning treat many detail items as add-ons. Move-out cleaning can include empty appliance and cabinet interiors when confirmed in the scope." },
-    { question: "How soon can you come?", answer: "We offer same-week availability for most cleaning services. Request a quote or call (559) 785-2822 to confirm pricing and timing." },
-    { question: "Do you require contracts?", answer: "No contracts required! We offer one-time, weekly, bi-weekly, or monthly services with no long-term commitment. Cancel anytime." },
-  ];
+type PaidIntent = "move" | "deep" | "recurring";
 
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+type CityKey =
+  | "fresno"
+  | "clovis"
+  | "madera"
+  | "woodward-park"
+  | "fig-garden"
+  | "tower-district"
+  | "near-me";
+
+type PaidIntentConfig = {
+  eyebrow: string;
+  h1: (city: string) => string;
+  subhead: string;
+  serviceDefault: string;
+  formTitle: string;
+  formSubtitle: string;
+  heroBullets: string[];
+  scopeTitle: string;
+  scopeIntro: string;
+  scopeBullets: string[];
+  addonTitle: string;
+  addonBullets: string[];
+  boundaryTitle: string;
+  boundaryBullets: string[];
+  proofTitle: string;
+  proofCopy: string;
+  faqs: Array<{ question: string; answer: string }>;
+};
+
+const CITY_LABELS: Record<CityKey, string> = {
+  fresno: "Fresno",
+  clovis: "Clovis",
+  madera: "Madera",
+  "woodward-park": "Woodward Park",
+  "fig-garden": "Fig Garden",
+  "tower-district": "Tower District",
+  "near-me": "your area",
+};
+
+const AREA_LABEL = "Fresno · Clovis · Madera";
+
+const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
+  move: {
+    eyebrow: "Move-in / move-out cleaning · planned turnover work",
+    h1: (city) => `Move-Out Cleaning in ${city} — clear scope before you book`,
+    subhead:
+      "For empty homes, rentals, and move deadlines where the details matter. We confirm size, condition, timing, and add-ons first so the cleaner is prepared and the price is clear.",
+    serviceDefault: "Move-in / move-out cleaning",
+    formTitle: "Request move-out cleaning pricing",
+    formSubtitle:
+      "Send the home size, move timing, and condition once. We price the scope before anything is booked.",
+    heroBullets: [
+      "Empty-home turnover cleaning",
+      "Baseboards, bathrooms, kitchen, fixtures, and floors",
+      "Add-ons confirmed upfront",
+      "Standard-condition assumptions stated clearly",
+    ],
+    scopeTitle: "Built for empty-home turnover cleaning",
+    scopeIntro:
+      "Move-out cleaning needs tighter scope control than a regular maintenance clean. The job is priced around what is empty, reachable, and confirmed before booking.",
+    scopeBullets: [
+      "Kitchen counters, sink, exterior cabinets, and exterior appliances",
+      "Bathrooms, fixtures, mirrors, tubs, and showers in normal condition",
+      "Bedrooms, closets, and common areas when empty and reachable",
+      "Baseboards, trim, doors, frames, reachable vents, and fixtures",
+      "Floors vacuumed and mopped after the agreed detail work is complete",
+    ],
+    addonTitle: "Add-ons we define before quoting",
+    addonBullets: [
+      "Inside oven",
+      "Inside refrigerator",
+      "Inside cabinets and drawers",
+      "Interior windows and tracks",
+      "Blinds",
+      "Heavy pet hair or heavy buildup",
+    ],
+    boundaryTitle: "Not a bargain rush clean",
+    boundaryBullets: [
+      "No same-day promise from an ad click",
+      "No vague quote that changes after the cleaner arrives",
+      "No laundry, dishes, packing, unpacking, or organizing",
+      "Heavy-duty conditions are priced separately before the job is accepted",
+    ],
+    proofTitle: "Move work is won on scope, not slogans",
+    proofCopy:
+      "The right move-out clean protects the customer, the cleaner, and the schedule. We ask the pricing questions upfront so the job is not underbid or rushed.",
+    faqs: [
+      {
+        question: "Can you clean before my move deadline?",
+        answer:
+          "Usually, if the schedule is planned. Send the date, home size, and whether the home is empty so we can confirm real availability instead of making a same-day promise we cannot protect.",
+      },
+      {
+        question: "Are oven, fridge, cabinets, and windows included?",
+        answer:
+          "They can be included when confirmed in the quote. We define appliance interiors, cabinet interiors, windows, tracks, blinds, and heavy buildup before booking so there are no surprises.",
+      },
+      {
+        question: "What if the home is heavier than standard condition?",
+        answer:
+          "We price heavy buildup, pet hair, grease, neglected bathrooms, or unusual conditions separately before the job is accepted. That keeps the quote fair and the cleaner prepared.",
+      },
+    ],
+  },
+  deep: {
+    eyebrow: "Deep cleaning · detailed home reset",
+    h1: (city) => `Deep Cleaning in ${city} for homes that need more than a surface clean`,
+    subhead:
+      "Detailed reset cleaning for kitchens, bathrooms, baseboards, reachable fixtures, trim, vents, and floors. We confirm condition first so the quote matches the work.",
+    serviceDefault: "Deep cleaning",
+    formTitle: "Request deep cleaning pricing",
+    formSubtitle:
+      "Tell us the size, condition, and priority areas so we can price the reset correctly before booking.",
+    heroBullets: [
+      "Detailed reset cleaning",
+      "Condition checked before quote",
+      "Clear add-on boundaries",
+      "Premium local cleaning team",
+    ],
+    scopeTitle: "For homes past maintenance-cleaning condition",
+    scopeIntro:
+      "Deep cleaning is for detail work and buildup that a regular visit is not designed to handle. We price it around condition, size, and the areas that matter most.",
+    scopeBullets: [
+      "Kitchen surfaces, exterior appliances, sink, backsplash, and cabinet fronts",
+      "Bathroom fixtures, toilets, tubs, showers, mirrors, and detail edges",
+      "Baseboards, trim, doors, switch plates, and reachable vents",
+      "Reachable light fixtures, ceiling fans, detail corners, and high-touch areas",
+      "Floors vacuumed and mopped after detailed surface cleaning is complete",
+    ],
+    addonTitle: "Possible add-ons if the home needs them",
+    addonBullets: [
+      "Inside oven",
+      "Inside refrigerator",
+      "Interior windows and tracks",
+      "Blinds",
+      "Heavy pet hair",
+      "Heavy grease, soap scum, or neglected buildup",
+    ],
+    boundaryTitle: "Clear expectations before the job",
+    boundaryBullets: [
+      "No open-ended “clean everything” quote",
+      "No laundry, dishes, organizing, or bed making",
+      "No unsafe climbing or unreachable fixtures",
+      "Heavy-duty work is quoted separately before scheduling",
+    ],
+    proofTitle: "A deep clean should be priced like real work",
+    proofCopy:
+      "The goal is a serious reset, not a rushed checklist. We confirm condition first so the cleaner has enough time and the customer knows what is included.",
+    faqs: [
+      {
+        question: "How is deep cleaning different from standard recurring cleaning?",
+        answer:
+          "Deep cleaning targets buildup, detail edges, baseboards, trim, reachable fixtures, bathrooms, and kitchen detail. Standard recurring cleaning is maintenance for homes already kept in normal condition.",
+      },
+      {
+        question: "Can I choose priority areas?",
+        answer:
+          "Yes. Tell us the rooms or issues that matter most. We use that to confirm scope and avoid underpricing the job.",
+      },
+      {
+        question: "What if the home has heavy buildup or pet hair?",
+        answer:
+          "That can still be handled, but it has to be priced as heavy-duty work before booking. We do not hide that until arrival.",
+      },
+    ],
+  },
+  recurring: {
+    eyebrow: "Recurring cleaning · weekly, biweekly, or monthly",
+    h1: (city) => `Recurring House Cleaning in ${city} for homes that need consistency`,
+    subhead:
+      "Weekly, biweekly, and monthly cleaning for homeowners who want a reliable local cleaning company — not a random one-time cleaner.",
+    serviceDefault: "Standard recurring cleaning",
+    formTitle: "Request recurring cleaning pricing",
+    formSubtitle:
+      "Share the home size, frequency, and current condition so we can recommend the right first clean and maintenance schedule.",
+    heroBullets: [
+      "Weekly, biweekly, and monthly options",
+      "Maintenance cleaning for homes in normal condition",
+      "First clean may need deep-clean pricing if condition requires it",
+      "No long-term contract",
+    ],
+    scopeTitle: "Built for consistent maintenance, not one-off bargain cleaning",
+    scopeIntro:
+      "Recurring cleaning works when the starting condition and ongoing scope are clear. If the first visit needs a reset, we say that before setting a maintenance schedule.",
+    scopeBullets: [
+      "Kitchen counters, sink, exterior appliance surfaces, and visible surfaces",
+      "Bathrooms, mirrors, fixtures, toilets, tubs, and showers in normal condition",
+      "Dusting of reachable surfaces, high-touch areas, and common rooms",
+      "Floors vacuumed and mopped as part of the recurring maintenance scope",
+      "Frequency matched to home size, traffic, pets, and upkeep expectations",
+    ],
+    addonTitle: "Recurring scope can be adjusted",
+    addonBullets: [
+      "Weekly cleaning",
+      "Biweekly cleaning",
+      "Monthly cleaning",
+      "First-visit deep reset",
+      "Priority room rotation",
+      "Add-ons quoted separately when needed",
+    ],
+    boundaryTitle: "Who this is not for",
+    boundaryBullets: [
+      "Not for the cheapest one-time standard clean",
+      "Not for same-day emergency service from an ad click",
+      "Not for laundry, dishes, organizing, or household chores",
+      "Not for heavy buildup at maintenance-cleaning pricing",
+    ],
+    proofTitle: "Recurring clients need reliability and scope control",
+    proofCopy:
+      "The first clean sets the relationship. We confirm frequency, size, condition, and priorities before recommending recurring service.",
+    faqs: [
+      {
+        question: "Do I need a deep clean before recurring service?",
+        answer:
+          "Sometimes. If the home needs a reset before maintenance cleaning makes sense, we will say that before booking the recurring schedule.",
+      },
+      {
+        question: "Can I do biweekly instead of weekly?",
+        answer:
+          "Yes. Weekly, biweekly, and monthly can all work depending on home size, pets, traffic, and expectations.",
+      },
+      {
+        question: "Is there a long-term contract?",
+        answer:
+          "No long-term contract. The priority is clear scope, reliable scheduling, and a home that stays consistently maintained.",
+      },
+    ],
+  },
+};
+
+function normalizeCity(value: string | null): { key: CityKey; label: string; formValue: string } {
+  const normalized = (value || "fresno").trim().toLowerCase().replace(/_/g, "-");
+  const key = Object.prototype.hasOwnProperty.call(CITY_LABELS, normalized)
+    ? (normalized as CityKey)
+    : "fresno";
+  const label = CITY_LABELS[key];
+  return {
+    key,
+    label,
+    formValue: key === "near-me" ? "" : label,
+  };
+}
+
+function detectIntent(service: string | null, frequency: string | null): PaidIntent {
+  const normalizedService = (service || "").trim().toLowerCase();
+  const normalizedFrequency = (frequency || "").trim().toLowerCase();
+
+  if (normalizedService.includes("deep")) return "deep";
+  if (normalizedService.includes("move")) return "move";
+  if (normalizedFrequency.includes("recurring") || normalizedService.includes("standard")) return "recurring";
+  return "move";
+}
+
+function TrustBar({ city }: { city: string }) {
+  const items = [`${city} + nearby routes`, "Clear pricing first", "Scope confirmed upfront", "5.0★ Google rating"];
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((item) => (
+        <div key={item} className="rounded-2xl border border-white/12 bg-white/8 px-4 py-3 text-sm font-semibold text-white/90">
+          {item}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SectionCard({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 md:p-8">
+      <h2 className="font-display text-2xl leading-tight text-primary md:text-3xl">{title}</h2>
+      <div className="mt-5 text-sm leading-7 text-ink-soft md:text-base">{children}</div>
+    </section>
+  );
+}
+
+function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <div className="space-y-3">
       {faqs.map((faq, index) => (
-        <div key={index} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
-          <button onClick={() => setOpenIndex(openIndex === index ? null : index)} className="w-full px-6 py-5 text-left font-semibold text-primary flex justify-between items-center hover:bg-gray-100 transition-colors">
-            {faq.question}
-            <span className={`text-2xl transition-transform ${openIndex === index ? "rotate-45" : ""}`}>+</span>
+        <div key={faq.question} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <button
+            type="button"
+            onClick={() => setOpenIndex(openIndex === index ? null : index)}
+            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-primary transition hover:bg-slate-50 md:text-base"
+          >
+            <span>{faq.question}</span>
+            <span className="text-xl text-accent">{openIndex === index ? "−" : "+"}</span>
           </button>
-          <div className={`overflow-hidden transition-all duration-300 ${openIndex === index ? "max-h-40" : "max-h-0"}`}>
-            <p className="px-6 pb-5 text-gray-600">{faq.answer}</p>
+          <div className={openIndex === index ? "px-5 pb-5 text-sm leading-7 text-ink-soft" : "hidden"}>
+            {faq.answer}
           </div>
         </div>
       ))}
@@ -36,35 +309,33 @@ function FAQAccordion() {
 
 function StickyMobileCTA() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] z-50 md:hidden p-4">
-      <div className="flex gap-3 max-w-md mx-auto">
-        <a href="tel:+15597852822" className="flex-1 py-3 bg-accent text-white text-center font-bold rounded-lg flex items-center justify-center gap-2">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" /></svg>
-          Call Now
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
+      <div className="mx-auto flex max-w-md gap-3">
+        <a href="tel:+15597852822" className="flex-1 rounded-full border border-slate-200 px-4 py-3 text-center text-sm font-bold text-primary">
+          Call
         </a>
-        <a href="#booking-form" className="flex-1 py-3 bg-primary text-white text-center font-bold rounded-lg">Request Quote</a>
+        <a href="#booking-form" className="flex-1 rounded-full bg-accent px-4 py-3 text-center text-sm font-bold text-white">
+          Request pricing
+        </a>
       </div>
     </div>
   );
 }
 
-function FormWithParams() {
-  return (
-    <QuickQuoteForm
-      source="google-ads"
-      title="Get pricing & availability"
-      subtitle="Send the key details once. We route this as a paid-search lead and follow up with clear pricing during business hours."
-    />
-  );
-}
-
 export default function GoogleAdsLandingPageClient() {
+  const searchParams = useSearchParams();
+  const city = useMemo(() => normalizeCity(searchParams.get("city")), [searchParams]);
+  const intentKey = useMemo(
+    () => detectIntent(searchParams.get("service"), searchParams.get("frequency")),
+    [searchParams]
+  );
+  const intent = INTENT_CONFIG[intentKey];
+
   return (
-    <div className="pb-24 md:pb-0">
-      {/* Header */}
-      <header className="bg-white sticky top-0 z-40 shadow-md">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex min-w-0 items-center gap-3">
+    <main className="bg-slate-50 pb-24 text-ink md:pb-0">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/92 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="New Star Cleaning home">
             <Image
               src="/brand/star-ink-mono.png"
               alt=""
@@ -72,239 +343,134 @@ export default function GoogleAdsLandingPageClient() {
               height={48}
               sizes="50px"
               className="h-auto w-11 shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)]"
-              style={{ height: "auto" }}
               priority
             />
-            <div className="flex min-w-0 flex-col leading-none">
+            <span className="flex min-w-0 flex-col leading-none">
               <span className="font-sans text-lg font-black tracking-[-0.07em] text-primary sm:text-[1.32rem]">
                 New Star Cleaning
               </span>
               <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block">
-                Fresno · Clovis · Madera
+                {AREA_LABEL}
               </span>
-            </div>
-          </div>
-          <a href="tel:+15597852822" className="flex items-center gap-2 text-primary font-semibold hover:text-accent transition-colors">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" /></svg>
-            <span className="hidden sm:inline">(559) 785-2822</span>
+            </span>
+          </Link>
+          <a href="tel:+15597852822" className="rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-primary transition hover:border-accent hover:text-accent">
+            (559) 785-2822
           </a>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary to-primary-dark py-12 lg:py-16 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 transform rotate-12 -translate-x-1/4" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="text-white">
-              <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full font-semibold mb-6">
-                <div className="flex">{[...Array(5)].map((_, i) => <span key={i} className="text-yellow-400">★</span>)}</div>
-                5.0 ★ (22 Google reviews)
-              </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight">Professional House Cleaning in Fresno</h1>
-              <p className="text-lg sm:text-xl opacity-90 mb-6">Background-checked cleaners, 24-hour re-clean promise, and same-week availability. Request a fast quote online.</p>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 bg-white/15 px-3 py-2 rounded-lg backdrop-blur-sm">
-                  <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
-                  <span className="text-sm font-medium">Background-Checked</span>
-                </div>
-                <div className="flex items-center gap-2 bg-white/15 px-3 py-2 rounded-lg backdrop-blur-sm">
-                  <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" /></svg>
-                  <span className="text-sm font-medium">Fully Insured</span>
-                </div>
-                <div className="flex items-center gap-2 bg-white/15 px-3 py-2 rounded-lg backdrop-blur-sm">
-                  <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
-                  <span className="text-sm font-medium">24-Hour Re-Clean</span>
-                </div>
-              </div>
+      <section className="relative overflow-hidden bg-primary">
+        <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-16">
+          <div className="flex flex-col justify-center text-white">
+            <div className="mb-5 inline-flex w-fit items-center rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
+              {intent.eyebrow}
             </div>
+            <h1 className="max-w-3xl font-display text-4xl leading-[1.03] tracking-[-0.03em] text-white sm:text-5xl lg:text-[4.6rem]">
+              {intent.h1(city.label)}
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
+              {intent.subhead}
+            </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              {intent.heroBullets.map((bullet) => (
+                <div key={bullet} className="flex items-start gap-3 rounded-2xl border border-white/12 bg-white/8 p-4">
+                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
+                  <span className="text-sm font-semibold leading-6 text-white/90">{bullet}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-7">
+              <TrustBar city={city.label} />
+            </div>
+          </div>
 
-            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
-              <h3 className="text-2xl font-bold text-primary mb-1 text-center">Get Pricing & Availability</h3>
-              <p className="text-gray-500 text-center mb-6 text-sm">Send the basics. We follow up with clear pricing before anything is booked.</p>
-              <div id="booking-form">
-                <Suspense fallback={<div className="animate-pulse bg-gray-100 h-64 rounded-lg"></div>}>
-                  <FormWithParams />
-                </Suspense>
-              </div>
-            </div>
+          <div id="booking-form" className="rounded-[2rem] border border-white/12 bg-white p-5 shadow-[0_24px_80px_-28px_rgba(0,0,0,0.55)] sm:p-7">
+            <QuickQuoteForm
+              source="google-ads"
+              title={intent.formTitle}
+              subtitle={intent.formSubtitle}
+              defaultCity={city.formValue}
+              defaultService={intent.serviceDefault}
+              extended
+              paidSearch
+            />
           </div>
         </div>
       </section>
 
-      {/* Quote Process Section */}
-      <section className="py-12 bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                step: "1",
-                title: "Request pricing",
-                copy: "Tell us your service type, home size, and best contact number.",
-              },
-              {
-                step: "2",
-                title: "We confirm details",
-                copy: "We text or call with clear pricing, timing, and any questions needed to price it right.",
-              },
-              {
-                step: "3",
-                title: "You decide",
-                copy: "You only confirm once the scope, price, and schedule make sense.",
-              },
-            ].map((item) => (
-              <div key={item.step} className="rounded-2xl border border-gray-100 bg-gray-50 p-6 shadow-sm">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg font-extrabold text-white">
-                  {item.step}
-                </div>
-                <h2 className="text-lg font-bold text-primary">{item.title}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.copy}</p>
-              </div>
+      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.75fr] lg:px-8 lg:py-14">
+        <SectionCard title={intent.scopeTitle}>
+          <p>{intent.scopeIntro}</p>
+          <ul className="mt-5 grid gap-3">
+            {intent.scopeBullets.map((item) => (
+              <li key={item} className="flex gap-3">
+                <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                <span>{item}</span>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
+        </SectionCard>
 
-      {/* Services Section */}
-      <section className="py-16 lg:py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-3">Our Cleaning Services</h2>
-            <p className="text-gray-600">Professional residential cleaning tailored to your needs. No contracts, no hassle.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 text-center">
-              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
-                <svg className="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-7h-2V8H8v2H6v2h2v2h2v-2h2V8h-2V6z" /></svg>
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-3">Standard Cleaning</h3>
-              <p className="text-gray-600 text-sm">Regular weekly, bi-weekly, or monthly cleaning to keep your home consistently fresh and clean.</p>
-              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
-            </div>
-            <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 text-center">
-              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
-                <svg className="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z" /></svg>
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-3">Deep Cleaning</h3>
-              <p className="text-gray-600 text-sm">Detailed cleaning for reachable buildup, baseboards, fixtures, kitchens, bathrooms, and floors.</p>
-              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
-            </div>
-            <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 text-center sm:col-span-2 lg:col-span-1">
-              <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
-                <svg className="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" /></svg>
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-3">Move-In/Move-Out</h3>
-              <p className="text-gray-600 text-sm">Empty-home cleaning for vacating or new homes, with clear scope before booking.</p>
-              <div className="mt-4 text-accent font-bold"><a href="#booking-form" className="hover:underline">Request Quote →</a></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-3">How It Works</h2>
-            <p className="text-gray-600">Get pricing, scheduling, and cleaning in three simple steps</p>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">1</div>
-              <h3 className="text-lg font-bold text-primary mb-2">Request Quote</h3>
-              <p className="text-gray-600 text-sm">Complete our simple quote form or call (559) 785-2822. We follow up quickly with clear pricing.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">2</div>
-              <h3 className="text-lg font-bold text-primary mb-2">We Clean</h3>
-              <p className="text-gray-600 text-sm">Our background-checked professionals arrive on time and clean the agreed scope.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-extrabold">3</div>
-              <h3 className="text-lg font-bold text-primary mb-2">You Relax</h3>
-              <p className="text-gray-600 text-sm">Enjoy your clean home. If something in scope is missed, contact us within 24 hours.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section className="py-16 lg:py-20 bg-gradient-to-br from-primary to-primary-dark text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">5.0★</div>
-                <div className="text-sm opacity-90">Google Rating</div>
-              </div>
-              <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">22</div>
-                <div className="text-sm opacity-90">5-Star Reviews</div>
-              </div>
-              <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">24-hour</div>
-                <div className="text-sm opacity-90">Re-Clean Promise</div>
-              </div>
-              <div className="bg-white/10 rounded-xl p-6 text-center">
-                <div className="text-4xl font-extrabold text-accent mb-1">Same-week</div>
-                <div className="text-sm opacity-90">Availability</div>
-              </div>
-            </div>
-            <div className="bg-white/10 rounded-2xl p-8 border-2 border-accent">
-              <h3 className="text-xl font-bold text-accent flex items-center gap-2 mb-4">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
-                Our 24-Hour Re-Clean Promise
-              </h3>
-              <p className="opacity-90 leading-relaxed">If anything is off, tell us within 24 hours and we&apos;ll come back to make it right at no additional cost. Simple, clear, and handled by a local team.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Service Areas */}
-      <section className="py-16 lg:py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-3">Service Areas</h2>
-            <p className="text-gray-600">Serving Fresno, Clovis, Madera, and close-in Fresno neighborhoods</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            {["Fresno", "Clovis", "Madera", "Tower District", "Fig Garden", "Woodward Park"].map((area) => (
-              <span key={area} className="bg-white px-5 py-3 rounded-full font-semibold text-primary shadow-md hover:bg-primary hover:text-white transition-colors cursor-default">{area}</span>
+        <SectionCard title={intent.addonTitle}>
+          <ul className="grid gap-3">
+            {intent.addonBullets.map((item) => (
+              <li key={item} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 font-semibold text-primary">
+                {item}
+              </li>
             ))}
+          </ul>
+        </SectionCard>
+      </section>
+
+      <section className="mx-auto grid max-w-6xl gap-5 px-4 pb-10 sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-14">
+        <SectionCard title={intent.boundaryTitle}>
+          <ul className="grid gap-3">
+            {intent.boundaryBullets.map((item) => (
+              <li key={item} className="flex gap-3">
+                <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </SectionCard>
+
+        <section className="rounded-[2rem] border border-primary/15 bg-primary p-6 text-white md:p-8">
+          <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">Why this is priced carefully</div>
+          <h2 className="mt-4 font-display text-2xl leading-tight md:text-3xl">{intent.proofTitle}</h2>
+          <p className="mt-5 text-sm leading-7 text-white/82 md:text-base">{intent.proofCopy}</p>
+          <div className="mt-6 grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2">
+            <div className="rounded-2xl border border-white/12 bg-white/8 p-4">Fresno, Clovis, Madera</div>
+            <div className="rounded-2xl border border-white/12 bg-white/8 p-4">Quote before booking</div>
           </div>
+        </section>
+      </section>
+
+      <section className="mx-auto max-w-4xl px-4 pb-14 sm:px-6 lg:px-8">
+        <div className="mb-6 text-center">
+          <div className="eyebrow eyebrow-dot justify-center">Paid-search questions</div>
+          <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">Before you request pricing</h2>
+        </div>
+        <FAQAccordion faqs={intent.faqs} />
+      </section>
+
+      <section className="border-t border-slate-200 bg-white px-4 py-12 text-center sm:px-6 lg:px-8">
+        <h2 className="font-display text-3xl text-primary md:text-4xl">Ready for clear pricing?</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-ink-soft md:text-base">
+          Send the details once. We confirm the scope, timing, and price before the job is accepted.
+        </p>
+        <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href="#booking-form" className="rounded-full bg-accent px-6 py-4 text-sm font-bold text-white transition hover:bg-accent-hover">
+            Request pricing
+          </a>
+          <a href="tel:+15597852822" className="rounded-full border border-slate-200 px-6 py-4 text-sm font-bold text-primary transition hover:border-accent hover:text-accent">
+            Call (559) 785-2822
+          </a>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-primary">Frequently Asked Questions</h2>
-          </div>
-          <FAQAccordion />
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 lg:py-20 bg-green-50 text-center">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-4">Ready for a Cleaner Home?</h2>
-          <p className="text-gray-600 mb-8">Request a quote online or call us now</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="tel:+15597852822" className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-lg rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-lg">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" /></svg>
-              Call (559) 785-2822
-            </a>
-            <a href="#booking-form" className="inline-flex items-center justify-center px-6 py-4 bg-white border-2 border-primary text-primary font-bold text-lg rounded-xl hover:bg-primary hover:text-white transition-all">
-              Request Quote
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Sticky Mobile CTA */}
       <StickyMobileCTA />
-    </div>
+    </main>
   );
 }

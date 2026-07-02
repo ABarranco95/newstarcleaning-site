@@ -11,8 +11,8 @@ type QuickQuoteFormProps = {
   defaultCity?: string;
   defaultService?: string;
   compact?: boolean;
-  /** Show calculator-style fields (frequency, beds, baths, sqft) + SMS consent copy */
   extended?: boolean;
+  paidSearch?: boolean;
 };
 
 type FormState = {
@@ -30,14 +30,27 @@ type FormState = {
   contactPreference: string;
   preferredTime: string;
   bookingIntent: string;
+  condition: string;
+  moveOutAddons: string[];
   company: string;
 };
+
+type TextFormField = Exclude<keyof FormState, "moveOutAddons">;
 
 const services = [
   "Standard recurring cleaning",
   "Deep cleaning",
   "Move-in / move-out cleaning",
   "Not sure yet",
+];
+
+const moveOutAddons = [
+  "Inside oven",
+  "Inside refrigerator",
+  "Inside cabinets/drawers",
+  "Interior windows/tracks",
+  "Blinds",
+  "Heavy pet hair or heavy buildup",
 ];
 
 function normalizeServiceParam(value: string | null) {
@@ -75,6 +88,8 @@ function initialForm(defaultCity?: string, defaultService?: string): FormState {
     contactPreference: "",
     preferredTime: "",
     bookingIntent: "",
+    condition: "",
+    moveOutAddons: [],
     company: "",
   };
 }
@@ -90,6 +105,7 @@ export default function QuickQuoteForm({
   defaultService,
   compact = false,
   extended = false,
+  paidSearch = false,
 }: QuickQuoteFormProps) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService));
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -140,9 +156,21 @@ export default function QuickQuoteForm({
     return compact ? "Get my quote" : "Get pricing & availability";
   }, [compact, isSubmitting]);
 
-  const updateField = (field: keyof FormState, value: string) => {
+  const updateField = (field: TextFormField, value: string) => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
+
+  const toggleMoveOutAddon = (addon: string) => {
+    setFormData((current) => ({
+      ...current,
+      moveOutAddons: current.moveOutAddons.includes(addon)
+        ? current.moveOutAddons.filter((item) => item !== addon)
+        : [...current.moveOutAddons, addon],
+    }));
+  };
+
+  const isMoveOutRequest = formData.service.toLowerCase().includes("move");
+  const isRecurringRequest = formData.service.toLowerCase().includes("recurring");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -224,7 +252,7 @@ export default function QuickQuoteForm({
       className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8"
     >
       <div className="mb-6">
-        <span className="eyebrow eyebrow-dot">Fast local quote</span>
+        <span className="eyebrow eyebrow-dot">{paidSearch ? "Clear local pricing" : "Fast local quote"}</span>
         <h2 className="mt-3 font-display text-2xl leading-tight text-ink lg:text-[1.6rem]">
           {title}
         </h2>
@@ -350,7 +378,8 @@ export default function QuickQuoteForm({
               className={fieldClass}
             >
               <option value="">Select timing…</option>
-              <option value="as-soon-as-possible">ASAP</option>
+              {!paidSearch && <option value="as-soon-as-possible">ASAP</option>}
+              {paidSearch && <option value="planned-this-week">This week / planned soon</option>}
               <option value="this-week">This week</option>
               <option value="next-week">Next week</option>
               <option value="flexible">Flexible</option>
@@ -382,6 +411,90 @@ export default function QuickQuoteForm({
 
         {extended && (
           <>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="quote-bedrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Bedrooms
+                </label>
+                <select
+                  id="quote-bedrooms"
+                  name="bedrooms"
+                  value={formData.bedrooms}
+                  onChange={(event) => updateField("bedrooms", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select bedrooms…</option>
+                  {["1","2","3","4","5","6+"].map((v) => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quote-bathrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Bathrooms
+                </label>
+                <select
+                  id="quote-bathrooms"
+                  name="bathrooms"
+                  value={formData.bathrooms}
+                  onChange={(event) => updateField("bathrooms", event.target.value)}
+                  className={fieldClass}
+                >
+                  <option value="">Select bathrooms…</option>
+                  {["1","1.5","2","2.5","3","3.5","4+"].map((v) => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="quote-condition" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                Current condition
+              </label>
+              <p className="mb-2 text-xs leading-relaxed text-mute">
+                This helps us match the right scope and avoid surprises.
+              </p>
+              <select
+                id="quote-condition"
+                name="condition"
+                value={formData.condition}
+                onChange={(event) => updateField("condition", event.target.value)}
+                className={fieldClass}
+              >
+                <option value="">Select condition…</option>
+                <option value="mostly-maintained">Mostly maintained</option>
+                <option value="some-buildup-needs-detail">Some buildup / needs detail</option>
+                <option value="heavy-buildup-pet-hair-neglected">Heavy buildup, pet hair, or neglected areas</option>
+              </select>
+            </div>
+
+            {isMoveOutRequest && (
+              <div>
+                <div className="mb-2">
+                  <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
+                    Move-out add-ons to price clearly
+                  </span>
+                  <p className="mt-1 text-xs leading-relaxed text-mute">
+                    Select anything you want included so the quote is not vague.
+                  </p>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {moveOutAddons.map((addon) => (
+                    <label key={addon} className="flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
+                      <input
+                        type="checkbox"
+                        checked={formData.moveOutAddons.includes(addon)}
+                        onChange={() => toggleMoveOutAddon(addon)}
+                        className="h-4 w-4 accent-accent"
+                      />
+                      <span>{addon}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="quote-contact-preference" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
@@ -419,74 +532,41 @@ export default function QuickQuoteForm({
               </div>
             </div>
 
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(!paidSearch || isRecurringRequest) && (
+                <div>
+                  <label htmlFor="quote-frequency" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                    How often?
+                  </label>
+                  <select
+                    id="quote-frequency"
+                    name="frequency"
+                    value={formData.frequency}
+                    onChange={(event) => updateField("frequency", event.target.value)}
+                    className={fieldClass}
+                  >
+                    <option value="">Select…</option>
+                    {!paidSearch && <option value="one-time">One-Time</option>}
+                    <option value="weekly">Weekly</option>
+                    <option value="bi-weekly">Bi-Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+              )}
               <div>
-                <label htmlFor="quote-frequency" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  How often?
+                <label htmlFor="quote-preferred-time" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+                  Best time to reach you
                 </label>
-                <select
-                  id="quote-frequency"
-                  name="frequency"
-                  value={formData.frequency}
-                  onChange={(event) => updateField("frequency", event.target.value)}
+                <input
+                  id="quote-preferred-time"
+                  name="preferredTime"
+                  type="text"
+                  value={formData.preferredTime}
+                  onChange={(event) => updateField("preferredTime", event.target.value)}
+                  placeholder={paidSearch ? "Example: weekday morning or next week" : "Example: today after 3 PM"}
                   className={fieldClass}
-                >
-                  <option value="">Select…</option>
-                  <option value="one-time">One-Time</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="bi-weekly">Bi-Weekly</option>
-                  <option value="monthly">Monthly</option>
-                </select>
+                />
               </div>
-              <div>
-                <label htmlFor="quote-bedrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Bedrooms
-                </label>
-                <select
-                  id="quote-bedrooms"
-                  name="bedrooms"
-                  value={formData.bedrooms}
-                  onChange={(event) => updateField("bedrooms", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select…</option>
-                  {["1","2","3","4","5","6+"].map((v) => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="quote-bathrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Bathrooms
-                </label>
-                <select
-                  id="quote-bathrooms"
-                  name="bathrooms"
-                  value={formData.bathrooms}
-                  onChange={(event) => updateField("bathrooms", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select…</option>
-                  {["1","1.5","2","2.5","3","3.5","4+"].map((v) => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="quote-preferred-time" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                Best time to reach you
-              </label>
-              <input
-                id="quote-preferred-time"
-                name="preferredTime"
-                type="text"
-                value={formData.preferredTime}
-                onChange={(event) => updateField("preferredTime", event.target.value)}
-                placeholder="Example: today after 3 PM"
-                className={fieldClass}
-              />
             </div>
           </>
         )}
