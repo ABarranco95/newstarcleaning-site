@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
@@ -47,14 +45,12 @@ const CITY_LABELS: Record<CityKey, string> = {
   "near-me": "your area",
 };
 
-const AREA_LABEL = "Fresno · Clovis · Madera";
-
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   move: {
-    eyebrow: "Move-in / move-out cleaning · planned turnover work",
-    h1: (city) => `Move-Out Cleaning in ${city} — clear scope before you book`,
+    eyebrow: "Move-in / move-out cleaning · deposit-ready turnover work",
+    h1: (city) => `Move-Out Cleaning in ${city} for a cleaner handoff`,
     subhead:
-      "For empty homes, rentals, and move deadlines where the details matter. We confirm size, condition, timing, and add-ons first so the cleaner is prepared and the price is clear.",
+      "Get a clear quote fast for empty homes, rentals, and move deadlines — with scope, timing, and add-ons confirmed before the job is accepted.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out cleaning pricing",
     formSubtitle:
@@ -84,7 +80,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "Blinds",
       "Heavy pet hair or heavy buildup",
     ],
-    boundaryTitle: "Not a bargain rush clean",
+    boundaryTitle: "Scope-first turnover cleaning",
     boundaryBullets: [
       "No same-day promise from an ad click",
       "No vague quote that changes after the cleaner arrives",
@@ -114,9 +110,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   deep: {
     eyebrow: "Deep cleaning · detailed home reset",
-    h1: (city) => `Deep Cleaning in ${city} for homes that need more than a surface clean`,
+    h1: (city) => `Deep Cleaning in ${city} for a real home reset`,
     subhead:
-      "Detailed reset cleaning for kitchens, bathrooms, baseboards, reachable fixtures, trim, vents, and floors. We confirm condition first so the quote matches the work.",
+      "Request clear pricing for kitchens, bathrooms, baseboards, reachable fixtures, trim, vents, and floors — without a vague lowball quote.",
     serviceDefault: "Deep cleaning",
     formTitle: "Request deep cleaning pricing",
     formSubtitle:
@@ -176,9 +172,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   recurring: {
     eyebrow: "Recurring cleaning · weekly, biweekly, or monthly",
-    h1: (city) => `Recurring House Cleaning in ${city} for homes that need consistency`,
+    h1: (city) => `Recurring House Cleaning in ${city} for a home that stays maintained`,
     subhead:
-      "Weekly, biweekly, and monthly cleaning for homeowners who want a reliable local cleaning company — not a random one-time cleaner.",
+      "Weekly, biweekly, and monthly cleaning for homeowners who want a reliable local cleaning company and a consistent maintenance scope.",
     serviceDefault: "Standard recurring cleaning",
     formTitle: "Request recurring cleaning pricing",
     formSubtitle:
@@ -189,7 +185,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "First clean may need deep-clean pricing if condition requires it",
       "No long-term contract",
     ],
-    scopeTitle: "Built for consistent maintenance, not one-off bargain cleaning",
+    scopeTitle: "Built for consistent home maintenance",
     scopeIntro:
       "Recurring cleaning works when the starting condition and ongoing scope are clear. If the first visit needs a reset, we say that before setting a maintenance schedule.",
     scopeBullets: [
@@ -210,8 +206,8 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     ],
     boundaryTitle: "Who this is not for",
     boundaryBullets: [
-      "Not for the cheapest one-time standard clean",
-      "Not for same-day emergency service from an ad click",
+      "Built around scheduled weekly, biweekly, or monthly maintenance",
+      "Same-day emergency service is not promised from an ad click",
       "Not for laundry, dishes, organizing, or household chores",
       "Not for heavy buildup at maintenance-cleaning pricing",
     ],
@@ -262,7 +258,7 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
 }
 
 function TrustBar({ city }: { city: string }) {
-  const items = [`${city} + nearby routes`, "Clear pricing first", "Scope confirmed upfront", "5.0★ Google rating"];
+  const items = [`${city} + nearby routes`, "Clear pricing first", "Scope confirmed upfront", "Call or quote form"];
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((item) => (
@@ -332,37 +328,10 @@ export default function GoogleAdsLandingPageClient() {
   const intent = INTENT_CONFIG[intentKey];
 
   return (
-    <main className="bg-slate-50 pb-24 text-ink md:pb-0">
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/92 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="New Star Cleaning home">
-            <Image
-              src="/brand/star-ink-mono.png"
-              alt=""
-              width={50}
-              height={48}
-              sizes="50px"
-              className="h-auto w-11 shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)]"
-              priority
-            />
-            <span className="flex min-w-0 flex-col leading-none">
-              <span className="font-sans text-lg font-black tracking-[-0.07em] text-primary sm:text-[1.32rem]">
-                New Star Cleaning
-              </span>
-              <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block">
-                {AREA_LABEL}
-              </span>
-            </span>
-          </Link>
-          <a href="tel:+15597852822" className="rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-primary transition hover:border-accent hover:text-accent">
-            (559) 785-2822
-          </a>
-        </div>
-      </header>
-
+    <div className="bg-slate-50 pb-24 text-ink md:pb-0">
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-16">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
           <div className="flex flex-col justify-center text-white">
             <div className="mb-5 inline-flex w-fit items-center rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
               {intent.eyebrow}
@@ -373,6 +342,14 @@ export default function GoogleAdsLandingPageClient() {
             <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
               {intent.subhead}
             </p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <a href="#booking-form" className="inline-flex min-h-14 items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-white transition hover:bg-accent-hover">
+                Get pricing & availability
+              </a>
+              <a href="tel:+15597852822" className="inline-flex min-h-14 items-center justify-center rounded-full border border-white/20 bg-white/8 px-6 py-4 text-sm font-bold text-white transition hover:bg-white/14">
+                Call (559) 785-2822
+              </a>
+            </div>
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {intent.heroBullets.map((bullet) => (
                 <div key={bullet} className="flex items-start gap-3 rounded-2xl border border-white/12 bg-white/8 p-4">
@@ -386,7 +363,7 @@ export default function GoogleAdsLandingPageClient() {
             </div>
           </div>
 
-          <div id="booking-form" className="rounded-[2rem] border border-white/12 bg-white p-5 shadow-[0_24px_80px_-28px_rgba(0,0,0,0.55)] sm:p-7">
+          <div id="booking-form" className="self-start">
             <QuickQuoteForm
               source="google-ads"
               title={intent.formTitle}
@@ -471,6 +448,6 @@ export default function GoogleAdsLandingPageClient() {
       </section>
 
       <StickyMobileCTA />
-    </main>
+    </div>
   );
 }

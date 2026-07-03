@@ -72,7 +72,7 @@ export async function generateMetadata({
 
   const { service, cityName } = parsed;
   const title = `${service.shortName} in ${cityName}, CA`;
-  const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Background-checked, insured cleaners. Request a fast quote online.`;
+  const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Clear-scope local cleaning. Request clear pricing online.`;
 
   return {
     title,
@@ -99,7 +99,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
 
   const { service, citySlug, cityName } = parsed;
   const area = serviceAreas.find((a) => a.slug === citySlug);
-  const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Background-checked, insured cleaners and the same trusted standard we deliver across our Fresno-area routes.`;
+  const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Clear-scope local cleaning and the same route discipline we use across Fresno-area homes.`;
 
   return (
     <>
@@ -271,7 +271,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
             <span className="italic text-accent-light">{cityName}</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Request clear pricing and availability before anything is booked. We&apos;ll match the scope to a background-checked cleaner and fit your schedule.
+            Request clear pricing and availability before anything is booked. We&apos;ll match the scope to the home condition, route availability, and schedule.
           </p>
           <div className="mt-8">
             <Link

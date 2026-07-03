@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand: deeper, inkier navy paired with a warm coral accent and a cream surface. */
+  /* Brand: deeper, inkier navy paired with a warm coral accent and cool slate surfaces. */
   --color-primary: #0e2747;
   --color-primary-light: #1a3a63;
   --color-primary-dark: #081a33;
 
   /* Darkened from #ef6a37/#d4561f/#f88a5e for WCAG AA contrast on white/cream backgrounds. */
-  --color-accent: #c2511a;
-  --color-accent-hover: #a44514;
-  --color-accent-light: #dc6028;
+  --color-accent: #a44514;
+  --color-accent-hover: #8f360f;
+  --color-accent-light: #fb923c;
 
-  /* Warm neutrals — replaces the cool gray look. */
-  --color-cream: #fbf6ee;
-  --color-cream-2: #f5ecdd;
+  /* Cool neutrals — no beige/cream canvas. */
+  --color-cream: #f8fafc;
+  --color-cream-2: #eef2f7;
   --color-ink: #0e1626;
   --color-ink-soft: #2c3447;
   --color-mute: #6b7184;
-  --color-line: #e8e2d4;
+  --color-line: #e2e8f0;
 
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;

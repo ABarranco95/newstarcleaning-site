@@ -159,15 +159,14 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 New Star Cleaning provides professional house cleaning throughout
                 {" "}{area.name}, CA — recurring (weekly, bi-weekly, or monthly),
                 one-time deep cleans, and clear-scope move-in/move-out
-                cleaning. Every cleaner is background-checked, fully insured, and
-                committed to delivering a spotless result every time.
+                cleaning. Every quote is scoped before booking so the cleaner understands the work before arrival.
               </p>
 
               <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
                   { k: "Local", v: "Fresno-based routes" },
-                  { k: "Insured", v: "Vetted cleaners" },
-                  { k: "24-hour", v: "Re-clean promise" },
+                  { k: "Scope", v: "Confirmed first" },
+                  { k: "Routes", v: "Local coverage" },
                 ].map((s) => (
                   <div
                     key={s.v}
@@ -387,7 +386,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
             Join homeowners across {area.name} who trust New Star Cleaning.
-            Request a fast quote and confirm only when pricing and timing make sense.
+            Request clear pricing and confirm only when pricing and timing make sense.
           </p>
           <div className="mt-8">
             <Link

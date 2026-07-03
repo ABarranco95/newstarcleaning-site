@@ -43,9 +43,7 @@ export default function ContactPage() {
                 <TrustBadges />
               </div>
               <p className="mt-6 text-sm leading-relaxed text-white/60">
-                5.0 on Google with 23 public reviews, backed by
-                our 24-hour re-clean promise. Background-checked and insured professionals
-                serving Fresno, Clovis, Madera &amp; nearby Fresno neighborhoods.
+                Clear quote path, local service routes, and service-related follow-up for Fresno, Clovis, Madera &amp; nearby Fresno neighborhoods.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-white/80">
                 <a

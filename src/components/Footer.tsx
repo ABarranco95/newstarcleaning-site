@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const serviceAreas = [
   { name: "Fresno", slug: "fresno" },
@@ -10,6 +13,12 @@ const serviceAreas = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/google-ads")) {
+    return null;
+  }
+
   return (
     <footer className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -36,8 +45,7 @@ export default function Footer() {
             </div>
             <p className="text-white/70 text-sm leading-relaxed">
               Professional house cleaning services in Fresno, Clovis,
-              Madera, and nearby Fresno neighborhoods. Vetted, insured, and backed by a
-              clear cleaning scope.
+              Madera, and nearby Fresno neighborhoods. Clear scope, local routes, and pricing before booking.
             </p>
           </div>
 
@@ -182,7 +190,7 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-white/50 text-sm">
             <span>Fresno, CA</span>
             <span>•</span>
-            <span>Licensed & Insured</span>
+            <span>Fresno-area routes</span>
           </div>
         </div>
       </div>

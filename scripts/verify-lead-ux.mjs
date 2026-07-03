@@ -25,6 +25,7 @@ const contactForm = read("src/components/ContactForm.tsx");
 const quotePathPanel = read("src/components/QuotePathPanel.tsx");
 const bookNow = read("src/app/book-now/page.tsx");
 const contact = read("src/app/contact/page.tsx");
+const googleAds = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
 
 assert(
   !layout.includes("MobileCTABar") &&
@@ -87,9 +88,24 @@ assert(
 );
 
 assert(
-  read("src/app/google-ads/GoogleAdsLandingPageClient.tsx").includes('source="google-ads"') &&
-    read("src/app/google-ads/GoogleAdsLandingPageClient.tsx").includes("QuickQuoteForm"),
+  googleAds.includes('source="google-ads"') && googleAds.includes("QuickQuoteForm"),
   "Google Ads landing page uses the shared quote form with paid-source attribution",
+);
+
+assert(
+  !googleAds.includes("<main") &&
+    !googleAds.includes("</main>") &&
+    !googleAds.includes("<header") &&
+    !googleAds.includes("</header>"),
+  "Google Ads landing page does not duplicate the global header or nest a second main landmark",
+);
+
+assert(
+  quickQuoteForm.includes("showPaidDetails") &&
+    quickQuoteForm.includes("Add optional details for a tighter quote") &&
+    quickQuoteForm.includes("paidCityPrefilled") &&
+    quickQuoteForm.includes("paidServicePrefilled"),
+  "paid quote form captures the core lead first and moves qualification details behind progressive disclosure",
 );
 
 assert(
@@ -100,6 +116,11 @@ assert(
 assert(
   !bookNow.includes("extended") && !contact.includes("extended"),
   "book-now and contact forms avoid the extended multi-field form by default",
+);
+
+assert(
+  bookNow.split("</section>")[0]?.includes("QuickQuoteForm"),
+  "book-now keeps the quote form in the hero before the first section ends",
 );
 
 if (failures.length) {

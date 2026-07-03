@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title:
     "About New Star Cleaning — Fresno's Trusted House Cleaning Company",
   description:
-    "New Star Cleaning is a locally owned, background-checked cleaning service serving Fresno, Clovis, Madera and nearby Fresno neighborhoods. Meet our team.",
+    "New Star Cleaning is a locally owned house cleaning company serving Fresno, Clovis, Madera and nearby Fresno neighborhoods. Clear scope, local routes, and pricing before booking.",
   alternates: {
     canonical: "/about",
   },
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title:
       "About New Star Cleaning — Fresno's Trusted House Cleaning Company | New Star Cleaning",
     description:
-      "Locally owned, background-checked cleaning service for Fresno, Clovis, Madera and nearby Fresno neighborhoods.",
+      "Locally owned house cleaning for Fresno, Clovis, Madera and nearby Fresno neighborhoods with clear scope before booking.",
     url: "https://newstarcleaning.com/about",
   },
 };
@@ -55,9 +55,9 @@ export default function AboutPage() {
               <p className="mt-5">
                 We started New Star Cleaning to fix the things that frustrate
                 homeowners about hiring help: no-shows, generic cleaning that
-                misses the details, and cleaners who don&apos;t feel
-                accountable. We hire fewer, better cleaners, train them in our
-                checklist, and back every job with a 24-hour re-clean promise.
+                misses the details, and quotes that do not match the actual
+                condition of the home. We keep the roster tighter, scope jobs
+                carefully, and make the expected result clear before booking.
               </p>
             </div>
 
@@ -68,25 +68,25 @@ export default function AboutPage() {
               </h2>
               <ul className="mt-5 space-y-3">
                 <li>
-                  <strong>Background-checked cleaners.</strong> Every team
-                  member is vetted before they ever step into your home.
+                  <strong>Vetted cleaner roster.</strong> New Star works with
+                  cleaners who are reviewed before being offered available work.
                 </li>
                 <li>
-                  <strong>Fully insured.</strong> Your home and our cleaners
-                  are protected on every visit.
+                  <strong>Scope before booking.</strong> We confirm service type,
+                  condition, add-ons, and timing before a cleaner accepts the job.
                 </li>
                 <li>
                   <strong>Consistent results.</strong> Recurring clients get
                   the same trusted cleaner whenever possible.
                 </li>
                 <li>
-                  <strong>Real checklist.</strong> We follow a thorough,
-                  room-by-room standard so nothing slips through.
+                  <strong>Clear expectations.</strong> The agreed cleaning scope
+                  is documented so the cleaner and customer are aligned.
                 </li>
                 <li>
-                  <strong>24-hour re-clean promise.</strong> If something
-                  included in the cleaning scope is missed, tell us within 24
-                  hours and we&apos;ll make it right.
+                  <strong>Make-it-right review.</strong> If something included in
+                  the agreed scope is missed, contact us quickly so we can review
+                  the best fix.
                 </li>
               </ul>
             </div>
@@ -135,7 +135,7 @@ export default function AboutPage() {
             <span className="italic text-accent-light"> trust</span>?
           </h2>
           <p className="mt-5 mx-auto max-w-2xl text-white/75">
-            Request a fast quote online. Same-week availability is strongest in Fresno and Clovis;
+            Request clear pricing online. Same-week availability is strongest in Fresno and Clovis;
             Madera is scheduled around route availability.
           </p>
           <div className="mt-8">

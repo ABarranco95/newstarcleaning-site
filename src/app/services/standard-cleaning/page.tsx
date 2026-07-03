@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title:
     "Standard House Cleaning in Fresno, CA | Recurring Professional Cleaning",
   description:
-    "Weekly or biweekly standard cleaning for Fresno homes. Trusted, background-checked cleaners. Request a fast quote online.",
+    "Weekly or biweekly standard cleaning for Fresno homes. Clear recurring scope before booking. Request clear pricing online.",
   alternates: {
     canonical: "/services/standard-cleaning",
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title:
       "Standard House Cleaning in Fresno, CA | Recurring Professional Cleaning | New Star Cleaning",
     description:
-      "Weekly or biweekly standard cleaning for Fresno homes. Background-checked, insured cleaners.",
+      "Weekly or biweekly standard cleaning for Fresno homes. Clear-scope local cleaners.",
     url: "https://newstarcleaning.com/services/standard-cleaning",
   },
 };

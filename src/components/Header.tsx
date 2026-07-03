@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Header() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -14,6 +16,10 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  if (pathname.startsWith("/google-ads")) {
+    return null;
+  }
 
   return (
     <header
@@ -34,7 +40,6 @@ export default function Header() {
               height={56}
               sizes="58px"
               className="h-auto w-11 shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)] lg:w-12 xl:w-14"
-              style={{ height: "auto" }}
               priority
             />
             <div className="flex min-w-0 flex-col leading-none">

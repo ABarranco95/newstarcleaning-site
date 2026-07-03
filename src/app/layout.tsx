@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: "New Star Cleaning",
     title: "Fresno & Clovis House Cleaning | New Star Cleaning",
     description:
-      "Request a fast quote for professional house cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
+      "Request clear pricing for professional house cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
     images: [
       {
         url: "/og-image.png",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Fresno & Clovis House Cleaning | New Star Cleaning",
     description:
-      "Request a fast quote for professional house cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
+      "Request clear pricing for professional house cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
     images: ["/og-image.png"],
   },
   icons: {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { trackLeadConversion } from "@/lib/conversionTracking";
 
 type QuickQuoteFormProps = {
@@ -53,6 +53,9 @@ const moveOutAddons = [
   "Heavy pet hair or heavy buildup",
 ];
 
+const fieldClass =
+  "w-full rounded-xl border border-line bg-white px-4 py-3 text-ink placeholder:text-mute/70 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10";
+
 function normalizeServiceParam(value: string | null) {
   if (!value) return "";
   const normalized = value.trim().toLowerCase();
@@ -94,8 +97,30 @@ function initialForm(defaultCity?: string, defaultService?: string): FormState {
   };
 }
 
-const fieldClass =
-  "w-full rounded-xl border border-line bg-white px-4 py-3 text-ink placeholder:text-mute/70 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10";
+function FieldLabel({ htmlFor, children, required = false }: { htmlFor: string; children: string; required?: boolean }) {
+  return (
+    <label htmlFor={htmlFor} className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+      {children} {required ? <span className="text-accent">*</span> : null}
+    </label>
+  );
+}
+
+function SubmitButton({ isSubmitting, compact }: { isSubmitting: boolean; compact: boolean }) {
+  return (
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="group inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+    >
+      {isSubmitting ? "Sending…" : compact ? "Get my quote" : "Get pricing & availability"}
+      {!isSubmitting && (
+        <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 export default function QuickQuoteForm({
   title = "Get pricing & availability",
@@ -112,6 +137,7 @@ export default function QuickQuoteForm({
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
+  const [showPaidDetails, setShowPaidDetails] = useState(false);
 
   useEffect(() => {
     setFormData((current) => ({
@@ -151,11 +177,6 @@ export default function QuickQuoteForm({
     }
   }, []);
 
-  const submitLabel = useMemo(() => {
-    if (isSubmitting) return "Sending…";
-    return compact ? "Get my quote" : "Get pricing & availability";
-  }, [compact, isSubmitting]);
-
   const updateField = (field: TextFormField, value: string) => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
@@ -171,6 +192,10 @@ export default function QuickQuoteForm({
 
   const isMoveOutRequest = formData.service.toLowerCase().includes("move");
   const isRecurringRequest = formData.service.toLowerCase().includes("recurring");
+  const paidCityPrefilled = paidSearch && Boolean(formData.city.trim());
+  const paidServicePrefilled = paidSearch && Boolean(formData.service.trim());
+  const showPaidOptionalDetails = extended && paidSearch;
+  const showInlineExtendedDetails = extended && !paidSearch;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -207,6 +232,7 @@ export default function QuickQuoteForm({
         leadType: formData.bookingIntent || "quote_request",
       });
       setIsSuccess(true);
+      setShowPaidDetails(false);
       setFormData(initialForm(defaultCity, defaultService));
     } catch (submitError) {
       setError(
@@ -219,12 +245,199 @@ export default function QuickQuoteForm({
     }
   };
 
+  const renderServiceField = () => (
+    <div>
+      <FieldLabel htmlFor="quote-service" required>
+        Service needed
+      </FieldLabel>
+      <select
+        id="quote-service"
+        name="service"
+        required
+        value={formData.service}
+        onChange={(event) => updateField("service", event.target.value)}
+        className={fieldClass}
+      >
+        <option value="">Select a service…</option>
+        {services.map((service) => (
+          <option key={service} value={service}>
+            {service}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  const renderCityField = () => (
+    <div>
+      <FieldLabel htmlFor="quote-city" required>
+        City or ZIP
+      </FieldLabel>
+      <input
+        id="quote-city"
+        name="city"
+        type="text"
+        required
+        value={formData.city}
+        onChange={(event) => updateField("city", event.target.value)}
+        autoComplete="address-level2"
+        placeholder="Fresno or 93720"
+        className={fieldClass}
+      />
+    </div>
+  );
+
+  const renderExtendedDetails = () => (
+    <>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <FieldLabel htmlFor="quote-bedrooms">Bedrooms</FieldLabel>
+          <select
+            id="quote-bedrooms"
+            name="bedrooms"
+            value={formData.bedrooms}
+            onChange={(event) => updateField("bedrooms", event.target.value)}
+            className={fieldClass}
+          >
+            <option value="">Select bedrooms…</option>
+            {["1", "2", "3", "4", "5", "6+"].map((value) => (
+              <option key={value} value={value}>{value}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <FieldLabel htmlFor="quote-bathrooms">Bathrooms</FieldLabel>
+          <select
+            id="quote-bathrooms"
+            name="bathrooms"
+            value={formData.bathrooms}
+            onChange={(event) => updateField("bathrooms", event.target.value)}
+            className={fieldClass}
+          >
+            <option value="">Select bathrooms…</option>
+            {["1", "1.5", "2", "2.5", "3", "3.5", "4+"].map((value) => (
+              <option key={value} value={value}>{value}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <FieldLabel htmlFor="quote-condition">Current condition</FieldLabel>
+        <p className="mb-2 text-xs leading-relaxed text-ink-soft">
+          This helps us match the right scope and avoid surprises.
+        </p>
+        <select
+          id="quote-condition"
+          name="condition"
+          value={formData.condition}
+          onChange={(event) => updateField("condition", event.target.value)}
+          className={fieldClass}
+        >
+          <option value="">Select condition…</option>
+          <option value="mostly-maintained">Mostly maintained</option>
+          <option value="some-buildup-needs-detail">Some buildup / needs detail</option>
+          <option value="heavy-buildup-pet-hair-neglected">Heavy buildup, pet hair, or neglected areas</option>
+        </select>
+      </div>
+
+      {isMoveOutRequest && (
+        <div>
+          <div className="mb-2">
+            <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
+              Move-out add-ons to price clearly
+            </span>
+            <p className="mt-1 text-xs leading-relaxed text-ink-soft">
+              Optional. We can confirm these on the follow-up call if you are not sure.
+            </p>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {moveOutAddons.map((addon) => (
+              <label key={addon} className="flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
+                <input
+                  type="checkbox"
+                  checked={formData.moveOutAddons.includes(addon)}
+                  onChange={() => toggleMoveOutAddon(addon)}
+                  className="h-4 w-4 accent-accent"
+                />
+                <span>{addon}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <FieldLabel htmlFor="quote-contact-preference">Contact</FieldLabel>
+          <select
+            id="quote-contact-preference"
+            name="contactPreference"
+            value={formData.contactPreference}
+            onChange={(event) => updateField("contactPreference", event.target.value)}
+            className={fieldClass}
+          >
+            <option value="">Best way?</option>
+            <option value="text">Text</option>
+            <option value="call">Call</option>
+            <option value="either">Either</option>
+          </select>
+        </div>
+        <div>
+          <FieldLabel htmlFor="quote-booking-intent">Intent</FieldLabel>
+          <select
+            id="quote-booking-intent"
+            name="bookingIntent"
+            value={formData.bookingIntent}
+            onChange={(event) => updateField("bookingIntent", event.target.value)}
+            className={fieldClass}
+          >
+            <option value="">Select...</option>
+            <option value="ready-after-quote">Ready after quote</option>
+            <option value="comparing-options">Comparing options</option>
+            <option value="just-researching">Just researching</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {(!paidSearch || isRecurringRequest) && (
+          <div>
+            <FieldLabel htmlFor="quote-frequency">How often?</FieldLabel>
+            <select
+              id="quote-frequency"
+              name="frequency"
+              value={formData.frequency}
+              onChange={(event) => updateField("frequency", event.target.value)}
+              className={fieldClass}
+            >
+              <option value="">Select…</option>
+              {!paidSearch && <option value="one-time">One-Time</option>}
+              <option value="weekly">Weekly</option>
+              <option value="bi-weekly">Bi-Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+        )}
+        <div>
+          <FieldLabel htmlFor="quote-preferred-time">Best time to reach you</FieldLabel>
+          <input
+            id="quote-preferred-time"
+            name="preferredTime"
+            type="text"
+            value={formData.preferredTime}
+            onChange={(event) => updateField("preferredTime", event.target.value)}
+            placeholder={paidSearch ? "Example: weekday morning or next week" : "Example: today after 3 PM"}
+            className={fieldClass}
+          />
+        </div>
+      </div>
+    </>
+  );
+
   if (isSuccess) {
     return (
-      <div
-        id="quote"
-        className="rounded-3xl border border-line bg-white p-8 text-center shadow-elev"
-      >
+      <div id="quote" className="rounded-3xl border border-line bg-white p-8 text-center shadow-elev">
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-accent">
           <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -247,24 +460,30 @@ export default function QuickQuoteForm({
   }
 
   return (
-    <div
-      id="quote"
-      className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8"
-    >
+    <div id="quote" className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8">
       <div className="mb-6">
         <span className="eyebrow eyebrow-dot">{paidSearch ? "Clear local pricing" : "Fast local quote"}</span>
         <h2 className="mt-3 font-display text-2xl leading-tight text-ink lg:text-[1.6rem]">
           {title}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p>
+
+        {paidSearch ? (
+          <div className="mt-4 grid gap-2">
+            <a
+              href="tel:+15597852822"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-primary/15 bg-primary px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-light"
+            >
+              Prefer to talk? Call (559) 785-2822
+            </a>
+          </div>
+        ) : null}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="quote-name" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              Name <span className="text-accent">*</span>
-            </label>
+            <FieldLabel htmlFor="quote-name" required>Name</FieldLabel>
             <input
               id="quote-name"
               name="name"
@@ -279,9 +498,7 @@ export default function QuickQuoteForm({
             />
           </div>
           <div>
-            <label htmlFor="quote-phone" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              Phone <span className="text-accent">*</span>
-            </label>
+            <FieldLabel htmlFor="quote-phone" required>Phone</FieldLabel>
             <input
               id="quote-phone"
               name="phone"
@@ -297,39 +514,27 @@ export default function QuickQuoteForm({
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label htmlFor="quote-email" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              Email
-            </label>
-            <input
-              id="quote-email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={(event) => updateField("email", event.target.value)}
-              autoComplete="email"
-              placeholder="you@example.com"
-              className={fieldClass}
-            />
+        {!paidSearch && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <FieldLabel htmlFor="quote-email">Email</FieldLabel>
+              <input
+                id="quote-email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={(event) => updateField("email", event.target.value)}
+                autoComplete="email"
+                placeholder="you@example.com"
+                className={fieldClass}
+              />
+            </div>
+            {renderCityField()}
           </div>
-          <div>
-            <label htmlFor="quote-city" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              City or ZIP <span className="text-accent">*</span>
-            </label>
-            <input
-              id="quote-city"
-              name="city"
-              type="text"
-              required
-              value={formData.city}
-              onChange={(event) => updateField("city", event.target.value)}
-              autoComplete="address-level2"
-              placeholder="Fresno or 93720"
-              className={fieldClass}
-            />
-          </div>
-        </div>
+        )}
+
+        {paidSearch && !paidCityPrefilled ? renderCityField() : null}
+        {paidSearch && paidCityPrefilled ? <input type="hidden" name="city" value={formData.city} readOnly /> : null}
 
         <div className="hidden" aria-hidden="true">
           <label htmlFor="quote-company">Company</label>
@@ -343,32 +548,12 @@ export default function QuickQuoteForm({
           />
         </div>
 
-        <div>
-          <label htmlFor="quote-service" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-            Service needed <span className="text-accent">*</span>
-          </label>
-          <select
-            id="quote-service"
-            name="service"
-            required
-            value={formData.service}
-            onChange={(event) => updateField("service", event.target.value)}
-            className={fieldClass}
-          >
-            <option value="">Select a service…</option>
-            {services.map((service) => (
-              <option key={service} value={service}>
-                {service}
-              </option>
-            ))}
-          </select>
-        </div>
+        {!paidSearch || !paidServicePrefilled ? renderServiceField() : null}
+        {paidSearch && paidServicePrefilled ? <input type="hidden" name="service" value={formData.service} readOnly /> : null}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="quote-timeline" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              Timeline <span className="text-accent">*</span>
-            </label>
+            <FieldLabel htmlFor="quote-timeline" required>Timeline</FieldLabel>
             <select
               id="quote-timeline"
               name="timeline"
@@ -378,17 +563,14 @@ export default function QuickQuoteForm({
               className={fieldClass}
             >
               <option value="">Select timing…</option>
-              {!paidSearch && <option value="as-soon-as-possible">ASAP</option>}
-              {paidSearch && <option value="planned-this-week">This week / planned soon</option>}
+              <option value="planned-this-week">This week / planned soon</option>
               <option value="this-week">This week</option>
               <option value="next-week">Next week</option>
               <option value="flexible">Flexible</option>
             </select>
           </div>
           <div>
-            <label htmlFor="quote-sqft" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              Approx. sq ft <span className="text-accent">*</span>
-            </label>
+            <FieldLabel htmlFor="quote-sqft" required>Approx. sq ft</FieldLabel>
             <select
               id="quote-sqft"
               name="sqft"
@@ -409,173 +591,11 @@ export default function QuickQuoteForm({
           </div>
         </div>
 
-        {extended && (
-          <>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="quote-bedrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Bedrooms
-                </label>
-                <select
-                  id="quote-bedrooms"
-                  name="bedrooms"
-                  value={formData.bedrooms}
-                  onChange={(event) => updateField("bedrooms", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select bedrooms…</option>
-                  {["1","2","3","4","5","6+"].map((v) => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="quote-bathrooms" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Bathrooms
-                </label>
-                <select
-                  id="quote-bathrooms"
-                  name="bathrooms"
-                  value={formData.bathrooms}
-                  onChange={(event) => updateField("bathrooms", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select bathrooms…</option>
-                  {["1","1.5","2","2.5","3","3.5","4+"].map((v) => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+        {showInlineExtendedDetails ? renderExtendedDetails() : null}
 
-            <div>
-              <label htmlFor="quote-condition" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                Current condition
-              </label>
-              <p className="mb-2 text-xs leading-relaxed text-mute">
-                This helps us match the right scope and avoid surprises.
-              </p>
-              <select
-                id="quote-condition"
-                name="condition"
-                value={formData.condition}
-                onChange={(event) => updateField("condition", event.target.value)}
-                className={fieldClass}
-              >
-                <option value="">Select condition…</option>
-                <option value="mostly-maintained">Mostly maintained</option>
-                <option value="some-buildup-needs-detail">Some buildup / needs detail</option>
-                <option value="heavy-buildup-pet-hair-neglected">Heavy buildup, pet hair, or neglected areas</option>
-              </select>
-            </div>
-
-            {isMoveOutRequest && (
-              <div>
-                <div className="mb-2">
-                  <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
-                    Move-out add-ons to price clearly
-                  </span>
-                  <p className="mt-1 text-xs leading-relaxed text-mute">
-                    Select anything you want included so the quote is not vague.
-                  </p>
-                </div>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {moveOutAddons.map((addon) => (
-                    <label key={addon} className="flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
-                      <input
-                        type="checkbox"
-                        checked={formData.moveOutAddons.includes(addon)}
-                        onChange={() => toggleMoveOutAddon(addon)}
-                        className="h-4 w-4 accent-accent"
-                      />
-                      <span>{addon}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="quote-contact-preference" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Contact
-                </label>
-                <select
-                  id="quote-contact-preference"
-                  name="contactPreference"
-                  value={formData.contactPreference}
-                  onChange={(event) => updateField("contactPreference", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Best way?</option>
-                  <option value="text">Text</option>
-                  <option value="call">Call</option>
-                  <option value="either">Either</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="quote-booking-intent" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Intent
-                </label>
-                <select
-                  id="quote-booking-intent"
-                  name="bookingIntent"
-                  value={formData.bookingIntent}
-                  onChange={(event) => updateField("bookingIntent", event.target.value)}
-                  className={fieldClass}
-                >
-                  <option value="">Select...</option>
-                  <option value="ready-after-quote">Ready after quote</option>
-                  <option value="comparing-options">Comparing options</option>
-                  <option value="just-researching">Just researching</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {(!paidSearch || isRecurringRequest) && (
-                <div>
-                  <label htmlFor="quote-frequency" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                    How often?
-                  </label>
-                  <select
-                    id="quote-frequency"
-                    name="frequency"
-                    value={formData.frequency}
-                    onChange={(event) => updateField("frequency", event.target.value)}
-                    className={fieldClass}
-                  >
-                    <option value="">Select…</option>
-                    {!paidSearch && <option value="one-time">One-Time</option>}
-                    <option value="weekly">Weekly</option>
-                    <option value="bi-weekly">Bi-Weekly</option>
-                    <option value="monthly">Monthly</option>
-                  </select>
-                </div>
-              )}
-              <div>
-                <label htmlFor="quote-preferred-time" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-                  Best time to reach you
-                </label>
-                <input
-                  id="quote-preferred-time"
-                  name="preferredTime"
-                  type="text"
-                  value={formData.preferredTime}
-                  onChange={(event) => updateField("preferredTime", event.target.value)}
-                  placeholder={paidSearch ? "Example: weekday morning or next week" : "Example: today after 3 PM"}
-                  className={fieldClass}
-                />
-              </div>
-            </div>
-          </>
-        )}
-
-        {!compact && (
+        {!compact && !paidSearch && (
           <div>
-            <label htmlFor="quote-message" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
-              Anything we should know?
-            </label>
+            <FieldLabel htmlFor="quote-message">Anything we should know?</FieldLabel>
             <textarea
               id="quote-message"
               name="message"
@@ -594,28 +614,58 @@ export default function QuickQuoteForm({
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
-        >
-          {submitLabel}
-          {!isSubmitting && (
-            <svg
-              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          )}
-        </button>
-        <p className="text-center text-xs leading-relaxed text-mute/80">
+        <SubmitButton isSubmitting={isSubmitting} compact={compact} />
+
+        <p className="text-center text-xs leading-relaxed text-ink-soft">
           By submitting, you consent to service-related calls/texts from New Star Cleaning about your quote, pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out. Consent is not required to purchase services.
           &nbsp;·&nbsp;
-          <Link href="/privacy" className="underline hover:text-mute">Privacy Policy</Link>
+          <Link href="/privacy" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>
         </p>
+
+        {showPaidOptionalDetails ? (
+          <div className="rounded-2xl border border-line bg-cream/60 p-4">
+            <button
+              type="button"
+              onClick={() => setShowPaidDetails((current) => !current)}
+              className="flex w-full items-center justify-between gap-4 text-left text-sm font-bold text-primary"
+              aria-expanded={showPaidDetails}
+            >
+              <span>{showPaidDetails ? "Hide optional quote details" : "Add optional details for a tighter quote"}</span>
+              <span className="text-lg text-accent">{showPaidDetails ? "−" : "+"}</span>
+            </button>
+            {showPaidDetails ? (
+              <div className="mt-4 space-y-4">
+                <div>
+                  <FieldLabel htmlFor="quote-email">Email</FieldLabel>
+                  <input
+                    id="quote-email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(event) => updateField("email", event.target.value)}
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    className={fieldClass}
+                  />
+                </div>
+                {renderExtendedDetails()}
+                <div>
+                  <FieldLabel htmlFor="quote-message">Anything we should know?</FieldLabel>
+                  <textarea
+                    id="quote-message"
+                    name="message"
+                    rows={3}
+                    value={formData.message}
+                    onChange={(event) => updateField("message", event.target.value)}
+                    placeholder="Move-out deadline, pets, priority areas, gate code notes, etc."
+                    className={fieldClass}
+                  />
+                </div>
+                <SubmitButton isSubmitting={isSubmitting} compact={compact} />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
       </form>
     </div>
   );
