@@ -514,7 +514,7 @@ export default function QuickQuoteForm({
           </div>
         </div>
 
-        {!paidSearch && (
+        {!paidSearch && !compact ? (
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <FieldLabel htmlFor="quote-email">Email</FieldLabel>
@@ -531,7 +531,14 @@ export default function QuickQuoteForm({
             </div>
             {renderCityField()}
           </div>
-        )}
+        ) : null}
+
+        {!paidSearch && compact ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {renderCityField()}
+            {renderServiceField()}
+          </div>
+        ) : null}
 
         {paidSearch && !paidCityPrefilled ? renderCityField() : null}
         {paidSearch && paidCityPrefilled ? <input type="hidden" name="city" value={formData.city} readOnly /> : null}
@@ -548,7 +555,9 @@ export default function QuickQuoteForm({
           />
         </div>
 
-        {!paidSearch || !paidServicePrefilled ? renderServiceField() : null}
+        {paidSearch
+          ? (!paidServicePrefilled ? renderServiceField() : null)
+          : (!compact ? renderServiceField() : null)}
         {paidSearch && paidServicePrefilled ? <input type="hidden" name="service" value={formData.service} readOnly /> : null}
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -563,9 +572,9 @@ export default function QuickQuoteForm({
               className={fieldClass}
             >
               <option value="">Select timing…</option>
-              <option value="planned-this-week">This week / planned soon</option>
               <option value="this-week">This week</option>
               <option value="next-week">Next week</option>
+              <option value="specific-deadline">Specific deadline</option>
               <option value="flexible">Flexible</option>
             </select>
           </div>
@@ -630,7 +639,7 @@ export default function QuickQuoteForm({
               className="flex w-full items-center justify-between gap-4 text-left text-sm font-bold text-primary"
               aria-expanded={showPaidDetails}
             >
-              <span>{showPaidDetails ? "Hide optional quote details" : "Add optional details for a tighter quote"}</span>
+              <span>{showPaidDetails ? "Hide optional quote details" : "Add condition/add-ons for a tighter quote"}</span>
               <span className="text-lg text-accent">{showPaidDetails ? "−" : "+"}</span>
             </button>
             {showPaidDetails ? (

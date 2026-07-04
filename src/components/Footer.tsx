@@ -91,7 +91,7 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">
+            <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">
               Services
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
@@ -105,7 +105,7 @@ export default function Footer() {
 
           {/* Service areas */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">
+            <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">
               Service areas
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
@@ -122,7 +122,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">
+            <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">
               Company
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">

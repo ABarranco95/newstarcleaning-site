@@ -66,6 +66,7 @@ export default function BookNow() {
               title="Get pricing & availability"
               subtitle="Start with the required basics. We only ask follow-up questions if the home needs a tighter scope before pricing."
               source="organic_quote_page"
+              compact
             />
           </div>
         </div>

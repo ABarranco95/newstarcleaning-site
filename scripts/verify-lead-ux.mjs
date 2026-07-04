@@ -27,6 +27,27 @@ const bookNow = read("src/app/book-now/page.tsx");
 const contact = read("src/app/contact/page.tsx");
 const googleAds = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
 
+for (const file of [
+  "src/app/page.tsx",
+  "src/app/book-now/page.tsx",
+  "src/app/contact/page.tsx",
+  "src/app/google-ads/GoogleAdsLandingPageClient.tsx",
+  "src/app/sms-opt-in/page.tsx",
+  "src/app/[serviceCity]/page.tsx",
+  "src/components/Header.tsx",
+  "src/components/Footer.tsx",
+  "src/components/QuickQuoteForm.tsx",
+  "src/components/QuotePathPanel.tsx",
+  "src/components/ServiceAreaPage.tsx",
+  "src/components/ServiceDetailPage.tsx",
+]) {
+  const contents = read(file);
+  assert(
+    !/href="tel:[^"]*\*/.test(contents) && !contents.includes("****2822"),
+    `${file} does not contain redacted or malformed phone hrefs`,
+  );
+}
+
 assert(
   !layout.includes("MobileCTABar") &&
     !existsSync(path.join(root, "src/components/MobileCTABar.tsx")),
@@ -102,7 +123,7 @@ assert(
 
 assert(
   quickQuoteForm.includes("showPaidDetails") &&
-    quickQuoteForm.includes("Add optional details for a tighter quote") &&
+    quickQuoteForm.includes("Add condition/add-ons for a tighter quote") &&
     quickQuoteForm.includes("paidCityPrefilled") &&
     quickQuoteForm.includes("paidServicePrefilled"),
   "paid quote form captures the core lead first and moves qualification details behind progressive disclosure",

@@ -54,7 +54,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out cleaning pricing",
     formSubtitle:
-      "Send the home size, move timing, and condition once. We price the scope before anything is booked.",
+      "Send home size and move timing first. Add condition or appliance details below if you want a tighter quote.",
     heroBullets: [
       "Empty-home turnover cleaning",
       "Baseboards, bathrooms, kitchen, fixtures, and floors",
@@ -116,7 +116,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     serviceDefault: "Deep cleaning",
     formTitle: "Request deep cleaning pricing",
     formSubtitle:
-      "Tell us the size, condition, and priority areas so we can price the reset correctly before booking.",
+      "Send the size and timing first. Add condition or priority areas below if you want a tighter quote.",
     heroBullets: [
       "Detailed reset cleaning",
       "Condition checked before quote",
@@ -178,7 +178,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     serviceDefault: "Standard recurring cleaning",
     formTitle: "Request recurring cleaning pricing",
     formSubtitle:
-      "Share the home size, frequency, and current condition so we can recommend the right first clean and maintenance schedule.",
+      "Share home size and timing first. Add frequency or condition details below if you want a tighter quote.",
     heroBullets: [
       "Weekly, biweekly, and monthly options",
       "Maintenance cleaning for homes in normal condition",
