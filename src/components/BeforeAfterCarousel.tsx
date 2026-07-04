@@ -55,13 +55,13 @@ export default function BeforeAfterCarousel({
   const current = showAfter ? item.after : item.before;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-white">
-      <div className="relative aspect-[4/3] bg-cream-2">
+    <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+      <div className="relative aspect-[3/4] bg-cream-2">
         <Image
           src={current.src}
           alt={current.alt}
           fill
-          sizes="(min-width: 1024px) 720px, 100vw"
+          sizes="(min-width: 768px) 480px, 80vw"
           className="object-cover"
         />
         <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">

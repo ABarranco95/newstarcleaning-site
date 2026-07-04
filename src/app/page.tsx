@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 
 const services = [
   {
@@ -71,6 +73,31 @@ const trustPoints = [
   "Same trusted cleaner recurring",
 ];
 
+/**
+ * Real New Star before/after pairs. Swap or extend in /public/photos.
+ * Hero uses after1.jpg by default (change HERO_PHOTO below to feature a different shot).
+ */
+const HERO_PHOTO = "/photos/after1.jpg";
+
+const resultsPairs: BeforeAfterItem[] = [
+  {
+    before: { src: "/photos/before1.jpg", alt: "Before a New Star cleaning" },
+    after: { src: "/photos/after1.jpg", alt: "After a New Star cleaning" },
+  },
+  {
+    before: { src: "/photos/before2.jpg", alt: "Before a New Star cleaning" },
+    after: { src: "/photos/after2.jpg", alt: "After a New Star cleaning" },
+  },
+  {
+    before: { src: "/photos/before3.jpg", alt: "Before a New Star cleaning" },
+    after: { src: "/photos/after3.jpg", alt: "After a New Star cleaning" },
+  },
+  {
+    before: { src: "/photos/before4.jpg", alt: "Before a New Star cleaning" },
+    after: { src: "/photos/after4.jpg", alt: "After a New Star cleaning" },
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -124,12 +151,24 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Proof card — honest specifics, not decorative fluff */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-accent-light">
-                Why homeowners call us
-              </span>
+          {/* Real work — hero photo (swap HERO_PHOTO to feature a different shot) */}
+          <div className="relative mx-auto w-full max-w-sm lg:max-w-none">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border-4 border-white/10 shadow-elev">
+              <Image
+                src={HERO_PHOTO}
+                alt="A finished New Star cleaning result"
+                fill
+                sizes="(min-width: 1024px) 420px, 80vw"
+                className="object-cover"
+                priority
+              />
+            </div>
+            <a
+              href="https://www.google.com/maps?cid=12575787905603463321"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute -bottom-4 -left-3 flex items-center gap-2.5 rounded-xl border border-white/10 bg-primary px-4 py-2.5 shadow-elev sm:-left-5"
+            >
               <span className="flex items-center gap-0.5 text-accent-light" aria-hidden="true">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <svg key={i} className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
@@ -137,29 +176,25 @@ export default function Home() {
                   </svg>
                 ))}
               </span>
-            </div>
-            <ul className="mt-5 space-y-3.5">
-              {trustPoints.map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm leading-6 text-white/85">
-                  <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <a
-              href="https://www.google.com/maps?cid=12575787905603463321"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-accent-light underline-offset-4 hover:underline"
-            >
-              Read our Google reviews
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5h5v5M19 5l-9 9" />
-              </svg>
+              <span className="text-xs font-bold text-white">Read our Google reviews</span>
             </a>
           </div>
+        </div>
+      </section>
+
+      {/* Trust strip — honest specifics */}
+      <section className="border-b border-line bg-cream">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-3 py-6 sm:grid-cols-4 sm:gap-x-10">
+            {trustPoints.map((point) => (
+              <li key={point} className="flex items-center gap-2.5 text-sm font-semibold text-ink-soft">
+                <svg className="h-4 w-4 flex-shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+                {point}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -231,6 +266,31 @@ export default function Home() {
           </ol>
           <div className="mt-10">
             <Link href="/book-now" className="btn btn-accent">Start the quote</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Real results — before/after proof */}
+      <section id="results" className="bg-cream-2">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
+            <div>
+              <span className="eyebrow eyebrow-dot">Real results</span>
+              <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
+                See the difference, then decide.
+              </h2>
+              <p className="mt-4 text-base leading-7 text-ink-soft">
+                Real before/after from New Star jobs across Fresno, Clovis, and Madera. Use the
+                toggle to compare, and swipe through a few recent cleans.
+              </p>
+              <p className="mt-4 text-sm leading-6 text-mute">
+                Every job is scoped before booking. Your result depends on the home&apos;s condition
+                and the agreed scope — not a stock photo and a vague promise.
+              </p>
+            </div>
+            <div className="mx-auto w-full max-w-sm">
+              <BeforeAfterCarousel items={resultsPairs} />
+            </div>
           </div>
         </div>
       </section>
