@@ -110,7 +110,7 @@ function SubmitButton({ isSubmitting, compact }: { isSubmitting: boolean; compac
     <button
       type="submit"
       disabled={isSubmitting}
-      className="group inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+      className="btn btn-accent w-full !text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
     >
       {isSubmitting ? "Sending…" : compact ? "Get my quote" : "Get pricing & availability"}
       {!isSubmitting && (
@@ -472,7 +472,7 @@ export default function QuickQuoteForm({
           <div className="mt-4 grid gap-2">
             <a
               href="tel:+15597852822"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-primary/15 bg-primary px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-light"
+              className="btn btn-outline !min-h-11 !px-4 !text-sm"
             >
               Prefer to talk? Call (559) 785-2822
             </a>

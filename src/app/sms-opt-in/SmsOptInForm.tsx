@@ -19,6 +19,17 @@ const initialFormState: FormState = {
   smsConsent: false,
 };
 
+const fieldClass =
+  "w-full rounded-xl border border-line bg-white px-4 py-3 text-ink placeholder:text-mute/70 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10";
+
+function FieldLabel({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
+  return (
+    <label htmlFor={htmlFor} className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-mute">
+      {children}
+    </label>
+  );
+}
+
 export default function SmsOptInForm() {
   const [formData, setFormData] = useState<FormState>(initialFormState);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,66 +76,60 @@ export default function SmsOptInForm() {
 
   if (isSuccess) {
     return (
-      <div className="rounded-xl border border-green-200 bg-green-50 p-6 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          You&apos;re opted in
-        </h2>
-        <p className="text-sm text-gray-700">
-          We received your SMS consent and will use this number for cleaning
-          service updates.
+      <div className="rounded-2xl border border-accent/15 bg-accent/5 p-6 text-center">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="text-xl font-extrabold text-ink">You&apos;re opted in</h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+          We received your SMS consent and will use this number for cleaning service updates.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div>
-        <label
-          htmlFor="firstName"
-          className="block text-sm font-semibold text-gray-700 mb-1"
-        >
-          First Name <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="firstName"
-          name="firstName"
-          required
-          minLength={2}
-          value={formData.firstName}
-          onChange={(event) => updateField("firstName", event.target.value)}
-          placeholder="Your first name"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-gray-900"
-        />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <FieldLabel htmlFor="firstName">
+            First Name <span className="text-accent">*</span>
+          </FieldLabel>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            required
+            minLength={2}
+            value={formData.firstName}
+            onChange={(event) => updateField("firstName", event.target.value)}
+            placeholder="Your first name"
+            className={fieldClass}
+          />
+        </div>
+        <div>
+          <FieldLabel htmlFor="lastName">
+            Last Name <span className="text-accent">*</span>
+          </FieldLabel>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+            value={formData.lastName}
+            onChange={(event) => updateField("lastName", event.target.value)}
+            placeholder="Your last name"
+            className={fieldClass}
+          />
+        </div>
       </div>
 
       <div>
-        <label
-          htmlFor="lastName"
-          className="block text-sm font-semibold text-gray-700 mb-1"
-        >
-          Last Name <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="lastName"
-          name="lastName"
-          required
-          value={formData.lastName}
-          onChange={(event) => updateField("lastName", event.target.value)}
-          placeholder="Your last name"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-gray-900"
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="phone"
-          className="block text-sm font-semibold text-gray-700 mb-1"
-        >
-          Phone Number <span className="text-red-500">*</span>
-        </label>
+        <FieldLabel htmlFor="phone">
+          Phone Number <span className="text-accent">*</span>
+        </FieldLabel>
         <input
           type="tel"
           id="phone"
@@ -134,17 +139,12 @@ export default function SmsOptInForm() {
           value={formData.phone}
           onChange={(event) => updateField("phone", event.target.value)}
           placeholder="(559) 000-0000"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-gray-900"
+          className={fieldClass}
         />
       </div>
 
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-semibold text-gray-700 mb-1"
-        >
-          Email Address
-        </label>
+        <FieldLabel htmlFor="email">Email Address</FieldLabel>
         <input
           type="email"
           id="email"
@@ -152,42 +152,36 @@ export default function SmsOptInForm() {
           value={formData.email}
           onChange={(event) => updateField("email", event.target.value)}
           placeholder="you@example.com"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-gray-900"
+          className={fieldClass}
         />
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <label className="flex items-start gap-3 cursor-pointer">
+      <div className="rounded-xl border border-line bg-cream-2 p-4">
+        <label className="flex cursor-pointer items-start gap-3">
           <input
             type="checkbox"
             name="smsConsent"
             required
             checked={formData.smsConsent}
             onChange={(event) => updateField("smsConsent", event.target.checked)}
-            className="mt-1 w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary"
+            className="mt-0.5 h-5 w-5 rounded border-line accent-accent"
           />
-          <span className="text-sm text-gray-700 leading-relaxed">
+          <span className="text-sm leading-relaxed text-ink-soft">
             I agree to receive automated SMS/text messages from{" "}
-            <strong>NEW STAR CLEANING LLC</strong> at the phone number
-            provided. Messages may include appointment confirmations, reminders,
-            service updates, and promotional offers. Message frequency varies.
-            Message and data rates may apply. Consent is not a condition of
-            purchase. Reply <strong>STOP</strong> to opt out at any time. Reply{" "}
-            <strong>HELP</strong> for assistance. View our{" "}
-            <Link href="/privacy" className="text-primary underline font-semibold">
-              Privacy Policy
-            </Link>{" "}
+            <strong className="text-ink">New Star Cleaning LLC</strong> at the phone number
+            provided. Messages may include appointment confirmations, reminders, service updates,
+            and promotional offers. Message frequency varies. Message and data rates may apply.
+            Consent is not a condition of purchase. Reply <strong>STOP</strong> to opt out at any
+            time. Reply <strong>HELP</strong> for assistance. View our{" "}
+            <Link href="/privacy" className="font-semibold text-primary underline">Privacy Policy</Link>{" "}
             and{" "}
-            <Link href="/terms" className="text-primary underline font-semibold">
-              Terms of Service
-            </Link>
-            .
+            <Link href="/terms" className="font-semibold text-primary underline">Terms of Service</Link>.
           </span>
         </label>
       </div>
 
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
           {error}
         </div>
       )}
@@ -195,9 +189,9 @@ export default function SmsOptInForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-4 px-6 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+        className="btn btn-accent w-full !text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
       >
-        {isSubmitting ? "Submitting..." : "Opt In to Text Updates"}
+        {isSubmitting ? "Submitting…" : "Opt in to text updates"}
       </button>
     </form>
   );

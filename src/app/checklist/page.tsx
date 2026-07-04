@@ -130,35 +130,25 @@ function CheckIcon() {
 export default function ChecklistPage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-primary-dark">
-        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
-        <div className="absolute inset-0 ns-grid-bg opacity-40" aria-hidden="true" />
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 text-white">
-          <span className="eyebrow eyebrow-dot text-accent-light">
-            Service checklist
-          </span>
-          <h1 className="mt-5 max-w-4xl text-4xl lg:text-[3.25rem] leading-[1.05]">
+      <section className="bg-cream-2">
+        <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
+          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-primary">Home</Link>
+            <span className="px-1.5">/</span>
+            <span className="font-semibold text-ink">Checklist</span>
+          </nav>
+          <span className="eyebrow eyebrow-dot">Service checklist</span>
+          <h1 className="mt-4 max-w-4xl text-4xl text-ink lg:text-[3.2rem]">
             Included, add-ons, and what we do not clean
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/75">
-            This page is the plain-English cleaning scope for New Star
-            Cleaning. It shows what is included in each service, what can be
-            added, and what is outside our work so clients know exactly what to
-            expect before booking.
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-soft">
+            This page is the plain-English cleaning scope for New Star Cleaning. It shows what is
+            included in each service, what can be added, and what is outside our work so clients
+            know exactly what to expect before booking.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#services"
-              className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
-            >
-              Review service scopes
-            </a>
-            <Link
-              href="/book-now"
-              className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
-            >
-              Request a quote
-            </Link>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a href="#services" className="btn btn-accent !min-h-12 !px-5 !text-sm">Review service scopes</a>
+            <Link href="/book-now" className="btn btn-outline !min-h-12 !px-5 !text-sm">Request a quote</Link>
           </div>
         </div>
       </section>
@@ -203,7 +193,7 @@ export default function ChecklistPage() {
             <div className="min-w-[640px] overflow-hidden rounded-2xl border border-line">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-primary-dark text-white">
+                  <tr className="bg-primary text-white">
                     <th className="px-4 py-3 text-left font-semibold">What&apos;s included</th>
                     <th className="px-4 py-3 text-center font-semibold">Standard</th>
                     <th className="px-4 py-3 text-center font-semibold">Deep</th>
@@ -420,13 +410,13 @@ export default function ChecklistPage() {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/book-now"
-              className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+              className="btn btn-accent !min-h-12 !px-6 !text-sm"
             >
               Request a cleaning quote
             </Link>
             <Link
               href="/services"
-              className="inline-flex items-center justify-center rounded-full border border-line bg-white px-6 py-3 text-sm font-semibold text-primary transition-colors hover:border-primary"
+              className="btn btn-outline !min-h-12 !px-6 !text-sm"
             >
               Compare services
             </Link>

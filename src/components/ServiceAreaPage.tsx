@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceArea } from "@/lib/serviceAreas";
+import { siteImages, uxPhotoUrl } from "@/lib/siteImages";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -16,49 +18,28 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       title: "Standard recurring cleaning",
       href: "/services/standard-cleaning",
       desc: `Keep your ${area.name} home consistently clean with weekly, bi-weekly, or monthly visits. Same trusted cleaner whenever scheduling allows.`,
-      features: [
-        "Weekly, bi-weekly, or monthly",
-        "All rooms refreshed each visit",
-        "Consistent cleaner notes and preferences",
-      ],
+      features: ["Weekly, bi-weekly, or monthly", "All rooms refreshed each visit", "Consistent cleaner notes and preferences"],
     },
     {
       title: "Deep cleaning",
       href: "/services/deep-cleaning",
       desc: `A detailed reset for your ${area.name} home, built for seasonal resets, first-time cleans, and homes that need reachable detail work.`,
-      features: [
-        "Reachable detail areas",
-        "Add-ons quoted separately",
-        "Baseboards, fans, trim, and vents",
-      ],
+      features: ["Reachable detail areas", "Add-ons quoted separately", "Baseboards, fans, trim, and vents"],
     },
     {
       title: "Move-in / move-out cleaning",
       href: "/services/move-out-cleaning",
       desc: `Moving in or out of a ${area.name} property? We clean empty homes against the details landlords, buyers, and sellers actually inspect.`,
-      features: [
-        "Empty-home cleaning",
-        "Appliance and cabinet interiors",
-        "Same-week availability when routes allow",
-      ],
+      features: ["Empty-home cleaning", "Appliance and cabinet interiors", "Same-week availability when routes allow"],
     },
   ];
 
   const localPanels: Array<
     { title: string; items: string[] } | { title: string; body: string }
   > = [
-    {
-      title: `Homes we clean in ${area.name}`,
-      items: area.homeProfiles,
-    },
-    {
-      title: "Common local requests",
-      items: area.commonJobs,
-    },
-    {
-      title: "Route and booking notes",
-      body: area.bookingNote,
-    },
+    { title: `Homes we clean in ${area.name}`, items: area.homeProfiles },
+    { title: "Common local requests", items: area.commonJobs },
+    { title: "Route and booking notes", body: area.bookingNote },
   ];
 
   const areaFaqs = [
@@ -83,83 +64,78 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary-dark">
-        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
-        <div className="absolute inset-0 ns-grid-bg opacity-40" aria-hidden="true" />
-        <div className="absolute -top-32 -left-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl" aria-hidden="true" />
+      <section className="bg-cream-2">
+        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
+          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-primary">Home</Link>
+            <span className="px-1.5">/</span>
+            <Link href="/service-areas" className="hover:text-primary">Service areas</Link>
+            <span className="px-1.5">/</span>
+            <span className="font-semibold text-ink">{area.name}</span>
+          </nav>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 lg:pt-20 lg:pb-24">
-          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-            <div className="max-w-2xl text-white">
-              <span className="eyebrow eyebrow-dot text-accent-light">
+          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+            <div className="max-w-2xl">
+              <span className="eyebrow eyebrow-dot">
                 {area.county} · {area.population} residents
               </span>
-              <h1 className="mt-5 text-4xl lg:text-[3.5rem] leading-[1.05]">
-                Professional house cleaning in{" "}
-                <span className="italic text-accent-light">{area.name}, CA</span>
+              <h1 className="mt-4 text-4xl text-ink lg:text-[3.4rem]">
+                Professional house cleaning in {area.name}, CA
               </h1>
-              <p className="mt-6 text-lg leading-relaxed text-white/75">
-                {area.description}
-              </p>
-
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <a
-                  href="#quote"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:bg-accent-hover hover:-translate-y-0.5"
-                >
+              <p className="mt-5 text-lg leading-8 text-ink-soft">{area.description}</p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <a href="#quote" className="btn btn-accent">
                   Get a {area.name} quote
-                  <svg
-                    className="w-4 h-4 transition-transform group-hover:translate-x-0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </a>
-                <Link
-                  href="/book-now"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.04] px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
-                >
-                  Request quote
-                </Link>
+                <Link href="/services" className="btn btn-outline">Compare services</Link>
               </div>
-
-              <div className="mt-8 hidden sm:block">
+              <div className="mt-8">
                 <TrustBadges />
               </div>
             </div>
 
-            <div id="quote" className="relative scroll-mt-24">
-              <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl" aria-hidden="true" />
-              <QuotePathPanel
-                title={`Check availability in ${area.name}`}
-                body="Review the local route notes here, then use the short quote page when you are ready for pricing."
-                city={area.name}
-                source={`organic_${area.slug}_service_area`}
-              />
+            <div className="flex flex-col gap-5">
+              <div className="relative h-52 overflow-hidden rounded-3xl border border-line shadow-soft sm:h-64">
+                <Image
+                  src={uxPhotoUrl(siteImages.heroes.modernHome, 900)}
+                  alt={siteImages.heroes.modernHome.alt}
+                  fill
+                  sizes="(min-width: 1024px) 480px, 100vw"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div id="quote" className="scroll-mt-24">
+                <QuotePathPanel
+                  title={`Check availability in ${area.name}`}
+                  body="Review the local route notes here, then use the short quote page when you are ready for pricing."
+                  city={area.name}
+                  source={`organic_${area.slug}_service_area`}
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Local Content */}
+      {/* Local content */}
       <section className="ns-section bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
               <span className="eyebrow eyebrow-dot">Local cleaning team</span>
-              <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
+              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
                 Trusted cleaning service in {area.name}
               </h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">
-                {area.localContent}
-              </p>
+              <p className="mt-5 leading-relaxed text-ink-soft">{area.localContent}</p>
               <p className="mt-4 leading-relaxed text-ink-soft">
-                New Star Cleaning provides professional house cleaning throughout
-                {" "}{area.name}, CA — recurring (weekly, bi-weekly, or monthly),
-                one-time deep cleans, and clear-scope move-in/move-out
-                cleaning. Every quote is scoped before booking so the cleaner understands the work before arrival.
+                New Star Cleaning provides professional house cleaning throughout {area.name},
+                CA — recurring (weekly, bi-weekly, or monthly), one-time deep cleans, and
+                clear-scope move-in/move-out cleaning. Every quote is scoped before booking so
+                the cleaner understands the work before arrival.
               </p>
 
               <div className="mt-8 grid grid-cols-3 gap-3">
@@ -168,14 +144,9 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                   { k: "Scope", v: "Confirmed first" },
                   { k: "Routes", v: "Local coverage" },
                 ].map((s) => (
-                  <div
-                    key={s.v}
-                    className="rounded-2xl border border-line bg-white p-4 text-center shadow-soft"
-                  >
-                    <div className="font-display text-2xl text-primary">{s.k}</div>
-                    <div className="mt-1 text-xs uppercase tracking-wider text-mute">
-                      {s.v}
-                    </div>
+                  <div key={s.v} className="rounded-2xl border border-line bg-white p-4 text-center shadow-soft">
+                    <div className="text-xl font-extrabold text-primary">{s.k}</div>
+                    <div className="mt-1 text-[0.7rem] uppercase tracking-wider text-mute">{s.v}</div>
                   </div>
                 ))}
               </div>
@@ -183,26 +154,14 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
             <div>
               <span className="eyebrow eyebrow-dot">Available services</span>
-              <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
-                Services available in {area.name}
-              </h2>
+              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Services available in {area.name}</h2>
               <div className="mt-8 space-y-4">
                 {serviceCards.map((service) => (
-                  <div
-                    key={service.title}
-                    className="rounded-2xl border border-line bg-white p-6 shadow-soft"
-                  >
+                  <div key={service.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
                     <h3 className="text-xl text-ink">
-                      <Link
-                        href={service.href}
-                        className="transition-colors hover:text-primary"
-                      >
-                        {service.title}
-                      </Link>
+                      <Link href={service.href} className="transition-colors hover:text-primary">{service.title}</Link>
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                      {service.desc}
-                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">{service.desc}</p>
                     <ul className="mt-4 space-y-1.5">
                       {service.features.map((f) => (
                         <li key={f} className="flex items-start gap-2 text-sm text-ink-soft">
@@ -222,83 +181,56 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           <div className="mt-14">
             <div className="max-w-3xl">
               <span className="eyebrow eyebrow-dot">Local service notes</span>
-              <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
+              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
                 Built around real {area.name} homes and cleaning needs
               </h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">
-                {area.localProof}
-              </p>
+              <p className="mt-5 leading-relaxed text-ink-soft">{area.localProof}</p>
             </div>
 
             <div className="mt-8 grid gap-4 lg:grid-cols-3">
               {localPanels.map((panel) => (
-                <div
-                  key={panel.title}
-                  className="rounded-2xl border border-line bg-white p-6 shadow-soft"
-                >
-                  <h3 className="text-lg font-semibold text-ink">
-                    {panel.title}
-                  </h3>
+                <div key={panel.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
+                  <h3 className="text-lg font-bold text-ink">{panel.title}</h3>
                   {"items" in panel ? (
                     <ul className="mt-4 space-y-2">
                       {panel.items.map((item) => (
-                        <li
-                          key={item}
-                          className="flex gap-2 text-sm leading-relaxed text-ink-soft"
-                        >
+                        <li key={item} className="flex gap-2 text-sm leading-relaxed text-ink-soft">
                           <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="mt-4 text-sm leading-relaxed text-ink-soft">
-                      {panel.body}
-                    </p>
+                    <p className="mt-4 text-sm leading-relaxed text-ink-soft">{panel.body}</p>
                   )}
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 grid gap-4 rounded-2xl border border-line bg-primary-dark p-6 text-white shadow-soft md:grid-cols-3">
+            <div className="mt-8 grid gap-6 rounded-2xl border border-line bg-white p-6 shadow-soft md:grid-cols-3">
               <div>
-                <div className="text-sm uppercase tracking-wider text-white/50">
-                  Local business
-                </div>
-                <div className="mt-2 font-semibold">NEW STAR CLEANING LLC</div>
-                <div className="mt-1 text-sm text-white/65">
-                  Fresno-based house cleaning for our core route area.
-                </div>
+                <div className="text-[0.7rem] uppercase tracking-wider text-mute">Local business</div>
+                <div className="mt-2 font-bold text-ink">New Star Cleaning LLC</div>
+                <div className="mt-1 text-sm text-ink-soft">Fresno-based house cleaning for our core route area.</div>
               </div>
               <div>
-                <div className="text-sm uppercase tracking-wider text-white/50">
-                  Call or text
-                </div>
-                <a
-                  href="tel:+15597852822"
-                  className="mt-2 block font-semibold text-accent-light hover:text-white"
-                >
+                <div className="text-[0.7rem] uppercase tracking-wider text-mute">Call or text</div>
+                <a href="tel:+15597852822" className="mt-2 block font-bold text-primary hover:text-accent">
                   (559) 785-2822
                 </a>
-                <div className="mt-1 text-sm text-white/65">
-                  Monday-Saturday, 8:00 AM-6:00 PM
-                </div>
+                <div className="mt-1 text-sm text-ink-soft">Monday–Saturday, 8:00 AM–6:00 PM</div>
               </div>
               <div>
-                <div className="text-sm uppercase tracking-wider text-white/50">
-                  Google profile
-                </div>
+                <div className="text-[0.7rem] uppercase tracking-wider text-mute">Google profile</div>
                 <Link
                   href="https://www.google.com/maps?cid=12575787905603463321"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 block font-semibold text-accent-light hover:text-white"
+                  className="mt-2 block font-bold text-primary hover:text-accent"
                 >
-                  View New Star Cleaning on Google
+                  View New Star on Google
                 </Link>
-                <div className="mt-1 text-sm text-white/65">
-                  Reviews, photos, directions, and business details.
-                </div>
+                <div className="mt-1 text-sm text-ink-soft">Reviews, photos, directions, and business details.</div>
               </div>
             </div>
           </div>
@@ -307,23 +239,18 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
       {/* Neighborhoods */}
       <section className="ns-section bg-cream-2">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
             <span className="eyebrow eyebrow-dot">Neighborhoods</span>
-            <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
-              {area.name} neighborhoods we serve
-            </h2>
+            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">{area.name} neighborhoods we serve</h2>
             <p className="mt-4 text-ink-soft">
-              Our teams cover every part of {area.name}, CA. Don&apos;t see your
-              neighborhood? Reach out — we likely cover it too.
+              Our teams cover every part of {area.name}, CA. Don&apos;t see your neighborhood?
+              Reach out — we likely cover it too.
             </p>
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-2.5">
             {area.neighborhoods.map((n) => (
-              <span
-                key={n}
-                className="rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink-soft shadow-soft"
-              >
+              <span key={n} className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-ink-soft shadow-soft">
                 {n}
               </span>
             ))}
@@ -332,40 +259,22 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       </section>
 
       {/* Local FAQs */}
-      <section className="ns-section bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="ns-section bg-cream">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="eyebrow eyebrow-dot">Local FAQs</span>
-            <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
-              Questions about cleaning in {area.name}
-            </h2>
+            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Questions about cleaning in {area.name}</h2>
           </div>
-          <div className="mt-10 space-y-4">
+          <div className="mt-10 space-y-3">
             {areaFaqs.map((faq) => (
-              <details
-                key={faq.question}
-                className="group rounded-2xl border border-line bg-cream shadow-soft"
-              >
-                <summary className="flex cursor-pointer items-center justify-between gap-4 p-6 text-lg font-medium text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden list-none">
+              <details key={faq.question} className="group rounded-2xl border border-line bg-white shadow-soft">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-6 text-lg font-bold text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
                   <span>{faq.question}</span>
-                  <svg
-                    className="h-5 w-5 flex-shrink-0 text-ink-soft transition-transform group-open:rotate-180"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
+                  <svg className="h-5 w-5 flex-shrink-0 text-ink-soft transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="px-6 pb-6 pt-0 text-ink-soft leading-relaxed">
-                  {faq.answer}
-                </div>
+                <div className="px-6 pb-6 leading-relaxed text-ink-soft">{faq.answer}</div>
               </details>
             ))}
           </div>
@@ -373,53 +282,41 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden bg-primary-dark">
-        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
-        <div className="absolute inset-0 ns-grid-bg opacity-30" aria-hidden="true" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 text-center">
-          <span className="eyebrow eyebrow-dot text-accent-light">
-            Same-week availability
-          </span>
-          <h2 className="mt-5 text-3xl lg:text-5xl text-white">
-            Ready for a spotless
-            <span className="italic text-accent-light"> {area.name}</span> home?
-          </h2>
-          <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Join homeowners across {area.name} who trust New Star Cleaning.
-            Request clear pricing and confirm only when pricing and timing make sense.
-          </p>
-          <div className="mt-8">
-            <Link
-              href="/book-now"
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
-            >
-              Request your {area.name} quote
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
+      <section className="bg-cream-2 py-14 lg:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
+            <span className="eyebrow text-accent-light">Same-week availability</span>
+            <h2 className="mt-4 text-3xl text-white lg:text-5xl">
+              Ready for a spotless {area.name} home?
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
+              Join homeowners across {area.name} who trust New Star Cleaning. Request clear
+              pricing and confirm only when pricing and timing make sense.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link href="/book-now" className="btn btn-accent">Request your {area.name} quote</Link>
+              <a href="tel:+15597852822" className="btn btn-ghost-dark">Call (559) 785-2822</a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Nearby Areas */}
-      <section className="ns-section bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Nearby areas */}
+      <section className="bg-cream py-14 lg:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="eyebrow eyebrow-dot">Nearby cities</span>
-            <h2 className="mt-4 text-2xl lg:text-3xl text-ink">
-              Also serving nearby cities
-            </h2>
+            <h2 className="mt-4 text-2xl text-ink lg:text-3xl">Also serving nearby cities</h2>
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             {area.nearbyAreas.map((nearby) => (
               <Link
                 key={nearby}
                 href={`/cleaning-services-${serviceAreaSlug(nearby)}`}
-                className="group inline-flex items-center gap-2 rounded-full border border-line bg-cream px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-primary hover:text-primary"
+                className="group inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-primary hover:text-primary"
               >
                 Cleaning in {nearby}, CA
-                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Link>
@@ -433,10 +330,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         items={[
           { name: "Home", url: siteUrl },
           { name: "Service Areas", url: `${siteUrl}/service-areas` },
-          {
-            name: `${area.name} Cleaning Services`,
-            url: `${siteUrl}/cleaning-services-${area.slug}`,
-          },
+          { name: `${area.name} Cleaning Services`, url: `${siteUrl}/cleaning-services-${area.slug}` },
         ]}
       />
       <script
@@ -462,36 +356,14 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 addressCountry: "US",
               },
             },
-            areaServed: {
-              "@type": "City",
-              name: area.name,
-              addressRegion: "CA",
-            },
+            areaServed: { "@type": "City", name: area.name, addressRegion: "CA" },
             hasOfferCatalog: {
               "@type": "OfferCatalog",
               name: "Cleaning Services",
               itemListElement: [
-                {
-                  "@type": "Offer",
-                  itemOffered: {
-                    "@type": "Service",
-                    name: "Standard Recurring Cleaning",
-                  },
-                },
-                {
-                  "@type": "Offer",
-                  itemOffered: {
-                    "@type": "Service",
-                    name: "Deep Cleaning",
-                  },
-                },
-                {
-                  "@type": "Offer",
-                  itemOffered: {
-                    "@type": "Service",
-                    name: "Move-In/Move-Out Cleaning",
-                  },
-                },
+                { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning" } },
+                { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning" } },
+                { "@type": "Offer", itemOffered: { "@type": "Service", name: "Move-In/Move-Out Cleaning" } },
               ],
             },
           }),
@@ -506,10 +378,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             mainEntity: areaFaqs.map((faq) => ({
               "@type": "Question",
               name: faq.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: faq.answer,
-              },
+              acceptedAnswer: { "@type": "Answer", text: faq.answer },
             })),
           }),
         }}

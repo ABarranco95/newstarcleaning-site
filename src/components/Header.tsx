@@ -5,6 +5,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+function StarRow() {
+  return (
+    <span className="flex items-center gap-0.5 text-accent" aria-hidden="true">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.77l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
+        </svg>
+      ))}
+    </span>
+  );
+}
+
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -25,87 +37,83 @@ export default function Header() {
     <header
       className={`sticky top-0 z-50 transition-all duration-200 ${
         scrolled
-          ? "bg-cream/85 backdrop-blur-md border-b border-line shadow-[0_1px_0_rgba(14,22,38,0.04)]"
-          : "bg-cream/0 border-b border-transparent"
+          ? "border-b border-line bg-white/90 shadow-[0_6px_24px_-18px_rgba(15,27,45,0.35)] backdrop-blur-md"
+          : "border-b border-transparent bg-white/80 backdrop-blur-md"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3 lg:gap-3.5" aria-label="New Star Cleaning home">
+          <Link
+            href="/"
+            className="flex min-w-0 items-center gap-2.5 sm:gap-3"
+            aria-label="New Star Cleaning home"
+          >
             <Image
               src="/brand/star-ink-mono.png"
               alt=""
-              width={58}
-              height={56}
-              sizes="58px"
-              className="h-auto w-11 shrink-0 drop-shadow-[0_6px_10px_rgba(14,39,71,0.16)] lg:w-12 xl:w-14"
+              width={52}
+              height={50}
+              sizes="52px"
+              className="h-auto w-10 shrink-0 lg:w-11"
               priority
             />
-            <div className="flex min-w-0 flex-col leading-none">
-              <span className="font-sans text-[1.08rem] font-black tracking-[-0.07em] text-primary sm:text-xl lg:text-[1.32rem]">
+            <span className="flex min-w-0 flex-col leading-none">
+              <span className="text-[1.05rem] font-extrabold tracking-tight text-primary sm:text-lg lg:text-xl">
                 New Star Cleaning
               </span>
-              <span className="mt-1 hidden text-[0.52rem] font-black uppercase tracking-[0.22em] text-accent sm:block lg:text-[0.58rem]">
+              <span className="mt-1 hidden text-[0.55rem] font-bold uppercase tracking-[0.22em] text-accent sm:block lg:text-[0.6rem]">
                 Fresno · Clovis · Madera
               </span>
-            </div>
+            </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-7">
-            <Link
-              href="/services"
-              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
-            >
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-7 lg:flex">
+            <Link href="/services" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
               Services
             </Link>
-            <Link
-              href="/#how-it-works"
-              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
-            >
+            <Link href="/#how-it-works" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
               How it works
             </Link>
-            <Link
-              href="/#reviews"
-              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
-            >
-              Reviews
-            </Link>
-            <Link
-              href="/service-areas"
-              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
-            >
+            <Link href="/service-areas" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
               Service areas
             </Link>
-            <Link
-              href="/checklist"
-              className="text-sm font-medium text-ink-soft transition-colors hover:text-primary"
-            >
+            <Link href="/#reviews" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
+              Reviews
+            </Link>
+            <Link href="/checklist" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
               Checklist
             </Link>
             <a
               href="tel:+15597852822"
-              className="text-sm font-semibold text-ink transition-colors hover:text-accent"
+              className="flex flex-col items-end leading-none"
             >
-              (559) 785-2822
+              <span className="text-sm font-extrabold text-primary">(559) 785-2822</span>
+              <span className="mt-0.5 flex items-center gap-1.5">
+                <StarRow />
+                <span className="text-[0.62rem] font-semibold uppercase tracking-wider text-mute">Google reviews</span>
+              </span>
             </a>
-            <Link
-              href="/book-now"
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:bg-primary-light"
-            >
+            <Link href="/book-now" className="btn btn-accent">
               Request quote
             </Link>
           </nav>
 
-          {/* Mobile menu button */}
-          <div className="lg:hidden flex items-center gap-2">
-            <Link
-              href="/book-now"
-              className="hidden min-h-11 items-center rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white shadow-soft sm:inline-flex"
-            >
+          {/* Mobile actions */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <Link href="/book-now" className="btn btn-accent hidden !min-h-10 !px-4 !text-xs sm:inline-flex">
               Quote
             </Link>
+            <a
+              href="tel:+15597852822"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white"
+              aria-label="Call (559) 785-2822"
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </a>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-ink"
@@ -113,11 +121,11 @@ export default function Header() {
               aria-expanded={mobileOpen}
             >
               {mobileOpen ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />
                 </svg>
               )}
@@ -125,31 +133,34 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile nav */}
         {mobileOpen && (
-          <div className="lg:hidden pb-5 pt-2 border-t border-line">
+          <div className="border-t border-line pb-5 lg:hidden">
             <nav className="flex flex-col gap-1 pt-3">
               {[
                 { href: "/services", label: "Services" },
                 { href: "/#how-it-works", label: "How it works" },
-                { href: "/#reviews", label: "Reviews" },
                 { href: "/service-areas", label: "Service areas" },
+                { href: "/#reviews", label: "Reviews" },
                 { href: "/checklist", label: "Checklist" },
+                { href: "/about", label: "About" },
+                { href: "/contact", label: "Contact" },
               ].map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-4 py-3 text-base font-medium text-ink-soft hover:bg-cream-2 hover:text-primary"
+                  className="rounded-xl px-4 py-3 text-base font-semibold text-ink-soft hover:bg-cream-2 hover:text-primary"
                 >
                   {link.label}
                 </Link>
               ))}
               <a
                 href="tel:+15597852822"
-                className="mt-2 rounded-lg px-4 py-3 text-base font-semibold text-primary"
+                className="mt-2 flex items-center justify-between rounded-xl bg-cream-2 px-4 py-3 text-base font-extrabold text-primary"
               >
-                Call (559) 785-2822
+                <span>Call (559) 785-2822</span>
+                <StarRow />
               </a>
             </nav>
           </div>

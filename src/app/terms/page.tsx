@@ -16,19 +16,19 @@ export default function TermsOfService() {
   return (
     <div className="py-16 lg:py-24 bg-white">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl lg:text-4xl font-bold text-ink mb-2">
           Terms of Service
         </h1>
-        <p className="text-gray-500 mb-12">
+        <p className="text-mute mb-12">
           Last Updated: June 12, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               1. Agreement to Terms
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding
               agreement between you and NEW STAR CLEANING LLC (&ldquo;New Star
               Cleaning,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), a California limited
@@ -41,15 +41,15 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               2. Services
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-3">
+            <p className="text-ink-soft leading-relaxed mb-3">
               New Star Cleaning provides professional residential cleaning
               services in Fresno, CA and the Fresno, Clovis, and Madera area.
               Our core residential services are:
             </p>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600">
+            <ul className="list-disc pl-6 space-y-2 text-ink-soft">
               <li>
                 <strong>Standard Recurring Cleaning:</strong> Regularly
                 scheduled house cleaning on a weekly, bi-weekly, or monthly
@@ -64,13 +64,13 @@ export default function TermsOfService() {
                 cleaning for properties being vacated or newly occupied
               </li>
             </ul>
-            <p className="mt-4 text-gray-600 leading-relaxed">
+            <p className="mt-4 text-ink-soft leading-relaxed">
               The service scope is limited to the work confirmed in your quote,
               booking, or written communication before the appointment. Add-ons
               are included only when they are specifically requested and
               confirmed before service.
             </p>
-            <p className="mt-4 text-gray-600 leading-relaxed">
+            <p className="mt-4 text-ink-soft leading-relaxed">
               New Star Cleaning is a cleaning service, not a household task,
               organizing, moving, or restoration service. Unless expressly
               confirmed in writing, we do not provide laundry, folding,
@@ -81,7 +81,7 @@ export default function TermsOfService() {
               remediation, pest waste cleanup, biohazard cleanup, repairs, paint
               removal, or restoration work.
             </p>
-            <p className="mt-4 text-gray-600 leading-relaxed">
+            <p className="mt-4 text-ink-soft leading-relaxed">
               Move-in and move-out cleaning does not guarantee any landlord,
               property manager, buyer, seller, or deposit decision. We clean
               against the agreed scope; damage, repairs, paint, carpet
@@ -91,14 +91,14 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               3. Booking and Scheduling
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-3">
+            <p className="text-ink-soft leading-relaxed mb-3">
               Services may be booked through our website, booking platform, or
               by contacting us directly. By booking a service, you agree to:
             </p>
-            <ul className="list-disc pl-6 space-y-2 text-gray-600">
+            <ul className="list-disc pl-6 space-y-2 text-ink-soft">
               <li>Provide accurate and complete information</li>
               <li>
                 Provide reasonable access to your property at the scheduled time
@@ -115,10 +115,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               4. Payment Terms
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               Payment is due at the time of service unless other arrangements
               have been made. We accept major credit cards and other payment
               methods as specified during booking. Prices are subject to change;
@@ -128,10 +128,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               5. Satisfaction Guarantee
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               We stand behind the quality of our work. If you are not satisfied
               with any aspect of our cleaning service, please contact us within
               24 hours of the completed service. We will return to re-clean the
@@ -140,11 +140,11 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          <section className="bg-blue-50 border border-blue-100 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+          <section className="bg-accent/5 border border-accent/15 rounded-xl p-6">
+            <h2 className="text-xl font-bold text-ink mb-3">
               6. SMS/Text Messaging Terms
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
+            <p className="text-ink-soft leading-relaxed mb-4">
               By providing your phone number and opting in, you consent to
               receive automated text messages from New Star Cleaning. This
               section outlines the terms governing our SMS/text messaging
@@ -153,10 +153,10 @@ export default function TermsOfService() {
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Consent to Receive Messages
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   By providing your mobile phone number and checking the SMS
                   consent checkbox on our booking form, or by texting us to
                   initiate a conversation, you expressly consent to receive
@@ -166,13 +166,13 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Types of Messages
                 </h3>
-                <p className="text-gray-600 text-sm mb-2">
+                <p className="text-ink-soft text-sm mb-2">
                   You may receive the following types of text messages:
                 </p>
-                <ul className="list-disc pl-6 space-y-1 text-gray-600 text-sm">
+                <ul className="list-disc pl-6 space-y-1 text-ink-soft text-sm">
                   <li>Appointment confirmations and scheduling updates</li>
                   <li>Appointment reminders</li>
                   <li>Service follow-ups and satisfaction check-ins</li>
@@ -184,10 +184,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Message Frequency
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   Message frequency varies. You may receive approximately 1–4
                   messages per service interaction. Promotional messages are
                   limited to no more than 4 per month. Actual frequency depends
@@ -196,10 +196,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Message and Data Rates
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   <strong>Message and data rates may apply.</strong> Please
                   contact your wireless carrier for pricing details specific to
                   your plan. New Star Cleaning is not responsible for any charges
@@ -208,10 +208,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Opt-Out Instructions
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   You can opt out of receiving text messages at any time by
                   replying <strong>STOP</strong> to any message from us. You
                   will receive a single confirmation message after opting out,
@@ -223,10 +223,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Help
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   For help with our text messaging program, reply{" "}
                   <strong>HELP</strong> to any message from us, or contact us
                   through our website at newstarcleaning.com.
@@ -234,10 +234,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Carrier Liability Disclaimer
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   Wireless carriers, including but not limited to AT&T,
                   T-Mobile, Verizon, Sprint, and other major U.S. carriers, are
                   not liable for delayed or undelivered messages. Message
@@ -249,10 +249,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Compatible Carriers
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   Our SMS messaging program is compatible with all major U.S.
                   wireless carriers, including AT&T, Verizon, T-Mobile, Sprint,
                   US Cellular, and most regional and prepaid carriers. Carrier
@@ -261,10 +261,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Age Restriction
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   You must be 18 years of age or older to opt in to our text
                   messaging program. By consenting to receive text messages, you
                   confirm that you are at least 18 years old.
@@ -272,10 +272,10 @@ export default function TermsOfService() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-ink">
                   Privacy
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-ink-soft text-sm">
                   Your phone number and personal information collected through
                   our SMS program are subject to our{" "}
                   <Link href="/privacy" className="text-primary underline">
@@ -289,10 +289,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               7. Property Access and Security
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               You are responsible for providing safe and reasonable access to
               your property for our cleaning team. Please secure valuables,
               inform us of any security systems or access codes, and ensure pets
@@ -303,10 +303,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               8. Liability and Insurance
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               New Star Cleaning carries general liability insurance. In the
               unlikely event of accidental damage to your property during a
               cleaning, please notify us within 24 hours. We will assess the
@@ -317,10 +317,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               9. Limitation of Liability
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               To the fullest extent permitted by law, New Star Cleaning, its
               members, employees, and contractors shall not be liable for any
               indirect, incidental, special, consequential, or punitive damages,
@@ -333,10 +333,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               10. Indemnification
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               You agree to indemnify and hold harmless New Star Cleaning, its
               members, employees, and contractors from any claims, damages,
               losses, or expenses (including reasonable attorney&apos;s fees) arising
@@ -346,10 +346,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               11. Intellectual Property
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               All content on our website, including text, graphics, logos,
               images, and software, is the property of New Star Cleaning or its
               licensors and is protected by intellectual property laws. You may
@@ -359,10 +359,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               12. Governing Law
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               These Terms shall be governed by and construed in accordance with
               the laws of the State of California, without regard to its
               conflict of law principles. Any legal action or proceeding arising
@@ -372,10 +372,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               13. Changes to These Terms
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               We reserve the right to modify these Terms at any time. Any
               changes will be posted on this page with an updated &ldquo;Last
               Updated&rdquo; date. Your continued use of our website or services
@@ -386,10 +386,10 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-ink mb-3">
               14. Severability
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-ink-soft leading-relaxed">
               If any provision of these Terms is found to be unenforceable or
               invalid, that provision shall be limited or eliminated to the
               minimum extent necessary, and the remaining provisions shall
@@ -397,15 +397,15 @@ export default function TermsOfService() {
             </p>
           </section>
 
-          <section className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+          <section className="bg-cream-2 rounded-xl p-6 border border-line">
+            <h2 className="text-xl font-bold text-ink mb-3">
               15. Contact Us
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
+            <p className="text-ink-soft leading-relaxed mb-4">
               If you have any questions about these Terms of Service, please
               contact us:
             </p>
-            <div className="text-gray-600 space-y-1">
+            <div className="text-ink-soft space-y-1">
               <p>
                 <strong>NEW STAR CLEANING LLC</strong>
               </p>

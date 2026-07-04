@@ -272,7 +272,7 @@ function TrustBar({ city }: { city: string }) {
 
 function SectionCard({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 md:p-8">
+    <section className="rounded-[2rem] border border-line bg-white p-6 md:p-8">
       <h2 className="font-display text-2xl leading-tight text-primary md:text-3xl">{title}</h2>
       <div className="mt-5 text-sm leading-7 text-ink-soft md:text-base">{children}</div>
     </section>
@@ -285,11 +285,11 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   return (
     <div className="space-y-3">
       {faqs.map((faq, index) => (
-        <div key={faq.question} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <div key={faq.question} className="overflow-hidden rounded-2xl border border-line bg-white">
           <button
             type="button"
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-primary transition hover:bg-slate-50 md:text-base"
+            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-primary transition hover:bg-cream-2 md:text-base"
           >
             <span>{faq.question}</span>
             <span className="text-xl text-accent">{openIndex === index ? "−" : "+"}</span>
@@ -305,9 +305,9 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
 
 function StickyMobileCTA() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
-        <a href="tel:+15597852822" className="flex-1 rounded-full border border-slate-200 px-4 py-3 text-center text-sm font-bold text-primary">
+        <a href="tel:+15597852822" className="flex-1 rounded-full border border-line px-4 py-3 text-center text-sm font-bold text-primary">
           Call
         </a>
         <a href="#booking-form" className="flex-1 rounded-full bg-accent px-4 py-3 text-center text-sm font-bold text-white">
@@ -328,7 +328,7 @@ export default function GoogleAdsLandingPageClient() {
   const intent = INTENT_CONFIG[intentKey];
 
   return (
-    <div className="bg-slate-50 pb-24 text-ink md:pb-0">
+    <div className="bg-cream-2 pb-24 text-ink md:pb-0">
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
@@ -343,10 +343,10 @@ export default function GoogleAdsLandingPageClient() {
               {intent.subhead}
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a href="#booking-form" className="inline-flex min-h-14 items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-white transition hover:bg-accent-hover">
+              <a href="#booking-form" className="btn btn-accent !text-sm">
                 Get pricing & availability
               </a>
-              <a href="tel:+15597852822" className="inline-flex min-h-14 items-center justify-center rounded-full border border-white/20 bg-white/8 px-6 py-4 text-sm font-bold text-white transition hover:bg-white/14">
+              <a href="tel:+15597852822" className="btn btn-ghost-dark !text-sm">
                 Call (559) 785-2822
               </a>
             </div>
@@ -393,7 +393,7 @@ export default function GoogleAdsLandingPageClient() {
         <SectionCard title={intent.addonTitle}>
           <ul className="grid gap-3">
             {intent.addonBullets.map((item) => (
-              <li key={item} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 font-semibold text-primary">
+              <li key={item} className="rounded-2xl border border-line bg-cream-2 px-4 py-3 font-semibold text-primary">
                 {item}
               </li>
             ))}
@@ -432,16 +432,16 @@ export default function GoogleAdsLandingPageClient() {
         <FAQAccordion faqs={intent.faqs} />
       </section>
 
-      <section className="border-t border-slate-200 bg-white px-4 py-12 text-center sm:px-6 lg:px-8">
+      <section className="border-t border-line bg-white px-4 py-12 text-center sm:px-6 lg:px-8">
         <h2 className="font-display text-3xl text-primary md:text-4xl">Ready for clear pricing?</h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-ink-soft md:text-base">
           Send the details once. We confirm the scope, timing, and price before the job is accepted.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href="#booking-form" className="rounded-full bg-accent px-6 py-4 text-sm font-bold text-white transition hover:bg-accent-hover">
+          <a href="#booking-form" className="btn btn-accent !text-sm">
             Request pricing
           </a>
-          <a href="tel:+15597852822" className="rounded-full border border-slate-200 px-6 py-4 text-sm font-bold text-primary transition hover:border-accent hover:text-accent">
+          <a href="tel:+15597852822" className="btn btn-outline !text-sm">
             Call (559) 785-2822
           </a>
         </div>

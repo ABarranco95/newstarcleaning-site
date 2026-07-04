@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services, type ServiceDefinition } from "@/lib/services";
+import { siteImages, uxPhotoUrl } from "@/lib/siteImages";
 
 const COMBO_CITY_SLUGS = [
   "fresno",
@@ -77,13 +79,8 @@ export async function generateMetadata({
   return {
     title,
     description,
-    robots: {
-      index: false,
-      follow: true,
-    },
-    alternates: {
-      canonical: `/${serviceCity}`,
-    },
+    robots: { index: false, follow: true },
+    alternates: { canonical: `/${serviceCity}` },
     openGraph: {
       title,
       description,
@@ -100,39 +97,49 @@ export default async function ServiceCityPage({ params }: RouteParams) {
   const { service, citySlug, cityName } = parsed;
   const area = serviceAreas.find((a) => a.slug === citySlug);
   const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Clear-scope local cleaning and the same route discipline we use across Fresno-area homes.`;
+  const heroPhoto = siteImages.serviceHero[service.slug] ?? siteImages.heroes.cleanKitchen;
 
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary-dark">
-        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
-        <div className="absolute inset-0 ns-grid-bg opacity-40" aria-hidden="true" />
-        <div className="absolute -top-32 -left-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl" aria-hidden="true" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 lg:pt-20 lg:pb-24">
-          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-            <div className="max-w-2xl text-white">
-              <span className="eyebrow eyebrow-dot text-accent-light">
+      <section className="bg-cream-2">
+        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
+          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-primary">Home</Link>
+            <span className="px-1.5">/</span>
+            <Link href={`/services/${service.slug}`} className="hover:text-primary">{service.shortName}</Link>
+            <span className="px-1.5">/</span>
+            <span className="font-semibold text-ink">{cityName}</span>
+          </nav>
+
+          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+            <div className="max-w-2xl">
+              <span className="eyebrow eyebrow-dot">
                 {cityName}, CA · {service.shortName}
               </span>
-              <h1 className="mt-5 text-4xl lg:text-[3.25rem] leading-[1.05]">
-                {`${service.shortName} in `}
-                <span className="italic text-accent-light">{cityName}, CA</span>
+              <h1 className="mt-4 text-4xl text-ink lg:text-[3.2rem]">
+                {service.shortName} in {cityName}, CA
               </h1>
-              <p className="mt-6 text-lg leading-relaxed text-white/75">
-                {intro}
-              </p>
-              <div className="mt-8">
+              <p className="mt-5 text-lg leading-8 text-ink-soft">{intro}</p>
+              <div className="mt-7">
                 <TrustBadges />
               </div>
             </div>
-            <div className="relative">
-              <div
-                className="absolute -inset-4 -z-10 rounded-[2rem] bg-accent/15 blur-2xl"
-                aria-hidden="true"
-              />
+
+            <div className="flex flex-col gap-5">
+              <div className="relative h-48 overflow-hidden rounded-3xl border border-line shadow-soft sm:h-56">
+                <Image
+                  src={uxPhotoUrl(heroPhoto, 900)}
+                  alt={heroPhoto.alt}
+                  fill
+                  sizes="(min-width: 1024px) 480px, 100vw"
+                  className="object-cover"
+                  priority
+                />
+              </div>
               <QuotePathPanel
                 title={`Price ${service.shortName.toLowerCase()} in ${cityName}`}
-                body="We will keep this page focused on local scope and route notes. The quote page preselects this city and service."
+                body="We keep this page focused on local scope and route notes. The quote page preselects this city and service."
                 city={cityName}
                 service={quoteFormService(service)}
                 source={`organic_${service.slug}_${citySlug}`}
@@ -144,27 +151,23 @@ export default async function ServiceCityPage({ params }: RouteParams) {
 
       {/* What's included */}
       <section className="ns-section bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
               <span className="eyebrow eyebrow-dot">What&apos;s included</span>
-              <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
+              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
                 {service.name} in {cityName}
               </h2>
-              <p className="mt-5 text-ink-soft leading-relaxed">
-                {service.description}
-              </p>
-              <p className="mt-4 text-ink-soft leading-relaxed">
-                Add-ons are quoted separately unless they are listed in your
-                confirmed scope. Laundry, dishes, bed making, organizing,
-                packing, and personal household tasks are not part of our
-                cleaning service.
+              <p className="mt-5 leading-relaxed text-ink-soft">{service.description}</p>
+              <p className="mt-4 leading-relaxed text-ink-soft">
+                Add-ons are quoted separately unless they are listed in your confirmed scope.
+                Laundry, dishes, bed making, organizing, packing, and personal household tasks
+                are not part of our cleaning service.
               </p>
               {area ? (
-                <p className="mt-4 text-ink-soft leading-relaxed">
-                  We serve {cityName} households across {area.neighborhoods
-                    .slice(0, 3)
-                    .join(", ")} and the surrounding {area.county} area.
+                <p className="mt-4 leading-relaxed text-ink-soft">
+                  We serve {cityName} households across {area.neighborhoods.slice(0, 3).join(", ")}{" "}
+                  and the surrounding {area.county} area.
                 </p>
               ) : null}
               <div className="mt-6 flex flex-wrap gap-2.5">
@@ -190,30 +193,13 @@ export default async function ServiceCityPage({ params }: RouteParams) {
             </div>
             <div className="space-y-4">
               {service.whatsIncluded.map((group) => (
-                <div
-                  key={group.title}
-                  className="rounded-2xl border border-line bg-white p-6 shadow-soft"
-                >
+                <div key={group.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
                   <h3 className="text-xl text-ink">{group.title}</h3>
                   <ul className="mt-3 space-y-1.5">
                     {group.items.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-2 text-sm text-ink-soft"
-                      >
-                        <svg
-                          className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2.4}
-                            d="M5 13l4 4L19 7"
-                          />
+                      <li key={item} className="flex items-start gap-2 text-sm text-ink-soft">
+                        <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M5 13l4 4L19 7" />
                         </svg>
                         {item}
                       </li>
@@ -229,14 +215,9 @@ export default async function ServiceCityPage({ params }: RouteParams) {
               <h3 className="text-xl text-ink">Available add-ons</h3>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {service.availableAddOns.map((addOn) => (
-                  <div
-                    key={addOn.title}
-                    className="rounded-2xl border border-line bg-white p-5 shadow-soft"
-                  >
-                    <h4 className="font-semibold text-ink">{addOn.title}</h4>
-                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                      {addOn.description}
-                    </p>
+                  <div key={addOn.title} className="rounded-2xl border border-line bg-white p-5 shadow-soft">
+                    <h4 className="font-bold text-ink">{addOn.title}</h4>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">{addOn.description}</p>
                   </div>
                 ))}
               </div>
@@ -245,10 +226,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
               <h3 className="text-xl text-ink">Not included</h3>
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {service.notIncluded.slice(0, 8).map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft"
-                  >
+                  <li key={item} className="rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft">
                     {item}
                   </li>
                 ))}
@@ -259,27 +237,21 @@ export default async function ServiceCityPage({ params }: RouteParams) {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden bg-primary-dark">
-        <div className="absolute inset-0 ns-mesh" aria-hidden="true" />
-        <div className="absolute inset-0 ns-grid-bg opacity-30" aria-hidden="true" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 text-center">
-          <span className="eyebrow eyebrow-dot text-accent-light">
-            Same-week availability
-          </span>
-          <h2 className="mt-5 text-3xl lg:text-5xl text-white">
-            {`Ready to get pricing for ${service.shortName.toLowerCase()} in `}
-            <span className="italic text-accent-light">{cityName}</span>?
-          </h2>
-          <p className="mt-5 mx-auto max-w-2xl text-lg text-white/75">
-            Request clear pricing and availability before anything is booked. We&apos;ll match the scope to the home condition, route availability, and schedule.
-          </p>
-          <div className="mt-8">
-            <Link
-              href="/book-now"
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-[0_10px_30px_-12px_rgba(239,106,55,0.6)] transition-all hover:-translate-y-0.5 hover:bg-accent-hover"
-            >
-              Request your {cityName} quote
-            </Link>
+      <section className="bg-cream-2 py-14 lg:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
+            <span className="eyebrow text-accent-light">Same-week availability</span>
+            <h2 className="mt-4 text-3xl text-white lg:text-5xl">
+              Ready for {service.shortName.toLowerCase()} pricing in {cityName}?
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
+              Request clear pricing and availability before anything is booked. We&apos;ll match
+              the scope to home condition, route availability, and schedule.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link href="/book-now" className="btn btn-accent">Request your {cityName} quote</Link>
+              <a href="tel:+15597852822" className="btn btn-ghost-dark">Call (559) 785-2822</a>
+            </div>
           </div>
         </div>
       </section>
@@ -304,11 +276,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
                 addressCountry: "US",
               },
             },
-            areaServed: {
-              "@type": "City",
-              name: cityName,
-              addressRegion: "CA",
-            },
+            areaServed: { "@type": "City", name: cityName, addressRegion: "CA" },
           }),
         }}
       />
