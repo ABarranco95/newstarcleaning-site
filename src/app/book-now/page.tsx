@@ -30,19 +30,23 @@ export const metadata: Metadata = {
 export default function BookNow() {
   return (
     <>
-      <section className="bg-cream-2">
-        <div className="mx-auto grid max-w-7xl items-start gap-10 px-4 pb-12 pt-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-16 lg:pt-14">
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-20 lg:pt-14">
           <div className="max-w-2xl lg:pt-4">
-            <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-              <Link href="/" className="hover:text-primary">Home</Link>
+            <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-white">Home</Link>
               <span className="px-1.5">/</span>
-              <span className="font-semibold text-ink">Request pricing</span>
+              <span className="font-semibold text-white">Request pricing</span>
             </nav>
-            <span className="eyebrow eyebrow-dot">Fresno / Clovis / Madera</span>
-            <h1 className="mt-4 text-4xl text-ink lg:text-[3.4rem]">
+            <span className="eyebrow eyebrow-dot text-accent-light">Fresno / Clovis / Madera</span>
+            <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
               Get cleaning pricing before anything is booked.
             </h1>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-ink-soft">
+            <p className="mt-5 max-w-xl text-lg leading-8 text-white/75">
               Send the basics for your home. We confirm scope, price, and available times before
               you decide. No payment or commitment on this form.
             </p>

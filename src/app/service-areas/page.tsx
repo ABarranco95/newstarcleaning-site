@@ -59,27 +59,31 @@ export default function ServiceAreasPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
+          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">Service areas</span>
+            <span className="font-semibold text-white">Service areas</span>
           </nav>
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot">Fresno, Clovis, and Madera routes</span>
-              <h1 className="mt-4 text-4xl text-ink lg:text-[3.4rem]">
+              <span className="eyebrow eyebrow-dot text-accent-light">Fresno, Clovis, and Madera routes</span>
+              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
                 House cleaning service areas near Fresno
               </h1>
-              <p className="mt-5 text-lg leading-8 text-ink-soft">
+              <p className="mt-5 text-lg leading-8 text-white/75">
                 New Star Cleaning is based in Fresno and routes vetted cleaners across the
                 Fresno, Clovis, and Madera area. Each area page explains what we commonly clean
                 there, how scheduling works, and which neighborhoods we serve.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a href="#cities" className="btn btn-accent">View cities</a>
-                <Link href="/services" className="btn btn-outline">Compare services</Link>
+                <Link href="/services" className="btn btn-ghost-dark">Compare services</Link>
               </div>
             </div>
             <QuotePathPanel

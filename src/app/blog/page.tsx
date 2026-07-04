@@ -24,18 +24,22 @@ export default function BlogIndexPage() {
 
   return (
     <>
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-5xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-5xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
+          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">Cleaning tips</span>
+            <span className="font-semibold text-white">Cleaning tips</span>
           </nav>
-          <span className="eyebrow eyebrow-dot">Cleaning blog</span>
-          <h1 className="mt-4 max-w-3xl text-4xl text-ink lg:text-[3.2rem]">
+          <span className="eyebrow eyebrow-dot text-accent-light">Cleaning blog</span>
+          <h1 className="mt-4 max-w-3xl text-4xl text-white lg:text-[3.2rem]">
             Cleaning tips &amp; guides
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-ink-soft">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">
             Practical, no-fluff cleaning advice from a real Fresno cleaning team. Cadences,
             checklists, and the small stuff that actually makes a difference.
           </p>
