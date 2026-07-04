@@ -5,23 +5,26 @@ const services = [
     title: "Deep Cleaning",
     href: "/services/deep-cleaning",
     lead: "A real reset — baseboards, reachable vents, fans, trim, fixtures, floor edges, and buildup. For first-time cleans, seasonal resets, or homes past maintenance condition.",
+    fit: "Best for first-time cleans & seasonal resets",
   },
   {
     title: "Move-In / Move-Out",
     href: "/services/move-out-cleaning",
     lead: "Empty-home turnover cleaned against the details landlords, buyers, and sellers actually inspect — appliances, cabinets, blinds, and closets. Priced before booking, not guessed.",
+    fit: "Best for rentals, turnovers & closings",
   },
   {
     title: "Standard Recurring",
     href: "/services/standard-cleaning",
     lead: "Maintenance for homes already in normal condition — weekly, bi-weekly, or monthly. Same trusted cleaner whenever scheduling allows.",
+    fit: "Best after the home is already reset",
   },
 ];
 
 const steps = [
   {
     title: "Send the basics",
-    text: "City, service type, timing, and home size. The form stays short on purpose — we only ask what we need to price it correctly.",
+    text: "City, service type, timing, and home size. The form stays short — we only ask what we need to price it correctly.",
   },
   {
     title: "We confirm scope",
@@ -61,86 +64,141 @@ const faqs = [
   },
 ];
 
+const trustPoints = [
+  "Locally owned, Fresno-based",
+  "Fresno, Clovis & Madera routes",
+  "Scope confirmed before booking",
+  "Same trusted cleaner recurring",
+];
+
 export default function Home() {
   return (
     <>
-      {/* Hero — typographic, one clear path */}
-      <section className="border-b border-line bg-cream">
-        <div className="mx-auto max-w-4xl px-4 pb-16 pt-14 sm:px-6 lg:px-8 lg:pb-24 lg:pt-24">
-          <div className="flex items-center gap-2.5">
-            <span className="flex items-center gap-0.5 text-accent" aria-hidden="true">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <svg key={i} className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.77l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
+      {/* Hero — navy anchor, one clear path */}
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -bottom-32 left-1/4 h-[24rem] w-[24rem] rounded-full bg-primary-light/40 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:px-8 lg:py-24">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <span className="flex items-center gap-0.5 text-accent-light" aria-hidden="true">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg key={i} className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.77l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
+                  </svg>
+                ))}
+              </span>
+              <span className="text-sm font-semibold text-white/80">
+                Fresno &amp; Clovis house cleaning
+              </span>
+            </div>
+
+            <h1 className="mt-6 text-4xl leading-[1.05] sm:text-5xl lg:text-[3.6rem]">
+              Clear scope and honest pricing before a cleaner steps in your home.
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-white/75">
+              New Star is a locally owned cleaning company serving Fresno, Clovis, and Madera.
+              No vague &ldquo;everything&rdquo; quotes, no surprises after arrival — just a clear
+              scope, an honest price, and a cleaner who knows the job before they start.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link href="/book-now" className="btn btn-accent">
+                Get pricing
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              ))}
-            </span>
-            <span className="text-sm font-semibold text-ink-soft">
-              Fresno &amp; Clovis house cleaning
-            </span>
+              </Link>
+              <a href="tel:+15597852822" className="btn btn-ghost-dark">
+                (559) 785-2822
+              </a>
+            </div>
+            <p className="mt-5 text-sm leading-6 text-white/55">
+              Get pricing without a long form. Request clear pricing before anything is booked.
+            </p>
           </div>
 
-          <h1 className="mt-6 text-4xl leading-[1.05] text-ink sm:text-5xl lg:text-[3.75rem]">
-            Clear scope and honest pricing before a cleaner ever steps in your home.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-ink-soft">
-            New Star is a locally owned cleaning company serving Fresno, Clovis, and Madera.
-            No vague &ldquo;everything&rdquo; quotes, no surprises after arrival — just a clear scope,
-            an honest price, and a cleaner who knows the job before they start.
-          </p>
-
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link href="/book-now" className="btn btn-accent">
-              Get pricing
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          {/* Proof card — honest specifics, not decorative fluff */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-accent-light">
+                Why homeowners call us
+              </span>
+              <span className="flex items-center gap-0.5 text-accent-light" aria-hidden="true">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg key={i} className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.77l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
+                  </svg>
+                ))}
+              </span>
+            </div>
+            <ul className="mt-5 space-y-3.5">
+              {trustPoints.map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm leading-6 text-white/85">
+                  <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="https://www.google.com/maps?cid=12575787905603463321"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-accent-light underline-offset-4 hover:underline"
+            >
+              Read our Google reviews
+              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5h5v5M19 5l-9 9" />
               </svg>
-            </Link>
-            <a href="tel:+15597852822" className="text-base font-bold text-primary underline-offset-4 hover:underline">
-              or call (559) 785-2822
             </a>
           </div>
-
-          <p className="mt-5 text-sm leading-6 text-mute">
-            Get pricing without a long form. Request clear pricing before anything is booked.
-          </p>
         </div>
       </section>
 
-      {/* Services — editorial, no images */}
-      <section id="services" className="bg-cream">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      {/* Services — contained cards on tinted bg for depth */}
+      <section id="services" className="bg-cream-2">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <span className="eyebrow eyebrow-dot">Services</span>
             <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
               Match the clean to the condition of the home.
             </h2>
             <p className="mt-4 text-lg leading-8 text-ink-soft">
-              The goal is not to sell every visitor the same package. It is to price the right
-              scope so the cleaner walks in prepared and you know exactly what is included.
+              We price the right scope so the cleaner walks in prepared and you know exactly what
+              is included — not the same package sold to every visitor.
             </p>
           </div>
 
-          <div className="mt-12 divide-y divide-line border-y border-line">
+          <div className="mt-12 grid gap-5 lg:grid-cols-3">
             {services.map((service, i) => (
               <Link
                 key={service.title}
                 href={service.href}
-                className="group grid gap-2 py-7 sm:grid-cols-[auto_1fr_auto] sm:items-baseline sm:gap-8"
+                className="group flex flex-col rounded-2xl border border-line bg-white p-7 shadow-soft transition-all hover:-translate-y-1 hover:border-primary/25 hover:shadow-elev"
               >
-                <span className="text-sm font-bold text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3 className="text-xl text-ink transition-colors group-hover:text-primary sm:text-2xl">
-                    {service.title}
-                  </h3>
-                  <p className="mt-2 max-w-2xl text-base leading-7 text-ink-soft">
-                    {service.lead}
-                  </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-extrabold text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="h-px w-10 bg-line transition-colors group-hover:bg-accent" aria-hidden="true" />
                 </div>
-                <span className="inline-flex items-center gap-1 self-center text-sm font-bold text-primary">
-                  Details
+                <h3 className="mt-5 text-2xl text-ink transition-colors group-hover:text-primary">
+                  {service.title}
+                </h3>
+                <p className="mt-3 text-base leading-7 text-ink-soft">{service.lead}</p>
+                <p className="mt-5 border-t border-line pt-4 text-sm font-bold text-ink">
+                  {service.fit}
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-accent group-hover:text-accent-hover">
+                  View details
                   <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -152,92 +210,120 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="border-y border-line bg-cream-2">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <section id="how-it-works" className="bg-cream">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <span className="eyebrow eyebrow-dot">How it works</span>
             <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
               Quote first. Cleaning only after the scope makes sense.
             </h2>
           </div>
-          <ol className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-8">
+          <ol className="mt-12 grid gap-8 sm:grid-cols-3">
             {steps.map((step, i) => (
-              <li key={step.title}>
-                <div className="text-sm font-bold text-accent">Step {i + 1}</div>
-                <h3 className="mt-2 text-lg font-bold text-ink">{step.title}</h3>
+              <li key={step.title} className="relative rounded-2xl border border-line bg-cream-2 p-6">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-base font-extrabold text-white">
+                  {i + 1}
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-ink">{step.title}</h3>
                 <p className="mt-2 text-base leading-7 text-ink-soft">{step.text}</p>
               </li>
             ))}
           </ol>
-          <div className="mt-12">
+          <div className="mt-10">
             <Link href="/book-now" className="btn btn-accent">Start the quote</Link>
           </div>
         </div>
       </section>
 
-      {/* Why New Star — specifics, not icon cards */}
-      <section className="bg-cream">
-        <div className="mx-auto grid max-w-4xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-8 lg:py-24">
+      {/* Why New Star — specifics */}
+      <section className="border-y border-line bg-cream-2">
+        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 lg:px-8 lg:py-24">
           <div>
             <span className="eyebrow eyebrow-dot">Why New Star</span>
             <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
               The boring things that actually make a clean reliable.
             </h2>
+            <p className="mt-4 text-base leading-7 text-ink-soft">
+              We would rather lose a booking than overpromise a result we can&apos;t control. Here
+              is exactly how we operate.
+            </p>
           </div>
-          <div className="space-y-7 text-base leading-7 text-ink-soft">
-            <p>
-              <span className="font-bold text-ink">Scope before booking.</span> We confirm
-              service type, home condition, add-ons, and timing before a cleaner accepts — so the
-              quote matches the job, not a best guess.
-            </p>
-            <p>
-              <span className="font-bold text-ink">Local, routed, not stretched.</span> Based in
-              Fresno, we run tight routes across Clovis and Madera instead of chasing every
-              nearby city. That keeps scheduling honest and quality consistent.
-            </p>
-            <p>
-              <span className="font-bold text-ink">Clear on what we don&apos;t do.</span> Laundry,
-              dishes, organizing, packing, and personal tasks are outside our scope — stated up
-              front so expectations align before anyone is paid.
-            </p>
-            <p>
-              <span className="font-bold text-ink">Make-it-right review.</span> If something in
-              the agreed scope is missed, contact us quickly and we will review the best fix.
-            </p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {[
+              {
+                t: "Scope before booking",
+                d: "We confirm service type, home condition, add-ons, and timing before a cleaner accepts — so the quote matches the job, not a best guess.",
+              },
+              {
+                t: "Local, routed, not stretched",
+                d: "Based in Fresno, we run tight routes across Clovis and Madera instead of chasing every nearby city. Scheduling stays honest, quality stays consistent.",
+              },
+              {
+                t: "Clear on what we don't do",
+                d: "Laundry, dishes, organizing, packing, and personal tasks are outside our scope — stated up front so expectations align before anyone is paid.",
+              },
+              {
+                t: "Make-it-right review",
+                d: "If something in the agreed scope is missed, contact us quickly and we will review the best fix.",
+              },
+            ].map((item) => (
+              <div key={item.t} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
+                <h3 className="text-base font-bold text-ink">{item.t}</h3>
+                <p className="mt-2 text-sm leading-6 text-ink-soft">{item.d}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Service areas — text links, not pills */}
-      <section id="areas" className="border-t border-line bg-cream-2">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      {/* Service areas */}
+      <section id="areas" className="bg-cream">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="max-w-2xl">
             <span className="eyebrow eyebrow-dot">Service areas</span>
-            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
-              Where we clean.
-            </h2>
+            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Where we clean.</h2>
             <p className="mt-4 text-base leading-7 text-ink-soft">
               We keep the public service area honest. Fresno and Clovis have the strongest route
               density; Madera is scheduled around route availability.
             </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2.5">
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {areas.map((area) => (
               <Link
                 key={area.slug}
                 href={`/cleaning-services-${area.slug}`}
-                className="text-base font-semibold text-primary underline-offset-4 hover:text-accent hover:underline"
+                className="rounded-xl border border-line bg-white px-4 py-5 text-center shadow-soft transition-all hover:-translate-y-0.5 hover:border-primary/25"
               >
-                {area.name}, CA
+                <span className="block text-base font-bold text-primary">{area.name}</span>
+                <span className="mt-0.5 block text-[0.65rem] font-bold uppercase tracking-[0.2em] text-mute">
+                  CA
+                </span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Reviews — calm */}
+      {/* Mid CTA — navy band */}
+      <section className="bg-primary text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-14 text-center sm:px-6 lg:flex-row lg:justify-between lg:px-8 lg:py-16 lg:text-left">
+          <div>
+            <h2 className="text-2xl text-white sm:text-3xl">Ready for a cleaner, clearer quote?</h2>
+            <p className="mt-2 max-w-xl text-base leading-7 text-white/70">
+              Clear pricing and route availability before anything is booked. Serving Fresno,
+              Clovis, Madera, and nearby Fresno neighborhoods.
+            </p>
+          </div>
+          <div className="flex flex-shrink-0 gap-3">
+            <Link href="/book-now" className="btn btn-accent">Get pricing</Link>
+            <a href="tel:+15597852822" className="btn btn-ghost-dark">Call</a>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
       <section id="reviews" className="bg-cream">
-        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-24">
           <span className="flex justify-center gap-1 text-accent" aria-hidden="true">
             {Array.from({ length: 5 }).map((_, i) => (
               <svg key={i} className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -257,7 +343,7 @@ export default function Home() {
               href="https://www.google.com/maps?cid=12575787905603463321"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-outline"
+              className="btn btn-primary"
             >
               Open Google reviews
             </a>
@@ -270,9 +356,7 @@ export default function Home() {
         <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <span className="eyebrow eyebrow-dot">FAQ</span>
-            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">
-              Worth answering before the quote.
-            </h2>
+            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Worth answering before the quote.</h2>
           </div>
           <div className="mt-10 divide-y divide-line border-y border-line">
             {faqs.map((item) => (
@@ -290,21 +374,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Final CTA — calm */}
-      <section className="bg-cream">
-        <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-24">
-          <h2 className="text-3xl text-ink sm:text-4xl">
+      {/* Final CTA — navy band */}
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-accent/15 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-24">
+          <h2 className="text-3xl text-white sm:text-4xl">
             Start with the basics. We&apos;ll help price the right clean.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-ink-soft">
+          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-white/75">
             Clear scope, no vague &ldquo;everything&rdquo; promise, no pressure to book before the
             details make sense.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/book-now" className="btn btn-accent">Get pricing</Link>
-            <a href="tel:+15597852822" className="text-base font-bold text-primary underline-offset-4 hover:underline">
-              (559) 785-2822
-            </a>
+            <a href="tel:+15597852822" className="btn btn-ghost-dark">(559) 785-2822</a>
           </div>
         </div>
       </section>
