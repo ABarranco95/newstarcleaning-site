@@ -1,11 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceDefinition } from "@/lib/services";
 import { getFullIncludedList } from "@/lib/services";
-import { siteImages, uxPhotoUrl } from "@/lib/siteImages";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -39,7 +37,6 @@ export default function ServiceDetailPage({
   intro?: string;
 }) {
   const fullIncluded = getFullIncludedList(service.slug);
-  const heroPhoto = siteImages.serviceHero[service.slug] ?? siteImages.heroes.cleanKitchen;
 
   return (
     <>
@@ -70,25 +67,13 @@ export default function ServiceDetailPage({
               </div>
             </div>
 
-            <div className="flex flex-col gap-5">
-              <div className="relative h-52 overflow-hidden rounded-3xl border border-line shadow-soft sm:h-64">
-                <Image
-                  src={uxPhotoUrl(heroPhoto, 900)}
-                  alt={heroPhoto.alt}
-                  fill
-                  sizes="(min-width: 1024px) 480px, 100vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div id="quote" className="scroll-mt-24">
-                <QuotePathPanel
-                  title={`Price ${service.shortName.toLowerCase()}`}
-                  body="We keep service pages focused on scope. When you are ready, the quote page asks only for the basics and preselects this service."
-                  source={`organic_${service.slug}_service`}
-                  service={quoteFormService(service)}
-                />
-              </div>
+            <div id="quote" className="scroll-mt-24">
+              <QuotePathPanel
+                title={`Price ${service.shortName.toLowerCase()}`}
+                body="We keep service pages focused on scope. When you are ready, the quote page asks only for the basics and preselects this service."
+                source={`organic_${service.slug}_service`}
+                service={quoteFormService(service)}
+              />
             </div>
           </div>
         </div>

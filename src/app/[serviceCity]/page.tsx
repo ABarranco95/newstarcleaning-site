@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services, type ServiceDefinition } from "@/lib/services";
-import { siteImages, uxPhotoUrl } from "@/lib/siteImages";
 
 const COMBO_CITY_SLUGS = [
   "fresno",
@@ -97,7 +95,6 @@ export default async function ServiceCityPage({ params }: RouteParams) {
   const { service, citySlug, cityName } = parsed;
   const area = serviceAreas.find((a) => a.slug === citySlug);
   const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Clear-scope local cleaning and the same route discipline we use across Fresno-area homes.`;
-  const heroPhoto = siteImages.serviceHero[service.slug] ?? siteImages.heroes.cleanKitchen;
 
   return (
     <>
@@ -126,17 +123,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-5">
-              <div className="relative h-48 overflow-hidden rounded-3xl border border-line shadow-soft sm:h-56">
-                <Image
-                  src={uxPhotoUrl(heroPhoto, 900)}
-                  alt={heroPhoto.alt}
-                  fill
-                  sizes="(min-width: 1024px) 480px, 100vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
+            <div>
               <QuotePathPanel
                 title={`Price ${service.shortName.toLowerCase()} in ${cityName}`}
                 body="We keep this page focused on local scope and route notes. The quote page preselects this city and service."

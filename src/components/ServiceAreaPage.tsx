@@ -1,10 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import QuotePathPanel from "@/components/QuotePathPanel";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceArea } from "@/lib/serviceAreas";
-import { siteImages, uxPhotoUrl } from "@/lib/siteImages";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -97,25 +95,13 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-5">
-              <div className="relative h-52 overflow-hidden rounded-3xl border border-line shadow-soft sm:h-64">
-                <Image
-                  src={uxPhotoUrl(siteImages.heroes.modernHome, 900)}
-                  alt={siteImages.heroes.modernHome.alt}
-                  fill
-                  sizes="(min-width: 1024px) 480px, 100vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div id="quote" className="scroll-mt-24">
-                <QuotePathPanel
-                  title={`Check availability in ${area.name}`}
-                  body="Review the local route notes here, then use the short quote page when you are ready for pricing."
-                  city={area.name}
-                  source={`organic_${area.slug}_service_area`}
-                />
-              </div>
+            <div id="quote" className="scroll-mt-24">
+              <QuotePathPanel
+                title={`Check availability in ${area.name}`}
+                body="Review the local route notes here, then use the short quote page when you are ready for pricing."
+                city={area.name}
+                source={`organic_${area.slug}_service_area`}
+              />
             </div>
           </div>
         </div>
