@@ -130,11 +130,6 @@ export default function Footer() {
               <li><Link href="/book-now" className="text-white/75 transition-colors hover:text-white">Request pricing</Link></li>
               <li><Link href="/contact" className="text-white/75 transition-colors hover:text-white">Contact</Link></li>
               <li><Link href="/blog" className="text-white/75 transition-colors hover:text-white">Cleaning tips</Link></li>
-              <li>
-                <a href="https://g.page/r/CZnoJYR4LIauEBM/review" target="_blank" rel="noopener noreferrer" className="text-white/75 transition-colors hover:text-white">
-                  Leave a review
-                </a>
-              </li>
               <li><Link href="/privacy" className="text-white/75 transition-colors hover:text-white">Privacy</Link></li>
               <li><Link href="/terms" className="text-white/75 transition-colors hover:text-white">Terms</Link></li>
             </ul>
