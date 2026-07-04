@@ -130,25 +130,29 @@ function CheckIcon() {
 export default function ChecklistPage() {
   return (
     <>
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
+          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">Checklist</span>
+            <span className="font-semibold text-white">Checklist</span>
           </nav>
-          <span className="eyebrow eyebrow-dot">Service checklist</span>
-          <h1 className="mt-4 max-w-4xl text-4xl text-ink lg:text-[3.2rem]">
+          <span className="eyebrow eyebrow-dot text-accent-light">Service checklist</span>
+          <h1 className="mt-4 max-w-4xl text-4xl text-white lg:text-[3.2rem]">
             Included, add-ons, and what we do not clean
           </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-ink-soft">
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-white/75">
             This page is the plain-English cleaning scope for New Star Cleaning. It shows what is
             included in each service, what can be added, and what is outside our work so clients
             know exactly what to expect before booking.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a href="#services" className="btn btn-accent !min-h-12 !px-5 !text-sm">Review service scopes</a>
-            <Link href="/book-now" className="btn btn-outline !min-h-12 !px-5 !text-sm">Request a quote</Link>
+            <Link href="/book-now" className="btn btn-ghost-dark !min-h-12 !px-5 !text-sm">Request a quote</Link>
           </div>
         </div>
       </section>
