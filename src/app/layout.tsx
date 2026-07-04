@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import AnalyticsTags from "@/components/AnalyticsTags";
+import PageViewTracker from "@/components/PageViewTracker";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -77,6 +78,7 @@ export default function RootLayout({
     <html lang="en" className={jakarta.variable}>
       <body className="font-sans antialiased text-ink bg-cream">
         <AnalyticsTags />
+        <PageViewTracker />
         <SchemaMarkup />
         <Header />
         <main className="min-h-screen">{children}</main>

@@ -219,18 +219,31 @@ export default function QuickQuoteForm({
         }),
       });
 
+      const data: Record<string, unknown> = await response
+        .json()
+        .catch(() => ({} as Record<string, unknown>));
+
       if (!response.ok) {
-        const data = await response.json().catch(() => null);
-        throw new Error(data?.details?.[0] || data?.error || "Could not send your quote request.");
+        const details = Array.isArray(data.details)
+          ? (data.details[0] as string | undefined)
+          : undefined;
+        const errorMsg = typeof data.error === "string" ? data.error : undefined;
+        throw new Error(errorMsg || details || "Could not send your quote request.");
       }
 
-      trackLeadConversion({
-        source,
-        service: formData.service,
-        city: formData.city,
-        page: window.location.pathname,
-        leadType: formData.bookingIntent || "quote_request",
-      });
+      // Only fire conversion pixels for real Apex-accepted leads.
+      // Honeypot-filtered bot submissions return { filtered: true } — show the
+      // bot a success state but never fire a conversion or pollute attribution.
+      if (data.filtered !== true) {
+        trackLeadConversion({
+          source,
+          service: formData.service,
+          city: formData.city,
+          page: window.location.pathname,
+          leadType: formData.bookingIntent || "quote_request",
+        });
+      }
+
       setIsSuccess(true);
       setShowPaidDetails(false);
       setFormData(initialForm(defaultCity, defaultService));

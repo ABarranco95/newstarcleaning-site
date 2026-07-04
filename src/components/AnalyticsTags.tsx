@@ -6,10 +6,45 @@ const googleAdsConversionId = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID;
 const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
 
+/**
+ * Tracking architecture — pick ONE Google path to avoid double-counting:
+ *  - If NEXT_PUBLIC_GTM_ID is set, GTM owns everything (GA4 + Google Ads
+ *    configured inside the GTM container). Do NOT also load gtag.js here.
+ *  - Otherwise, load gtag.js ONCE and config both GA4 and Google Ads onto it.
+ * Meta Pixel and Clarity are independent of the Google path.
+ */
+const useGtm = Boolean(gtmId);
+const gtagIds = [gaId, googleAdsConversionId].filter(
+  (id): id is string => typeof id === "string" && id.length > 0,
+);
+const gtagLoaderId = gaId || googleAdsConversionId;
+
 export default function AnalyticsTags() {
   return (
     <>
-      {gtmId ? (
+      {/*
+        Google Consent Mode v2 — default granted (US, no consent banner yet).
+        If a consent banner is added later, set these to 'denied' by default
+        and update them when the visitor consents. Runs before the tag scripts
+        below so the default state is set first.
+      */}
+      <Script id="consent-default" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', {
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            analytics_storage: 'granted',
+            functionality_storage: 'granted',
+            security_storage: 'granted',
+            wait_for_update: 500
+          });
+        `}
+      </Script>
+
+      {useGtm && gtmId ? (
         <>
           <Script id="gtm-init" strategy="afterInteractive">
             {`
@@ -22,36 +57,18 @@ export default function AnalyticsTags() {
             strategy="afterInteractive"
           />
         </>
-      ) : null}
-
-      {gaId ? (
+      ) : gtagLoaderId ? (
         <>
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtagLoaderId}`}
             strategy="afterInteractive"
           />
-          <Script id="ga-init" strategy="afterInteractive">
+          <Script id="gtag-init" strategy="afterInteractive">
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${gaId}');
-            `}
-          </Script>
-        </>
-      ) : null}
-
-      {googleAdsConversionId && googleAdsConversionId !== gaId ? (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsConversionId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="google-ads-init" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('config', '${googleAdsConversionId}');
+              ${gtagIds.map((id) => `gtag('config', '${id}', { send_page_view: true });`).join("\n")}
             `}
           </Script>
         </>
