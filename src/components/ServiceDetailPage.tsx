@@ -41,29 +41,33 @@ export default function ServiceDetailPage({
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
+          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="px-1.5">/</span>
-            <Link href="/services" className="hover:text-primary">Services</Link>
+            <Link href="/services" className="hover:text-white">Services</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">{service.shortName}</span>
+            <span className="font-semibold text-white">{service.shortName}</span>
           </nav>
 
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot">{service.shortName}</span>
-              <h1 className="mt-4 text-4xl text-ink lg:text-[3.4rem]">{h1}</h1>
-              <p className="mt-5 text-lg leading-8 text-ink-soft">
+              <span className="eyebrow eyebrow-dot text-accent-light">{service.shortName}</span>
+              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">{h1}</h1>
+              <p className="mt-5 text-lg leading-8 text-white/75">
                 {intro ?? service.tagline}
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a href="#quote" className="btn btn-accent">Request pricing</a>
-                <a href="#whats-included" className="btn btn-outline">See what&apos;s included</a>
+                <a href="#whats-included" className="btn btn-ghost-dark">See what&apos;s included</a>
               </div>
               <div className="mt-8">
-                <TrustBadges />
+                <TrustBadges onDark />
               </div>
             </div>
 

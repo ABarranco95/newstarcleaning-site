@@ -62,25 +62,29 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
+          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="px-1.5">/</span>
-            <Link href="/service-areas" className="hover:text-primary">Service areas</Link>
+            <Link href="/service-areas" className="hover:text-white">Service areas</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">{area.name}</span>
+            <span className="font-semibold text-white">{area.name}</span>
           </nav>
 
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot">
+              <span className="eyebrow eyebrow-dot text-accent-light">
                 {area.county} · {area.population} residents
               </span>
-              <h1 className="mt-4 text-4xl text-ink lg:text-[3.4rem]">
+              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
                 Professional house cleaning in {area.name}, CA
               </h1>
-              <p className="mt-5 text-lg leading-8 text-ink-soft">{area.description}</p>
+              <p className="mt-5 text-lg leading-8 text-white/75">{area.description}</p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a href="#quote" className="btn btn-accent">
                   Get a {area.name} quote
@@ -88,10 +92,10 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </a>
-                <Link href="/services" className="btn btn-outline">Compare services</Link>
+                <Link href="/services" className="btn btn-ghost-dark">Compare services</Link>
               </div>
               <div className="mt-8">
-                <TrustBadges />
+                <TrustBadges onDark />
               </div>
             </div>
 

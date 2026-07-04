@@ -99,27 +99,31 @@ export default async function ServiceCityPage({ params }: RouteParams) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 lg:pt-14 lg:pb-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
+      <section className="relative overflow-hidden bg-primary text-white">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
+          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="px-1.5">/</span>
-            <Link href={`/services/${service.slug}`} className="hover:text-primary">{service.shortName}</Link>
+            <Link href={`/services/${service.slug}`} className="hover:text-white">{service.shortName}</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">{cityName}</span>
+            <span className="font-semibold text-white">{cityName}</span>
           </nav>
 
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot">
+              <span className="eyebrow eyebrow-dot text-accent-light">
                 {cityName}, CA · {service.shortName}
               </span>
-              <h1 className="mt-4 text-4xl text-ink lg:text-[3.2rem]">
+              <h1 className="mt-4 text-4xl text-white lg:text-[3.2rem]">
                 {service.shortName} in {cityName}, CA
               </h1>
-              <p className="mt-5 text-lg leading-8 text-ink-soft">{intro}</p>
+              <p className="mt-5 text-lg leading-8 text-white/75">{intro}</p>
               <div className="mt-7">
-                <TrustBadges />
+                <TrustBadges onDark />
               </div>
             </div>
 
