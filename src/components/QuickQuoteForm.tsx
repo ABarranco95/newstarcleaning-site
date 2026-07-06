@@ -75,6 +75,21 @@ function normalizeServiceParam(value: string | null) {
   return services.includes(value) ? value : "";
 }
 
+function normalizeCityParam(value: string | null) {
+  if (!value) return "";
+  const normalized = value.trim().toLowerCase().replace(/_/g, "-");
+  if (normalized === "near-me") return "";
+  const cityLabels: Record<string, string> = {
+    fresno: "Fresno",
+    clovis: "Clovis",
+    madera: "Madera",
+    "woodward-park": "Woodward Park",
+    "fig-garden": "Fig Garden",
+    "tower-district": "Tower District",
+  };
+  return cityLabels[normalized] || value.trim();
+}
+
 function initialForm(defaultCity?: string, defaultService?: string): FormState {
   return {
     name: "",
@@ -166,7 +181,7 @@ export default function QuickQuoteForm({
     if (document.referrer) capture.referrer = document.referrer;
     setTracking(capture);
 
-    const city = params.get("city");
+    const city = normalizeCityParam(params.get("city"));
     const service = normalizeServiceParam(params.get("service"));
     if (city || service) {
       setFormData((current) => ({
