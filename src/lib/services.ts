@@ -181,36 +181,38 @@ export const services: ServiceDefinition[] = [
       "Deep cleaning is a detailed reset for first-time visits, seasonal cleaning, and homes with visible buildup. It covers accessible kitchen and bathroom surfaces, floors, baseboards, door frames, vent covers, ceiling fan blades, light fixtures, reachable grout, trim, and floor edges.",
     whatsIncluded: [
       {
-        title: "Kitchen detail",
+        title: "Kitchen",
         items: [
           "Counters, sink, backsplash, and stovetop scrubbed",
-          "Exterior appliance surfaces detailed",
+          "Range hood, exterior appliances, and dishwasher exterior cleaned",
           "Microwave interior wiped if empty and accessible",
-          "Cabinet fronts and handles spot-cleaned",
-          "Small appliance exteriors wiped where accessible",
-          "Floor edges and corners detailed",
+          "Cabinet fronts, handles, and reachable small-appliance exteriors detailed",
+          "Floor edges and corners detailed; floors vacuumed or swept and mopped",
+          "Trash emptied from accessible bins",
         ],
       },
       {
-        title: "Bathroom detail",
+        title: "Bathrooms",
         items: [
-          "Toilet cleaned behind and around the base",
+          "Toilet cleaned inside, behind, and around the base",
           "Tub, shower, tile, glass, and fixtures cleaned",
           "Sink, vanity, counters, mirrors, and chrome polished",
-          "Light bathroom buildup and reachable grout detail",
-          "Floor edges and corners detailed",
+          "Light bathroom buildup and reachable grout detailed",
+          "Cabinet fronts spot-cleaned",
+          "Floor edges and corners detailed; floors vacuumed or swept and mopped",
+          "Trash emptied from accessible bins",
         ],
       },
       {
-        title: "Whole-home detail",
+        title: "Bedrooms, living areas & whole-home detail",
         items: [
-          "Baseboards wiped where accessible",
+          "Accessible surfaces, reachable high ledges, and shelf tops dusted",
+          "Baseboards, vent covers, switch plates, door frames, and trim wiped",
           "Ceiling fan blades and light fixtures detailed within normal reach",
-          "Vent covers, switch plates, door frames, and trim wiped",
-          "Window sills dusted or wiped within normal reach",
-          "Reachable high ledges and shelf tops dusted within normal reach",
-          "Door fronts spot-cleaned where accessible",
+          "Mirrors, reachable glass, and window sills cleaned",
+          "Visible cobwebs removed and door fronts spot-cleaned",
           "Under furniture vacuumed where accessible without heavy moving",
+          "Floors vacuumed or swept and mopped; accessible trash emptied",
         ],
       },
     ],
@@ -244,7 +246,7 @@ export const services: ServiceDefinition[] = [
     notIncluded: serviceLimitations,
     scopeNotes: [
       "Deep cleaning is not restoration cleaning. Heavy grease, hard-water damage, mold, paint, or permanent staining may not fully come off.",
-      "Inside appliances, cabinets, and interior windows are add-ons unless the quote specifically includes them.",
+      "Inside the oven, refrigerator, cabinets, and interior window glass are add-ons unless the quote specifically includes them.",
       "The home still needs to be picked up enough for surfaces to be accessible.",
     ],
     bestFor: [
@@ -317,14 +319,11 @@ export const services: ServiceDefinition[] = [
       {
         title: "Kitchen",
         items: [
-          "Inside oven cleaned when empty, cool, and accessible",
-          "Inside microwave cleaned when empty and accessible",
-          "Inside refrigerator cleaned when empty and accessible",
-          "Dishwasher interior and filter checked when accessible",
-          "Empty cabinets and drawers wiped inside and out",
-          "Range hood and filter degreased where accessible",
-          "Counters, sink, backsplash, and exterior appliances detailed",
-          "Floors vacuumed edge to edge and mopped",
+          "Counters, sink, backsplash, stovetop, range hood, and filter detailed",
+          "Inside oven, microwave, and refrigerator cleaned when empty and accessible",
+          "Exterior appliances and dishwasher interior and filter cleaned where accessible",
+          "Empty cabinets and drawers wiped inside and out; fronts and handles detailed",
+          "Floors vacuumed edge to edge and mopped; accessible trash emptied",
         ],
       },
       {
@@ -334,20 +333,20 @@ export const services: ServiceDefinition[] = [
           "Tub, shower, tile, glass, and fixtures cleaned",
           "Sink, vanity, counters, mirrors, and chrome polished",
           "Empty cabinets, drawers, and vanity interiors wiped",
-          "Floors vacuumed or swept and mopped",
+          "Floor edges and corners detailed; floors vacuumed or swept and mopped",
+          "Trash emptied from accessible bins",
         ],
       },
       {
-        title: "Empty-home detail",
+        title: "Bedrooms, living areas & empty-home detail",
         items: [
-          "Baseboards wiped where accessible",
-          "Door frames, switch plates, vent covers, and reachable trim wiped",
+          "Accessible surfaces, reachable high ledges, shelf tops, and window sills cleaned",
+          "Baseboards, door frames, switch plates, vent covers, trim, and door fronts wiped",
+          "Mirrors and reachable glass cleaned",
           "Blinds dusted where accessible and safe to handle",
-          "Closet shelves and rods wiped when empty",
-          "Window sills dusted or wiped within normal reach",
-          "Ceiling fans and light fixtures detailed within normal reach",
-          "Cobwebs removed within normal reach",
-          "Floors vacuumed edge to edge where accessible",
+          "Empty closet shelves and rods wiped",
+          "Ceiling fans and light fixtures detailed within normal reach; cobwebs removed",
+          "Floors vacuumed edge to edge and mopped where appropriate; accessible trash emptied",
         ],
       },
     ],
@@ -450,72 +449,9 @@ export function getService(slug: string): ServiceDefinition | undefined {
 }
 
 /**
- * Maps a room title to a canonical category for merging across tiers.
- */
-function roomCategory(title: string): "kitchen" | "bathroom" | "general" {
-  const lower = title.toLowerCase();
-  if (lower.includes("kitchen")) return "kitchen";
-  if (lower.includes("bathroom")) return "bathroom";
-  return "general";
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  kitchen: "Kitchen",
-  bathroom: "Bathrooms",
-  general: "Bedrooms, living areas & whole-home detail",
-};
-
-/**
- * Returns the full cascading "what's included" list for a service.
- * Deep cleaning includes all standard items + deep-specific items, merged
- * into one clean list per room category with no duplicates.
- * Move-out includes all standard + deep + move-out items, merged the same way.
+ * Returns the standalone room-by-room list for a service. Each tier is written
+ * as a complete customer-facing scope so readers do not have to combine plans.
  */
 export function getFullIncludedList(slug: string) {
-  const standard = services.find((s) => s.slug === "standard-cleaning");
-  const deep = services.find((s) => s.slug === "deep-cleaning");
-  const moveOut = services.find((s) => s.slug === "move-out-cleaning");
-
-  // Standard is simple — just return as-is
-  if (slug === "standard-cleaning") {
-    return standard?.whatsIncluded || [];
-  }
-
-  // For deep and move-out, collect all applicable tier data
-  const tiers: ServiceDefinition[] = [];
-  if (slug === "deep-cleaning") {
-    if (standard) tiers.push(standard);
-    if (deep) tiers.push(deep);
-  } else if (slug === "move-out-cleaning") {
-    if (standard) tiers.push(standard);
-    if (deep) tiers.push(deep);
-    if (moveOut) tiers.push(moveOut);
-  } else {
-    return [];
-  }
-
-  // Merge all items by category, deduplicating
-  const categoryItems: Record<string, Set<string>> = {
-    kitchen: new Set(),
-    bathroom: new Set(),
-    general: new Set(),
-  };
-
-  for (const tier of tiers) {
-    for (const room of tier.whatsIncluded) {
-      const cat = roomCategory(room.title);
-      for (const item of room.items) {
-        // Skip the pseudo-instruction lines
-        if (item.startsWith("Everything in")) continue;
-        categoryItems[cat].add(item);
-      }
-    }
-  }
-
-  // Build output in logical order: kitchen, bathroom, general
-  return [
-    { title: CATEGORY_LABELS.kitchen, items: Array.from(categoryItems.kitchen) },
-    { title: CATEGORY_LABELS.bathroom, items: Array.from(categoryItems.bathroom) },
-    { title: CATEGORY_LABELS.general, items: Array.from(categoryItems.general) },
-  ];
+  return services.find((service) => service.slug === slug)?.whatsIncluded || [];
 }

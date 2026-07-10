@@ -44,7 +44,7 @@ const comparisonRows = [
     values: [
       "Visible surfaces, floors, bathrooms, kitchen, and dusting",
       "Baseboards, reachable fans, vents, trim, fixtures, and light buildup",
-      "Inside appliances, cabinets, closets, baseboards, and full empty-home detail",
+      "Inside oven, refrigerator, microwave, empty cabinets, closets, baseboards, and full empty-home detail",
     ],
   },
 ];
@@ -103,7 +103,7 @@ export default function ServicesPage() {
               Fresno and Clovis households.
             </p>
             <p className="mt-4 leading-relaxed text-ink-soft">
-              For standard and deep cleaning, appliance interiors, cabinet interiors, and interior window glass are optional. Move-in/move-out cleaning includes an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Laundry, dishes, organizing, bed making, packing, and personal household tasks are not part of any cleaning service.
+              For standard and deep cleaning, the inside of the oven and refrigerator, cabinet interiors, and interior window glass are optional. The inside of an empty microwave is included when accessible. Move-in/move-out cleaning includes an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Laundry, dishes, organizing, bed making, packing, and personal household tasks are not part of any cleaning service.
             </p>
           </div>
 

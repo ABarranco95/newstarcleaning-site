@@ -46,12 +46,12 @@ const faqs = [
   {
     question: "Which detail items are optional?",
     answer:
-      "For standard and deep cleaning, appliance interiors, cabinet interiors, and interior window glass are optional. Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Interior window glass, garage sweeping, patio or balcony sweeping, extra blind detail, and heavy buildup time can be added when quoted.",
+      "For standard and deep cleaning, the inside of the oven and refrigerator, cabinet interiors, and interior window glass are optional. The inside of an empty microwave is included when accessible. Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Interior window glass, garage sweeping, patio or balcony sweeping, extra blind detail, and heavy buildup time can be added when quoted.",
   },
   {
     question: "Does deep cleaning include every add-on?",
     answer:
-      "No. Deep cleaning includes more detail than standard cleaning, such as baseboards, reachable vents, trim, fixtures, and buildup areas. Inside appliances, cabinets, and interior windows are add-ons unless the quote specifically includes them.",
+      "No. Deep cleaning includes more detail than standard cleaning, such as baseboards, reachable vents, trim, fixtures, and buildup areas. The inside of the oven and refrigerator, cabinet interiors, and interior window glass are add-ons unless the quote specifically includes them.",
   },
   {
     question: "Does move-out cleaning guarantee a deposit return?",

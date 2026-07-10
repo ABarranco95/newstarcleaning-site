@@ -56,7 +56,7 @@ const faqs = [
   },
   {
     q: "Are the oven, refrigerator, cabinets, and windows included?",
-    a: "Standard and deep cleaning treat appliance interiors, cabinet interiors, and interior window glass as optional additions. Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when they are accessible. Interior window glass is optional; exterior windows, screens, tracks, and ladder work are not included.",
+    a: "Standard and deep cleaning treat the inside of the oven and refrigerator, cabinet interiors, and interior window glass as optional additions. The inside of an empty microwave is included when accessible. Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when they are accessible. Interior window glass is optional; exterior windows, screens, tracks, and ladder work are not included.",
   },
   {
     q: "Do cleaners bring supplies and equipment?",
