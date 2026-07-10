@@ -7,14 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "tower-district")!;
 export const metadata: Metadata = {
   title: "House Cleaning in Fresno's Tower District",
   description:
-    "Detail-oriented house cleaning for Tower District homes. Standard recurring, deep, and move-out cleaning with clear scope before booking. Request clear pricing online.",
+    "Recurring, deep, and move-in/move-out house cleaning for Tower District homes, apartments, and duplexes. Request pricing online.",
   alternates: {
     canonical: "/cleaning-services-tower-district",
   },
   openGraph: {
     title: "House Cleaning in Fresno's Tower District | New Star Cleaning",
     description:
-      "Vintage-friendly house cleaning in Fresno's Tower District. Clear-scope local cleaning. Request clear pricing online.",
+      "House cleaning for Fresno's Tower District, including recurring care, deep cleaning, and empty-home moves.",
     url: "https://newstarcleaning.com/cleaning-services-tower-district",
   },
 };

@@ -156,7 +156,8 @@ assert(
 
 assert(
   deepPage.includes("Optional add-ons quoted separately") &&
-    moveOutPage.includes("Clear-scope move-out"),
+    moveOutPage.includes("appliances, empty cabinets, bathrooms, and floors") &&
+    !moveOutPage.toLowerCase().includes("same-week"),
   "service metadata avoids base-scope overpromises",
 );
 

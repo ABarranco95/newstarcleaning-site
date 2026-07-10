@@ -72,7 +72,7 @@ export async function generateMetadata({
 
   const { service, cityName } = parsed;
   const title = `${service.shortName} in ${cityName}, CA`;
-  const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Clear-scope local cleaning. Request clear pricing online.`;
+  const description = `Professional ${service.shortName.toLowerCase()} in ${cityName}, CA. Review included work, optional additions, and request pricing online.`;
 
   return {
     title,
@@ -94,7 +94,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
 
   const { service, citySlug, cityName } = parsed;
   const area = serviceAreas.find((a) => a.slug === citySlug);
-  const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Clear-scope local cleaning and the same route discipline we use across Fresno-area homes.`;
+  const intro = `Professional ${service.shortName.toLowerCase()} for ${cityName} homes. Review the service details, optional additions, and route information before requesting a quote.`;
 
   return (
     <>
@@ -231,13 +231,12 @@ export default async function ServiceCityPage({ params }: RouteParams) {
       <section className="bg-cream-2 py-14 lg:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
-            <span className="eyebrow text-accent-light">Same-week availability</span>
+            <span className="eyebrow text-accent-light">Request availability</span>
             <h2 className="mt-4 text-3xl text-white lg:text-5xl">
               Ready for {service.shortName.toLowerCase()} pricing in {cityName}?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
-              Request clear pricing and availability before anything is booked. We&apos;ll match
-              the scope to home condition, route availability, and schedule.
+              Tell us about the home and preferred date. We will confirm the price, included work, and route options before you book.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/book-now" className="btn btn-accent">Request your {cityName} quote</Link>

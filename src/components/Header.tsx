@@ -5,18 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function StarRow() {
-  return (
-    <span className="flex items-center gap-0.5 text-accent" aria-hidden="true">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.77l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
-        </svg>
-      ))}
-    </span>
-  );
-}
-
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -90,13 +78,10 @@ export default function Header() {
               className="flex flex-col items-end leading-none"
             >
               <span className="text-sm font-extrabold text-primary">(559) 785-2822</span>
-              <span className="mt-0.5 flex items-center gap-1.5">
-                <StarRow />
-                <span className="text-[0.62rem] font-semibold uppercase tracking-wider text-mute">Google reviews</span>
-              </span>
+              <span className="mt-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-mute">Call or text</span>
             </a>
             <Link href="/book-now" className="btn btn-accent">
-              Request quote
+              Request a quote
             </Link>
           </nav>
 
@@ -160,7 +145,7 @@ export default function Header() {
                 className="mt-2 flex items-center justify-between rounded-xl bg-cream-2 px-4 py-3 text-base font-extrabold text-primary"
               >
                 <span>Call (559) 785-2822</span>
-                <StarRow />
+                <span className="text-xs font-semibold text-mute">Call or text</span>
               </a>
             </nav>
           </div>

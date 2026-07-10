@@ -15,8 +15,8 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
     {
       title: "Standard recurring cleaning",
       href: "/services/standard-cleaning",
-      desc: `Keep your ${area.name} home consistently clean with weekly, bi-weekly, or monthly visits. Same trusted cleaner whenever scheduling allows.`,
-      features: ["Weekly, bi-weekly, or monthly", "All rooms refreshed each visit", "Consistent cleaner notes and preferences"],
+      desc: `Keep your ${area.name} home consistently clean with weekly, bi-weekly, or monthly visits. We record the requested priorities for each appointment.`,
+      features: ["Weekly, bi-weekly, or monthly", "Kitchen, bathrooms, living areas, and floors", "Cleaners bring supplies and equipment"],
     },
     {
       title: "Deep cleaning",
@@ -27,8 +27,8 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
     {
       title: "Move-in / move-out cleaning",
       href: "/services/move-out-cleaning",
-      desc: `Moving in or out of a ${area.name} property? We clean empty homes against the details landlords, buyers, and sellers actually inspect.`,
-      features: ["Empty-home cleaning", "Appliance and cabinet interiors", "Same-week availability when routes allow"],
+      desc: `Moving in or out of a ${area.name} property? We clean empty homes across kitchens, bathrooms, floors, appliances, empty cabinets, and accessible detail areas.`,
+      features: ["Empty-home cleaning", "Oven, refrigerator, microwave, and empty cabinets", "Timing confirmed before booking"],
     },
   ];
 
@@ -79,7 +79,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
             <div className="max-w-2xl">
               <span className="eyebrow eyebrow-dot text-accent-light">
-                {area.county} · {area.population} residents
+                {area.county} · {area.areaType}
               </span>
               <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
                 Professional house cleaning in {area.name}, CA
@@ -116,23 +116,20 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-              <span className="eyebrow eyebrow-dot">Local cleaning team</span>
+              <span className="eyebrow eyebrow-dot">Local service area</span>
               <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                Trusted cleaning service in {area.name}
+                House cleaning for {area.name} homes
               </h2>
               <p className="mt-5 leading-relaxed text-ink-soft">{area.localContent}</p>
               <p className="mt-4 leading-relaxed text-ink-soft">
-                New Star Cleaning provides professional house cleaning throughout {area.name},
-                CA — recurring (weekly, bi-weekly, or monthly), one-time deep cleans, and
-                clear-scope move-in/move-out cleaning. Every quote is scoped before booking so
-                the cleaner understands the work before arrival.
+                New Star Cleaning provides recurring, deep, and move-in/move-out house cleaning in {area.name}. We use the address, home size, service type, condition, and requested details to confirm the right quote before booking.
               </p>
 
               <div className="mt-8 grid grid-cols-3 gap-3">
                 {[
-                  { k: "Local", v: "Fresno-based routes" },
-                  { k: "Scope", v: "Confirmed first" },
-                  { k: "Routes", v: "Local coverage" },
+                  { k: "3", v: "Cleaning services" },
+                  { k: "Local", v: "Approved route" },
+                  { k: "Clear", v: "Quote before booking" },
                 ].map((s) => (
                   <div key={s.v} className="rounded-2xl border border-line bg-white p-4 text-center shadow-soft">
                     <div className="text-xl font-extrabold text-primary">{s.k}</div>
@@ -208,7 +205,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 <a href="tel:+15597852822" className="mt-2 block font-bold text-primary hover:text-accent">
                   (559) 785-2822
                 </a>
-                <div className="mt-1 text-sm text-ink-soft">Monday–Saturday, 8:00 AM–6:00 PM</div>
+                <div className="mt-1 text-sm text-ink-soft">Call or text for current availability</div>
               </div>
               <div>
                 <div className="text-[0.7rem] uppercase tracking-wider text-mute">Google profile</div>
@@ -234,8 +231,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             <span className="eyebrow eyebrow-dot">Neighborhoods</span>
             <h2 className="mt-4 text-3xl text-ink lg:text-4xl">{area.name} neighborhoods we serve</h2>
             <p className="mt-4 text-ink-soft">
-              Our teams cover every part of {area.name}, CA. Don&apos;t see your neighborhood?
-              Reach out — we likely cover it too.
+              We serve the listed {area.name} neighborhoods when the address fits the route. If your exact area is not shown, send the address and we will confirm coverage before quoting.
             </p>
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-2.5">
@@ -275,13 +271,12 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       <section className="bg-cream-2 py-14 lg:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
-            <span className="eyebrow text-accent-light">Same-week availability</span>
+            <span className="eyebrow text-accent-light">Request availability</span>
             <h2 className="mt-4 text-3xl text-white lg:text-5xl">
               Ready for a spotless {area.name} home?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
-              Join homeowners across {area.name} who trust New Star Cleaning. Request clear
-              pricing and confirm only when pricing and timing make sense.
+              Tell us about the home and preferred date. We will confirm the price, what is included, and the appointment options before you book.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/book-now" className="btn btn-accent">Request your {area.name} quote</Link>
@@ -295,8 +290,8 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       <section className="bg-cream py-14 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <span className="eyebrow eyebrow-dot">Nearby cities</span>
-            <h2 className="mt-4 text-2xl text-ink lg:text-3xl">Also serving nearby cities</h2>
+            <span className="eyebrow eyebrow-dot">Nearby service areas</span>
+            <h2 className="mt-4 text-2xl text-ink lg:text-3xl">Explore nearby approved routes</h2>
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             {area.nearbyAreas.map((nearby) => (
@@ -305,7 +300,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 href={`/cleaning-services-${serviceAreaSlug(nearby)}`}
                 className="group inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-primary hover:text-primary"
               >
-                Cleaning in {nearby}, CA
+                House cleaning in {nearby}
                 <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>

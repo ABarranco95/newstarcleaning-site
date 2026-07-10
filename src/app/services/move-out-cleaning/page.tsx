@@ -7,7 +7,7 @@ const service = getService("move-out-cleaning")!;
 export const metadata: Metadata = {
   title: "Move-Out Cleaning in Fresno, CA | Move-In Cleaning",
   description:
-    "Clear-scope move-out and move-in cleaning for Fresno tenants, landlords, sellers, and buyers. Request same-week availability.",
+    "Move-out and move-in cleaning for Fresno tenants, owners, sellers, buyers, and property turnovers. Request pricing and current availability.",
   alternates: {
     canonical: "/services/move-out-cleaning",
   },
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title:
       "Move-Out Cleaning in Fresno, CA | Move-In Cleaning | New Star Cleaning",
     description:
-      "Move-out cleaning across Fresno, Clovis & Madera with clear scope, appliance and empty-cabinet cleaning, and same-week availability.",
+      "Move-out cleaning across Fresno, Clovis & Madera with detailed empty-home cleaning for appliances, empty cabinets, bathrooms, and floors.",
     url: "https://newstarcleaning.com/services/move-out-cleaning",
   },
 };

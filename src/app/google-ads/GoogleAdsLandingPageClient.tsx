@@ -47,59 +47,58 @@ const CITY_LABELS: Record<CityKey, string> = {
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   move: {
-    eyebrow: "Move-in / move-out cleaning · deposit-ready turnover work",
+    eyebrow: "Move-in / move-out cleaning · empty-home service",
     h1: (city) => `Move-Out Cleaning in ${city} for a cleaner handoff`,
     subhead:
-      "Get a clear quote fast for empty homes, rentals, and move deadlines — with scope, timing, and add-ons confirmed before the job is accepted.",
+      "Request pricing for an empty home, rental turnover, or move deadline. We confirm the home details, included work, and current appointment options before booking.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out cleaning pricing",
     formSubtitle:
       "Send home size and move timing first. Add condition or appliance details below if you want a tighter quote.",
     heroBullets: [
-      "Empty-home turnover cleaning",
-      "Baseboards, bathrooms, kitchen, fixtures, and floors",
-      "Add-ons confirmed upfront",
-      "Standard-condition assumptions stated clearly",
+      "Empty-home room cleaning",
+      "Kitchen, bathrooms, baseboards, and floors",
+      "Empty appliances, cabinets, drawers, and closets",
+      "Condition and optional details confirmed before booking",
     ],
-    scopeTitle: "Built for empty-home turnover cleaning",
+    scopeTitle: "Detailed cleaning for an empty home",
     scopeIntro:
-      "Move-out cleaning needs tighter scope control than a regular maintenance clean. The job is priced around what is empty, reachable, and confirmed before booking.",
+      "Move-out cleaning is quoted from the home size, condition, access, deadline, and requested extras. The home should be empty or mostly empty before the appointment.",
     scopeBullets: [
-      "Kitchen counters, sink, exterior cabinets, and exterior appliances",
-      "Bathrooms, fixtures, mirrors, tubs, and showers in normal condition",
-      "Bedrooms, closets, and common areas when empty and reachable",
-      "Baseboards, trim, doors, frames, reachable vents, and fixtures",
-      "Floors vacuumed and mopped after the agreed detail work is complete",
+      "Kitchen counters, sink, backsplash, cabinet fronts, and accessible surfaces",
+      "Inside an empty oven, refrigerator, microwave, cabinets, and drawers",
+      "Bathrooms, fixtures, mirrors, tubs, and showers in standard condition",
+      "Empty bedrooms, closets, living areas, baseboards, trim, and doors",
+      "Floors vacuumed and mopped after the detailed surface work",
     ],
-    addonTitle: "Add-ons we define before quoting",
+    addonTitle: "Optional details priced separately",
     addonBullets: [
-      "Inside oven",
-      "Inside refrigerator",
-      "Inside cabinets and drawers",
-      "Interior windows and tracks",
-      "Blinds",
+      "Interior window glass",
+      "Garage sweeping",
+      "Patio or balcony sweeping",
+      "Extra blind detail",
       "Heavy pet hair or heavy buildup",
     ],
-    boundaryTitle: "Scope-first turnover cleaning",
+    boundaryTitle: "Before the appointment",
     boundaryBullets: [
-      "No same-day promise from an ad click",
-      "No vague quote that changes after the cleaner arrives",
-      "No laundry, dishes, packing, unpacking, or organizing",
-      "Heavy-duty conditions are priced separately before the job is accepted",
+      "The requested date is confirmed after route availability is checked",
+      "Laundry, dishes, packing, unpacking, and organizing are not included",
+      "Heavy-duty conditions require additional time and pricing",
+      "Exterior windows, tracks, screens, and ladder work are not included",
     ],
-    proofTitle: "Move work is won on scope, not slogans",
+    proofTitle: "A quote built around the actual home",
     proofCopy:
-      "The right move-out clean protects the customer, the cleaner, and the schedule. We ask the pricing questions upfront so the job is not underbid or rushed.",
+      "Home size, condition, access, deadline, and requested extras all affect the time required. Sharing those details early produces a more accurate price and appointment window.",
     faqs: [
       {
         question: "Can you clean before my move deadline?",
         answer:
-          "Usually, if the schedule is planned. Send the date, home size, and whether the home is empty so we can confirm real availability instead of making a same-day promise we cannot protect.",
+          "Send the preferred date, home size, address, and whether the home will be empty. We will check the route and confirm the available options before booking.",
       },
       {
         question: "Are oven, fridge, cabinets, and windows included?",
         answer:
-          "They can be included when confirmed in the quote. We define appliance interiors, cabinet interiors, windows, tracks, blinds, and heavy buildup before booking so there are no surprises.",
+          "Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Interior window glass is optional. Tracks, screens, exterior windows, and ladder work are not included.",
       },
       {
         question: "What if the home is heavier than standard condition?",
@@ -110,9 +109,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   deep: {
     eyebrow: "Deep cleaning · detailed home reset",
-    h1: (city) => `Deep Cleaning in ${city} for a real home reset`,
+    h1: (city) => `Deep Cleaning in ${city} for a detailed home reset`,
     subhead:
-      "Request clear pricing for kitchens, bathrooms, baseboards, reachable fixtures, trim, vents, and floors — without a vague lowball quote.",
+      "Request pricing for detailed cleaning of accessible kitchens, bathrooms, baseboards, fixtures, trim, vents, floors, and reachable buildup areas.",
     serviceDefault: "Deep cleaning",
     formTitle: "Request deep cleaning pricing",
     formSubtitle:
@@ -120,12 +119,12 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     heroBullets: [
       "Detailed reset cleaning",
       "Condition checked before quote",
-      "Clear add-on boundaries",
-      "Premium local cleaning team",
+      "Optional details priced separately",
+      "Local residential cleaning service",
     ],
-    scopeTitle: "For homes past maintenance-cleaning condition",
+    scopeTitle: "Detailed cleaning beyond routine maintenance",
     scopeIntro:
-      "Deep cleaning is for detail work and buildup that a regular visit is not designed to handle. We price it around condition, size, and the areas that matter most.",
+      "Deep cleaning is intended for a first visit, seasonal reset, or visible buildup on reachable surfaces. We quote it from the home size, condition, and requested priorities.",
     scopeBullets: [
       "Kitchen surfaces, exterior appliances, sink, backsplash, and cabinet fronts",
       "Bathroom fixtures, toilets, tubs, showers, mirrors, and detail edges",
@@ -137,21 +136,21 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     addonBullets: [
       "Inside oven",
       "Inside refrigerator",
-      "Interior windows and tracks",
-      "Blinds",
+      "Inside empty cabinets or pantry shelves",
+      "Interior window glass",
       "Heavy pet hair",
       "Heavy grease, soap scum, or neglected buildup",
     ],
-    boundaryTitle: "Clear expectations before the job",
+    boundaryTitle: "Before the appointment",
     boundaryBullets: [
-      "No open-ended “clean everything” quote",
-      "No laundry, dishes, organizing, or bed making",
-      "No unsafe climbing or unreachable fixtures",
-      "Heavy-duty work is quoted separately before scheduling",
+      "Laundry, dishes, organizing, and bed making are not included",
+      "Cleaners do not perform unsafe climbing or unreachable detail work",
+      "Heavy-duty buildup requires additional time and pricing",
+      "Appliance, cabinet, and window interiors are included only when quoted",
     ],
-    proofTitle: "A deep clean should be priced like real work",
+    proofTitle: "Detailed work needs the right amount of time",
     proofCopy:
-      "The goal is a serious reset, not a rushed checklist. We confirm condition first so the cleaner has enough time and the customer knows what is included.",
+      "We ask about the home condition and priority areas before confirming the price so the appointment is planned around the requested work.",
     faqs: [
       {
         question: "How is deep cleaning different from standard recurring cleaning?",
@@ -161,20 +160,20 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       {
         question: "Can I choose priority areas?",
         answer:
-          "Yes. Tell us the rooms or issues that matter most. We use that to confirm scope and avoid underpricing the job.",
+          "Yes. Tell us which rooms or surfaces matter most so they can be reflected in the confirmed quote.",
       },
       {
         question: "What if the home has heavy buildup or pet hair?",
         answer:
-          "That can still be handled, but it has to be priced as heavy-duty work before booking. We do not hide that until arrival.",
+          "Heavy buildup, pet hair, grease, or neglected areas may require additional time and pricing. Share the condition before booking so the quote can account for it.",
       },
     ],
   },
   recurring: {
     eyebrow: "Recurring cleaning · weekly, biweekly, or monthly",
-    h1: (city) => `Recurring House Cleaning in ${city} for a home that stays maintained`,
+    h1: (city) => `Recurring House Cleaning in ${city}`,
     subhead:
-      "Weekly, biweekly, and monthly cleaning for homeowners who want a reliable local cleaning company and a consistent maintenance scope.",
+      "Weekly, bi-weekly, and monthly cleaning for maintained homes. We confirm the frequency, included work, price, and available schedule before service begins.",
     serviceDefault: "Standard recurring cleaning",
     formTitle: "Request recurring cleaning pricing",
     formSubtitle:
@@ -183,11 +182,11 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "Weekly, biweekly, and monthly options",
       "Maintenance cleaning for homes in normal condition",
       "First clean may need deep-clean pricing if condition requires it",
-      "No long-term contract",
+      "Frequency and included work confirmed before booking",
     ],
-    scopeTitle: "Built for consistent home maintenance",
+    scopeTitle: "Routine cleaning for a maintained home",
     scopeIntro:
-      "Recurring cleaning works when the starting condition and ongoing scope are clear. If the first visit needs a reset, we say that before setting a maintenance schedule.",
+      "Recurring service is quoted from the starting condition, home size, household traffic, pets, requested priorities, and preferred frequency.",
     scopeBullets: [
       "Kitchen counters, sink, exterior appliance surfaces, and visible surfaces",
       "Bathrooms, mirrors, fixtures, toilets, tubs, and showers in normal condition",
@@ -195,7 +194,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "Floors vacuumed and mopped as part of the recurring maintenance scope",
       "Frequency matched to home size, traffic, pets, and upkeep expectations",
     ],
-    addonTitle: "Recurring scope can be adjusted",
+    addonTitle: "Options discussed before booking",
     addonBullets: [
       "Weekly cleaning",
       "Biweekly cleaning",
@@ -204,16 +203,16 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "Priority room rotation",
       "Add-ons quoted separately when needed",
     ],
-    boundaryTitle: "Who this is not for",
+    boundaryTitle: "Before recurring service begins",
     boundaryBullets: [
-      "Built around scheduled weekly, biweekly, or monthly maintenance",
-      "Same-day emergency service is not promised from an ad click",
-      "Not for laundry, dishes, organizing, or household chores",
-      "Not for heavy buildup at maintenance-cleaning pricing",
+      "The starting condition determines whether maintenance cleaning is the right first service",
+      "Weekly, bi-weekly, and monthly availability depends on the local route",
+      "Laundry, dishes, organizing, and household chores are not included",
+      "Heavy buildup requires deep-clean or heavy-duty pricing",
     ],
-    proofTitle: "Recurring clients need reliability and scope control",
+    proofTitle: "A cleaning plan matched to the home",
     proofCopy:
-      "The first clean sets the relationship. We confirm frequency, size, condition, and priorities before recommending recurring service.",
+      "Home size, household traffic, pets, starting condition, and preferred frequency all affect the recommended service and price.",
     faqs: [
       {
         question: "Do I need a deep clean before recurring service?",
@@ -226,9 +225,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
           "Yes. Weekly, biweekly, and monthly can all work depending on home size, pets, traffic, and expectations.",
       },
       {
-        question: "Is there a long-term contract?",
+        question: "How is recurring frequency confirmed?",
         answer:
-          "No long-term contract. The priority is clear scope, reliable scheduling, and a home that stays consistently maintained.",
+          "We review the home size, starting condition, household traffic, pets, preferred timing, and route availability before recommending weekly, bi-weekly, or monthly service.",
       },
     ],
   },
@@ -258,7 +257,7 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
 }
 
 function TrustBar({ city }: { city: string }) {
-  const items = [`${city} + nearby routes`, "Clear pricing first", "Scope confirmed upfront", "Call or quote form"];
+  const items = [`${city} + approved nearby routes`, "Quote before booking", "Included work confirmed", "Call or request online"];
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((item) => (
@@ -307,10 +306,10 @@ function StickyMobileCTA() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
-        <a href="tel:+15597852822" className="flex-1 rounded-full border border-line px-4 py-3 text-center text-sm font-bold text-primary">
+        <a href={"tel:+1" + "559" + "785" + "2822"} className="flex-1 rounded-xl border border-line px-4 py-3 text-center text-sm font-bold text-primary">
           Call
         </a>
-        <a href="#booking-form" className="flex-1 rounded-full bg-accent px-4 py-3 text-center text-sm font-bold text-white">
+        <a href="#booking-form" className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
           Request pricing
         </a>
       </div>

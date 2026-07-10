@@ -74,7 +74,7 @@ export default function ServiceDetailPage({
             <div id="quote" className="scroll-mt-24">
               <QuotePathPanel
                 title={`Price ${service.shortName.toLowerCase()}`}
-                body="We keep service pages focused on scope. When you are ready, the quote page asks only for the basics and preselects this service."
+                body="See the room-by-room details here, then use the short quote page when you are ready. This service will already be selected."
                 source={`organic_${service.slug}_service`}
                 service={quoteFormService(service)}
               />
@@ -90,11 +90,11 @@ export default function ServiceDetailPage({
             <div>
               <span className="eyebrow eyebrow-dot">What&apos;s included</span>
               <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                {service.name}: complete room-by-room scope
+                {service.name}: room-by-room details
               </h2>
               <p className="mt-5 leading-relaxed text-ink-soft">{service.description}</p>
               <div className="mt-7 rounded-2xl border border-primary/15 bg-white p-6 shadow-soft">
-                <h3 className="text-lg font-bold text-ink">Clear scope before we book</h3>
+                <h3 className="text-lg font-bold text-ink">Before your appointment</h3>
                 <ul className="mt-4 space-y-2">
                   {service.scopeNotes.map((note) => (
                     <li key={note} className="flex gap-2 text-sm leading-relaxed text-ink-soft">
@@ -129,9 +129,9 @@ export default function ServiceDetailPage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
             <div>
-              <span className="eyebrow eyebrow-dot">Scope protection</span>
+              <span className="eyebrow eyebrow-dot">Optional details</span>
               <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                Add-ons are separate from the base cleaning
+                Additions are priced separately
               </h2>
               <p className="mt-5 leading-relaxed text-ink-soft">
                 We price cleaning by the work agreed before the visit. Optional detail items
@@ -294,13 +294,12 @@ export default function ServiceDetailPage({
       <section className="bg-cream py-14 lg:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
-            <span className="eyebrow text-accent-light">Same-week availability</span>
+            <span className="eyebrow text-accent-light">Request availability</span>
             <h2 className="mt-4 text-3xl text-white lg:text-5xl">
               Ready to price your {service.shortName.toLowerCase()}?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
-              Request clear pricing and availability before anything is booked. We&apos;ll
-              match the scope to the right cleaner and schedule.
+              Tell us about the home and preferred date. We will confirm the price, included work, and appointment options before you book.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/book-now" className="btn btn-accent">Request your quote</Link>

@@ -45,11 +45,10 @@ const services = [
 ];
 
 const moveOutAddons = [
-  "Inside oven",
-  "Inside refrigerator",
-  "Inside cabinets/drawers",
-  "Interior windows/tracks",
-  "Blinds",
+  "Interior window glass",
+  "Garage sweeping",
+  "Patio or balcony sweeping",
+  "Extra blind detail",
   "Heavy pet hair or heavy buildup",
 ];
 
@@ -373,10 +372,10 @@ export default function QuickQuoteForm({
         <div>
           <div className="mb-2">
             <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
-              Move-out add-ons to price clearly
+              Optional move-out details
             </span>
             <p className="mt-1 text-xs leading-relaxed text-ink-soft">
-              Optional. We can confirm these on the follow-up call if you are not sure.
+              Oven, refrigerator, microwave, and empty cabinet interiors are already part of our move-out scope when accessible. Select only the extra items you want priced.
             </p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">

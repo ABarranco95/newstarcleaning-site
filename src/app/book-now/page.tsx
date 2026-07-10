@@ -44,14 +44,13 @@ export default function BookNow() {
             </nav>
             <span className="eyebrow eyebrow-dot text-accent-light">Fresno / Clovis / Madera</span>
             <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
-              Get cleaning pricing before anything is booked.
+              Request a cleaning quote for your home.
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-8 text-white/75">
-              Send the basics for your home. We confirm scope, price, and available times before
-              you decide. No payment or commitment on this form.
+              Share the home details and preferred timing. We will confirm the price, what is included, and available appointments before you decide. No payment or booking is taken on this form.
             </p>
 
-            <div className="mt-7 rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft">
+            <div className="mt-7 hidden rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft sm:block">
               Serving Fresno, Clovis, Madera, Tower District, Fig Garden, and Woodward Park.
             </div>
 
@@ -68,7 +67,7 @@ export default function BookNow() {
           <div id="quote-form" className="relative scroll-mt-24">
             <QuickQuoteForm
               title="Get pricing & availability"
-              subtitle="Start with the required basics. We only ask follow-up questions if the home needs a tighter scope before pricing."
+              subtitle="Start with your contact information, city, service, timing, and approximate home size. We will ask only the follow-up details needed for an accurate quote."
               source="organic_quote_page"
               compact
             />

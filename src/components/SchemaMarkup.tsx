@@ -24,7 +24,7 @@ export default function SchemaMarkup() {
     },
     {
       name: "Move-In/Move-Out Cleaning",
-      description: "Complete cleaning for movers, landlords, and tenants.",
+      description: "Complete cleaning for empty homes during move-ins, move-outs, and property turnovers.",
     },
   ];
 
@@ -48,7 +48,7 @@ export default function SchemaMarkup() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["LocalBusiness", "CleaningService"],
+        "@type": "LocalBusiness",
         "@id": localBusinessId,
         name: "New Star Cleaning",
         legalName: "NEW STAR CLEANING LLC",

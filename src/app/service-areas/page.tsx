@@ -39,7 +39,7 @@ function AreaCard({ area }: { area: (typeof serviceAreas)[number] }) {
         </div>
         {area.isPrimary ? (
           <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent">
-            Core route
+            Primary city
           </span>
         ) : null}
       </div>
@@ -77,9 +77,7 @@ export default function ServiceAreasPage() {
                 House cleaning service areas near Fresno
               </h1>
               <p className="mt-5 text-lg leading-8 text-white/75">
-                New Star Cleaning is based in Fresno and routes vetted cleaners across the
-                Fresno, Clovis, and Madera area. Each area page explains what we commonly clean
-                there, how scheduling works, and which neighborhoods we serve.
+                New Star Cleaning is based in Fresno and serves the approved Fresno, Clovis, and Madera routes shown below. Each page explains the local coverage, common home types, and how appointment availability is confirmed.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a href="#cities" className="btn btn-accent">View cities</a>
@@ -99,11 +97,9 @@ export default function ServiceAreasPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <span className="eyebrow eyebrow-dot">Cities we serve</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Local cleaning routes in our real service area</h2>
+            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Approved city routes</h2>
             <p className="mt-5 leading-relaxed text-ink-soft">
-              Start with your city or Fresno neighborhood to see local route notes, common
-              cleaning requests, and nearby neighborhoods. Fresno and Clovis have the strongest
-              route density; Madera is scheduled with clear route windows.
+              Review the city pages for coverage, common home types, and route notes. Fresno and Clovis are core routes; Madera availability is confirmed from the address and requested date.
             </p>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -118,10 +114,9 @@ export default function ServiceAreasPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <span className="eyebrow eyebrow-dot">Fresno neighborhoods</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Neighborhood pages for higher-intent local searches</h2>
+            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Cleaning information for Fresno neighborhoods</h2>
             <p className="mt-5 leading-relaxed text-ink-soft">
-              Some Fresno searches are neighborhood-specific. These pages focus on the home types,
-              access details, and cleaning needs we see in established Fresno neighborhoods.
+              These pages cover the approved Tower District, Fig Garden, and Woodward Park routes with neighborhood-specific home, access, and scheduling details.
             </p>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
@@ -136,12 +131,9 @@ export default function ServiceAreasPage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="rounded-2xl border border-line bg-white p-6 shadow-soft sm:p-8">
             <span className="eyebrow eyebrow-dot">How route timing works</span>
-            <h2 className="mt-4 text-3xl text-ink">Better route planning means better cleaning</h2>
+            <h2 className="mt-4 text-3xl text-ink">How appointment availability is confirmed</h2>
             <p className="mt-4 leading-relaxed text-ink-soft">
-              We would rather give a clear window than overpromise a time we cannot keep. Fresno
-              and Clovis appointments are easiest to fill quickly. Madera appointments are
-              scheduled with route planning so the cleaner has enough time for the full scope. We
-              do not advertise farther cities we cannot reliably cover.
+              Route capacity depends on the address, requested service, home size, and preferred date. Fresno and Clovis are core routes. Madera requires a compatible route window. We confirm the available options before booking.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/book-now" className="btn btn-accent !min-h-12 !px-5 !text-sm">Request availability</Link>

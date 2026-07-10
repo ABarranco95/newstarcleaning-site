@@ -3,10 +3,10 @@ type Badge = {
 };
 
 const badges: Badge[] = [
-  { label: "Clear scope first" },
-  { label: "Local Fresno routes" },
-  { label: "Quote before booking" },
-  { label: "Consistent cleaners" },
+  { label: "Locally owned" },
+  { label: "Cleaners bring supplies" },
+  { label: "Clear quote before booking" },
+  { label: "Serving Fresno, Clovis & Madera" },
 ];
 
 /**
@@ -28,7 +28,7 @@ export default function TrustBadges({
         <span key={badge.label} className="flex items-center gap-2.5">
           {i > 0 && (
             <span
-              className={`h-1 w-1 rounded-full ${onDark ? "bg-white/30" : "bg-line"}`}
+              className={`hidden h-1 w-1 rounded-full sm:inline-block ${onDark ? "bg-white/30" : "bg-line"}`}
               aria-hidden="true"
             />
           )}

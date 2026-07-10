@@ -7,14 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "woodward-park")!;
 export const metadata: Metadata = {
   title: "House Cleaning in Woodward Park, Fresno",
   description:
-    "Reliable house cleaning for Woodward Park families. Recurring, deep, and move-in/move-out cleaning with clear scope before booking. Request clear pricing online.",
+    "Recurring, deep, and move-in/move-out house cleaning in Woodward Park and nearby north Fresno routes. Request pricing online.",
   alternates: {
     canonical: "/cleaning-services-woodward-park",
   },
   openGraph: {
     title: "House Cleaning in Woodward Park, Fresno | New Star Cleaning",
     description:
-      "Trusted Woodward Park house cleaning. Clear-scope local cleaning. Request clear pricing online.",
+      "House cleaning for Woodward Park and nearby approved north Fresno routes. Request pricing and current availability.",
     url: "https://newstarcleaning.com/cleaning-services-woodward-park",
   },
 };

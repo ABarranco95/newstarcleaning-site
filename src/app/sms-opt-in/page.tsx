@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "SMS Opt-In — New Star Cleaning",
   description:
     "Opt in to receive text messages from New Star Cleaning about your cleaning service, appointments, and follow-ups.",
+  alternates: { canonical: "/sms-opt-in" },
   openGraph: {
     title: "SMS Opt-In | New Star Cleaning",
     description: "Opt in to receive text messages from New Star Cleaning.",

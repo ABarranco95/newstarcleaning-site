@@ -72,12 +72,10 @@ export default function ServicesPage() {
             <div className="max-w-2xl">
               <span className="eyebrow eyebrow-dot text-accent-light">Fresno house cleaning services</span>
               <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
-                House cleaning built for real Fresno-area homes
+                House cleaning for Fresno-area homes
               </h1>
               <p className="mt-5 text-lg leading-8 text-white/75">
-                Compare recurring, deep, and move-in/move-out cleaning before you request a
-                quote. We keep the scope clear so the cleaner, timing, and price match what your
-                home actually needs.
+                Compare recurring, deep, and move-in/move-out cleaning, including the room-by-room work, optional additions, and exclusions for each service.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a href="#compare" className="btn btn-accent">Compare services</a>
@@ -98,16 +96,14 @@ export default function ServicesPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <span className="eyebrow eyebrow-dot">Choose the right clean</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Services by scope, not vague packages</h2>
+            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Compare the three cleaning services</h2>
             <p className="mt-5 leading-relaxed text-ink-soft">
               The right service depends on how lived-in the home is, whether it is empty, and how
               much detail work is needed. These are the core services we quote most often for
               Fresno and Clovis households.
             </p>
             <p className="mt-4 leading-relaxed text-ink-soft">
-              Add-ons such as inside oven, refrigerator, cabinets, and interior window glass are{" "}
-              separate unless your quote specifically includes them. Laundry, dishes, organizing, bed making, packing,
-              and personal household tasks are not part of our cleaning service.
+              For standard and deep cleaning, appliance interiors, cabinet interiors, and interior window glass are optional. Move-in/move-out cleaning includes an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Laundry, dishes, organizing, bed making, packing, and personal household tasks are not part of any cleaning service.
             </p>
           </div>
 

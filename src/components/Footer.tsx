@@ -13,18 +13,6 @@ const serviceAreas = [
   { name: "Woodward Park", slug: "woodward-park" },
 ];
 
-function StarRow() {
-  return (
-    <span className="flex items-center gap-0.5 text-accent-light" aria-hidden="true">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.79L10 14.77l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85L10 1.5z" />
-        </svg>
-      ))}
-    </span>
-  );
-}
-
 export default function Footer() {
   const pathname = usePathname();
 
@@ -39,19 +27,18 @@ export default function Footer() {
         <div className="grid gap-6 rounded-3xl border border-white/10 bg-white/[0.04] p-7 sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <span className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-accent-light">
-              Need pricing or route availability?
+              Ready for a cleaning quote?
             </span>
             <h2 className="mt-2 text-2xl font-extrabold text-white sm:text-3xl">
-              Ready for a spotless home?
+              Tell us about the home.
             </h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/70">
-              Get clear pricing and route availability before anything is booked.
-              Serving Fresno, Clovis, Madera, and nearby Fresno neighborhoods.
+              Share the service, home size, condition, and preferred timing. We will confirm pricing and available appointment options before you book.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row md:flex-col">
             <Link href="/book-now" className="btn btn-accent">
-              Request pricing
+              Request a quote
             </Link>
             <a href="tel:+15597852822" className="btn btn-ghost-dark">
               (559) 785-2822
@@ -73,18 +60,16 @@ export default function Footer() {
               <span className="text-lg font-extrabold">New Star Cleaning</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-white/70">
-              Locally owned house cleaning for Fresno, Clovis, Madera, and nearby
-              Fresno neighborhoods. Clear scope and pricing before booking.
+              Locally owned residential cleaning for Fresno, Clovis, Madera, and the listed Fresno neighborhoods.
             </p>
-            <div className="mt-5 flex items-center gap-3">
-              <StarRow />
+            <div className="mt-5">
               <a
                 href="https://www.google.com/maps?cid=12575787905603463321"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-semibold text-white/80 underline-offset-4 hover:text-white hover:underline"
               >
-                See our Google reviews
+                Read customer reviews on Google
               </a>
             </div>
           </div>

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title:
       "Deep House Cleaning in Fresno, CA | One-Time Deep Clean | New Star Cleaning",
     description:
-      "Top-to-bottom deep cleaning for Fresno homes. Clear-scope local cleaners.",
+      "Detailed deep cleaning for Fresno homes, including accessible kitchens, bathrooms, floors, baseboards, fixtures, vents, and buildup areas.",
     url: "https://newstarcleaning.com/services/deep-cleaning",
   },
 };

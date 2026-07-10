@@ -7,14 +7,14 @@ const area = serviceAreas.find((a) => a.slug === "clovis")!;
 export const metadata: Metadata = {
   title: "House Cleaning Services in Clovis, CA",
   description:
-    "Professional house cleaning in Clovis, CA and nearby Fresno-area homes. Standard recurring, deep, and move-in/move-out cleaning with clear scope before booking.",
+    "Recurring, deep, and move-in/move-out house cleaning in Clovis, CA. Review services, included work, and request current availability.",
   alternates: {
     canonical: "/cleaning-services-clovis",
   },
   openGraph: {
     title: "House Cleaning Services in Clovis, CA | New Star Cleaning",
     description:
-      "Local Fresno-area house cleaning in Clovis, CA. Request clear pricing with clear scope before booking.",
+      "Clovis house cleaning for recurring care, detailed resets, and empty-home moves. Request pricing and current availability.",
     url: "https://newstarcleaning.com/cleaning-services-clovis",
   },
 };

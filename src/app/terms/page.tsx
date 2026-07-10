@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Terms of Service for New Star Cleaning LLC. Review our service terms, SMS/text messaging terms, and conditions of use.",
+  alternates: { canonical: "/terms" },
   openGraph: {
     title: "Terms of Service | New Star Cleaning",
     description: "Terms of Service for New Star Cleaning LLC.",
@@ -129,14 +130,14 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              5. Satisfaction Guarantee
+              5. Service Concerns
             </h2>
             <p className="text-ink-soft leading-relaxed">
-              We stand behind the quality of our work. If you are not satisfied
-              with any aspect of our cleaning service, please contact us within
-              24 hours of the completed service. We will return to re-clean the
-              areas of concern at no additional charge. This guarantee does not
-              cover requests for services not included in the original booking.
+              If you believe something included in the agreed cleaning scope was
+              missed, contact us within 24 hours of the completed service. We will
+              review the concern and determine an appropriate make-it-right response,
+              which may include a return visit when reasonable. Requests for work
+              outside the confirmed scope are not included.
             </p>
           </section>
 

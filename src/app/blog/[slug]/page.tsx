@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
               Need a cleaning team you can trust?
             </h3>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-              New Star Cleaning serves Fresno, Clovis, and Madera with clear-scope local cleaners.
+              New Star Cleaning serves Fresno, Clovis, and Madera with recurring, deep, and move-in/move-out residential cleaning.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link

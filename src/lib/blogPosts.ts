@@ -76,7 +76,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Deep cleaning",
         paragraphs: [
-          "Deep cleaning includes the standard scope plus extra reachable detail work such as baseboards, vents, fans, trim, fixtures, bathroom buildup, and tight corners. Inside oven, refrigerator, cabinets, and interior windows are add-ons unless the quote specifically includes them.",
+          "Deep cleaning covers accessible kitchens, bathrooms, floors, baseboards, vents, fans, trim, fixtures, reachable buildup, and detail edges. Inside the oven, refrigerator, cabinets, and interior window glass are optional unless the quote includes them.",
         ],
       },
       {
@@ -202,7 +202,7 @@ export const blogPosts: BlogPost[] = [
       {
         heading: "Trust",
         paragraphs: [
-          "Background-checked, insured, and the same trusted cleaner each visit when possible. That's the bar a real cleaning service should hit — and it's the difference between a service you keep and a service you cancel.",
+          "Look for clear service details, current customer feedback, insured business operations, and a company that documents your priorities before the appointment. Recurring cleaner continuity can be helpful when schedules align, but it should not be presented as a guarantee.",
         ],
       },
     ],

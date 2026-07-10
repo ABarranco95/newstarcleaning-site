@@ -3,6 +3,7 @@ import Link from "next/link";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import {
   clientPrepChecklist,
+  getFullIncludedList,
   serviceLimitations,
   services,
 } from "@/lib/services";
@@ -43,9 +44,9 @@ const faqs = [
       "No. Add-ons are only included when they are requested before the appointment and listed in the confirmed quote. This protects the time window, price, and cleaner workload.",
   },
   {
-    question: "Can I add inside oven, fridge, cabinets, or windows?",
+    question: "Which detail items are optional?",
     answer:
-      "Yes, many detail items can be added when requested ahead of time. The item must be accessible, safe to clean, and scheduled with enough time. Exterior windows, tracks, screens, and ladder work are not included.",
+      "For standard and deep cleaning, appliance interiors, cabinet interiors, and interior window glass are optional. Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Interior window glass, garage sweeping, patio or balcony sweeping, extra blind detail, and heavy buildup time can be added when quoted.",
   },
   {
     question: "Does deep cleaning include every add-on?",
@@ -84,7 +85,7 @@ const comparisonRows = [
   { label: "Floor edges & corners detailed", standard: false, deep: true, moveOut: true },
   { label: "Inside oven", standard: false, deep: false, moveOut: true },
   { label: "Inside refrigerator", standard: false, deep: false, moveOut: true },
-  { label: "Inside microwave (deep wipe)", standard: false, deep: false, moveOut: true },
+  { label: "Inside microwave", standard: false, deep: false, moveOut: true },
   { label: "Inside empty cabinets & drawers", standard: false, deep: false, moveOut: true },
   { label: "Blinds dusted", standard: false, deep: false, moveOut: true },
   { label: "Closet shelves & rods wiped", standard: false, deep: false, moveOut: true },
@@ -221,9 +222,9 @@ export default function ChecklistPage() {
           {/* ── When to choose ── */}
           <div className="mt-6 grid gap-4 lg:grid-cols-3">
             {[
-              { tier: "Standard", price: "from $165", desc: "Weekly, bi-weekly, or monthly maintenance for a home that is already in good shape.", when: "Choose this if your home is picked up and you mainly need surfaces, kitchen, bathrooms, and floors maintained." },
-              { tier: "Deep", price: "from $235", desc: "Includes everything in Standard plus baseboards, vents, fans, light fixtures, trim, and detail edges.", when: "Choose this for first-time cleans, seasonal resets, or homes with visible buildup on reachable surfaces." },
-              { tier: "Move-Out", price: "from $245", desc: "Includes everything in Deep plus inside oven, fridge, microwave, empty cabinets, blinds, and closet interiors.", when: "Choose this for empty homes, rental turnover, move-ins, or landlord walkthroughs where every surface matters." },
+              { tier: "Standard", price: "from $165", desc: "Maintenance cleaning for accessible kitchen and bathroom surfaces, bedrooms, living areas, dusting, and floors.", when: "Choose this for an already maintained home on a weekly, bi-weekly, or monthly schedule." },
+              { tier: "Deep", price: "from $235", desc: "Detailed cleaning for accessible kitchens, bathrooms, living areas, floors, baseboards, vents, fans, trim, and reachable buildup.", when: "Choose this for a first visit, seasonal reset, or a home that needs more detail than maintenance cleaning." },
+              { tier: "Move-Out", price: "from $245", desc: "Empty-home cleaning for rooms, kitchens, bathrooms, floors, appliances, empty cabinets and drawers, blinds, and closet interiors.", when: "Choose this for a move-in, move-out, sale, rental turnover, or other empty-home transition." },
             ].map((card) => (
               <div key={card.tier} className="rounded-2xl border border-line bg-white p-5 shadow-soft">
                 <div className="flex items-baseline justify-between">
@@ -270,7 +271,7 @@ export default function ChecklistPage() {
                   <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
                     <div className="space-y-4">
                       <h4 className="text-xl text-ink">Included base scope</h4>
-                      {service.whatsIncluded.map((group) => (
+                      {getFullIncludedList(service.slug).map((group) => (
                         <div
                           key={group.title}
                           className="rounded-2xl border border-line bg-white p-5 shadow-soft"

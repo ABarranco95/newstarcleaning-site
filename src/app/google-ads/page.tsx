@@ -5,7 +5,7 @@ import GoogleAdsLandingPageClient from "./GoogleAdsLandingPageClient";
 export const metadata: Metadata = {
   title: "House Cleaning Pricing Request",
   description:
-    "Request clear pricing for move-out, deep, or recurring house cleaning in Fresno, Clovis, and Madera. Scope confirmed before booking.",
+    "Request pricing for move-out, deep, or recurring house cleaning in Fresno, Clovis, and Madera.",
   robots: {
     index: false,
     follow: false,

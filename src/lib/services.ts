@@ -42,7 +42,7 @@ export const services: ServiceDefinition[] = [
     tagline:
       "Recurring weekly, bi-weekly, or monthly cleaning to keep your home consistently fresh.",
     description:
-      "Standard cleaning is maintenance cleaning for a home that is already in livable condition. We clean visible, accessible surfaces room by room. It is not a household organizing, laundry, dishes, or bed-making service.",
+      "Standard cleaning keeps an already maintained home comfortable week to week. The visit covers accessible surfaces, kitchens, bathrooms, bedrooms, living areas, and floors on a weekly, bi-weekly, or monthly schedule.",
     whatsIncluded: [
       {
         title: "Kitchen",
@@ -169,7 +169,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning serves Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Recurring weekly and bi-weekly slots fill up fast. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning provides recurring house cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Route availability depends on the address, frequency, home size, and requested work, so we confirm timing before booking.",
   },
   {
     slug: "deep-cleaning",
@@ -178,7 +178,7 @@ export const services: ServiceDefinition[] = [
     tagline:
       "A detailed reset for accessible surfaces, buildup, baseboards, fixtures, and first-time cleans.",
     description:
-      "Deep cleaning includes everything in our standard cleaning scope, plus extra attention to detail areas most people miss: baseboards, door frames, vent covers, ceiling fan blades, light fixtures, reachable grout, and buildup around fixtures. It is the right choice for first-time cleans, seasonal resets, or homes that need more than surface maintenance.",
+      "Deep cleaning is a detailed reset for first-time visits, seasonal cleaning, and homes with visible buildup. It covers accessible kitchen and bathroom surfaces, floors, baseboards, door frames, vent covers, ceiling fan blades, light fixtures, reachable grout, trim, and floor edges.",
     whatsIncluded: [
       {
         title: "Kitchen detail",
@@ -204,7 +204,6 @@ export const services: ServiceDefinition[] = [
       {
         title: "Whole-home detail",
         items: [
-          "Everything in standard cleaning, plus:",
           "Baseboards wiped where accessible",
           "Ceiling fan blades and light fixtures detailed within normal reach",
           "Vent covers, switch plates, door frames, and trim wiped",
@@ -304,7 +303,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning serves Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Same-week deep cleaning availability is common when the scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning provides deep cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Availability depends on the home, requested details, and local route capacity; we confirm the options before booking.",
   },
   {
     slug: "move-out-cleaning",
@@ -313,12 +312,11 @@ export const services: ServiceDefinition[] = [
     tagline:
       "Empty-home cleaning for move-outs, move-ins, sellers, landlords, and property turnovers.",
     description:
-      "Move-out cleaning is our most comprehensive service. It includes everything in deep cleaning, plus interior cleaning of the oven, refrigerator, microwave, and empty cabinets and drawers. It is designed for empty or mostly empty homes being turned over for the next tenant, buyer, or landlord inspection.",
+      "Move-out cleaning is a detailed empty-home service for tenants, owners, buyers, sellers, and property turnovers. It covers accessible room surfaces, kitchens, bathrooms, floors, baseboards, fixtures, inside the oven, refrigerator and microwave, and empty cabinet and drawer interiors.",
     whatsIncluded: [
       {
         title: "Kitchen",
         items: [
-          "Everything in deep cleaning, plus:",
           "Inside oven cleaned when empty, cool, and accessible",
           "Inside microwave cleaned when empty and accessible",
           "Inside refrigerator cleaned when empty and accessible",
@@ -443,7 +441,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning provides move-out cleaning across Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Most move-out jobs are scheduled within 3-5 business days when the empty-home scope is confirmed early. We background-check every cleaner and carry general liability insurance.",
+      "New Star Cleaning provides move-out cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Timing depends on the deadline, home size, condition, requested extras, and route capacity; we confirm availability before booking.",
   },
 ];
 

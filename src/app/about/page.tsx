@@ -3,14 +3,14 @@ import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
 
 export const metadata: Metadata = {
-  title: "About New Star Cleaning — Fresno's Trusted House Cleaning Company",
+  title: "About New Star Cleaning | Fresno House Cleaning",
   description:
-    "New Star Cleaning is a locally owned house cleaning company serving Fresno, Clovis, Madera and nearby Fresno neighborhoods. Clear scope, local routes, and pricing before booking.",
+    "New Star Cleaning is a locally owned residential cleaning company serving Fresno, Clovis, Madera, and the listed Fresno neighborhoods.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About New Star Cleaning — Fresno's Trusted House Cleaning Company | New Star Cleaning",
+    title: "About New Star Cleaning | Fresno House Cleaning",
     description:
-      "Locally owned house cleaning for Fresno, Clovis, Madera and nearby Fresno neighborhoods with clear scope before booking.",
+      "Locally owned residential cleaning for Fresno, Clovis, Madera, and the listed Fresno neighborhoods.",
     url: "https://newstarcleaning.com/about",
   },
 };
@@ -63,9 +63,9 @@ export default function AboutPage() {
               <span className="eyebrow eyebrow-dot">Our promise</span>
               <h2 className="mt-4 text-3xl text-ink lg:text-4xl">What you can expect</h2>
               <ul className="mt-5 space-y-3">
-                <li><strong className="text-ink">Vetted cleaner roster.</strong> New Star works with cleaners who are reviewed before being offered available work.</li>
-                <li><strong className="text-ink">Scope before booking.</strong> We confirm service type, condition, add-ons, and timing before a cleaner accepts the job.</li>
-                <li><strong className="text-ink">Consistent results.</strong> Recurring clients get the same trusted cleaner whenever possible.</li>
+                <li><strong className="text-ink">Documented priorities.</strong> Requested rooms, add-ons, access notes, and customer priorities are recorded before the appointment.</li>
+                <li><strong className="text-ink">Clear quote before booking.</strong> We confirm service type, condition, add-ons, and timing before the appointment is accepted.</li>
+                <li><strong className="text-ink">Cleaner continuity when available.</strong> Recurring clients may be matched with the same cleaner when schedules align, but it is not guaranteed.</li>
                 <li><strong className="text-ink">Clear expectations.</strong> The agreed cleaning scope is documented so the cleaner and customer are aligned.</li>
                 <li><strong className="text-ink">Make-it-right review.</strong> If something included in the agreed scope is missed, contact us quickly so we can review the best fix.</li>
               </ul>
@@ -96,8 +96,7 @@ export default function AboutPage() {
               Ready to get a quote from cleaners you can trust?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-white/75">
-              Request clear pricing online. Same-week availability is strongest in Fresno and
-              Clovis; Madera is scheduled around route availability.
+              Request a quote online and we will confirm current appointment options for your address and service.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/book-now" className="btn btn-accent">Request pricing &amp; availability</Link>

@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Privacy Policy for New Star Cleaning LLC. Learn how we collect, use, and protect your personal information, including our SMS/text messaging practices.",
+    "Privacy Policy for New Star Cleaning LLC. Learn how we collect, use, and protect personal information.",
+  alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy Policy | New Star Cleaning",
     description: "Privacy Policy for New Star Cleaning LLC.",

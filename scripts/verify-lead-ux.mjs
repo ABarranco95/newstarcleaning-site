@@ -56,15 +56,17 @@ assert(
 
 assert(
   !footer.includes("ContactForm") &&
-    footer.includes("Need pricing or route availability?") &&
+    footer.includes("Ready for a cleaning quote?") &&
+    footer.includes("Tell us about the home.") &&
     footer.includes('href="/book-now"'),
   "footer uses a CTA instead of a site-wide form",
 );
 
 assert(
   !home.includes("ContactForm") &&
-    home.includes("Get pricing without a long form") &&
-    home.includes("Request clear pricing before anything is booked"),
+    !home.includes("QuickQuoteForm") &&
+    home.includes("House cleaning in Fresno, Clovis &amp; Madera") &&
+    home.includes("Request a quote"),
   "homepage uses quote-first CTA instead of embedded form",
 );
 
