@@ -21,7 +21,8 @@ includes("src/app/api/lead/route.ts", "websiteApiVersion", "organic lead proxy m
 includes("src/app/api/lead/route.ts", "text(body.company)", "organic lead proxy must include a honeypot guard");
 includes("src/lib/apexCrm.ts", "APEX_LEAD_URL", "shared Apex helper must use public lead URL");
 includes("src/lib/apexCrm.ts", "headers.Authorization", "shared Apex helper must send bearer authorization when configured");
-includes("src/lib/apexCrm.ts", "headers: baseForwardedHeaders(sourceHeaders)", "fallback webhook must not receive the Apex authorization secret");
+assert(!read("src/lib/apexCrm.ts").includes("GHL"), "retired GHL lead routing must not remain executable");
+assert(!read("src/app/api/lead/route.ts").includes("apexData"), "organic lead failures must not parse, log, or echo upstream PII");
 includes("src/components/QuickQuoteForm.tsx", "bookingIntent", "quote form must capture booking intent");
 includes("src/components/QuickQuoteForm.tsx", "contactPreference", "quote form must capture contact preference");
 includes("src/components/QuickQuoteForm.tsx", "smsConsent", "quote form must preserve SMS consent context");
@@ -31,11 +32,20 @@ includes("src/components/ContactForm.tsx", "QuickQuoteForm", "legacy contact for
 includes("src/components/QuickQuoteForm.tsx", "gclid", "shared quote form must capture gclid for paid traffic");
 includes("src/components/QuickQuoteForm.tsx", "gbraid", "shared quote form must capture gbraid for paid traffic");
 includes("src/components/QuickQuoteForm.tsx", "wbraid", "shared quote form must capture wbraid for paid traffic");
+includes("src/components/QuickQuoteForm.tsx", 'paidSearch ? "/api/google-ads-lead" : "/api/lead"', "paid quote form must use the paid lead route");
+includes("src/components/QuickQuoteForm.tsx", "mergeAttributionForSubmission", "shared quote form must merge first-touch attribution at submission time");
+includes("src/app/api/google-ads-lead/route.ts", "firstLandingPage", "paid lead route must forward first landing page");
+includes("src/app/api/google-ads-lead/route.ts", "firstReferrer", "paid lead route must forward first referrer");
+assert(!read("src/app/api/google-ads-lead/route.ts").includes("allowFallback"), "paid lead routing must have no executable fallback path");
+includes("src/components/QuickQuoteForm.tsx", "paidSearch && !apexAccepted", "paid form must not show success unless Apex accepted the lead");
+assert(!read("src/lib/apexCrm.ts").includes("data: apexData"), "Apex upstream responses must not be echoed or logged because they may contain PII");
+includes("src/lib/apexCrm.ts", "landingService", "Apex helper must preserve paid landing service");
+includes("src/lib/apexCrm.ts", "landingCity", "Apex helper must preserve paid landing city");
 includes("src/app/book-now/page.tsx", "NEXT_PUBLIC_DIRECT_BOOKING_URL", "book-now page must support direct booking CTA URL");
 includes("src/components/AnalyticsTags.tsx", "NEXT_PUBLIC_GTM_ID", "analytics tags must support GTM");
 includes("src/components/AnalyticsTags.tsx", "NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID", "analytics tags must support Google Ads conversion config");
-includes("src/lib/conversionTracking.ts", "lead_submit", "conversion tracker must push a GTM lead_submit event");
-includes("src/lib/conversionTracking.ts", "generate_lead", "conversion tracker must emit GA4 generate_lead");
+includes("src/lib/conversionTracking.ts", "lead_submit_accepted", "conversion tracker must push an accepted-lead funnel event");
+includes("src/lib/conversionTracking.ts", "generate_lead", "conversion tracker must emit GA4 generate_lead only for accepted leads");
 includes("src/lib/conversionTracking.ts", "NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL", "conversion tracker must support Google Ads lead conversion label");
 includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "quote form must track successful lead conversions");
 includes("src/components/QuickQuoteForm.tsx", "trackLeadConversion", "shared quote form must track contact and paid lead conversions");
@@ -44,6 +54,7 @@ includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "QuickQuoteForm", 
 includes("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "source=\"google-ads\"", "Google Ads landing page must tag leads as google-ads");
 includes("src/app/api/ad-readiness/route.ts", "readyForPaidTraffic", "site must expose safe ad readiness status");
 includes("src/app/api/ad-readiness/route.ts", "APEX_LEAD_INTAKE_SECRET", "site ad readiness must confirm Apex lead secret is configured");
+includes("src/app/api/ad-readiness/route.ts", "NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL", "site ad readiness must report phone conversion configuration separately");
 includes("next.config.ts", "X-Frame-Options", "site must send basic security headers");
 includes("next.config.ts", "Referrer-Policy", "site must send referrer policy");
 

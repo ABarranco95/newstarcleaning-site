@@ -59,11 +59,15 @@ Expected env vars, never hardcode secret values:
 - `NEXT_PUBLIC_GTM_ID`
 - `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID`
 - `NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL`
+- `NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL`
+- `NEXT_PUBLIC_GOOGLE_ADS_PHONE_DISPLAY_NUMBER`
+- `NEXT_PUBLIC_GTM_GOOGLE_ADS_FORM_CONVERSION_CONFIGURED` (only `true` after the tag is published in GTM)
+- `NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURED` (only `true` after the Calls from Website tag is published in GTM)
 - `NEXT_PUBLIC_META_PIXEL_ID`
 - `NEXT_PUBLIC_CLARITY_ID`
 - `NEXT_PUBLIC_DIRECT_BOOKING_URL` or `NEXT_PUBLIC_BOOKINGKOALA_URL`
 
-`GHL_FALLBACK_WEBHOOK_URL` is legacy optional fallback only. Do not make GHL the primary route.
+GHL lead routing is retired. Apex is the only accepted website lead destination; intake must fail closed if Apex rejects the request.
 
 ## Messaging and customer-safety rules
 

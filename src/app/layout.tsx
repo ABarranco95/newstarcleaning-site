@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import AnalyticsTags from "@/components/AnalyticsTags";
 import PageViewTracker from "@/components/PageViewTracker";
+import WebsiteCallTracker from "@/components/WebsiteCallTracker";
+import PaidAttributionTracker from "@/components/PaidAttributionTracker";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -79,6 +81,8 @@ export default function RootLayout({
       <body className="font-sans antialiased text-ink bg-cream">
         <AnalyticsTags />
         <PageViewTracker />
+        <PaidAttributionTracker />
+        <WebsiteCallTracker />
         <SchemaMarkup />
         <Header />
         <main className="min-h-screen">{children}</main>

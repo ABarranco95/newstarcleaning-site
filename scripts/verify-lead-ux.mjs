@@ -111,7 +111,10 @@ assert(
 );
 
 assert(
-  googleAds.includes('source="google-ads"') && googleAds.includes("QuickQuoteForm"),
+  googleAds.includes('source="google-ads"') &&
+    googleAds.includes("QuickQuoteForm") &&
+    googleAds.includes('type PaidIntent = "house" | "move" | "deep" | "recurring"') &&
+    googleAds.includes('return "house";'),
   "Google Ads landing page uses the shared quote form with paid-source attribution",
 );
 

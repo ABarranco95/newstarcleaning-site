@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { trackLeadConversion } from "@/lib/conversionTracking";
+import { useEffect, useRef, useState } from "react";
+import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
+import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 
 type QuickQuoteFormProps = {
   title?: string;
@@ -36,6 +37,17 @@ type FormState = {
 };
 
 type TextFormField = Exclude<keyof FormState, "moveOutAddons">;
+
+type LeadResponse = {
+  error?: string;
+  details?: unknown;
+  filtered?: boolean;
+  metadata?: {
+    apex?: {
+      success?: boolean;
+    };
+  };
+};
 
 const services = [
   "Standard recurring cleaning",
@@ -152,6 +164,7 @@ export default function QuickQuoteForm({
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
+  const hasTrackedFormStart = useRef(false);
 
   useEffect(() => {
     setFormData((current) => ({
@@ -177,7 +190,8 @@ export default function QuickQuoteForm({
       const value = params.get(key);
       if (value) capture[key] = value;
     });
-    if (document.referrer) capture.referrer = document.referrer;
+    const referrer = sanitizeReferrer(document.referrer);
+    if (referrer) capture.referrer = referrer;
     setTracking(capture);
 
     const city = normalizeCityParam(params.get("city"));
@@ -191,11 +205,24 @@ export default function QuickQuoteForm({
     }
   }, []);
 
+  const trackFormStart = () => {
+    if (hasTrackedFormStart.current) return;
+    hasTrackedFormStart.current = true;
+    trackFunnelEvent("quote_form_start", {
+      source,
+      service: formData.service,
+      city: formData.city,
+      page: window.location.pathname,
+    });
+  };
+
   const updateField = (field: TextFormField, value: string) => {
+    trackFormStart();
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
   const toggleMoveOutAddon = (addon: string) => {
+    trackFormStart();
     setFormData((current) => ({
       ...current,
       moveOutAddons: current.moveOutAddons.includes(addon)
@@ -217,12 +244,21 @@ export default function QuickQuoteForm({
     setError("");
 
     try {
-      const response = await fetch("/api/lead", {
+      const attribution = mergeAttributionForSubmission({
+        ...tracking,
+        firstLandingPage: window.location.pathname,
+        firstReferrer: document.referrer,
+        landingService: formData.service,
+        landingCity: formData.city,
+      });
+      const endpoint = paidSearch ? "/api/google-ads-lead" : "/api/lead";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           ...tracking,
+          ...attribution,
           homeSize: formData.sqft,
           source,
           page: window.location.pathname,
@@ -233,11 +269,20 @@ export default function QuickQuoteForm({
         }),
       });
 
-      const data: Record<string, unknown> = await response
+      const data = (await response
         .json()
-        .catch(() => ({} as Record<string, unknown>));
+        .catch(() => ({}))) as LeadResponse;
 
       if (!response.ok) {
+        if (response.status === 400) {
+          trackFunnelEvent("quote_validation_error", {
+            source,
+            service: formData.service,
+            city: formData.city,
+            page: window.location.pathname,
+            validationField: "server_validation",
+          });
+        }
         const details = Array.isArray(data.details)
           ? (data.details[0] as string | undefined)
           : undefined;
@@ -248,7 +293,15 @@ export default function QuickQuoteForm({
       // Only fire conversion pixels for real Apex-accepted leads.
       // Honeypot-filtered bot submissions return { filtered: true } — show the
       // bot a success state but never fire a conversion or pollute attribution.
-      if (data.filtered !== true) {
+      const apexAccepted = paidSearch
+        ? data.metadata?.apex?.success === true
+        : data.filtered !== true;
+
+      if (paidSearch && !apexAccepted) {
+        throw new Error("We could not receive your quote request. Please call us directly.");
+      }
+
+      if (apexAccepted) {
         trackLeadConversion({
           source,
           service: formData.service,
@@ -507,7 +560,25 @@ export default function QuickQuoteForm({
         ) : null}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        onFocusCapture={trackFormStart}
+        onInvalidCapture={(event) => {
+          const field = event.target instanceof HTMLInputElement ||
+            event.target instanceof HTMLSelectElement ||
+            event.target instanceof HTMLTextAreaElement
+            ? event.target.name
+            : "unknown";
+          trackFunnelEvent("quote_validation_error", {
+            source,
+            service: formData.service,
+            city: formData.city,
+            page: window.location.pathname,
+            validationField: field || "unknown",
+          });
+        }}
+        className="space-y-4"
+      >
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <FieldLabel htmlFor="quote-name" required>Name</FieldLabel>

@@ -88,17 +88,21 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    const apexData = await apexRes.json().catch(() => ({}));
-
     if (!apexRes.ok) {
-      console.error("Apex CRM lead intake failed:", apexRes.status, apexData);
+      console.error("Apex CRM lead intake failed:", { status: apexRes.status });
       return NextResponse.json(
-        { error: apexData.error || "Unable to submit lead. Please try again or call us." },
+        { error: "Unable to submit lead. Please try again or call us." },
         { status: apexRes.status }
       );
     }
 
-    return NextResponse.json(apexData, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        metadata: { apex: { configured: true, success: true, status: apexRes.status } },
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Lead proxy error:", error);
     return NextResponse.json(

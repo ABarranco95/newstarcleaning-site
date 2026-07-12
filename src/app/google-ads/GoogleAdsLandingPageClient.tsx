@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
+import { captureFirstPaidTouch } from "@/lib/attribution";
+import { trackFunnelEvent } from "@/lib/conversionTracking";
 
-type PaidIntent = "move" | "deep" | "recurring";
+type PaidIntent = "house" | "move" | "deep" | "recurring";
 
 type CityKey =
   | "fresno"
@@ -46,6 +48,67 @@ const CITY_LABELS: Record<CityKey, string> = {
 };
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
+  house: {
+    eyebrow: "House cleaning · local quote and availability",
+    h1: (city) => `House Cleaning in ${city} Built Around Your Home`,
+    subhead:
+      "Request pricing for house cleaning based on your home size, current condition, timing, and priorities. We confirm the right service scope before booking.",
+    serviceDefault: "Not sure yet",
+    formTitle: "Request house cleaning pricing",
+    formSubtitle:
+      "Send the home size and timing first. We will confirm whether standard, deep, or move cleaning fits the request.",
+    heroBullets: [
+      "Standard, deep, and move cleaning options",
+      "Scope matched to the home condition",
+      "Price and included work confirmed before booking",
+      "Local residential cleaning service",
+    ],
+    scopeTitle: "The right cleaning scope starts with the home",
+    scopeIntro:
+      "House-cleaning requests vary by condition, timing, and whether the home needs maintenance, a detailed reset, or an empty-home service. We use those details to route the request correctly.",
+    scopeBullets: [
+      "Standard recurring cleaning for maintained homes",
+      "Deep cleaning for first visits, seasonal resets, or visible buildup",
+      "Move-in or move-out cleaning for empty or mostly empty homes",
+      "Kitchen, bathroom, reachable surface, and floor priorities confirmed in the quote",
+      "Optional details priced separately when requested",
+    ],
+    addonTitle: "Details that shape the quote",
+    addonBullets: [
+      "Home size and layout",
+      "Current condition",
+      "Preferred timing",
+      "Pets or heavy buildup",
+      "Priority rooms or requested add-ons",
+    ],
+    boundaryTitle: "Before the appointment",
+    boundaryBullets: [
+      "The cleaning type and included work are confirmed before booking",
+      "Route availability depends on the requested city and date",
+      "Laundry, dishes, organizing, and household chores are not included",
+      "Heavy buildup or optional detail work may require additional time and pricing",
+    ],
+    proofTitle: "A service recommendation based on the request",
+    proofCopy:
+      "Sharing the home size, condition, timing, and priorities helps us recommend the appropriate cleaning scope instead of assuming every home needs the same service.",
+    faqs: [
+      {
+        question: "Which cleaning service should I choose?",
+        answer:
+          "Choose the closest option if you know it. If you are unsure, submit the home size, condition, and timing and we will help identify whether standard, deep, or move cleaning fits.",
+      },
+      {
+        question: "Do I need to know the cleaning type before I request pricing?",
+        answer:
+          "No. Share the current condition, timing, and priorities and we will help identify whether standard recurring, deep, or move cleaning fits the request.",
+      },
+      {
+        question: "What information helps with pricing?",
+        answer:
+          "Home size, city, current condition, preferred timing, pets, and priority areas are the most useful starting details.",
+      },
+    ],
+  },
   move: {
     eyebrow: "Move-in / move-out cleaning · empty-home service",
     h1: (city) => `Move-Out Cleaning in ${city} for a cleaner handoff`,
@@ -252,8 +315,13 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
 
   if (normalizedService.includes("deep")) return "deep";
   if (normalizedService.includes("move")) return "move";
-  if (normalizedFrequency.includes("recurring") || normalizedService.includes("standard")) return "recurring";
-  return "move";
+  if (
+    normalizedService.includes("recurring") ||
+    ["recurring", "weekly", "biweekly", "bi-weekly", "monthly"].includes(normalizedFrequency)
+  ) {
+    return "recurring";
+  }
+  return "house";
 }
 
 function TrustBar({ city }: { city: string }) {
@@ -302,14 +370,14 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   );
 }
 
-function StickyMobileCTA() {
+function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
         <a href={"tel:+1" + "559" + "785" + "2822"} className="flex-1 rounded-xl border border-line px-4 py-3 text-center text-sm font-bold text-primary">
           Call
         </a>
-        <a href="#booking-form" className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
+        <a href="#booking-form" onClick={onQuoteClick} className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
           Request pricing
         </a>
       </div>
@@ -319,12 +387,42 @@ function StickyMobileCTA() {
 
 export default function GoogleAdsLandingPageClient() {
   const searchParams = useSearchParams();
+  const hasTrackedLandingView = useRef(false);
   const city = useMemo(() => normalizeCity(searchParams.get("city")), [searchParams]);
   const intentKey = useMemo(
     () => detectIntent(searchParams.get("service"), searchParams.get("frequency")),
     [searchParams]
   );
   const intent = INTENT_CONFIG[intentKey];
+
+  useEffect(() => {
+    captureFirstPaidTouch({
+      landingService: searchParams.get("service") || intentKey,
+      landingCity: searchParams.get("city") || city.label,
+    });
+
+    if (!hasTrackedLandingView.current) {
+      hasTrackedLandingView.current = true;
+      trackFunnelEvent("paid_landing_view", {
+        source: "google-ads",
+        service: intent.serviceDefault,
+        city: city.formValue || city.label,
+        page: "/google-ads",
+        intent: intentKey,
+      });
+    }
+  }, [city.formValue, city.label, intent.serviceDefault, intentKey, searchParams]);
+
+  const trackQuoteCta = (ctaLocation: string) => {
+    trackFunnelEvent("quote_cta_click", {
+      source: "google-ads",
+      service: intent.serviceDefault,
+      city: city.formValue || city.label,
+      page: "/google-ads",
+      intent: intentKey,
+      ctaLocation,
+    });
+  };
 
   return (
     <div className="bg-cream-2 pb-24 text-ink md:pb-0">
@@ -342,7 +440,7 @@ export default function GoogleAdsLandingPageClient() {
               {intent.subhead}
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a href="#booking-form" className="btn btn-accent !text-sm">
+              <a href="#booking-form" onClick={() => trackQuoteCta("hero")} className="btn btn-accent !text-sm">
                 Get pricing & availability
               </a>
               <a href="tel:+15597852822" className="btn btn-ghost-dark !text-sm">
@@ -437,7 +535,7 @@ export default function GoogleAdsLandingPageClient() {
           Send the details once. We confirm the scope, timing, and price before the job is accepted.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href="#booking-form" className="btn btn-accent !text-sm">
+          <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !text-sm">
             Request pricing
           </a>
           <a href="tel:+15597852822" className="btn btn-outline !text-sm">
@@ -446,7 +544,7 @@ export default function GoogleAdsLandingPageClient() {
         </div>
       </section>
 
-      <StickyMobileCTA />
+      <StickyMobileCTA onQuoteClick={() => trackQuoteCta("sticky_mobile")} />
     </div>
   );
 }

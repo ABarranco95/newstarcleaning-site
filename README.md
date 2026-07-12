@@ -45,20 +45,21 @@ NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID=AW-XXXXXXXXXX
 NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL=xxxxxxxxxxxxxxxx
+NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL=xxxxxxxxxxxxxxxx
+NEXT_PUBLIC_GOOGLE_ADS_PHONE_DISPLAY_NUMBER="(559) 785-2822"
+# Set these only after the matching Google Ads tags are published in GTM:
+NEXT_PUBLIC_GTM_GOOGLE_ADS_FORM_CONVERSION_CONFIGURED=false
+NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURED=false
 NEXT_PUBLIC_META_PIXEL_ID=000000000000000
 NEXT_PUBLIC_CLARITY_ID=xxxxxxxxxx
 ```
 
-The safe readiness endpoint returns booleans only:
+The safe readiness endpoint returns booleans only. When GTM is configured, form and website-call readiness remain false until the corresponding `NEXT_PUBLIC_GTM_GOOGLE_ADS_*_CONFIGURED` marker is explicitly set after the tags are published. Without GTM, the site uses the direct Google Ads form event and forwarding-number phone snippet.
+
+Paid click IDs and first-touch fields are stored in allowlisted browser storage for no more than 90 days, then forwarded to Apex only when a quote is submitted.
 
 ```text
 https://newstarcleaning.com/api/ad-readiness
-```
-
-Optional secondary fallback:
-
-```bash
-GHL_FALLBACK_WEBHOOK_URL=https://your-ghl-fallback-webhook.example
 ```
 
 Primary routes:

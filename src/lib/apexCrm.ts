@@ -12,7 +12,6 @@ const APEX_INCOMING_URL =
   process.env.APEX_CRM_INCOMING_URL ||
   (APEX_CRM_BASE_URL ? `${APEX_CRM_BASE_URL}/api/public/lead` : "");
 
-const GHL_FALLBACK_WEBHOOK_URL = process.env.GHL_FALLBACK_WEBHOOK_URL || "";
 const APEX_LEAD_INTAKE_SECRET =
   process.env.APEX_LEAD_INTAKE_SECRET || process.env.APEX_PUBLIC_API_KEY || "";
 
@@ -27,6 +26,11 @@ type LeadPayload = {
   message?: string;
   source: string;
   page?: string;
+  firstLandingPage?: string;
+  firstReferrer?: string;
+  landingService?: string;
+  landingCity?: string;
+  capturedAt?: string;
   beds?: number;
   baths?: number;
   sqft?: number;
@@ -37,14 +41,6 @@ type LeadRoutingResult = {
   metadata: {
     apex: {
       configured: boolean;
-      success: boolean;
-      status?: number;
-      data?: unknown;
-    };
-    fallback?: {
-      provider: "ghl";
-      configured: boolean;
-      attempted: boolean;
       success: boolean;
       status?: number;
     };
@@ -119,6 +115,11 @@ export function validateLeadPayload(payload: LeadPayload) {
       message: normalizeOptionalString(payload.message),
       source: normalizeOptionalString(payload.source) || "",
       page: normalizeOptionalString(payload.page),
+      firstLandingPage: normalizeOptionalString(payload.firstLandingPage),
+      firstReferrer: normalizeOptionalString(payload.firstReferrer),
+      landingService: normalizeOptionalString(payload.landingService),
+      landingCity: normalizeOptionalString(payload.landingCity),
+      capturedAt: normalizeOptionalString(payload.capturedAt),
     },
   };
 }
@@ -148,52 +149,9 @@ function apexForwardedHeaders(sourceHeaders?: Headers) {
   return headers;
 }
 
-async function readJsonSafely(response: Response) {
-  try {
-    return await response.json();
-  } catch {
-    return null;
-  }
-}
-
-async function submitToGhlFallback(payload: LeadPayload, sourceHeaders?: Headers) {
-  if (!GHL_FALLBACK_WEBHOOK_URL) {
-    return {
-      provider: "ghl" as const,
-      configured: false,
-      attempted: false,
-      success: false,
-    };
-  }
-
-  try {
-    const response = await fetch(GHL_FALLBACK_WEBHOOK_URL, {
-      method: "POST",
-      headers: baseForwardedHeaders(sourceHeaders),
-      body: JSON.stringify(payload),
-    });
-
-    return {
-      provider: "ghl" as const,
-      configured: true,
-      attempted: true,
-      success: response.ok,
-      status: response.status,
-    };
-  } catch (error) {
-    console.error("GHL fallback lead submission failed:", error);
-    return {
-      provider: "ghl" as const,
-      configured: true,
-      attempted: true,
-      success: false,
-    };
-  }
-}
-
 export async function submitLeadToApex(
   payload: LeadPayload,
-  sourceHeaders?: Headers
+  sourceHeaders?: Headers,
 ) {
   const validation = validateLeadPayload(payload);
 
@@ -216,7 +174,6 @@ export async function submitLeadToApex(
     );
   }
 
-  let apexData: unknown = null;
   let apexStatus: number | undefined;
 
   try {
@@ -226,7 +183,6 @@ export async function submitLeadToApex(
       body: JSON.stringify(validation.payload),
     });
     apexStatus = response.status;
-    apexData = await readJsonSafely(response);
 
     if (response.ok) {
       const result: LeadRoutingResult = {
@@ -236,7 +192,6 @@ export async function submitLeadToApex(
             configured: true,
             success: true,
             status: response.status,
-            data: apexData,
           },
         },
       };
@@ -244,30 +199,26 @@ export async function submitLeadToApex(
       return NextResponse.json(result, { status: 201 });
     }
 
-    console.error("Apex CRM lead submission failed:", {
-      status: response.status,
-      data: apexData,
-    });
+    console.error("Apex CRM lead submission failed:", { status: response.status });
   } catch (error) {
-    console.error("Apex CRM lead submission error:", error);
+    console.error("Apex CRM lead submission error:", {
+      name: error instanceof Error ? error.name : "UnknownError",
+      message: error instanceof Error ? error.message : "Upstream request failed",
+    });
   }
-
-  const fallback = await submitToGhlFallback(validation.payload, sourceHeaders);
 
   return NextResponse.json(
     {
-      success: fallback.success,
-      error: "Failed to route lead to Apex CRM.",
+      success: false,
+      error: "We could not receive your quote request. Please call us directly.",
       metadata: {
         apex: {
           configured: true,
           success: false,
           status: apexStatus,
-          data: apexData,
         },
-        fallback,
       },
     },
-    { status: fallback.success ? 202 : 502 }
+    { status: 502 }
   );
 }
