@@ -16,7 +16,7 @@
     "verify:funnel-events": "node scripts/verify-funnel-events.mjs"
   },
   "dependencies": {
-    "next": "^16.2.6",
+    "next": "^16.2.10",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
@@ -26,7 +26,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "^16.2.6",
+    "eslint-config-next": "^16.2.10",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -1,9 +1,11 @@
 import Link from "next/link";
 import QuotePathPanel from "@/components/QuotePathPanel";
+import RealWorkGallery from "@/components/RealWorkGallery";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceDefinition } from "@/lib/services";
 import { getFullIncludedList } from "@/lib/services";
+import { bathroomResultPhotos, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -37,6 +39,17 @@ export default function ServiceDetailPage({
   intro?: string;
 }) {
   const fullIncluded = getFullIncludedList(service.slug);
+  const resultPhotos = service.slug === "deep-cleaning"
+    ? bathroomResultPhotos
+    : service.slug === "move-out-cleaning"
+      ? emptyHomeResultPhotos
+      : [];
+  const resultTitle = service.slug === "deep-cleaning"
+    ? "Bathroom detail from real appointments."
+    : "Empty-home details from real appointments.";
+  const resultIntro = service.slug === "deep-cleaning"
+    ? "These customer-job photos show the kind of accessible bathroom surfaces addressed during detailed cleaning."
+    : "These customer-job photos show clean, empty interior areas without presenting them as a guaranteed result for every home.";
 
   return (
     <>
@@ -123,6 +136,18 @@ export default function ServiceDetailPage({
           </div>
         </div>
       </section>
+
+      {resultPhotos.length > 0 && (
+        <section className="ns-section border-y border-line bg-white">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <RealWorkGallery
+              photos={resultPhotos}
+              title={resultTitle}
+              intro={resultIntro}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Scope boundaries */}
       <section className="ns-section bg-cream-2">
@@ -231,6 +256,15 @@ export default function ServiceDetailPage({
               <h2 className="text-2xl text-ink">Serving Fresno, Clovis &amp; Madera</h2>
               <p className="mt-4 leading-relaxed text-ink-soft">{service.localNotes}</p>
               <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/cleaning-services-fresno" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
+                  {service.shortName} in Fresno &rarr;
+                </Link>
+                <Link href="/cleaning-services-clovis" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
+                  Cleaning service in Clovis &rarr;
+                </Link>
+                <Link href="/cleaning-services-madera" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
+                  Cleaning service in Madera &rarr;
+                </Link>
                 <Link
                   href="/book-now"
                   className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
@@ -337,7 +371,7 @@ export default function ServiceDetailPage({
                 streetAddress: "132 W Nees Ave Unit 106",
                 addressLocality: "Fresno",
                 addressRegion: "CA",
-                postalCode: "93720",
+                postalCode: "93711",
                 addressCountry: "US",
               },
             },

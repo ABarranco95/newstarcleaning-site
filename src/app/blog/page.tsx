@@ -3,14 +3,14 @@ import Link from "next/link";
 import { blogPosts } from "@/lib/blogPosts";
 
 export const metadata: Metadata = {
-  title: "Cleaning Tips & Guides — New Star Cleaning Blog",
+  title: "Fresno House Cleaning Tips & Guides",
   description:
     "Cleaning tips, deep-clean cadences, and move-out checklists from New Star Cleaning's local team in Fresno, Clovis & Madera.",
   alternates: {
     canonical: "/blog",
   },
   openGraph: {
-    title: "Cleaning Tips & Guides — New Star Cleaning Blog | New Star Cleaning",
+    title: "Fresno House Cleaning Tips & Guides | New Star Cleaning",
     description:
       "Local Fresno-area cleaning advice from the New Star Cleaning team.",
     url: "https://newstarcleaning.com/blog",

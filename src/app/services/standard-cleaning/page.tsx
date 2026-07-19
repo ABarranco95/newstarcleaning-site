@@ -5,16 +5,14 @@ import { getService } from "@/lib/services";
 const service = getService("standard-cleaning")!;
 
 export const metadata: Metadata = {
-  title:
-    "Standard House Cleaning in Fresno, CA | Recurring Professional Cleaning",
+  title: "Recurring House Cleaning in Fresno, CA",
   description:
     "Weekly, bi-weekly, or monthly cleaning for maintained Fresno homes. Review included rooms, optional additions, and current availability.",
   alternates: {
     canonical: "/services/standard-cleaning",
   },
   openGraph: {
-    title:
-      "Standard House Cleaning in Fresno, CA | Recurring Professional Cleaning | New Star Cleaning",
+    title: "Recurring House Cleaning in Fresno, CA | New Star Cleaning",
     description:
       "Weekly, bi-weekly, or monthly house cleaning for maintained Fresno homes.",
     url: "https://newstarcleaning.com/services/standard-cleaning",

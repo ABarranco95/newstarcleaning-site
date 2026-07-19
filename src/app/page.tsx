@@ -1,5 +1,7 @@
 import Link from "next/link";
 import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
+import RealWorkGallery from "@/components/RealWorkGallery";
+import { realWorkPhotos } from "@/lib/realWorkPhotos";
 
 const services = [
   {
@@ -190,6 +192,25 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-y border-line bg-white">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[0.78fr_1.22fr] md:items-center lg:px-8">
+          <div>
+            <span className="eyebrow eyebrow-dot">Properties and projects</span>
+            <h2 className="mt-3 text-2xl text-ink sm:text-3xl">Need cleaning beyond an occupied home?</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link href="/services/post-construction-cleaning" className="group border-l-2 border-primary pl-5">
+              <span className="font-bold text-ink group-hover:text-primary">Post-construction cleaning</span>
+              <span className="mt-1 block text-sm leading-6 text-ink-soft">Final cleans, renovations, turnover detail, and scoped punch returns.</span>
+            </Link>
+            <Link href="/services/commercial-cleaning" className="group border-l-2 border-primary pl-5">
+              <span className="font-bold text-ink group-hover:text-primary">Office & commercial cleaning</span>
+              <span className="mt-1 block text-sm leading-6 text-ink-soft">Walkthrough-based proposals for offices and small commercial facilities.</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section id="how-it-works" className="border-y border-line bg-cream-2">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
@@ -210,19 +231,28 @@ export default function Home() {
       </section>
 
       <section id="results" className="bg-white">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20 lg:px-8 lg:py-24">
-          <div>
-            <span className="eyebrow eyebrow-dot">Real results</span>
-            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Real before-and-after work from New Star appointments.</h2>
-            <p className="mt-5 text-lg leading-8 text-ink-soft">
-              These are customer-job photos, not stock images. Use the toggle to compare the same surface before and after cleaning.
-            </p>
-            <p className="mt-4 text-sm leading-6 text-mute">
-              Results vary with surface condition, buildup, access, and the cleaning requested.
-            </p>
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
+            <div>
+              <span className="eyebrow eyebrow-dot">Real results</span>
+              <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Real before-and-after work from New Star appointments.</h2>
+              <p className="mt-5 text-lg leading-8 text-ink-soft">
+                These are customer-job photos, not stock images. Use the toggle to compare the same surface before and after cleaning.
+              </p>
+              <p className="mt-4 text-sm leading-6 text-mute">
+                Results vary with surface condition, buildup, access, and the cleaning requested.
+              </p>
+            </div>
+            <div className="mx-auto w-full max-w-sm">
+              <BeforeAfterCarousel items={resultsPairs} />
+            </div>
           </div>
-          <div className="mx-auto w-full max-w-sm">
-            <BeforeAfterCarousel items={resultsPairs} />
+          <div className="mt-16 border-t border-line pt-14">
+            <RealWorkGallery
+              photos={realWorkPhotos}
+              title="Clean details from real appointments."
+              intro="A wider look at bathrooms and empty-home details completed by New Star cleaners. No stock photography or staged showroom images."
+            />
           </div>
         </div>
       </section>

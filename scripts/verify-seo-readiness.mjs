@@ -23,7 +23,11 @@ const serviceCityPage = read("src/app/[serviceCity]/page.tsx");
 const schemaMarkup = read("src/components/SchemaMarkup.tsx");
 const serviceAreaPage = read("src/components/ServiceAreaPage.tsx");
 const serviceDetailPage = read("src/components/ServiceDetailPage.tsx");
+const commercialServicePage = read("src/components/CommercialServicePage.tsx");
 const servicesHub = read("src/app/services/page.tsx");
+const postConstructionPage = read("src/app/services/post-construction-cleaning/page.tsx");
+const commercialCleaningPage = read("src/app/services/commercial-cleaning/page.tsx");
+const business = read("src/lib/business.ts");
 const serviceAreasHub = read("src/app/service-areas/page.tsx");
 const header = read("src/components/Header.tsx");
 const footer = read("src/components/Footer.tsx");
@@ -96,6 +100,14 @@ assert(
 );
 
 assert(
+  business.includes('postalCode: "93711"') &&
+    !schemaMarkup.includes('postalCode: "93720"') &&
+    !serviceAreaPage.includes('postalCode: "93720"') &&
+    !serviceDetailPage.includes('postalCode: "93720"'),
+  "structured NAP uses the reviewed GBP ZIP 93711",
+);
+
+assert(
   serviceAreaPage.includes("Local service notes") &&
     serviceAreaPage.includes("Google profile") &&
     serviceAreaPage.includes("Local FAQs") &&
@@ -123,6 +135,18 @@ assert(
 );
 
 assert(
+  postConstructionPage.includes("Post-Construction Cleaning") &&
+    commercialCleaningPage.includes("Office & Commercial Cleaning") &&
+    commercialServicePage.includes("FAQPage") &&
+    commercialServicePage.includes("BreadcrumbSchema") &&
+    servicesHub.includes("/services/post-construction-cleaning") &&
+    servicesHub.includes("/services/commercial-cleaning") &&
+    sitemap.includes("/services/post-construction-cleaning") &&
+    sitemap.includes("/services/commercial-cleaning"),
+  "commercial and post-construction pages have scope, schema, hub links, and sitemap entries",
+);
+
+assert(
   serviceAreasHub.includes("Cities we serve") &&
     serviceAreasHub.includes("Fresno neighborhoods") &&
     serviceAreasHub.includes("ItemList") &&
@@ -135,6 +159,8 @@ for (const href of [
   "/services/standard-cleaning",
   "/services/deep-cleaning",
   "/services/move-out-cleaning",
+  "/services/post-construction-cleaning",
+  "/services/commercial-cleaning",
   "/service-areas",
 ]) {
   assert(footer.includes(`href="${href}"`), `footer links ${href}`);

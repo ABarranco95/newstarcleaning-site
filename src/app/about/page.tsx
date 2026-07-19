@@ -3,7 +3,7 @@ import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
 
 export const metadata: Metadata = {
-  title: "About New Star Cleaning | Fresno House Cleaning",
+  title: "About Our Fresno Cleaning Company",
   description:
     "New Star Cleaning is a locally owned residential cleaning company serving Fresno, Clovis, Madera, and the listed Fresno neighborhoods.",
   alternates: { canonical: "/about" },

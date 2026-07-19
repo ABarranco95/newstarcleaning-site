@@ -5,7 +5,7 @@ import { getService } from "@/lib/services";
 const service = getService("deep-cleaning")!;
 
 export const metadata: Metadata = {
-  title: "Deep House Cleaning in Fresno, CA | One-Time Deep Clean",
+  title: "Deep Cleaning in Fresno, CA",
   description:
     "Detailed deep cleaning for Fresno homes: baseboards, reachable vents, fixtures, floors, bathrooms, and buildup areas. Optional add-ons quoted separately.",
   alternates: {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      "Deep House Cleaning in Fresno, CA | One-Time Deep Clean | New Star Cleaning",
+      "Deep Cleaning in Fresno, CA | New Star Cleaning",
     description:
       "Detailed deep cleaning for Fresno homes, including accessible kitchens, bathrooms, floors, baseboards, fixtures, vents, and buildup areas.",
     url: "https://newstarcleaning.com/services/deep-cleaning",

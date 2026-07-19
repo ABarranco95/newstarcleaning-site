@@ -84,7 +84,9 @@ export default function ContactPage() {
               <span className="eyebrow eyebrow-dot">Hours</span>
               <h2 className="mt-3 text-xl text-ink">Office availability</h2>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Monday – Saturday: 8 AM – 6 PM
+                Monday – Friday: 8 AM – 6 PM
+                <br />
+                Saturday: 8 AM – 5 PM
                 <br />
                 Sunday: closed
               </p>

@@ -1,36 +1,40 @@
+import { business, businessAreaServed } from "@/lib/business";
+
 export default function SchemaMarkup() {
-  const siteUrl = "https://newstarcleaning.com";
-  const localBusinessId = `${siteUrl}/#localbusiness`;
-  const organizationId = `${siteUrl}/#organization`;
-  const websiteId = `${siteUrl}/#website`;
-  const googleMapsUrl = "https://www.google.com/maps?cid=12575787905603463321";
-  const areaServed = [
-    { "@type": "City", name: "Fresno", addressRegion: "CA" },
-    { "@type": "City", name: "Clovis", addressRegion: "CA" },
-    { "@type": "City", name: "Madera", addressRegion: "CA" },
-    { "@type": "Place", name: "Tower District, Fresno", addressRegion: "CA" },
-    { "@type": "Place", name: "Fig Garden, Fresno", addressRegion: "CA" },
-    { "@type": "Place", name: "Woodward Park, Fresno", addressRegion: "CA" },
-  ];
+  const localBusinessId = `${business.siteUrl}/#localbusiness`;
+  const organizationId = `${business.siteUrl}/#organization`;
+  const websiteId = `${business.siteUrl}/#website`;
   const cleaningServices = [
     {
       name: "Standard Recurring Cleaning",
-      description:
-        "Weekly, bi-weekly, or monthly recurring house cleaning service.",
+      description: "Weekly, bi-weekly, or monthly recurring house cleaning service.",
+      url: `${business.siteUrl}/services/standard-cleaning`,
     },
     {
       name: "Deep Cleaning",
-      description: "Thorough one-time deep cleaning for your home.",
+      description: "Detailed one-time deep cleaning for Fresno-area homes.",
+      url: `${business.siteUrl}/services/deep-cleaning`,
     },
     {
       name: "Move-In/Move-Out Cleaning",
-      description: "Complete cleaning for empty homes during move-ins, move-outs, and property turnovers.",
+      description: "Detailed cleaning for empty homes during move-ins, move-outs, and property turnovers.",
+      url: `${business.siteUrl}/services/move-out-cleaning`,
+    },
+    {
+      name: "Post-Construction Cleaning",
+      description: "Scoped final cleaning for new construction, renovations, and property handoffs.",
+      url: `${business.siteUrl}/services/post-construction-cleaning`,
+    },
+    {
+      name: "Office & Commercial Cleaning",
+      description: "Walkthrough-based cleaning for offices and small commercial facilities.",
+      url: `${business.siteUrl}/services/commercial-cleaning`,
     },
   ];
 
   const offerCatalog = {
     "@type": "OfferCatalog",
-    "@id": `${siteUrl}/#cleaning-services`,
+    "@id": `${business.siteUrl}/#cleaning-services`,
     name: "Cleaning Services",
     itemListElement: cleaningServices.map((service) => ({
       "@type": "Offer",
@@ -38,8 +42,9 @@ export default function SchemaMarkup() {
         "@type": "Service",
         name: service.name,
         description: service.description,
+        url: service.url,
         provider: { "@id": localBusinessId },
-        areaServed,
+        areaServed: businessAreaServed,
       },
     })),
   };
@@ -50,68 +55,64 @@ export default function SchemaMarkup() {
       {
         "@type": "LocalBusiness",
         "@id": localBusinessId,
-        name: "New Star Cleaning",
-        legalName: "NEW STAR CLEANING LLC",
+        name: business.name,
+        legalName: business.legalName,
         description:
-          "Professional house cleaning services in Fresno, Clovis, Madera, and nearby Fresno neighborhoods. Standard recurring cleaning, deep cleaning, and move-in/move-out cleaning.",
-        url: siteUrl,
-        image: `${siteUrl}/og-image.png`,
-        logo: `${siteUrl}/logo.png`,
-        telephone: "+1-559-785-2822",
-        email: "support@newstarcleaning.com",
+          "Professional residential, office, commercial, and post-construction cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
+        url: business.siteUrl,
+        image: `${business.siteUrl}/og-image.png`,
+        logo: `${business.siteUrl}/logo.png`,
+        telephone: business.phoneE164,
+        email: business.email,
         priceRange: "$$",
-        areaServed,
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "132 W Nees Ave Unit 106",
-          addressLocality: "Fresno",
-          addressRegion: "CA",
-          postalCode: "93720",
-          addressCountry: "US",
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: 36.8526532,
-          longitude: -119.7919928,
-        },
+        areaServed: businessAreaServed,
+        address: { "@type": "PostalAddress", ...business.address },
+        geo: { "@type": "GeoCoordinates", ...business.geo },
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
-            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
             opens: "08:00",
             closes: "18:00",
           },
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: "Saturday",
+            opens: "08:00",
+            closes: "17:00",
+          },
         ],
-        sameAs: [googleMapsUrl, "https://www.facebook.com/newstarcleaning/"],
+        hasMap: business.googleMapsUrl,
+        sameAs: [business.googleMapsUrl, business.facebookUrl],
         hasOfferCatalog: offerCatalog,
       },
       {
         "@type": "Organization",
         "@id": organizationId,
-        name: "New Star Cleaning",
-        legalName: "NEW STAR CLEANING LLC",
-        url: siteUrl,
-        logo: `${siteUrl}/logo.png`,
-        telephone: "+1-559-785-2822",
-        email: "support@newstarcleaning.com",
-        sameAs: [googleMapsUrl, "https://www.facebook.com/newstarcleaning/"],
+        name: business.name,
+        legalName: business.legalName,
+        url: business.siteUrl,
+        logo: `${business.siteUrl}/logo.png`,
+        telephone: business.phoneE164,
+        email: business.email,
+        sameAs: [business.googleMapsUrl, business.facebookUrl],
       },
       {
         "@type": "WebSite",
         "@id": websiteId,
-        name: "New Star Cleaning",
-        url: siteUrl,
+        name: business.name,
+        url: business.siteUrl,
         publisher: { "@id": organizationId },
       },
       {
         "@type": "Service",
-        "@id": `${siteUrl}/#house-cleaning-service`,
-        name: "House Cleaning Services",
-        serviceType: "House cleaning",
+        "@id": `${business.siteUrl}/#cleaning-service-provider`,
+        name: "Cleaning Services",
+        serviceType: "Residential, commercial, and post-construction cleaning",
         description:
-          "Recurring, deep, and move-in/move-out house cleaning services for homes in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
+          "Recurring, deep, move-in/move-out, post-construction, office, and commercial cleaning in New Star Cleaning's approved local route area.",
         provider: { "@id": localBusinessId },
-        areaServed,
+        areaServed: businessAreaServed,
         hasOfferCatalog: offerCatalog,
       },
     ],
@@ -120,9 +121,7 @@ export default function SchemaMarkup() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(localBusinessSchema),
-      }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
     />
   );
 }

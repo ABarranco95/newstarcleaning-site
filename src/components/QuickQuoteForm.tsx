@@ -33,6 +33,7 @@ type FormState = {
   bookingIntent: string;
   condition: string;
   moveOutAddons: string[];
+  organization: string;
   company: string;
 };
 
@@ -53,6 +54,8 @@ const services = [
   "Standard recurring cleaning",
   "Deep cleaning",
   "Move-in / move-out cleaning",
+  "Post-construction cleaning",
+  "Office / commercial cleaning",
   "Not sure yet",
 ];
 
@@ -82,6 +85,16 @@ function normalizeServiceParam(value: string | null) {
     normalized === "moveinout"
   ) {
     return "Move-in / move-out cleaning";
+  }
+  if (normalized === "post-construction-cleaning" || normalized === "post-construction") {
+    return "Post-construction cleaning";
+  }
+  if (
+    normalized === "commercial-cleaning" ||
+    normalized === "office-cleaning" ||
+    normalized === "commercial"
+  ) {
+    return "Office / commercial cleaning";
   }
   return services.includes(value) ? value : "";
 }
@@ -119,6 +132,7 @@ function initialForm(defaultCity?: string, defaultService?: string): FormState {
     bookingIntent: "",
     condition: "",
     moveOutAddons: [],
+    organization: "",
     company: "",
   };
 }
@@ -131,14 +145,28 @@ function FieldLabel({ htmlFor, children, required = false }: { htmlFor: string; 
   );
 }
 
-function SubmitButton({ isSubmitting, compact }: { isSubmitting: boolean; compact: boolean }) {
+function SubmitButton({
+  isSubmitting,
+  compact,
+  commercial,
+}: {
+  isSubmitting: boolean;
+  compact: boolean;
+  commercial: boolean;
+}) {
   return (
     <button
       type="submit"
       disabled={isSubmitting}
       className="btn btn-accent w-full !text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
     >
-      {isSubmitting ? "Sending…" : compact ? "Get my quote" : "Get pricing & availability"}
+      {isSubmitting
+        ? "Sending…"
+        : commercial
+          ? "Request a walkthrough"
+          : compact
+            ? "Get my quote"
+            : "Get pricing & availability"}
       {!isSubmitting && (
         <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -161,6 +189,7 @@ export default function QuickQuoteForm({
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submittedCommercial, setSubmittedCommercial] = useState(false);
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
@@ -233,6 +262,10 @@ export default function QuickQuoteForm({
 
   const isMoveOutRequest = formData.service.toLowerCase().includes("move");
   const isRecurringRequest = formData.service.toLowerCase().includes("recurring");
+  const isCommercialRequest =
+    formData.service.toLowerCase().includes("commercial") ||
+    formData.service.toLowerCase().includes("office") ||
+    formData.service.toLowerCase().includes("post-construction");
   const paidCityPrefilled = paidSearch && Boolean(formData.city.trim());
   const paidServicePrefilled = paidSearch && Boolean(formData.service.trim());
   const showPaidOptionalDetails = extended && paidSearch;
@@ -311,6 +344,7 @@ export default function QuickQuoteForm({
         });
       }
 
+      setSubmittedCommercial(isCommercialRequest);
       setIsSuccess(true);
       setShowPaidDetails(false);
       setFormData(initialForm(defaultCity, defaultService));
@@ -361,7 +395,7 @@ export default function QuickQuoteForm({
         value={formData.city}
         onChange={(event) => updateField("city", event.target.value)}
         autoComplete="address-level2"
-        placeholder="Fresno or 93720"
+        placeholder="Fresno or 93711"
         className={fieldClass}
       />
     </div>
@@ -526,11 +560,14 @@ export default function QuickQuoteForm({
         <h2 className="font-display text-2xl text-ink">Quote request received.</h2>
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">
           A member of the New Star team will follow up shortly with availability,
-          pricing, and the best next step for your home.
+          pricing, and the best next step for your {submittedCommercial ? "property or project" : "home"}.
         </p>
         <button
           type="button"
-          onClick={() => setIsSuccess(false)}
+          onClick={() => {
+            setSubmittedCommercial(false);
+            setIsSuccess(false);
+          }}
           className="mt-5 text-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           Send another request
@@ -693,14 +730,47 @@ export default function QuickQuoteForm({
               <option value="2000-2499">2,000 – 2,499</option>
               <option value="2500-2999">2,500 – 2,999</option>
               <option value="3000-3499">3,000 – 3,499</option>
-              <option value="3500+">3,500+</option>
+              <option value="3500-4999">3,500 – 4,999</option>
+              <option value="5000-9999">5,000 – 9,999</option>
+              <option value="10000-19999">10,000 – 19,999</option>
+              <option value="20000+">20,000+</option>
             </select>
           </div>
         </div>
 
+        {isCommercialRequest ? (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <FieldLabel htmlFor="quote-organization">Company or project</FieldLabel>
+              <input
+                id="quote-organization"
+                name="organization"
+                type="text"
+                value={formData.organization}
+                onChange={(event) => updateField("organization", event.target.value)}
+                autoComplete="organization"
+                placeholder="Company, property, or project name"
+                className={fieldClass}
+              />
+            </div>
+            <div>
+              <FieldLabel htmlFor="quote-commercial-message">Scope or deadline</FieldLabel>
+              <input
+                id="quote-commercial-message"
+                name="message"
+                type="text"
+                value={formData.message}
+                onChange={(event) => updateField("message", event.target.value)}
+                placeholder="Areas, frequency, handoff date, or access notes"
+                className={fieldClass}
+              />
+            </div>
+          </div>
+        ) : null}
+
         {showInlineExtendedDetails ? renderExtendedDetails() : null}
 
-        {!compact && !paidSearch && (
+        {!compact && !paidSearch && !isCommercialRequest && (
           <div>
             <FieldLabel htmlFor="quote-message">Anything we should know?</FieldLabel>
             <textarea
@@ -721,7 +791,11 @@ export default function QuickQuoteForm({
           </div>
         )}
 
-        <SubmitButton isSubmitting={isSubmitting} compact={compact} />
+        <SubmitButton
+          isSubmitting={isSubmitting}
+          compact={compact}
+          commercial={isCommercialRequest}
+        />
 
         <p className="text-center text-xs leading-relaxed text-ink-soft">
           By submitting, you consent to service-related calls/texts from New Star Cleaning about your quote, pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out. Consent is not required to purchase services.
@@ -768,7 +842,11 @@ export default function QuickQuoteForm({
                     className={fieldClass}
                   />
                 </div>
-                <SubmitButton isSubmitting={isSubmitting} compact={compact} />
+                <SubmitButton
+                  isSubmitting={isSubmitting}
+                  compact={compact}
+                  commercial={isCommercialRequest}
+                />
               </div>
             ) : null}
           </div>

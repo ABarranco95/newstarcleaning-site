@@ -60,7 +60,7 @@ export default function Footer() {
               <span className="text-lg font-extrabold">New Star Cleaning</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-white/70">
-              Locally owned residential cleaning for Fresno, Clovis, Madera, and the listed Fresno neighborhoods.
+              Locally owned residential, project, and commercial cleaning for Fresno, Clovis, Madera, and the listed Fresno neighborhoods.
             </p>
             <div className="mt-5">
               <a
@@ -84,6 +84,8 @@ export default function Footer() {
               <li><Link href="/services/standard-cleaning" className="text-white/75 transition-colors hover:text-white">Standard recurring</Link></li>
               <li><Link href="/services/deep-cleaning" className="text-white/75 transition-colors hover:text-white">Deep cleaning</Link></li>
               <li><Link href="/services/move-out-cleaning" className="text-white/75 transition-colors hover:text-white">Move-in / move-out</Link></li>
+              <li><Link href="/services/post-construction-cleaning" className="text-white/75 transition-colors hover:text-white">Post-construction</Link></li>
+              <li><Link href="/services/commercial-cleaning" className="text-white/75 transition-colors hover:text-white">Office / commercial</Link></li>
               <li><Link href="/checklist" className="text-white/75 transition-colors hover:text-white">Service checklist</Link></li>
             </ul>
           </div>

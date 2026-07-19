@@ -337,7 +337,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 streetAddress: "132 W Nees Ave Unit 106",
                 addressLocality: "Fresno",
                 addressRegion: "CA",
-                postalCode: "93720",
+                postalCode: "93711",
                 addressCountry: "US",
               },
             },

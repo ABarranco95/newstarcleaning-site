@@ -8,12 +8,12 @@ import { services } from "@/lib/services";
 const siteUrl = "https://newstarcleaning.com";
 
 export const metadata: Metadata = {
-  title: "House Cleaning Services in Fresno & Clovis, CA",
+  title: "Cleaning Services in Fresno & Clovis",
   description:
-    "Compare New Star Cleaning's recurring, deep, and move-in/move-out cleaning services for Fresno, Clovis, and Madera homes.",
+    "Compare residential, post-construction, office, and commercial cleaning services for Fresno, Clovis, Madera, and close-in Fresno routes.",
   alternates: { canonical: "/services" },
   openGraph: {
-    title: "House Cleaning Services in Fresno & Clovis, CA | New Star Cleaning",
+    title: "Cleaning Services in Fresno & Clovis | New Star Cleaning",
     description:
       "Compare local house cleaning services, what is included, and where New Star Cleaning serves across Fresno, Clovis, and Madera.",
     url: `${siteUrl}/services`,
@@ -47,6 +47,28 @@ const comparisonRows = [
       "Inside oven, refrigerator, microwave, empty cabinets, closets, baseboards, and full empty-home detail",
     ],
   },
+];
+
+const projectServices = [
+  {
+    name: "Post-construction cleaning",
+    href: "/services/post-construction-cleaning",
+    description:
+      "Scoped final cleaning, turnover detail, and punch-return support for new homes, renovations, tenant improvements, and project handoffs.",
+    fit: "Builders, remodelers, owners, and project teams",
+  },
+  {
+    name: "Office & commercial cleaning",
+    href: "/services/commercial-cleaning",
+    description:
+      "Walkthrough-based cleaning proposals for offices, professional suites, property teams, and small commercial facilities.",
+    fit: "Offices, property managers, and commercial facilities",
+  },
+];
+
+const serviceSchemaItems = [
+  ...services.map((service) => ({ name: service.name, href: serviceLinks[service.slug] })),
+  ...projectServices.map((service) => ({ name: service.name, href: service.href })),
 ];
 
 const primaryAreas = serviceAreas.filter((area) =>
@@ -159,6 +181,30 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      <section className="ns-section bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+            <div>
+              <span className="eyebrow eyebrow-dot">Projects and workplaces</span>
+              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Commercial and post-construction cleaning</h2>
+              <p className="mt-5 leading-relaxed text-ink-soft">
+                These services begin with the property, deadline, access, and written scope. We confirm route and crew capacity before proposing a start date.
+              </p>
+            </div>
+            <div className="divide-y divide-line border-y border-line">
+              {projectServices.map((service) => (
+                <Link key={service.href} href={service.href} className="group block py-7">
+                  <span className="text-xs font-bold uppercase tracking-[0.14em] text-accent">{service.fit}</span>
+                  <h3 className="mt-2 text-2xl text-ink group-hover:text-primary">{service.name}</h3>
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-soft">{service.description}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary">Review service scope &rarr;</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="ns-section bg-cream-2">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -202,11 +248,11 @@ export default function ServicesPage() {
             "@context": "https://schema.org",
             "@type": "ItemList",
             name: "New Star Cleaning services",
-            itemListElement: services.map((service, index) => ({
+            itemListElement: serviceSchemaItems.map((service, index) => ({
               "@type": "ListItem",
               position: index + 1,
               name: service.name,
-              url: `${siteUrl}${serviceLinks[service.slug]}`,
+              url: `${siteUrl}${service.href}`,
             })),
           }),
         }}

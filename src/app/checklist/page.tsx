@@ -11,7 +11,7 @@ import {
 const siteUrl = "https://newstarcleaning.com";
 
 export const metadata: Metadata = {
-  title: "Service Checklist: Included, Add-Ons, Not Included",
+  title: "House Cleaning Service Checklist",
   description:
     "See New Star Cleaning's standard, deep, and move-out cleaning scope, available add-ons, exclusions, and client prep checklist.",
   alternates: {

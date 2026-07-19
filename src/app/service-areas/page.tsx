@@ -7,12 +7,12 @@ import { serviceAreas } from "@/lib/serviceAreas";
 const siteUrl = "https://newstarcleaning.com";
 
 export const metadata: Metadata = {
-  title: "House Cleaning Service Areas in Fresno, Clovis & Madera",
+  title: "Cleaning Service Areas near Fresno",
   description:
     "See New Star Cleaning service areas across Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
   alternates: { canonical: "/service-areas" },
   openGraph: {
-    title: "House Cleaning Service Areas in Fresno, Clovis & Madera | New Star Cleaning",
+    title: "Cleaning Service Areas near Fresno | New Star Cleaning",
     description:
       "Local house cleaning routes for Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
     url: `${siteUrl}/service-areas`,

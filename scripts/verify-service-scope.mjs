@@ -89,17 +89,19 @@ assert(
   "services hub explains add-on boundaries and links checklist",
 );
 
-for (const [fileName, contents] of [
-  ["QuickQuoteForm", quickQuoteForm],
-  ["ContactForm", contactForm],
-]) {
-  assert(
-    !contents.includes("Post-construction cleaning") &&
-      !contents.includes("Vacation rental / Airbnb cleaning") &&
-      !contents.includes("Commercial Cleaning"),
-    `${fileName} avoids unoffered service options`,
-  );
-}
+assert(
+  quickQuoteForm.includes("Post-construction cleaning") &&
+    quickQuoteForm.includes("Office / commercial cleaning") &&
+    !quickQuoteForm.includes("Vacation rental / Airbnb cleaning"),
+  "QuickQuoteForm exposes the scoped project/commercial options without adding vacation-rental work",
+);
+
+assert(
+  !contactForm.includes("Post-construction cleaning") &&
+    !contactForm.includes("Vacation rental / Airbnb cleaning") &&
+    !contactForm.includes("Commercial Cleaning"),
+  "ContactForm avoids unsupported service options",
+);
 
 assert(
   !layout.includes("maid service Clovis"),
