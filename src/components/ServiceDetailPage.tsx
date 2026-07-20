@@ -50,6 +50,7 @@ export default function ServiceDetailPage({
   const resultIntro = service.slug === "deep-cleaning"
     ? "These customer-job photos show the kind of accessible bathroom surfaces addressed during detailed cleaning."
     : "These customer-job photos show clean, empty interior areas without presenting them as a guaranteed result for every home.";
+  const isMoveOut = service.slug === "move-out-cleaning";
 
   return (
     <>
@@ -171,12 +172,22 @@ export default function ServiceDetailPage({
                   handling are outside our service scope.
                 </p>
               </div>
-              <Link
-                href="/checklist"
-                className="mt-5 inline-flex items-center rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft transition-colors hover:border-primary hover:text-primary"
-              >
-                Review the full service checklist
-              </Link>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  href="/checklist"
+                  className="inline-flex items-center rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft transition-colors hover:border-primary hover:text-primary"
+                >
+                  Review the full service checklist
+                </Link>
+                {isMoveOut ? (
+                  <Link
+                    href="/blog/move-out-cleaning-checklist-before-inspection"
+                    className="inline-flex items-center rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft transition-colors hover:border-primary hover:text-primary"
+                  >
+                    Fresno rental turnover guide
+                  </Link>
+                ) : null}
+              </div>
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">

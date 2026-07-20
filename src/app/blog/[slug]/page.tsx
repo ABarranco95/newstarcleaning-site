@@ -38,6 +38,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
   const { slug } = await params;
   const post = getBlogPost(slug);
   if (!post) notFound();
+  const isTurnoverGuide = post.slug === "move-out-cleaning-checklist-before-inspection";
 
   return (
     <>
@@ -85,30 +86,41 @@ export default async function BlogPostPage({ params }: RouteParams) {
 
           <div className="mt-12 rounded-2xl border border-line bg-white p-6 shadow-soft">
             <h3 className="text-xl text-ink">
-              Need a cleaning team you can trust?
+              {isTurnoverGuide ? "Planning a Fresno-area turnover?" : "Need a cleaning team you can trust?"}
             </h3>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-              New Star Cleaning serves Fresno, Clovis, and Madera with recurring, deep, and move-in/move-out residential cleaning.
+              {isTurnoverGuide
+                ? "Share the property size, deadline, occupancy, and current condition. We will price the cleaning scope before scheduling the work."
+                : "New Star Cleaning serves Fresno, Clovis, and Madera with recurring, deep, and move-in/move-out residential cleaning."}
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/book-now"
                 className="btn btn-accent !min-h-11 !px-5 !text-sm"
               >
-                Request a cleaning quote
+                {isTurnoverGuide ? "Request turnover pricing" : "Request a cleaning quote"}
               </Link>
               <Link
-                href="/services/standard-cleaning"
+                href={isTurnoverGuide ? "/services/move-out-cleaning" : "/services/standard-cleaning"}
                 className="btn btn-outline !min-h-11 !px-5 !text-sm"
               >
-                Standard cleaning
+                {isTurnoverGuide ? "Review move-out scope" : "Standard cleaning"}
               </Link>
-              <Link
-                href="/services/deep-cleaning"
-                className="btn btn-outline !min-h-11 !px-5 !text-sm"
-              >
-                Deep cleaning
-              </Link>
+              {isTurnoverGuide ? (
+                <Link
+                  href="/commercial-quote"
+                  className="btn btn-outline !min-h-11 !px-5 !text-sm"
+                >
+                  Property manager walkthrough
+                </Link>
+              ) : (
+                <Link
+                  href="/services/deep-cleaning"
+                  className="btn btn-outline !min-h-11 !px-5 !text-sm"
+                >
+                  Deep cleaning
+                </Link>
+              )}
             </div>
           </div>
         </div>

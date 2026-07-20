@@ -89,44 +89,76 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "move-out-cleaning-checklist-before-inspection",
-    title: "Move-Out Cleaning Checklist Before Inspection",
+    title: "Fresno Move-Out and Rental Turnover Cleaning Checklist",
     metaTitle:
-      "Move-Out Cleaning Checklist Before Inspection",
+      "Fresno Move-Out & Rental Turnover Checklist",
     metaDescription:
-      "A realistic move-out cleaning checklist for tenants, sellers, buyers, and landlords before the final walkthrough.",
+      "A room-by-room Fresno rental turnover and move-out cleaning checklist for tenants, owners, realtors, and property managers before the final walkthrough.",
     excerpt:
-      "Room-by-room cleaning areas to review before keys are handed over, without promising a landlord's final decision.",
+      "A practical turnover sequence, quote-prep list, and room-by-room cleaning scope for Fresno-area rentals and empty homes.",
     category: "Move-out",
     publishedAt: "2026-03-30",
-    readMinutes: 6,
+    readMinutes: 9,
     body: [
       {
         paragraphs: [
-          "Move-out cleaning is about making an empty home ready for walkthrough, move-in, or turnover. This checklist focuses on cleaning scope only; repairs, carpet condition, paint, and deposit decisions are separate from our service.",
+          "A clean rental turnover starts with the work in the right order. This guide is for Fresno, Clovis, and Madera-area tenants, owners, realtors, and property managers preparing an empty house, apartment, or rental unit for a walkthrough or the next occupant.",
+          "It covers cleaning scope only. Repairs, paint, carpet replacement or extraction, pest treatment, hauling, damage decisions, lease enforcement, and security-deposit decisions remain separate from professional cleaning.",
         ],
       },
       {
-        heading: "Kitchen",
+        heading: "1. Put turnover work in the right order",
         paragraphs: [
-          "Inside the oven, cabinet interiors when empty, microwave, refrigerator when empty, sink and faucet, visible appliance exteriors, and floors corner-to-corner. We do not move heavy appliances or clean unsafe areas behind them.",
+          "Remove belongings and trash first. Complete repairs, drywall work, painting, flooring work, appliance replacement, and pest treatment next. Schedule the detailed cleaning after dusty or disruptive vendor work is finished, then complete the final condition walkthrough.",
+          "Cleaning too early creates repeat work. Fresh paint, cabinet repair, flooring, and contractor punch-list work can leave dust, labels, packaging, and footprints on surfaces that were already cleaned.",
         ],
       },
       {
-        heading: "Bathrooms",
+        heading: "2. Collect the details needed for an accurate quote",
         paragraphs: [
-          "Toilet inside and out, tub and shower including grout, glass doors, sink, mirror, exhaust fan cover, and floors.",
+          "Provide the address or service area, approximate square footage, bedrooms and bathrooms, whether the property will be completely empty, flooring types, appliance and cabinet-interior needs, access instructions, deadline, and clear photos of current condition.",
+          "Flag heavy grease, hard-water buildup, pet hair, smoke residue, construction dust, adhesive, excessive trash, or other unusual conditions before scheduling. Standard-condition pricing should not be treated as a heavy-duty restoration quote.",
         ],
       },
       {
-        heading: "Bedrooms and living areas",
+        heading: "3. Kitchen turnover checklist",
         paragraphs: [
-          "Closets emptied and wiped, baseboards, door frames, switch plates, reachable fixtures and ceiling fans, light blind dusting, and window sills. Carpet shampooing and repairs are not part of our cleaning service.",
+          "Review the inside of the empty oven, refrigerator, microwave, cabinets, and drawers; appliance exteriors; counters and backsplash; sink and faucet; cabinet fronts; reachable fixtures; baseboards; floor edges; and the full kitchen floor.",
+          "Heavy appliances must remain in a safe position unless a qualified party moves them before the cleaning. Cleaners should not be expected to disconnect appliances or reach unsafe areas behind them.",
         ],
       },
       {
-        heading: "Final pass",
+        heading: "4. Bathroom turnover checklist",
         paragraphs: [
-          "All trash out, no personal items, no dishes or food left behind, and a final walkthrough with the unit empty so any cleaning misses can be seen clearly.",
+          "Review the toilet inside and out; tub and shower surfaces; reachable grout and buildup; glass doors; sink and vanity; mirror; cabinet fronts and empty interiors when quoted; exhaust-fan cover; fixtures; baseboards; and floors.",
+          "Permanent staining, damaged caulk, mold remediation, failed grout, rust damage, and worn surfaces are repair or specialty-restoration issues rather than ordinary cleaning misses.",
+        ],
+      },
+      {
+        heading: "5. Bedrooms, living areas, closets, and floors",
+        paragraphs: [
+          "Confirm rooms and closets are empty. Review reachable surfaces, shelves and closet rods, baseboards, door frames and fronts, switch plates, window sills, reachable fixtures and ceiling fans, light blind dusting when included, floor edges, and hard floors.",
+          "Carpet shampooing or extraction, wall washing, paint correction, exterior windows, furniture moving, and repair work are separate services unless another qualified vendor is assigned.",
+        ],
+      },
+      {
+        heading: "6. Final handoff before the walkthrough",
+        paragraphs: [
+          "Remove all trash, food, dishes, and personal items. Keep utilities active long enough for safe lighting, water use, appliance access, and the final walkthrough. Confirm keys, gate codes, parking instructions, lockbox details, and the person authorized to approve scope questions.",
+          "Walk the empty property in good light after all vendors are finished. Separate cleaning touch-ups from damage, maintenance, or work that was never included in the cleaning quote.",
+        ],
+      },
+      {
+        heading: "Tenant and seller note",
+        paragraphs: [
+          "Use your lease, sale agreement, property checklist, or manager instructions as the controlling standard. A professional cleaning can address an agreed cleaning scope, but no cleaner can promise a deposit return, inspection outcome, buyer decision, or landlord approval.",
+        ],
+      },
+      {
+        heading: "Property manager and realtor turnover packet",
+        paragraphs: [
+          "For repeat turnovers, keep one packet with the property address, unit size, preferred scope, appliance expectations, access method, required completion window, photo contact, maintenance contact, billing contact, and approval process for condition-based extra work.",
+          "New Star Cleaning can quote Fresno-area empty-home turnovers individually. Multi-unit, office, common-area, and ongoing commercial work begins with a walkthrough so frequency, occupancy, trash volume, flooring, access, and security requirements are defined before a proposal.",
         ],
       },
     ],
