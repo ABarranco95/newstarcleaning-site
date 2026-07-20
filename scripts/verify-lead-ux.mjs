@@ -130,7 +130,8 @@ assert(
   quickQuoteForm.includes("showPaidDetails") &&
     quickQuoteForm.includes("Add condition/add-ons for a tighter quote") &&
     quickQuoteForm.includes("paidCityPrefilled") &&
-    quickQuoteForm.includes("paidServicePrefilled"),
+    quickQuoteForm.includes("paidServicePrefilled") &&
+    quickQuoteForm.includes("isPaidHouseRequest"),
   "paid quote form captures the core lead first and moves qualification details behind progressive disclosure",
 );
 

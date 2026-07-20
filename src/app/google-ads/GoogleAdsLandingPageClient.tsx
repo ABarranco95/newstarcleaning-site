@@ -25,6 +25,12 @@ type PaidIntentConfig = {
   formTitle: string;
   formSubtitle: string;
   heroBullets: string[];
+  pricingGuide?: {
+    eyebrow: string;
+    intro: string;
+    examples: Array<{ home: string; price: string }>;
+    footnote: string;
+  };
   scopeTitle: string;
   scopeIntro: string;
   scopeBullets: string[];
@@ -49,20 +55,33 @@ const CITY_LABELS: Record<CityKey, string> = {
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
-    eyebrow: "House cleaning · local quote and availability",
-    h1: (city) => `House Cleaning in ${city} Built Around Your Home`,
+    eyebrow: "House cleaning pricing",
+    h1: (city) => `House Cleaning in ${city} With Clear Price Examples`,
     subhead:
-      "Request pricing for house cleaning based on your home size, current condition, timing, and priorities. We confirm the right service scope before booking.",
+      "Smaller maintained homes start at $165. Review normal-condition examples below, then send the home details for a final quote before booking.",
     serviceDefault: "Not sure yet",
     formTitle: "Request house cleaning pricing",
     formSubtitle:
-      "Send the home size and timing first. We will confirm whether standard, deep, or move cleaning fits the request.",
+      "Send the home size and timing first. Add bedrooms, bathrooms, frequency, and condition for a tighter quote.",
     heroBullets: [
-      "Standard, deep, and move cleaning options",
-      "Scope matched to the home condition",
-      "Price and included work confirmed before booking",
-      "Local residential cleaning service",
+      "Standard cleaning for maintained homes",
+      "First-visit detail priced separately",
+      "Weekly, biweekly, and monthly options",
+      "Exact scope confirmed before booking",
     ],
+    pricingGuide: {
+      eyebrow: "Normal-condition examples",
+      intro:
+        "These maintained-home examples set a realistic expectation. They are not a promise that every home receives the minimum price.",
+      examples: [
+        { home: "1 bed · 1 bath · about 800 sq ft", price: "$165" },
+        { home: "2 bed · 2 bath · about 1,200 sq ft", price: "$195" },
+        { home: "3 bed · 2 bath · about 1,600 sq ft", price: "$225" },
+        { home: "4 bed · 3 bath · about 2,100 sq ft", price: "$300" },
+      ],
+      footnote:
+        "Examples assume normal maintained condition and standard scope with no add-ons. Final pricing changes with size, bathrooms, frequency, condition, and requested detail.",
+    },
     scopeTitle: "The right cleaning scope starts with the home",
     scopeIntro:
       "House-cleaning requests vary by condition, timing, and whether the home needs maintenance, a detailed reset, or an empty-home service. We use those details to route the request correctly.",
@@ -92,6 +111,11 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     proofCopy:
       "Sharing the home size, condition, timing, and priorities helps us recommend the appropriate cleaning scope instead of assuming every home needs the same service.",
     faqs: [
+      {
+        question: "Why can my quote be higher than $165?",
+        answer:
+          "$165 is the current normal-condition example for a one-bedroom, one-bath home around 800 square feet. More square footage, bathrooms, buildup, pet hair, or requested detail increases the time and final price. We confirm that price before booking.",
+      },
       {
         question: "Which cleaning service should I choose?",
         answer:
@@ -337,6 +361,36 @@ function TrustBar({ city }: { city: string }) {
   );
 }
 
+function PricingGuide({ guide }: { guide: NonNullable<PaidIntentConfig["pricingGuide"]> }) {
+  return (
+    <section
+      className="mt-7 min-w-0 rounded-3xl border border-white/15 bg-white/[0.07] p-5"
+      aria-labelledby="paid-house-pricing-title"
+    >
+      <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">
+        {guide.eyebrow}
+      </div>
+      <p id="paid-house-pricing-title" className="mt-3 max-w-2xl text-sm leading-6 text-white/82">
+        {guide.intro}
+      </p>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        {guide.examples.map((example) => (
+          <div
+            key={example.home}
+            className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-white/12 bg-primary-light/40 px-4 py-3"
+          >
+            <span className="min-w-0 break-words text-xs font-semibold leading-5 text-white/78 sm:text-sm">
+              {example.home}
+            </span>
+            <span className="shrink-0 font-display text-xl text-white">{example.price}</span>
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 text-xs leading-5 text-white/68">{guide.footnote}</p>
+    </section>
+  );
+}
+
 function SectionCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="rounded-[2rem] border border-line bg-white p-6 md:p-8">
@@ -428,17 +482,18 @@ export default function GoogleAdsLandingPageClient() {
     <div className="bg-cream-2 pb-24 text-ink md:pb-0">
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
-          <div className="flex flex-col justify-center text-white">
-            <div className="mb-5 inline-flex w-fit items-center rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
+        <div className="mx-auto grid min-w-0 max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
+          <div className="flex min-w-0 flex-col justify-center text-white">
+            <div className="mb-5 inline-flex max-w-full self-start whitespace-normal rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
               {intent.eyebrow}
             </div>
-            <h1 className="max-w-3xl font-display text-4xl leading-[1.03] tracking-[-0.03em] text-white sm:text-5xl lg:text-[4.6rem]">
+            <h1 className="max-w-3xl break-words font-display text-3xl leading-[1.03] tracking-[-0.03em] text-white sm:text-5xl lg:text-[4.6rem]">
               {intent.h1(city.label)}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
               {intent.subhead}
             </p>
+            {intent.pricingGuide ? <PricingGuide guide={intent.pricingGuide} /> : null}
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <a href="#booking-form" onClick={() => trackQuoteCta("hero")} className="btn btn-accent !text-sm">
                 Get pricing & availability
@@ -460,7 +515,7 @@ export default function GoogleAdsLandingPageClient() {
             </div>
           </div>
 
-          <div id="booking-form" className="self-start">
+          <div id="booking-form" className="min-w-0 self-start">
             <QuickQuoteForm
               source="google-ads"
               title={intent.formTitle}

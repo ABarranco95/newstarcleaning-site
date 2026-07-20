@@ -20,6 +20,15 @@ assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring 
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(paidPage.includes("House Cleaning in"), "generic house headline matches house-cleaning intent");
+assert(paidPage.includes("With Clear Price Examples"), "generic house headline promises specific price context");
+for (const expectedPrice of ["$165", "$195", "$225", "$300"]) {
+  assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
+}
+assert(
+  paidPage.includes("They are not a promise that every home receives the minimum price") &&
+    paidPage.includes("Final pricing changes with size, bathrooms, frequency, condition, and requested detail"),
+  "generic house pricing guide prevents minimum-price bait and explains quote variation",
+);
 assert(paidPage.includes("Recurring House Cleaning in"), "recurring headline remains distinct");
 assert(paidPage.includes('serviceDefault: "Deep cleaning"'), "deep intent form state matches its scope");
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");

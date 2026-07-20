@@ -262,6 +262,7 @@ export default function QuickQuoteForm({
 
   const isMoveOutRequest = formData.service.toLowerCase().includes("move");
   const isRecurringRequest = formData.service.toLowerCase().includes("recurring");
+  const isPaidHouseRequest = paidSearch && formData.service === "Not sure yet";
   const isCommercialRequest =
     formData.service.toLowerCase().includes("commercial") ||
     formData.service.toLowerCase().includes("office") ||
@@ -515,7 +516,7 @@ export default function QuickQuoteForm({
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {(!paidSearch || isRecurringRequest) && (
+        {(!paidSearch || isRecurringRequest || isPaidHouseRequest) && (
           <div>
             <FieldLabel htmlFor="quote-frequency">How often?</FieldLabel>
             <select
@@ -526,7 +527,7 @@ export default function QuickQuoteForm({
               className={fieldClass}
             >
               <option value="">Select…</option>
-              {!paidSearch && <option value="one-time">One-Time</option>}
+              {(!paidSearch || isPaidHouseRequest) && <option value="one-time">One-Time</option>}
               <option value="weekly">Weekly</option>
               <option value="bi-weekly">Bi-Weekly</option>
               <option value="monthly">Monthly</option>
