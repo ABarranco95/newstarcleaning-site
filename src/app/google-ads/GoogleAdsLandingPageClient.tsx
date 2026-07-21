@@ -28,7 +28,7 @@ type PaidIntentConfig = {
   pricingGuide?: {
     eyebrow: string;
     intro: string;
-    examples: Array<{ home: string; price: string }>;
+    examples: Array<{ home: string; size: string; price: string }>;
     footnote: string;
   };
   scopeTitle: string;
@@ -55,81 +55,80 @@ const CITY_LABELS: Record<CityKey, string> = {
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
-    eyebrow: "House cleaning pricing",
-    h1: (city) => `House Cleaning in ${city} With Clear Price Examples`,
+    eyebrow: "One-time or regular house cleaning",
+    h1: (city) => `Come Home to a Clean House in ${city}`,
     subhead:
-      "Smaller maintained homes start at $165. Review normal-condition examples below, then send the home details for a final quote before booking.",
+      "House cleaning starts at $165 for a smaller home. Tell us what you want cleaned and we'll confirm your price before you book.",
     serviceDefault: "Not sure yet",
-    formTitle: "Request house cleaning pricing",
+    formTitle: "Tell us about your home",
     formSubtitle:
-      "Send the home size and timing first. Add bedrooms, bathrooms, frequency, and condition for a tighter quote.",
+      "Start with the size and timing. We'll send pricing and available days.",
     heroBullets: [
-      "Standard cleaning for maintained homes",
-      "First-visit detail priced separately",
-      "Weekly, biweekly, and monthly options",
-      "Exact scope confirmed before booking",
+      "Kitchen, bathrooms, dusting, and floors",
+      "One-time, weekly, every other week, or monthly",
+      "Clear price before booking",
+      "Fresno, Clovis, and Madera",
     ],
     pricingGuide: {
-      eyebrow: "Normal-condition examples",
+      eyebrow: "What house cleaning costs",
       intro:
-        "These maintained-home examples set a realistic expectation. They are not a promise that every home receives the minimum price.",
+        "Here are a few examples for regular house cleaning with no heavy buildup or extras.",
       examples: [
-        { home: "1 bed · 1 bath · about 800 sq ft", price: "$165" },
-        { home: "2 bed · 2 bath · about 1,200 sq ft", price: "$195" },
-        { home: "3 bed · 2 bath · about 1,600 sq ft", price: "$225" },
-        { home: "4 bed · 3 bath · about 2,100 sq ft", price: "$300" },
+        { home: "1 bedroom, 1 bathroom", size: "Around 800 sq ft", price: "$165" },
+        { home: "2 bedrooms, 2 bathrooms", size: "Around 1,200 sq ft", price: "$195" },
+        { home: "3 bedrooms, 2 bathrooms", size: "Around 1,600 sq ft", price: "$225" },
+        { home: "4 bedrooms, 3 bathrooms", size: "Around 2,100 sq ft", price: "$300" },
       ],
       footnote:
-        "Examples assume normal maintained condition and standard scope with no add-ons. Final pricing changes with size, bathrooms, frequency, condition, and requested detail.",
+        "Need extra detail, have heavier buildup, or want the inside of the oven or refrigerator cleaned? Tell us when you ask for a quote. We'll include that work in your price.",
     },
-    scopeTitle: "The right cleaning scope starts with the home",
+    scopeTitle: "What kind of cleaning does your home need?",
     scopeIntro:
-      "House-cleaning requests vary by condition, timing, and whether the home needs maintenance, a detailed reset, or an empty-home service. We use those details to route the request correctly.",
+      "Some homes need a regular clean. Others need more time and detail on the first visit. Tell us what you're dealing with and we'll quote the right cleaning.",
     scopeBullets: [
-      "Standard recurring cleaning for maintained homes",
-      "Deep cleaning for first visits, seasonal resets, or visible buildup",
-      "Move-in or move-out cleaning for empty or mostly empty homes",
-      "Kitchen, bathroom, reachable surface, and floor priorities confirmed in the quote",
-      "Optional details priced separately when requested",
+      "Regular house cleaning for kitchens, bathrooms, dusting, and floors",
+      "Deeper cleaning when there is buildup or more detail to cover",
+      "Move-in or move-out cleaning for empty homes",
+      "Optional extras added only when you ask for them",
     ],
-    addonTitle: "Details that shape the quote",
+    addonTitle: "What changes the price",
     addonBullets: [
-      "Home size and layout",
-      "Current condition",
-      "Preferred timing",
-      "Pets or heavy buildup",
-      "Priority rooms or requested add-ons",
+      "Home size and number of bathrooms",
+      "How much cleaning the home needs",
+      "Pets or heavy pet hair",
+      "Oven, refrigerator, windows, or other extras",
+      "How soon you need the cleaning",
     ],
-    boundaryTitle: "Before the appointment",
+    boundaryTitle: "Good to know before booking",
     boundaryBullets: [
-      "The cleaning type and included work are confirmed before booking",
-      "Route availability depends on the requested city and date",
-      "Laundry, dishes, organizing, and household chores are not included",
-      "Heavy buildup or optional detail work may require additional time and pricing",
+      "We'll confirm what is included and the full price first",
+      "Available days depend on your area and requested date",
+      "Laundry, dishes, and organizing are not included",
+      "Heavy buildup or extra-detail work may cost more",
     ],
-    proofTitle: "A service recommendation based on the request",
+    proofTitle: "A clear quote for your home",
     proofCopy:
-      "Sharing the home size, condition, timing, and priorities helps us recommend the appropriate cleaning scope instead of assuming every home needs the same service.",
+      "A few details about the home help us allow enough time and give you the full price before you book.",
     faqs: [
       {
-        question: "Why can my quote be higher than $165?",
+        question: "Why might my price be higher than $165?",
         answer:
-          "$165 is the current normal-condition example for a one-bedroom, one-bath home around 800 square feet. More square footage, bathrooms, buildup, pet hair, or requested detail increases the time and final price. We confirm that price before booking.",
+          "The $165 starting price is for a smaller home that only needs regular cleaning. Bigger homes, buildup, heavy pet hair, or extra detail take more time. We'll tell you the full price before you book.",
       },
       {
-        question: "Which cleaning service should I choose?",
+        question: "What kind of cleaning should I request?",
         answer:
-          "Choose the closest option if you know it. If you are unsure, submit the home size, condition, and timing and we will help identify whether standard, deep, or move cleaning fits.",
+          "If the home just needs regular kitchen, bathroom, dusting, and floor cleaning, start with house cleaning. If there's buildup or more detail to cover, tell us and we'll quote a deeper clean.",
       },
       {
-        question: "Do I need to know the cleaning type before I request pricing?",
+        question: "Can I request a one-time cleaning?",
         answer:
-          "No. Share the current condition, timing, and priorities and we will help identify whether standard recurring, deep, or move cleaning fits the request.",
+          "Yes. We offer one-time cleaning along with weekly, every-other-week, and monthly options.",
       },
       {
-        question: "What information helps with pricing?",
+        question: "What should I include in my request?",
         answer:
-          "Home size, city, current condition, preferred timing, pets, and priority areas are the most useful starting details.",
+          "Tell us the home size, number of bedrooms and bathrooms, city, timing, pets, and anything that needs extra attention.",
       },
     ],
   },
@@ -376,11 +375,12 @@ function PricingGuide({ guide }: { guide: NonNullable<PaidIntentConfig["pricingG
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {guide.examples.map((example) => (
           <div
-            key={example.home}
+            key={`${example.home}-${example.size}`}
             className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-white/12 bg-primary-light/40 px-4 py-3"
           >
-            <span className="min-w-0 break-words text-xs font-semibold leading-5 text-white/78 sm:text-sm">
-              {example.home}
+            <span className="min-w-0">
+              <span className="block break-words text-xs font-semibold leading-5 text-white/88 sm:text-sm">{example.home}</span>
+              <span className="mt-0.5 block text-xs leading-5 text-white/62">{example.size}</span>
             </span>
             <span className="shrink-0 font-display text-xl text-white">{example.price}</span>
           </div>
@@ -432,7 +432,7 @@ function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
           Call
         </a>
         <a href="#booking-form" onClick={onQuoteClick} className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
-          Request pricing
+          Get my price
         </a>
       </div>
     </div>
@@ -496,7 +496,7 @@ export default function GoogleAdsLandingPageClient() {
             {intent.pricingGuide ? <PricingGuide guide={intent.pricingGuide} /> : null}
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <a href="#booking-form" onClick={() => trackQuoteCta("hero")} className="btn btn-accent !text-sm">
-                Get pricing & availability
+                Get my cleaning price
               </a>
               <a href="tel:+15597852822" className="btn btn-ghost-dark !text-sm">
                 Call (559) 785-2822
@@ -566,7 +566,7 @@ export default function GoogleAdsLandingPageClient() {
         </SectionCard>
 
         <section className="rounded-[2rem] border border-primary/15 bg-primary p-6 text-white md:p-8">
-          <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">Why this is priced carefully</div>
+          <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">How we price your cleaning</div>
           <h2 className="mt-4 font-display text-2xl leading-tight md:text-3xl">{intent.proofTitle}</h2>
           <p className="mt-5 text-sm leading-7 text-white/82 md:text-base">{intent.proofCopy}</p>
           <div className="mt-6 grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2">
@@ -578,20 +578,20 @@ export default function GoogleAdsLandingPageClient() {
 
       <section className="mx-auto max-w-4xl px-4 pb-14 sm:px-6 lg:px-8">
         <div className="mb-6 text-center">
-          <div className="eyebrow eyebrow-dot justify-center">Paid-search questions</div>
-          <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">Before you request pricing</h2>
+          <div className="eyebrow eyebrow-dot justify-center">Questions before booking</div>
+          <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">A few things homeowners ask us</h2>
         </div>
         <FAQAccordion faqs={intent.faqs} />
       </section>
 
       <section className="border-t border-line bg-white px-4 py-12 text-center sm:px-6 lg:px-8">
-        <h2 className="font-display text-3xl text-primary md:text-4xl">Ready for clear pricing?</h2>
+        <h2 className="font-display text-3xl text-primary md:text-4xl">Ready to get a price for your home?</h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-ink-soft md:text-base">
-          Send the details once. We confirm the scope, timing, and price before the job is accepted.
+          Tell us about the home and when you need it cleaned. We&apos;ll send pricing and available days.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !text-sm">
-            Request pricing
+            Get my cleaning price
           </a>
           <a href="tel:+15597852822" className="btn btn-outline !text-sm">
             Call (559) 785-2822

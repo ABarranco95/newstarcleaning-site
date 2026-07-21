@@ -3,6 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const paidPage = readFileSync(path.join(root, "src/app/google-ads/GoogleAdsLandingPageClient.tsx"), "utf8");
+const houseBlock = paidPage.slice(paidPage.indexOf("  house: {"), paidPage.indexOf("  move: {"));
 const failures = [];
 const passes = [];
 
@@ -19,16 +20,21 @@ assert(!paidPage.includes('return "move";\n}'), "missing or unknown service neve
 assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring intent requires an explicit recurring signal");
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
-assert(paidPage.includes("House Cleaning in"), "generic house headline matches house-cleaning intent");
-assert(paidPage.includes("With Clear Price Examples"), "generic house headline promises specific price context");
+assert(paidPage.includes("Come Home to a Clean House in"), "generic house headline leads with the homeowner outcome");
+assert(paidPage.includes("House cleaning starts at $165 for a smaller home"), "generic house hero states the starting-price boundary above the fold");
+assert(paidPage.includes("What house cleaning costs"), "generic house page gives specific price context");
 for (const expectedPrice of ["$165", "$195", "$225", "$300"]) {
   assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
 }
 assert(
-  paidPage.includes("They are not a promise that every home receives the minimum price") &&
-    paidPage.includes("Final pricing changes with size, bathrooms, frequency, condition, and requested detail"),
+  paidPage.includes("regular house cleaning with no heavy buildup or extras") &&
+    paidPage.includes("Need extra detail, have heavier buildup, or want the inside of the oven or refrigerator cleaned") &&
+    paidPage.includes("We'll include that work in your price"),
   "generic house pricing guide prevents minimum-price bait and explains quote variation",
 );
+for (const rejectedPhrase of ["maintained", "normal-condition", "1/1"]) {
+  assert(!houseBlock.toLowerCase().includes(rejectedPhrase), `generic house copy rejects operator jargon: ${rejectedPhrase}`);
+}
 assert(paidPage.includes("Recurring House Cleaning in"), "recurring headline remains distinct");
 assert(paidPage.includes('serviceDefault: "Deep cleaning"'), "deep intent form state matches its scope");
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");

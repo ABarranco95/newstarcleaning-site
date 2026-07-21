@@ -149,10 +149,12 @@ function SubmitButton({
   isSubmitting,
   compact,
   commercial,
+  paidSearch,
 }: {
   isSubmitting: boolean;
   compact: boolean;
   commercial: boolean;
+  paidSearch: boolean;
 }) {
   return (
     <button
@@ -164,9 +166,11 @@ function SubmitButton({
         ? "Sending…"
         : commercial
           ? "Request a walkthrough"
-          : compact
-            ? "Get my quote"
-            : "Get pricing & availability"}
+          : paidSearch
+            ? "Get my cleaning price"
+            : compact
+              ? "Get my quote"
+              : "Get pricing & availability"}
       {!isSubmitting && (
         <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -438,9 +442,9 @@ export default function QuickQuoteForm({
       </div>
 
       <div>
-        <FieldLabel htmlFor="quote-condition">Current condition</FieldLabel>
+        <FieldLabel htmlFor="quote-condition">How much cleaning does the home need?</FieldLabel>
         <p className="mb-2 text-xs leading-relaxed text-ink-soft">
-          This helps us match the right scope and avoid surprises.
+          A quick answer helps us price the right amount of time.
         </p>
         <select
           id="quote-condition"
@@ -449,10 +453,10 @@ export default function QuickQuoteForm({
           onChange={(event) => updateField("condition", event.target.value)}
           className={fieldClass}
         >
-          <option value="">Select condition…</option>
-          <option value="mostly-maintained">Mostly maintained</option>
-          <option value="some-buildup-needs-detail">Some buildup / needs detail</option>
-          <option value="heavy-buildup-pet-hair-neglected">Heavy buildup, pet hair, or neglected areas</option>
+          <option value="">Choose one…</option>
+          <option value="mostly-maintained">Regular cleaning, no major buildup</option>
+          <option value="some-buildup-needs-detail">Some buildup or areas needing extra detail</option>
+          <option value="heavy-buildup-pet-hair-neglected">Heavy buildup or a lot of pet hair</option>
         </select>
       </div>
 
@@ -580,7 +584,7 @@ export default function QuickQuoteForm({
   return (
     <div id="quote" className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8">
       <div className="mb-6">
-        <span className="eyebrow eyebrow-dot">{paidSearch ? "Clear local pricing" : "Fast local quote"}</span>
+        <span className="eyebrow eyebrow-dot">{paidSearch ? "Pricing & availability" : "Fast local quote"}</span>
         <h2 className="mt-3 font-display text-2xl leading-tight text-ink lg:text-[1.6rem]">
           {title}
         </h2>
@@ -796,6 +800,7 @@ export default function QuickQuoteForm({
           isSubmitting={isSubmitting}
           compact={compact}
           commercial={isCommercialRequest}
+          paidSearch={paidSearch}
         />
 
         <p className="text-center text-xs leading-relaxed text-ink-soft">
@@ -812,7 +817,7 @@ export default function QuickQuoteForm({
               className="flex w-full items-center justify-between gap-4 text-left text-sm font-bold text-primary"
               aria-expanded={showPaidDetails}
             >
-              <span>{showPaidDetails ? "Hide optional quote details" : "Add condition/add-ons for a tighter quote"}</span>
+              <span>{showPaidDetails ? "Hide home details" : "Add home details (optional)"}</span>
               <span className="text-lg text-accent">{showPaidDetails ? "−" : "+"}</span>
             </button>
             {showPaidDetails ? (
@@ -847,6 +852,7 @@ export default function QuickQuoteForm({
                   isSubmitting={isSubmitting}
                   compact={compact}
                   commercial={isCommercialRequest}
+                  paidSearch={paidSearch}
                 />
               </div>
             ) : null}

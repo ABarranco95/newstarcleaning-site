@@ -128,7 +128,10 @@ assert(
 
 assert(
   quickQuoteForm.includes("showPaidDetails") &&
-    quickQuoteForm.includes("Add condition/add-ons for a tighter quote") &&
+    quickQuoteForm.includes("Add home details (optional)") &&
+    quickQuoteForm.includes("How much cleaning does the home need?") &&
+    quickQuoteForm.includes("Get my cleaning price") &&
+    quickQuoteForm.includes("paidSearch={paidSearch}") &&
     quickQuoteForm.includes("paidCityPrefilled") &&
     quickQuoteForm.includes("paidServicePrefilled") &&
     quickQuoteForm.includes("isPaidHouseRequest"),
