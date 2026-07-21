@@ -28,7 +28,11 @@ type PaidIntentConfig = {
   pricingGuide?: {
     eyebrow: string;
     intro: string;
-    examples: Array<{ home: string; size: string; price: string }>;
+    examples: Array<{
+      home: string;
+      size: string;
+      prices: Array<{ label: string; price: string }>;
+    }>;
     footnote: string;
   };
   scopeTitle: string;
@@ -55,32 +59,44 @@ const CITY_LABELS: Record<CityKey, string> = {
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
-    eyebrow: "One-time or regular house cleaning",
-    h1: (city) => `Come Home to a Clean House in ${city}`,
+    eyebrow: "One-time house cleaning",
+    h1: (city) => `House cleaning in ${city}, done with care.`,
     subhead:
-      "House cleaning starts at $165 for a smaller home. Tell us what you want cleaned and we'll confirm your price before you book.",
+      "For a 3-bedroom, 2-bath home around 1,600 sq ft, Standard Cleaning is $225 and Deep Cleaning is $360. We confirm the right service and full price before booking.",
     serviceDefault: "Not sure yet",
     formTitle: "Tell us about your home",
     formSubtitle:
       "Start with the size and timing. We'll send pricing and available days.",
     heroBullets: [
-      "Kitchen, bathrooms, dusting, and floors",
-      "One-time, weekly, every other week, or monthly",
-      "Clear price before booking",
+      "Standard and Deep prices shown side by side",
+      "Home size and starting condition shape the quote",
+      "Included work and full price confirmed first",
       "Fresno, Clovis, and Madera",
     ],
     pricingGuide: {
-      eyebrow: "What house cleaning costs",
+      eyebrow: "Standard or Deep?",
       intro:
-        "Here are a few examples for regular house cleaning with no heavy buildup or extras.",
+        "These one-time examples show how the same home prices differently based on the cleaning it needs.",
       examples: [
-        { home: "1 bedroom, 1 bathroom", size: "Around 800 sq ft", price: "$165" },
-        { home: "2 bedrooms, 2 bathrooms", size: "Around 1,200 sq ft", price: "$195" },
-        { home: "3 bedrooms, 2 bathrooms", size: "Around 1,600 sq ft", price: "$225" },
-        { home: "4 bedrooms, 3 bathrooms", size: "Around 2,100 sq ft", price: "$300" },
+        {
+          home: "3 bedrooms, 2 bathrooms",
+          size: "Around 1,600 sq ft",
+          prices: [
+            { label: "Standard", price: "$225" },
+            { label: "Deep", price: "$360" },
+          ],
+        },
+        {
+          home: "4 bedrooms, 3 bathrooms",
+          size: "Around 2,100 sq ft",
+          prices: [
+            { label: "Standard", price: "$300" },
+            { label: "Deep", price: "$475" },
+          ],
+        },
       ],
       footnote:
-        "Need extra detail, have heavier buildup, or want the inside of the oven or refrigerator cleaned? Tell us when you ask for a quote. We'll include that work in your price.",
+        "Standard Cleaning is for routine upkeep. Deep Cleaning is for a first visit or visible buildup. Larger homes, heavier conditions, pet hair, and selected extras cost more.",
     },
     scopeTitle: "What kind of cleaning does your home need?",
     scopeIntro:
@@ -111,9 +127,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "A few details about the home help us allow enough time and give you the full price before you book.",
     faqs: [
       {
-        question: "Why might my price be higher than $165?",
+        question: "Which cleaning price applies to my home?",
         answer:
-          "The $165 starting price is for a smaller home that only needs regular cleaning. Bigger homes, buildup, heavy pet hair, or extra detail take more time. We'll tell you the full price before you book.",
+          "Standard Cleaning is for routine upkeep. Deep Cleaning is for a first visit, visible buildup, or more detail. Tell us about the home and we'll confirm which service fits before you book.",
       },
       {
         question: "What kind of cleaning should I request?",
@@ -123,7 +139,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       {
         question: "Can I request a one-time cleaning?",
         answer:
-          "Yes. We offer one-time cleaning along with weekly, every-other-week, and monthly options.",
+          "Yes. The prices shown here are one-time cleaning examples. Tell us what the home needs and we'll confirm the service, included work, and full price before booking.",
       },
       {
         question: "What should I include in my request?",
@@ -376,13 +392,22 @@ function PricingGuide({ guide }: { guide: NonNullable<PaidIntentConfig["pricingG
         {guide.examples.map((example) => (
           <div
             key={`${example.home}-${example.size}`}
-            className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-white/12 bg-primary-light/40 px-4 py-3"
+            className="min-w-0 rounded-2xl border border-white/12 bg-primary-light/40 p-4"
           >
-            <span className="min-w-0">
+            <div className="min-w-0">
               <span className="block break-words text-xs font-semibold leading-5 text-white/88 sm:text-sm">{example.home}</span>
               <span className="mt-0.5 block text-xs leading-5 text-white/62">{example.size}</span>
-            </span>
-            <span className="shrink-0 font-display text-xl text-white">{example.price}</span>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {example.prices.map((option) => (
+                <div key={option.label} className="rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5">
+                  <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-white/58">
+                    {option.label}
+                  </span>
+                  <span className="mt-1 block font-display text-xl text-white">{option.price}</span>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

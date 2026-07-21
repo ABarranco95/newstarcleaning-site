@@ -20,18 +20,30 @@ assert(!paidPage.includes('return "move";\n}'), "missing or unknown service neve
 assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring intent requires an explicit recurring signal");
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
-assert(paidPage.includes("Come Home to a Clean House in"), "generic house headline leads with the homeowner outcome");
-assert(paidPage.includes("House cleaning starts at $165 for a smaller home"), "generic house hero states the starting-price boundary above the fold");
-assert(paidPage.includes("What house cleaning costs"), "generic house page gives specific price context");
-for (const expectedPrice of ["$165", "$195", "$225", "$300"]) {
+assert(paidPage.includes("House cleaning in") && paidPage.includes("done with care"), "generic house headline matches New Star's public brand voice");
+assert(
+  paidPage.includes("For a 3-bedroom, 2-bath home around 1,600 sq ft") &&
+    paidPage.includes("Standard Cleaning is $225") &&
+    paidPage.includes("Deep Cleaning is $360"),
+  "generic house hero anchors representative Standard and Deep prices for the same home",
+);
+assert(paidPage.includes("Standard or Deep?"), "generic house page frames price by required cleaning level");
+for (const expectedPrice of ["$225", "$300", "$360", "$475"]) {
   assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
 }
 assert(
-  paidPage.includes("regular house cleaning with no heavy buildup or extras") &&
-    paidPage.includes("Need extra detail, have heavier buildup, or want the inside of the oven or refrigerator cleaned") &&
-    paidPage.includes("We'll include that work in your price"),
-  "generic house pricing guide prevents minimum-price bait and explains quote variation",
+  paidPage.includes("same home prices differently") &&
+    paidPage.includes("Standard Cleaning is for routine upkeep") &&
+    paidPage.includes("Deep Cleaning is for a first visit or visible buildup") &&
+    paidPage.includes("Larger homes, heavier conditions, pet hair, and selected extras cost more"),
+  "generic house pricing guide uses condition-aware representative examples without minimum-price bait",
 );
+for (const rejectedPrice of ["$165", "$195"]) {
+  assert(!houseBlock.includes(rejectedPrice), `generic house price lane omits floor-price anchor: ${rejectedPrice}`);
+}
+for (const rejectedFrequencyPhrase of ["weekly", "every other week", "every-other-week", "monthly"]) {
+  assert(!houseBlock.toLowerCase().includes(rejectedFrequencyPhrase), `generic house price lane avoids recurring-rate framing: ${rejectedFrequencyPhrase}`);
+}
 for (const rejectedPhrase of ["maintained", "normal-condition", "1/1"]) {
   assert(!houseBlock.toLowerCase().includes(rejectedPhrase), `generic house copy rejects operator jargon: ${rejectedPhrase}`);
 }
