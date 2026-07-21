@@ -22,21 +22,20 @@ assert(!paidPage.includes('normalizedService.includes("standard") return "recurr
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(paidPage.includes("House cleaning in") && paidPage.includes("done with care"), "generic house headline matches New Star's public brand voice");
 assert(
-  paidPage.includes("For a 3-bedroom, 2-bath home around 1,600 sq ft") &&
-    paidPage.includes("Standard Cleaning is $225") &&
-    paidPage.includes("Deep Cleaning is $360"),
-  "generic house hero anchors representative Standard and Deep prices for the same home",
+  paidPage.includes("For a one-time 3-bedroom, 2-bath home around 1,600 sq ft") &&
+    paidPage.includes("pricing may be around $225 for Standard or $360 for Deep"),
+  "generic house hero labels representative Standard and Deep prices as approximate",
 );
-assert(paidPage.includes("Standard or Deep?"), "generic house page frames price by required cleaning level");
+assert(paidPage.includes("Representative price examples"), "generic house page labels its price examples as representative");
 for (const expectedPrice of ["$225", "$300", "$360", "$475"]) {
   assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
 }
 assert(
-  paidPage.includes("same home prices differently") &&
-    paidPage.includes("Standard Cleaning is for routine upkeep") &&
-    paidPage.includes("Deep Cleaning is for a first visit or visible buildup") &&
-    paidPage.includes("Larger homes, heavier conditions, pet hair, and selected extras cost more"),
-  "generic house pricing guide uses condition-aware representative examples without minimum-price bait",
+  paidPage.includes("These are examples, not fixed quotes") &&
+    paidPage.includes("These are representative examples, not fixed prices") &&
+    paidPage.includes("Are these exact cleaning prices?") &&
+    paidPage.includes("No. They are representative examples."),
+  "generic house pricing guide makes the estimate boundary explicit without minimum-price bait",
 );
 for (const rejectedPrice of ["$165", "$195"]) {
   assert(!houseBlock.includes(rejectedPrice), `generic house price lane omits floor-price anchor: ${rejectedPrice}`);

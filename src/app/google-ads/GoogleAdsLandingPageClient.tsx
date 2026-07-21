@@ -62,21 +62,21 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     eyebrow: "One-time house cleaning",
     h1: (city) => `House cleaning in ${city}, done with care.`,
     subhead:
-      "For a 3-bedroom, 2-bath home around 1,600 sq ft, Standard Cleaning is $225 and Deep Cleaning is $360. We confirm the right service and full price before booking.",
+      "For a one-time 3-bedroom, 2-bath home around 1,600 sq ft, pricing may be around $225 for Standard or $360 for Deep. We confirm the right service and full price before booking.",
     serviceDefault: "Not sure yet",
     formTitle: "Tell us about your home",
     formSubtitle:
       "Start with the size and timing. We'll send pricing and available days.",
     heroBullets: [
-      "Standard and Deep prices shown side by side",
+      "Representative Standard and Deep examples",
       "Home size and starting condition shape the quote",
       "Included work and full price confirmed first",
       "Fresno, Clovis, and Madera",
     ],
     pricingGuide: {
-      eyebrow: "Standard or Deep?",
+      eyebrow: "Representative price examples",
       intro:
-        "These one-time examples show how the same home prices differently based on the cleaning it needs.",
+        "These are examples, not fixed quotes. They show how the same home may price differently based on the cleaning it needs.",
       examples: [
         {
           home: "3 bedrooms, 2 bathrooms",
@@ -96,7 +96,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
         },
       ],
       footnote:
-        "Standard Cleaning is for routine upkeep. Deep Cleaning is for a first visit or visible buildup. Larger homes, heavier conditions, pet hair, and selected extras cost more.",
+        "These are representative examples, not fixed prices. Home size, starting condition, pet hair, and selected extras can change the quote. We confirm the final price before booking.",
     },
     scopeTitle: "What kind of cleaning does your home need?",
     scopeIntro:
@@ -127,9 +127,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       "A few details about the home help us allow enough time and give you the full price before you book.",
     faqs: [
       {
-        question: "Which cleaning price applies to my home?",
+        question: "Are these exact cleaning prices?",
         answer:
-          "Standard Cleaning is for routine upkeep. Deep Cleaning is for a first visit, visible buildup, or more detail. Tell us about the home and we'll confirm which service fits before you book.",
+          "No. They are representative examples. Tell us the home size, condition, and requested work, and we'll confirm the right service and final price before you book.",
       },
       {
         question: "What kind of cleaning should I request?",
