@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
@@ -17,6 +18,18 @@ type CityKey =
   | "tower-district"
   | "near-me";
 
+type PaidProofMedia = {
+  eyebrow: string;
+  title: string;
+  copy: string;
+  images: Array<{
+    src: string;
+    alt: string;
+    label: string;
+  }>;
+  note?: string;
+};
+
 type PaidIntentConfig = {
   eyebrow: string;
   h1: (city: string) => string;
@@ -25,6 +38,7 @@ type PaidIntentConfig = {
   formTitle: string;
   formSubtitle: string;
   heroBullets: string[];
+  proofMedia: PaidProofMedia;
   pricingGuide?: {
     eyebrow: string;
     intro: string;
@@ -60,23 +74,40 @@ const CITY_LABELS: Record<CityKey, string> = {
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "One-time house cleaning",
-    h1: (city) => `House cleaning in ${city}, done with care.`,
+    h1: (city) => `House cleaning in ${city}, quoted for your home.`,
     subhead:
-      "For a one-time 3-bedroom, 2-bath home around 1,600 sq ft, pricing may be around $225 for Standard or $360 for Deep. We confirm the right service and full price before booking.",
+      "For context, a typical 3-bedroom, 2-bath home around 1,600 sq ft is about $225 for Standard or $360 for Deep. Share the size, timing, and condition, and we'll confirm the total before you book.",
     serviceDefault: "Not sure yet",
-    formTitle: "Tell us about your home",
+    formTitle: "Request your cleaning quote",
     formSubtitle:
-      "Start with the size and timing. We'll send pricing and available days.",
+      "Share the home size and when you need it. We'll call or text with the price and available dates.",
     heroBullets: [
-      "Representative Standard and Deep examples",
-      "Home size and starting condition shape the quote",
-      "Included work and full price confirmed first",
+      "Standard or Deep based on the home",
+      "Price confirmed before booking",
       "Fresno, Clovis, and Madera",
     ],
+    proofMedia: {
+      eyebrow: "Real New Star work",
+      title: "The details are visible.",
+      copy:
+        "This is real cleaning work from a local home, not a stock photo. Your quote will reflect the condition and detail your home actually needs.",
+      images: [
+        {
+          src: "/photos/real-work/paid/shower-detail-before.webp",
+          alt: "Shower wall and caddies with visible residue before cleaning",
+          label: "Before",
+        },
+        {
+          src: "/photos/real-work/paid/shower-detail-after.webp",
+          alt: "The same shower wall and caddies after New Star Cleaning detail work",
+          label: "After",
+        },
+      ],
+    },
     pricingGuide: {
       eyebrow: "Representative price examples",
       intro:
-        "These are examples, not fixed quotes. They show how the same home may price differently based on the cleaning it needs.",
+        "These examples show how scope changes the price. Your quote will reflect your home and the work requested.",
       examples: [
         {
           home: "3 bedrooms, 2 bathrooms",
@@ -96,7 +127,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
         },
       ],
       footnote:
-        "These are representative examples, not fixed prices. Home size, starting condition, pet hair, and selected extras can change the quote. We confirm the final price before booking.",
+        "Examples are not fixed quotes. Home size, condition, pet hair, and selected extras can change the total. We confirm your price before booking.",
     },
     scopeTitle: "What kind of cleaning does your home need?",
     scopeIntro:
@@ -149,46 +180,64 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     ],
   },
   move: {
-    eyebrow: "Move-in / move-out cleaning · empty-home service",
+    eyebrow: "Move-in / move-out cleaning",
     h1: (city) =>
       city === "your area"
-        ? "Move-out cleaning for a cleaner handoff."
-        : `Move-out cleaning in ${city}, ready for handoff.`,
+        ? "Move-out cleaning before keys or inspection."
+        : `Move-out cleaning in ${city} before keys or inspection.`,
     subhead:
-      "Get pricing for an empty home, rental turnover, or move deadline. We confirm scope and availability before booking.",
+      "Share the home size, move date, and condition. We'll confirm what is included, the price, and an available day before you book.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Get move-out cleaning pricing",
+    formTitle: "Request move-out cleaning pricing",
     formSubtitle:
-      "Share the home size and move date. Add condition details if needed.",
+      "Share the home size and move date. We'll confirm scope, price, and available dates.",
     heroBullets: [
-      "Empty-home room cleaning",
+      "Empty-home cleaning",
       "Kitchen, bathrooms, baseboards, and floors",
-      "Empty appliances, cabinets, drawers, and closets",
-      "Condition and optional details confirmed before booking",
+      "Appliance and cabinet needs quoted clearly",
+      "Heavy-duty conditions identified up front",
     ],
+    proofMedia: {
+      eyebrow: "Real New Star work",
+      title: "Appliance detail, shown honestly.",
+      copy:
+        "This is the same oven before and after cleaning. Tell us which appliance or cabinet interiors you need, and your quote will state exactly what is included.",
+      images: [
+        {
+          src: "/photos/real-work/paid/oven-interior-before.webp",
+          alt: "Oven interior with visible grease and buildup before cleaning",
+          label: "Before",
+        },
+        {
+          src: "/photos/real-work/paid/oven-interior-after.webp",
+          alt: "The same oven interior after New Star Cleaning detail work",
+          label: "After",
+        },
+      ],
+      note: "Appliance detail shown. Included work is confirmed in your quote.",
+    },
     scopeTitle: "Detailed cleaning for an empty home",
     scopeIntro:
       "Move-out cleaning is quoted from the home size, condition, access, deadline, and requested extras. The home should be empty or mostly empty before the appointment.",
     scopeBullets: [
       "Kitchen counters, sink, backsplash, cabinet fronts, and accessible surfaces",
-      "Inside an empty oven, refrigerator, microwave, cabinets, and drawers",
-      "Bathrooms, fixtures, mirrors, tubs, and showers in standard condition",
+      "Bathrooms, fixtures, mirrors, tubs, and showers in quoted condition",
       "Empty bedrooms, closets, living areas, baseboards, trim, and doors",
       "Floors vacuumed and mopped after the detailed surface work",
     ],
-    addonTitle: "Optional details priced separately",
+    addonTitle: "Details to mention in your request",
     addonBullets: [
+      "Inside oven or refrigerator",
+      "Inside empty cabinets or drawers",
       "Interior window glass",
-      "Garage sweeping",
-      "Patio or balcony sweeping",
-      "Extra blind detail",
+      "Garage, patio, balcony, or blind detail",
       "Heavy pet hair or heavy buildup",
     ],
     boundaryTitle: "Before the appointment",
     boundaryBullets: [
+      "Your quote lists the included work and any separately priced details",
       "The requested date is confirmed after route availability is checked",
       "Laundry, dishes, packing, unpacking, and organizing are not included",
-      "Heavy-duty conditions require additional time and pricing",
       "Exterior windows, tracks, screens, and ladder work are not included",
     ],
     proofTitle: "A quote built around the actual home",
@@ -203,7 +252,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       {
         question: "Are oven, fridge, cabinets, and windows included?",
         answer:
-          "Move-in/move-out cleaning includes the inside of an empty oven, refrigerator, microwave, and empty cabinets and drawers when accessible. Interior window glass is optional. Tracks, screens, exterior windows, and ladder work are not included.",
+          "List the oven, refrigerator, cabinet, and window details you need in the request. Your quote will state exactly what is included and any separate pricing before booking.",
       },
       {
         question: "What if the home is heavier than standard condition?",
@@ -213,20 +262,38 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     ],
   },
   deep: {
-    eyebrow: "Deep cleaning · detailed home reset",
-    h1: (city) => `Deep Cleaning in ${city} for a detailed home reset`,
+    eyebrow: "Deep cleaning for buildup and first visits",
+    h1: (city) => `Deep cleaning in ${city} when regular cleaning is not enough.`,
     subhead:
-      "Request pricing for detailed cleaning of accessible kitchens, bathrooms, baseboards, fixtures, trim, vents, floors, and reachable buildup areas.",
+      "For first visits, seasonal cleaning, or visible buildup. Share the home size, condition, and priority areas so we can price enough time for the work.",
     serviceDefault: "Deep cleaning",
-    formTitle: "Request deep cleaning pricing",
+    formTitle: "Request deep-cleaning pricing",
     formSubtitle:
-      "Send the size and timing first. Add condition or priority areas below if you want a tighter quote.",
+      "Share the home size and timing. Add condition or priority areas if they affect the quote.",
     heroBullets: [
-      "Detailed reset cleaning",
-      "Condition checked before quote",
-      "Optional details priced separately",
-      "Local residential cleaning service",
+      "First visits and visible buildup",
+      "Bathrooms, kitchen detail, baseboards, and trim",
+      "Condition reflected in the quote",
+      "Add-ons confirmed before booking",
     ],
+    proofMedia: {
+      eyebrow: "Real New Star work",
+      title: "Detail work means getting past the obvious surfaces.",
+      copy:
+        "This is the same reachable vent before and after cleaning. Deep-cleaning quotes account for visible buildup and the time required to handle it properly.",
+      images: [
+        {
+          src: "/photos/real-work/paid/vent-detail-before.webp",
+          alt: "Reachable return vent with visible dust before cleaning",
+          label: "Before",
+        },
+        {
+          src: "/photos/real-work/paid/vent-detail-after.webp",
+          alt: "The same reachable return vent after New Star Cleaning detail work",
+          label: "After",
+        },
+      ],
+    },
     scopeTitle: "Detailed cleaning beyond routine maintenance",
     scopeIntro:
       "Deep cleaning is intended for a first visit, seasonal reset, or visible buildup on reachable surfaces. We quote it from the home size, condition, and requested priorities.",
@@ -275,20 +342,39 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     ],
   },
   recurring: {
-    eyebrow: "Recurring cleaning · weekly, biweekly, or monthly",
-    h1: (city) => `Recurring House Cleaning in ${city}`,
+    eyebrow: "Weekly, biweekly, or monthly",
+    h1: (city) => `Recurring house cleaning in ${city} for a home that stays maintained.`,
     subhead:
-      "Weekly, bi-weekly, and monthly cleaning for maintained homes. We confirm the frequency, included work, price, and available schedule before service begins.",
+      "Tell us the home size, starting condition, and preferred frequency. We'll confirm the first-clean scope, ongoing price, and route availability before service begins.",
     serviceDefault: "Standard recurring cleaning",
     formTitle: "Request recurring cleaning pricing",
     formSubtitle:
-      "Share home size and timing first. Add frequency or condition details below if you want a tighter quote.",
+      "Share the home size and timing. Add your preferred frequency if you already know it.",
     heroBullets: [
       "Weekly, biweekly, and monthly options",
-      "Maintenance cleaning for homes in normal condition",
-      "First clean may need deep-clean pricing if condition requires it",
-      "Frequency and included work confirmed before booking",
+      "Maintenance cleaning for an already-kept home",
+      "First-clean condition reviewed up front",
+      "Ongoing price confirmed before booking",
     ],
+    proofMedia: {
+      eyebrow: "Real New Star work",
+      title: "A maintained home should feel consistently cared for.",
+      copy:
+        "These are real New Star cleaning results. If the starting condition needs a deeper first visit, we'll tell you before setting the recurring schedule.",
+      images: [
+        {
+          src: "/photos/real-work/clean-bathroom-new-star.webp",
+          alt: "Clean bathroom result from New Star Cleaning work",
+          label: "Bathroom result",
+        },
+        {
+          src: "/photos/real-work/detailed-shower-tile-new-star.webp",
+          alt: "Clean shower tile detail from New Star Cleaning work",
+          label: "Shower detail",
+        },
+      ],
+      note: "After-only results from real New Star work.",
+    },
     scopeTitle: "Routine cleaning for a maintained home",
     scopeIntro:
       "Recurring service is quoted from the starting condition, home size, household traffic, pets, requested priorities, and preferred frequency.",
@@ -366,21 +452,48 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
   return "house";
 }
 
+function PaidBrand() {
+  return (
+    <div className="mb-2 flex items-center gap-2.5" aria-label="New Star Cleaning">
+      <Image
+        src="/brand/star-ink-mono.png"
+        alt=""
+        width={28}
+        height={27}
+        sizes="28px"
+        className="h-7 w-auto brightness-0 invert"
+        priority
+      />
+      <span className="flex flex-col leading-none">
+        <span className="text-sm font-extrabold tracking-tight text-white sm:text-base">
+          New Star Cleaning
+        </span>
+        <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">
+          Fresno · Clovis · Madera
+        </span>
+      </span>
+    </div>
+  );
+}
+
 function TrustBar() {
   const items = [
     "Insured local company",
-    "Fresno • Clovis • Madera",
-    "Local since 2020",
-    "Price confirmed first",
+    "Fresno, Clovis & Madera",
+    "Cleaning homes since 2020",
+    "Price before booking",
   ];
   return (
-    <ul className="grid grid-cols-2 gap-2" aria-label="New Star Cleaning trust signals">
+    <ul className="grid grid-cols-2 gap-2.5" aria-label="New Star Cleaning trust signals">
       {items.map((item) => (
         <li
           key={item}
-          className="flex items-center justify-center rounded-xl border border-white/15 bg-white/8 px-2 py-2 text-center text-[11px] font-semibold leading-tight text-white/90 sm:text-xs"
+          className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-3 py-2.5 text-xs font-semibold leading-4 text-white/90"
         >
-          {item}
+          <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-black text-white" aria-hidden="true">
+            ✓
+          </span>
+          <span>{item}</span>
         </li>
       ))}
     </ul>
@@ -412,7 +525,7 @@ function PricingGuide({ guide }: { guide: NonNullable<PaidIntentConfig["pricingG
             <div className="mt-3 grid grid-cols-2 gap-2">
               {example.prices.map((option) => (
                 <div key={option.label} className="rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-white/58">
+                  <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-white/75">
                     {option.label}
                   </span>
                   <span className="mt-1 block font-display text-xl text-white">{option.price}</span>
@@ -422,7 +535,51 @@ function PricingGuide({ guide }: { guide: NonNullable<PaidIntentConfig["pricingG
           </div>
         ))}
       </div>
-      <p className="mt-4 text-xs leading-5 text-white/68">{guide.footnote}</p>
+      <p className="mt-4 text-xs leading-5 text-white/75">{guide.footnote}</p>
+    </section>
+  );
+}
+
+function RealWorkProof({ proof }: { proof: PaidProofMedia }) {
+  return (
+    <section className="border-y border-slate-200 bg-white" aria-labelledby="paid-real-work-title">
+      <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:px-8 lg:py-14">
+        <div>
+          <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
+            {proof.eyebrow}
+          </div>
+          <h2 id="paid-real-work-title" className="mt-3 font-display text-3xl leading-tight text-primary md:text-4xl">
+            {proof.title}
+          </h2>
+          <p className="mt-4 max-w-xl text-sm leading-7 text-ink-soft md:text-base">
+            {proof.copy}
+          </p>
+          {proof.note ? (
+            <p className="mt-4 border-l-2 border-accent pl-4 text-xs font-semibold leading-5 text-primary/75">
+              {proof.note}
+            </p>
+          ) : null}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          {proof.images.map((image) => (
+            <figure key={image.src} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+              <div className="relative aspect-square">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 767px) 46vw, 360px"
+                  className="object-cover"
+                />
+                <figcaption className="absolute left-3 top-3 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-white sm:text-xs">
+                  {image.label}
+                </figcaption>
+              </div>
+            </figure>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
@@ -446,7 +603,7 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
           <button
             type="button"
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-primary transition hover:bg-cream-2 md:text-base"
+            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-primary transition hover:bg-slate-50 md:text-base"
           >
             <span>{faq.question}</span>
             <span className="text-xl text-accent">{openIndex === index ? "−" : "+"}</span>
@@ -468,7 +625,7 @@ function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
           Call
         </a>
         <a href="#booking-form" onClick={onQuoteClick} className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
-          Get my price
+          Request quote
         </a>
       </div>
     </div>
@@ -515,21 +672,22 @@ export default function GoogleAdsLandingPageClient() {
   };
 
   return (
-    <div className="bg-cream-2 pb-24 text-ink md:pb-0">
+    <div className="bg-slate-50 pb-24 text-ink md:pb-0">
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
-        <div className="mx-auto grid min-w-0 max-w-6xl gap-6 px-4 py-10 sm:gap-8 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
+        <div className="mx-auto grid min-w-0 max-w-6xl gap-4 px-4 py-7 sm:gap-8 sm:px-6 sm:py-10 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
           <div className="flex min-w-0 flex-col justify-center text-white lg:col-start-1 lg:row-start-1">
-            <div className="mb-5 inline-flex max-w-full self-start whitespace-normal rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
+            <PaidBrand />
+            <div className="mb-4 inline-flex max-w-full self-start whitespace-normal rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
               {intent.eyebrow}
             </div>
             <h1 className="max-w-3xl break-words font-display text-3xl leading-[1.03] tracking-[-0.03em] text-white sm:text-5xl lg:text-[4.6rem]">
               {intent.h1(city.label)}
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
+            <p className="mt-4 max-w-2xl text-base leading-8 text-white/82 sm:mt-5 sm:text-lg">
               {intent.subhead}
             </p>
-            <div className="mt-5 sm:mt-6">
+            <div className="mt-6 hidden lg:block">
               <TrustBar />
             </div>
           </div>
@@ -546,11 +704,14 @@ export default function GoogleAdsLandingPageClient() {
             />
           </div>
 
-          <div className="min-w-0 text-white lg:col-start-1 lg:row-start-2">
+          <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+            <div className="mb-6 lg:hidden">
+              <TrustBar />
+            </div>
             {intent.pricingGuide ? <PricingGuide guide={intent.pricingGuide} /> : null}
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <a href="#booking-form" onClick={() => trackQuoteCta("hero")} className="btn btn-accent !text-sm">
-                Get my cleaning price
+                Request my quote
               </a>
               <a href="tel:+15597852822" className="btn btn-ghost-dark !text-sm">
                 Call (559) 785-2822
@@ -568,6 +729,8 @@ export default function GoogleAdsLandingPageClient() {
         </div>
       </section>
 
+      <RealWorkProof proof={intent.proofMedia} />
+
       <section className="mx-auto grid max-w-6xl gap-5 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.75fr] lg:px-8 lg:py-14">
         <SectionCard title={intent.scopeTitle}>
           <p>{intent.scopeIntro}</p>
@@ -584,7 +747,7 @@ export default function GoogleAdsLandingPageClient() {
         <SectionCard title={intent.addonTitle}>
           <ul className="grid gap-3">
             {intent.addonBullets.map((item) => (
-              <li key={item} className="rounded-2xl border border-line bg-cream-2 px-4 py-3 font-semibold text-primary">
+              <li key={item} className="rounded-2xl border border-line bg-slate-50 px-4 py-3 font-semibold text-primary">
                 {item}
               </li>
             ))}
@@ -630,7 +793,7 @@ export default function GoogleAdsLandingPageClient() {
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !text-sm">
-            Get my cleaning price
+            Request my quote
           </a>
           <a href="tel:+15597852822" className="btn btn-outline !text-sm">
             Call (559) 785-2822

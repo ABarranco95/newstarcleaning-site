@@ -95,10 +95,12 @@ assert(
 
 assert(
   quickQuoteForm.includes("normalizeServiceParam") &&
+    quickQuoteForm.includes("normalizeFrequencyParam") &&
     quickQuoteForm.includes('params.get("city")') &&
     quickQuoteForm.includes('params.get("service")') &&
+    quickQuoteForm.includes('params.get("frequency")') &&
     quickQuoteForm.includes('homeSize: formData.sqft'),
-  "quote form supports prefill and forwards the home-size signal",
+  "quote form supports city, service, and recurring-frequency prefill and forwards the home-size signal",
 );
 
 assert(
@@ -128,9 +130,10 @@ assert(
 
 assert(
   quickQuoteForm.includes("showPaidDetails") &&
-    quickQuoteForm.includes("Add home details (optional)") &&
+    quickQuoteForm.includes("Add details for a more accurate quote (optional)") &&
     quickQuoteForm.includes("How much cleaning does the home need?") &&
-    quickQuoteForm.includes("Get my cleaning price") &&
+    quickQuoteForm.includes("Request my quote") &&
+    quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
     quickQuoteForm.includes("paidCityPrefilled") &&
     quickQuoteForm.includes("paidServicePrefilled") &&

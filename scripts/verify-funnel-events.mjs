@@ -29,6 +29,8 @@ for (const event of [
   "paid_landing_view",
   "quote_cta_click",
   "quote_form_start",
+  "quote_details_open",
+  "quote_submit_attempt",
   "quote_validation_error",
   "lead_submit_accepted",
   "website_phone_click",
@@ -41,10 +43,18 @@ assert(tracking.includes("window.dataLayer.push"), "every funnel event is pushed
 assert(tracking.includes("NEXT_PUBLIC_GTM_ID") && tracking.includes("!googleTagManagerConfigured"), "direct gtag is suppressed when GTM is configured");
 assert(tracking.includes("NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL"), "form conversion has separate Ads label support");
 assert(tracking.includes("NEXT_PUBLIC_GTM_GOOGLE_ADS_FORM_CONVERSION_CONFIGURED") && tracking.includes("NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURED"), "GTM readiness requires explicit published-tag markers");
-assert(form.includes("quote_form_start") && form.includes("quote_validation_error"), "quote form instruments start and validation events");
+assert(
+  form.includes("quote_form_start") &&
+    form.includes("quote_details_open") &&
+    form.includes("quote_submit_attempt") &&
+    form.includes("quote_validation_error"),
+  "quote form instruments start, optional-detail, submit-attempt, and validation events",
+);
 assert(form.includes("trackLeadConversion"), "quote form instruments Apex-accepted leads");
+assert(form.includes('data-clarity-mask="true"'), "quote form explicitly masks customer fields for replay tools");
 assert(form.includes("metadata?.apex?.success === true"), "paid conversion requires explicit Apex acceptance metadata");
 assert(paidPage.includes("paid_landing_view") && paidPage.includes("quote_cta_click"), "paid page instruments landing and CTA events");
+assert(paidPage.includes("RealWorkProof") && paidPage.includes("Real New Star work"), "paid page renders route-specific real-work proof");
 assert(callTracker.includes('a[href^="tel:"]') && callTracker.includes("trackWebsitePhoneClick"), "website phone tracker diagnoses all tel-link clicks");
 assert(callTracker.includes("phone_conversion_number") && callTracker.includes("phone_conversion_callback"), "direct website-call path installs Google's forwarding-number phone snippet");
 assert(callTracker.includes('window.gtag("config"') && callTracker.includes("updateWebsitePhoneLinks"), "phone snippet updates displayed and clickable forwarding numbers");

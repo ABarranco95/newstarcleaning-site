@@ -60,9 +60,11 @@ const services = [
 ];
 
 const moveOutAddons = [
+  "Inside oven",
+  "Inside refrigerator",
+  "Inside empty cabinets or drawers",
   "Interior window glass",
-  "Garage sweeping",
-  "Patio or balcony sweeping",
+  "Garage, patio, or balcony sweeping",
   "Extra blind detail",
   "Heavy pet hair or heavy buildup",
 ];
@@ -73,7 +75,15 @@ const fieldClass =
 function normalizeServiceParam(value: string | null) {
   if (!value) return "";
   const normalized = value.trim().toLowerCase();
-  if (normalized === "standard-cleaning" || normalized === "standard") {
+  if (
+    normalized === "recurring-cleaning" ||
+    normalized === "recurring" ||
+    normalized === "weekly-cleaning" ||
+    normalized === "biweekly-cleaning" ||
+    normalized === "monthly-cleaning" ||
+    normalized === "standard-cleaning" ||
+    normalized === "standard"
+  ) {
     return "Standard recurring cleaning";
   }
   if (normalized === "deep-cleaning" || normalized === "deep") {
@@ -112,6 +122,18 @@ function normalizeCityParam(value: string | null) {
     "tower-district": "Tower District",
   };
   return cityLabels[normalized] || value.trim();
+}
+
+function normalizeFrequencyParam(value: string | null) {
+  if (!value) return "";
+  const normalized = value.trim().toLowerCase().replace(/_/g, "-");
+  const frequencies: Record<string, string> = {
+    weekly: "weekly",
+    biweekly: "bi-weekly",
+    "bi-weekly": "bi-weekly",
+    monthly: "monthly",
+  };
+  return frequencies[normalized] || "";
 }
 
 function initialForm(defaultCity?: string, defaultService?: string): FormState {
@@ -167,7 +189,7 @@ function SubmitButton({
         : commercial
           ? "Request a walkthrough"
           : paidSearch
-            ? "Get my cleaning price"
+            ? "Request my quote"
             : compact
               ? "Get my quote"
               : "Get pricing & availability"}
@@ -229,11 +251,13 @@ export default function QuickQuoteForm({
 
     const city = normalizeCityParam(params.get("city"));
     const service = normalizeServiceParam(params.get("service"));
-    if (city || service) {
+    const frequency = normalizeFrequencyParam(params.get("frequency"));
+    if (city || service || frequency) {
       setFormData((current) => ({
         ...current,
         city: current.city || city || "",
         service: current.service || service || "",
+        frequency: current.frequency || frequency || "",
       }));
     }
   }, []);
@@ -278,6 +302,12 @@ export default function QuickQuoteForm({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    trackFunnelEvent("quote_submit_attempt", {
+      source,
+      service: formData.service,
+      city: formData.city,
+      page: window.location.pathname,
+    });
     setIsSubmitting(true);
     setError("");
 
@@ -467,7 +497,7 @@ export default function QuickQuoteForm({
               Optional move-out details
             </span>
             <p className="mt-1 text-xs leading-relaxed text-ink-soft">
-              Oven, refrigerator, microwave, and empty cabinet interiors are already part of our move-out scope when accessible. Select only the extra items you want priced.
+              Select the appliance, cabinet, window, or heavy-detail items you want included in the quote. We&apos;ll confirm the exact scope and any separate pricing before booking.
             </p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -488,7 +518,7 @@ export default function QuickQuoteForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <FieldLabel htmlFor="quote-contact-preference">Contact</FieldLabel>
+          <FieldLabel htmlFor="quote-contact-preference">Best way to reach you</FieldLabel>
           <select
             id="quote-contact-preference"
             name="contactPreference"
@@ -503,7 +533,7 @@ export default function QuickQuoteForm({
           </select>
         </div>
         <div>
-          <FieldLabel htmlFor="quote-booking-intent">Intent</FieldLabel>
+          <FieldLabel htmlFor="quote-booking-intent">Where are you in the process?</FieldLabel>
           <select
             id="quote-booking-intent"
             name="bookingIntent"
@@ -511,10 +541,10 @@ export default function QuickQuoteForm({
             onChange={(event) => updateField("bookingIntent", event.target.value)}
             className={fieldClass}
           >
-            <option value="">Select...</option>
-            <option value="ready-after-quote">Ready after quote</option>
-            <option value="comparing-options">Comparing options</option>
-            <option value="just-researching">Just researching</option>
+            <option value="">Select one…</option>
+            <option value="ready-after-quote">Ready to book if the quote fits</option>
+            <option value="comparing-options">Comparing quotes</option>
+            <option value="planning-ahead">Planning ahead</option>
           </select>
         </div>
       </div>
@@ -556,7 +586,7 @@ export default function QuickQuoteForm({
 
   if (isSuccess) {
     return (
-      <div id="quote" className="rounded-3xl border border-line bg-white p-8 text-center shadow-elev">
+      <div id="quote" className={`rounded-3xl border bg-white p-8 text-center ${paidSearch ? "border-slate-200" : "border-line shadow-elev"}`}>
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-accent">
           <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -564,8 +594,9 @@ export default function QuickQuoteForm({
         </div>
         <h2 className="font-display text-2xl text-ink">Quote request received.</h2>
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-          A member of the New Star team will follow up shortly with availability,
-          pricing, and the best next step for your {submittedCommercial ? "property or project" : "home"}.
+          {paidSearch
+            ? "We'll review the details and call or text during business hours with pricing and available dates."
+            : `We'll follow up with pricing, availability, and the next step for your ${submittedCommercial ? "property or project" : "home"}.`}
         </p>
         <button
           type="button"
@@ -584,14 +615,16 @@ export default function QuickQuoteForm({
   return (
     <div
       id="quote"
-      className={`rounded-3xl border border-line bg-white shadow-elev ${paidSearch ? "p-5 sm:p-7 lg:p-8" : "p-6 sm:p-7 lg:p-8"}`}
+      className={`rounded-3xl border bg-white ${paidSearch ? "border-slate-200 p-5 sm:p-7 lg:p-8" : "border-line p-6 shadow-elev sm:p-7 lg:p-8"}`}
     >
       <div className={paidSearch ? "mb-4 sm:mb-6" : "mb-6"}>
         <span className="eyebrow eyebrow-dot">{paidSearch ? "Pricing & availability" : "Fast local quote"}</span>
         <h2 className={`mt-3 font-display leading-tight text-ink lg:text-[1.6rem] ${paidSearch ? "text-xl sm:text-2xl" : "text-2xl"}`}>
           {title}
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p>
+        <p className={paidSearch ? "mt-2 hidden text-sm leading-relaxed text-ink-soft md:block" : "mt-2 text-sm leading-relaxed text-ink-soft"}>
+          {subtitle}
+        </p>
 
         {paidSearch ? (
           <div className="mt-4 hidden gap-2 sm:grid">
@@ -607,6 +640,7 @@ export default function QuickQuoteForm({
 
       <form
         onSubmit={handleSubmit}
+        data-clarity-mask="true"
         onFocusCapture={trackFormStart}
         onInvalidCapture={(event) => {
           const field = event.target instanceof HTMLInputElement ||
@@ -813,14 +847,24 @@ export default function QuickQuoteForm({
         </p>
 
         {showPaidOptionalDetails ? (
-          <div className="rounded-2xl border border-line bg-cream/60 p-4">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <button
               type="button"
-              onClick={() => setShowPaidDetails((current) => !current)}
+              onClick={() => {
+                if (!showPaidDetails) {
+                  trackFunnelEvent("quote_details_open", {
+                    source,
+                    service: formData.service,
+                    city: formData.city,
+                    page: window.location.pathname,
+                  });
+                }
+                setShowPaidDetails((current) => !current);
+              }}
               className="flex w-full items-center justify-between gap-4 text-left text-sm font-bold text-primary"
               aria-expanded={showPaidDetails}
             >
-              <span>{showPaidDetails ? "Hide home details" : "Add home details (optional)"}</span>
+              <span>{showPaidDetails ? "Hide extra details" : "Add details for a more accurate quote (optional)"}</span>
               <span className="text-lg text-accent">{showPaidDetails ? "−" : "+"}</span>
             </button>
             {showPaidDetails ? (
