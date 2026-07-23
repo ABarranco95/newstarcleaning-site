@@ -363,12 +363,17 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
   return "house";
 }
 
-function TrustBar({ city }: { city: string }) {
-  const items = [`${city} + approved nearby routes`, "Quote before booking", "Included work confirmed", "Call or request online"];
+function TrustBar() {
+  const items = [
+    "Insured local cleaning company",
+    "Fresno, Clovis & Madera",
+    "Locally operated since 2020",
+    "Full price confirmed before booking",
+  ];
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="flex flex-wrap gap-2" aria-label="New Star Cleaning trust signals">
       {items.map((item) => (
-        <div key={item} className="rounded-2xl border border-white/12 bg-white/8 px-4 py-3 text-sm font-semibold text-white/90">
+        <div key={item} className="rounded-full border border-white/15 bg-white/8 px-3 py-2 text-xs font-semibold text-white/90">
           {item}
         </div>
       ))}
@@ -508,7 +513,7 @@ export default function GoogleAdsLandingPageClient() {
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
         <div className="mx-auto grid min-w-0 max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
-          <div className="flex min-w-0 flex-col justify-center text-white">
+          <div className="flex min-w-0 flex-col justify-center text-white lg:col-start-1 lg:row-start-1">
             <div className="mb-5 inline-flex max-w-full self-start whitespace-normal rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
               {intent.eyebrow}
             </div>
@@ -518,6 +523,24 @@ export default function GoogleAdsLandingPageClient() {
             <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
               {intent.subhead}
             </p>
+            <div className="mt-6">
+              <TrustBar />
+            </div>
+          </div>
+
+          <div id="booking-form" className="min-w-0 self-start lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <QuickQuoteForm
+              source="google-ads"
+              title={intent.formTitle}
+              subtitle={intent.formSubtitle}
+              defaultCity={city.formValue}
+              defaultService={intent.serviceDefault}
+              extended
+              paidSearch
+            />
+          </div>
+
+          <div className="min-w-0 text-white lg:col-start-1 lg:row-start-2">
             {intent.pricingGuide ? <PricingGuide guide={intent.pricingGuide} /> : null}
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <a href="#booking-form" onClick={() => trackQuoteCta("hero")} className="btn btn-accent !text-sm">
@@ -535,21 +558,6 @@ export default function GoogleAdsLandingPageClient() {
                 </div>
               ))}
             </div>
-            <div className="mt-7">
-              <TrustBar city={city.label} />
-            </div>
-          </div>
-
-          <div id="booking-form" className="min-w-0 self-start">
-            <QuickQuoteForm
-              source="google-ads"
-              title={intent.formTitle}
-              subtitle={intent.formSubtitle}
-              defaultCity={city.formValue}
-              defaultService={intent.serviceDefault}
-              extended
-              paidSearch
-            />
           </div>
         </div>
       </section>
