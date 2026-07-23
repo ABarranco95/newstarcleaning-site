@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import { captureFirstPaidTouch } from "@/lib/attribution";
@@ -18,16 +18,12 @@ type CityKey =
   | "tower-district"
   | "near-me";
 
-type PaidProofMedia = {
-  eyebrow: string;
+type ProofPairKey = "shower" | "oven" | "vent";
+
+type ProofPair = {
   title: string;
-  copy: string;
-  images: Array<{
-    src: string;
-    alt: string;
-    label: string;
-  }>;
-  note?: string;
+  before: { src: string; alt: string };
+  after: { src: string; alt: string };
 };
 
 type PaidIntentConfig = {
@@ -36,28 +32,12 @@ type PaidIntentConfig = {
   subhead: string;
   serviceDefault: string;
   formTitle: string;
-  formSubtitle: string;
-  heroBullets: string[];
-  proofMedia: PaidProofMedia;
-  pricingGuide?: {
-    eyebrow: string;
-    intro: string;
-    examples: Array<{
-      home: string;
-      size: string;
-      prices: Array<{ label: string; price: string }>;
-    }>;
-    footnote: string;
+  priceContext?: {
+    label: string;
+    value: string;
+    note: string;
   };
-  scopeTitle: string;
-  scopeIntro: string;
-  scopeBullets: string[];
-  addonTitle: string;
-  addonBullets: string[];
-  boundaryTitle: string;
-  boundaryBullets: string[];
-  proofTitle: string;
-  proofCopy: string;
+  proofOrder: ProofPairKey[];
   faqs: Array<{ question: string; answer: string }>;
 };
 
@@ -71,354 +51,117 @@ const CITY_LABELS: Record<CityKey, string> = {
   "near-me": "your area",
 };
 
+const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
+  shower: {
+    title: "Shower detail",
+    before: {
+      src: "/photos/real-work/paid/shower-detail-before.webp",
+      alt: "Shower wall and caddies with visible residue before cleaning",
+    },
+    after: {
+      src: "/photos/real-work/paid/shower-detail-after.webp",
+      alt: "The same shower wall and caddies after New Star Cleaning detail work",
+    },
+  },
+  oven: {
+    title: "Oven interior",
+    before: {
+      src: "/photos/real-work/paid/oven-interior-before.webp",
+      alt: "Oven interior with visible grease and buildup before cleaning",
+    },
+    after: {
+      src: "/photos/real-work/paid/oven-interior-after.webp",
+      alt: "The same oven interior after New Star Cleaning detail work",
+    },
+  },
+  vent: {
+    title: "Reachable vent",
+    before: {
+      src: "/photos/real-work/paid/vent-detail-before.webp",
+      alt: "Reachable return vent with visible dust before cleaning",
+    },
+    after: {
+      src: "/photos/real-work/paid/vent-detail-after.webp",
+      alt: "The same reachable return vent after New Star Cleaning detail work",
+    },
+  },
+};
+
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "One-time house cleaning",
-    h1: (city) => `House cleaning in ${city}, quoted for your home.`,
-    subhead:
-      "For context, a typical 3-bedroom, 2-bath home around 1,600 sq ft is about $225 for Standard or $360 for Deep. Share the size, timing, and condition, and we'll confirm the total before you book.",
+    h1: (city) => `House cleaning in ${city}, without the guesswork.`,
+    subhead: "Tell us the home size and timing. We’ll send a clear price and available dates.",
     serviceDefault: "Not sure yet",
-    formTitle: "Request your cleaning quote",
-    formSubtitle:
-      "Share the home size and when you need it. We'll call or text with the price and available dates.",
-    heroBullets: [
-      "Standard or Deep based on the home",
-      "Price confirmed before booking",
-      "Fresno, Clovis, and Madera",
-    ],
-    proofMedia: {
-      eyebrow: "Real New Star work",
-      title: "The details are visible.",
-      copy:
-        "This is real cleaning work from a local home, not a stock photo. Your quote will reflect the condition and detail your home actually needs.",
-      images: [
-        {
-          src: "/photos/real-work/paid/shower-detail-before.webp",
-          alt: "Shower wall and caddies with visible residue before cleaning",
-          label: "Before",
-        },
-        {
-          src: "/photos/real-work/paid/shower-detail-after.webp",
-          alt: "The same shower wall and caddies after New Star Cleaning detail work",
-          label: "After",
-        },
-      ],
+    formTitle: "Get your cleaning quote",
+    priceContext: {
+      label: "Typical 3 bed / 2 bath",
+      value: "Around $225 Standard · $360 Deep",
+      note: "About 1,600 sq ft. Final price depends on condition and requested work.",
     },
-    pricingGuide: {
-      eyebrow: "Representative price examples",
-      intro:
-        "These examples show how scope changes the price. Your quote will reflect your home and the work requested.",
-      examples: [
-        {
-          home: "3 bedrooms, 2 bathrooms",
-          size: "Around 1,600 sq ft",
-          prices: [
-            { label: "Standard", price: "$225" },
-            { label: "Deep", price: "$360" },
-          ],
-        },
-        {
-          home: "4 bedrooms, 3 bathrooms",
-          size: "Around 2,100 sq ft",
-          prices: [
-            { label: "Standard", price: "$300" },
-            { label: "Deep", price: "$475" },
-          ],
-        },
-      ],
-      footnote:
-        "Examples are not fixed quotes. Home size, condition, pet hair, and selected extras can change the total. We confirm your price before booking.",
-    },
-    scopeTitle: "What kind of cleaning does your home need?",
-    scopeIntro:
-      "Some homes need a regular clean. Others need more time and detail on the first visit. Tell us what you're dealing with and we'll quote the right cleaning.",
-    scopeBullets: [
-      "Regular house cleaning for kitchens, bathrooms, dusting, and floors",
-      "Deeper cleaning when there is buildup or more detail to cover",
-      "Move-in or move-out cleaning for empty homes",
-      "Optional extras added only when you ask for them",
-    ],
-    addonTitle: "What changes the price",
-    addonBullets: [
-      "Home size and number of bathrooms",
-      "How much cleaning the home needs",
-      "Pets or heavy pet hair",
-      "Oven, refrigerator, windows, or other extras",
-      "How soon you need the cleaning",
-    ],
-    boundaryTitle: "Good to know before booking",
-    boundaryBullets: [
-      "We'll confirm what is included and the full price first",
-      "Available days depend on your area and requested date",
-      "Laundry, dishes, and organizing are not included",
-      "Heavy buildup or extra-detail work may cost more",
-    ],
-    proofTitle: "A clear quote for your home",
-    proofCopy:
-      "A few details about the home help us allow enough time and give you the full price before you book.",
+    proofOrder: ["shower", "oven", "vent"],
     faqs: [
       {
-        question: "Are these exact cleaning prices?",
-        answer:
-          "No. They are representative examples. Tell us the home size, condition, and requested work, and we'll confirm the right service and final price before you book.",
+        question: "Are those exact cleaning prices?",
+        answer: "They’re representative examples. We confirm the service, included work, and final price before you book.",
       },
       {
-        question: "What kind of cleaning should I request?",
-        answer:
-          "If the home just needs regular kitchen, bathroom, dusting, and floor cleaning, start with house cleaning. If there's buildup or more detail to cover, tell us and we'll quote a deeper clean.",
-      },
-      {
-        question: "Can I request a one-time cleaning?",
-        answer:
-          "Yes. The prices shown here are one-time cleaning examples. Tell us what the home needs and we'll confirm the service, included work, and full price before booking.",
-      },
-      {
-        question: "What should I include in my request?",
-        answer:
-          "Tell us the home size, number of bedrooms and bathrooms, city, timing, pets, and anything that needs extra attention.",
+        question: "Should I request Standard or Deep?",
+        answer: "Standard fits regular kitchen, bathroom, dusting, and floor cleaning. If there’s buildup or extra detail, tell us and we’ll quote the right amount of time.",
       },
     ],
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: (city) =>
-      city === "your area"
-        ? "Move-out cleaning before keys or inspection."
-        : `Move-out cleaning in ${city} before keys or inspection.`,
-    subhead:
-      "Share the home size, move date, and condition. We'll confirm what is included, the price, and an available day before you book.",
+    h1: (city) => `Move-out cleaning in ${city}, priced before your deadline.`,
+    subhead: "Share the home size, move date, and condition. We’ll confirm scope, price, and an available day.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Request move-out cleaning pricing",
-    formSubtitle:
-      "Share the home size and move date. We'll confirm scope, price, and available dates.",
-    heroBullets: [
-      "Empty-home cleaning",
-      "Kitchen, bathrooms, baseboards, and floors",
-      "Appliance and cabinet needs quoted clearly",
-      "Heavy-duty conditions identified up front",
-    ],
-    proofMedia: {
-      eyebrow: "Real New Star work",
-      title: "Appliance detail, shown honestly.",
-      copy:
-        "This is the same oven before and after cleaning. Tell us which appliance or cabinet interiors you need, and your quote will state exactly what is included.",
-      images: [
-        {
-          src: "/photos/real-work/paid/oven-interior-before.webp",
-          alt: "Oven interior with visible grease and buildup before cleaning",
-          label: "Before",
-        },
-        {
-          src: "/photos/real-work/paid/oven-interior-after.webp",
-          alt: "The same oven interior after New Star Cleaning detail work",
-          label: "After",
-        },
-      ],
-      note: "Appliance detail shown. Included work is confirmed in your quote.",
-    },
-    scopeTitle: "Detailed cleaning for an empty home",
-    scopeIntro:
-      "Move-out cleaning is quoted from the home size, condition, access, deadline, and requested extras. The home should be empty or mostly empty before the appointment.",
-    scopeBullets: [
-      "Kitchen counters, sink, backsplash, cabinet fronts, and accessible surfaces",
-      "Bathrooms, fixtures, mirrors, tubs, and showers in quoted condition",
-      "Empty bedrooms, closets, living areas, baseboards, trim, and doors",
-      "Floors vacuumed and mopped after the detailed surface work",
-    ],
-    addonTitle: "Details to mention in your request",
-    addonBullets: [
-      "Inside oven or refrigerator",
-      "Inside empty cabinets or drawers",
-      "Interior window glass",
-      "Garage, patio, balcony, or blind detail",
-      "Heavy pet hair or heavy buildup",
-    ],
-    boundaryTitle: "Before the appointment",
-    boundaryBullets: [
-      "Your quote lists the included work and any separately priced details",
-      "The requested date is confirmed after route availability is checked",
-      "Laundry, dishes, packing, unpacking, and organizing are not included",
-      "Exterior windows, tracks, screens, and ladder work are not included",
-    ],
-    proofTitle: "A quote built around the actual home",
-    proofCopy:
-      "Home size, condition, access, deadline, and requested extras all affect the time required. Sharing those details early produces a more accurate price and appointment window.",
+    formTitle: "Get move-out pricing",
+    proofOrder: ["oven", "shower", "vent"],
     faqs: [
       {
-        question: "Can you clean before my move deadline?",
-        answer:
-          "Send the preferred date, home size, address, and whether the home will be empty. We will check the route and confirm the available options before booking.",
+        question: "Are oven, fridge, cabinets, or windows included?",
+        answer: "List the details you need. Your quote will state exactly what is included and any separate pricing before booking.",
       },
       {
-        question: "Are oven, fridge, cabinets, and windows included?",
-        answer:
-          "List the oven, refrigerator, cabinet, and window details you need in the request. Your quote will state exactly what is included and any separate pricing before booking.",
-      },
-      {
-        question: "What if the home is heavier than standard condition?",
-        answer:
-          "We price heavy buildup, pet hair, grease, neglected bathrooms, or unusual conditions separately before the job is accepted. That keeps the quote fair and the cleaner prepared.",
+        question: "What if the home has heavy buildup?",
+        answer: "Tell us before booking. Heavy grease, pet hair, or neglected areas may need additional time and pricing so the cleaner arrives prepared.",
       },
     ],
   },
   deep: {
-    eyebrow: "Deep cleaning for buildup and first visits",
-    h1: (city) => `Deep cleaning in ${city} when regular cleaning is not enough.`,
-    subhead:
-      "For first visits, seasonal cleaning, or visible buildup. Share the home size, condition, and priority areas so we can price enough time for the work.",
+    eyebrow: "Deep cleaning",
+    h1: (city) => `Deep cleaning in ${city}, planned for the work your home needs.`,
+    subhead: "Share the home size, condition, and timing. We’ll price enough time for the detail work.",
     serviceDefault: "Deep cleaning",
-    formTitle: "Request deep-cleaning pricing",
-    formSubtitle:
-      "Share the home size and timing. Add condition or priority areas if they affect the quote.",
-    heroBullets: [
-      "First visits and visible buildup",
-      "Bathrooms, kitchen detail, baseboards, and trim",
-      "Condition reflected in the quote",
-      "Add-ons confirmed before booking",
-    ],
-    proofMedia: {
-      eyebrow: "Real New Star work",
-      title: "Detail work means getting past the obvious surfaces.",
-      copy:
-        "This is the same reachable vent before and after cleaning. Deep-cleaning quotes account for visible buildup and the time required to handle it properly.",
-      images: [
-        {
-          src: "/photos/real-work/paid/vent-detail-before.webp",
-          alt: "Reachable return vent with visible dust before cleaning",
-          label: "Before",
-        },
-        {
-          src: "/photos/real-work/paid/vent-detail-after.webp",
-          alt: "The same reachable return vent after New Star Cleaning detail work",
-          label: "After",
-        },
-      ],
-    },
-    scopeTitle: "Detailed cleaning beyond routine maintenance",
-    scopeIntro:
-      "Deep cleaning is intended for a first visit, seasonal reset, or visible buildup on reachable surfaces. We quote it from the home size, condition, and requested priorities.",
-    scopeBullets: [
-      "Kitchen surfaces, exterior appliances, sink, backsplash, and cabinet fronts",
-      "Bathroom fixtures, toilets, tubs, showers, mirrors, and detail edges",
-      "Baseboards, trim, doors, switch plates, and reachable vents",
-      "Reachable light fixtures, ceiling fans, detail corners, and high-touch areas",
-      "Floors vacuumed and mopped after detailed surface cleaning is complete",
-    ],
-    addonTitle: "Possible add-ons if the home needs them",
-    addonBullets: [
-      "Inside oven",
-      "Inside refrigerator",
-      "Inside empty cabinets or pantry shelves",
-      "Interior window glass",
-      "Heavy pet hair",
-      "Heavy grease, soap scum, or neglected buildup",
-    ],
-    boundaryTitle: "Before the appointment",
-    boundaryBullets: [
-      "Laundry, dishes, organizing, and bed making are not included",
-      "Cleaners do not perform unsafe climbing or unreachable detail work",
-      "Heavy-duty buildup requires additional time and pricing",
-      "Appliance, cabinet, and window interiors are included only when quoted",
-    ],
-    proofTitle: "Detailed work needs the right amount of time",
-    proofCopy:
-      "We ask about the home condition and priority areas before confirming the price so the appointment is planned around the requested work.",
+    formTitle: "Get deep-cleaning pricing",
+    proofOrder: ["vent", "shower", "oven"],
     faqs: [
       {
-        question: "How is deep cleaning different from standard recurring cleaning?",
-        answer:
-          "Deep cleaning targets buildup, detail edges, baseboards, trim, reachable fixtures, bathrooms, and kitchen detail. Standard recurring cleaning is maintenance for homes already kept in normal condition.",
+        question: "How is Deep different from regular cleaning?",
+        answer: "Deep cleaning allows more time for buildup, baseboards, trim, detail edges, bathrooms, and kitchen work beyond routine maintenance.",
       },
       {
         question: "Can I choose priority areas?",
-        answer:
-          "Yes. Tell us which rooms or surfaces matter most so they can be reflected in the confirmed quote.",
-      },
-      {
-        question: "What if the home has heavy buildup or pet hair?",
-        answer:
-          "Heavy buildup, pet hair, grease, or neglected areas may require additional time and pricing. Share the condition before booking so the quote can account for it.",
+        answer: "Yes. Add the rooms or surfaces that matter most and we’ll reflect them in the confirmed quote.",
       },
     ],
   },
   recurring: {
-    eyebrow: "Weekly, biweekly, or monthly",
-    h1: (city) => `Recurring house cleaning in ${city} for a home that stays maintained.`,
-    subhead:
-      "Tell us the home size, starting condition, and preferred frequency. We'll confirm the first-clean scope, ongoing price, and route availability before service begins.",
+    eyebrow: "Weekly · biweekly · monthly",
+    h1: (city) => `Recurring house cleaning in ${city}, built around your home.`,
+    subhead: "Tell us the home size and preferred frequency. We’ll confirm the first clean and ongoing price.",
     serviceDefault: "Standard recurring cleaning",
-    formTitle: "Request recurring cleaning pricing",
-    formSubtitle:
-      "Share the home size and timing. Add your preferred frequency if you already know it.",
-    heroBullets: [
-      "Weekly, biweekly, and monthly options",
-      "Maintenance cleaning for an already-kept home",
-      "First-clean condition reviewed up front",
-      "Ongoing price confirmed before booking",
-    ],
-    proofMedia: {
-      eyebrow: "Real New Star work",
-      title: "A maintained home should feel consistently cared for.",
-      copy:
-        "These are real New Star cleaning results. If the starting condition needs a deeper first visit, we'll tell you before setting the recurring schedule.",
-      images: [
-        {
-          src: "/photos/real-work/clean-bathroom-new-star.webp",
-          alt: "Clean bathroom result from New Star Cleaning work",
-          label: "Bathroom result",
-        },
-        {
-          src: "/photos/real-work/detailed-shower-tile-new-star.webp",
-          alt: "Clean shower tile detail from New Star Cleaning work",
-          label: "Shower detail",
-        },
-      ],
-      note: "After-only results from real New Star work.",
-    },
-    scopeTitle: "Routine cleaning for a maintained home",
-    scopeIntro:
-      "Recurring service is quoted from the starting condition, home size, household traffic, pets, requested priorities, and preferred frequency.",
-    scopeBullets: [
-      "Kitchen counters, sink, exterior appliance surfaces, and visible surfaces",
-      "Bathrooms, mirrors, fixtures, toilets, tubs, and showers in normal condition",
-      "Dusting of reachable surfaces, high-touch areas, and common rooms",
-      "Floors vacuumed and mopped as part of the recurring maintenance scope",
-      "Frequency matched to home size, traffic, pets, and upkeep expectations",
-    ],
-    addonTitle: "Options discussed before booking",
-    addonBullets: [
-      "Weekly cleaning",
-      "Biweekly cleaning",
-      "Monthly cleaning",
-      "First-visit deep reset",
-      "Priority room rotation",
-      "Add-ons quoted separately when needed",
-    ],
-    boundaryTitle: "Before recurring service begins",
-    boundaryBullets: [
-      "The starting condition determines whether maintenance cleaning is the right first service",
-      "Weekly, bi-weekly, and monthly availability depends on the local route",
-      "Laundry, dishes, organizing, and household chores are not included",
-      "Heavy buildup requires deep-clean or heavy-duty pricing",
-    ],
-    proofTitle: "A cleaning plan matched to the home",
-    proofCopy:
-      "Home size, household traffic, pets, starting condition, and preferred frequency all affect the recommended service and price.",
+    formTitle: "Get recurring pricing",
+    proofOrder: ["shower", "vent", "oven"],
     faqs: [
       {
-        question: "Do I need a deep clean before recurring service?",
-        answer:
-          "Sometimes. If the home needs a reset before maintenance cleaning makes sense, we will say that before booking the recurring schedule.",
+        question: "Do I need a Deep clean first?",
+        answer: "Not always. If the home needs a reset before regular maintenance makes sense, we’ll tell you before booking.",
       },
       {
-        question: "Can I do biweekly instead of weekly?",
-        answer:
-          "Yes. Weekly, biweekly, and monthly can all work depending on home size, pets, traffic, and expectations.",
-      },
-      {
-        question: "How is recurring frequency confirmed?",
-        answer:
-          "We review the home size, starting condition, household traffic, pets, preferred timing, and route availability before recommending weekly, bi-weekly, or monthly service.",
+        question: "Can I choose biweekly instead of weekly?",
+        answer: "Yes. Weekly, biweekly, and monthly options depend on the home, expectations, and local route availability.",
       },
     ],
   },
@@ -454,7 +197,7 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
 
 function PaidBrand() {
   return (
-    <div className="mb-2 flex items-center gap-2.5" aria-label="New Star Cleaning">
+    <div className="flex items-center gap-2.5" aria-label="New Star Cleaning">
       <Image
         src="/brand/star-ink-mono.png"
         alt=""
@@ -468,7 +211,7 @@ function PaidBrand() {
         <span className="text-sm font-extrabold tracking-tight text-white sm:text-base">
           New Star Cleaning
         </span>
-        <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">
+        <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">
           Fresno · Clovis · Madera
         </span>
       </span>
@@ -476,21 +219,14 @@ function PaidBrand() {
   );
 }
 
-function TrustBar() {
-  const items = [
-    "Insured local company",
-    "Fresno, Clovis & Madera",
-    "Cleaning homes since 2020",
-    "Price before booking",
-  ];
+function TrustLine() {
+  const items = ["Insured local company", "Cleaning homes since 2020", "Price before booking"];
+
   return (
-    <ul className="grid grid-cols-2 gap-2.5" aria-label="New Star Cleaning trust signals">
+    <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-white/82" aria-label="New Star Cleaning trust signals">
       {items.map((item) => (
-        <li
-          key={item}
-          className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-3 py-2.5 text-xs font-semibold leading-4 text-white/90"
-        >
-          <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-black text-white" aria-hidden="true">
+        <li key={item} className="flex items-center gap-2">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-black text-white" aria-hidden="true">
             ✓
           </span>
           <span>{item}</span>
@@ -500,115 +236,109 @@ function TrustBar() {
   );
 }
 
-function PricingGuide({ guide }: { guide: NonNullable<PaidIntentConfig["pricingGuide"]> }) {
+function PriceContext({ context }: { context: NonNullable<PaidIntentConfig["priceContext"]> }) {
   return (
-    <section
-      className="mt-7 min-w-0 rounded-3xl border border-white/15 bg-white/[0.07] p-5"
-      aria-labelledby="paid-house-pricing-title"
-    >
-      <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">
-        {guide.eyebrow}
+    <div className="border-l-2 border-accent pl-4">
+      <span className="block text-[11px] font-bold uppercase tracking-[0.16em] text-white/58">{context.label}</span>
+      <strong className="mt-1 block text-base font-bold text-white">{context.value}</strong>
+      <span className="mt-1 block text-xs leading-5 text-white/62">{context.note}</span>
+    </div>
+  );
+}
+
+function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
+  const pairs = order.map((key) => ({ key, ...PROOF_PAIRS[key] }));
+
+  return (
+    <section className="border-b border-slate-200 bg-white" aria-labelledby="paid-proof-title">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">Real New Star work</div>
+            <h2 id="paid-proof-title" className="mt-2 font-display text-3xl leading-tight text-primary sm:text-4xl">
+              Three real before-and-after results.
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm leading-6 text-ink-soft">Photographed from New Star jobs. No stock photography.</p>
+        </div>
+
+        <div className="mt-7 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
+          {pairs.map((pair) => (
+            <article key={pair.key} className="min-w-[84%] snap-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 sm:min-w-[62%] md:min-w-0">
+              <div className="grid grid-cols-2 gap-px bg-slate-200">
+                {(["before", "after"] as const).map((stage) => {
+                  const image = pair[stage];
+                  return (
+                    <figure key={stage} className="relative aspect-[4/5] bg-slate-100">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        sizes="(max-width: 767px) 50vw, 190px"
+                        className="object-cover"
+                      />
+                      <figcaption className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white ${stage === "before" ? "bg-primary" : "bg-accent"}`}>
+                        {stage}
+                      </figcaption>
+                    </figure>
+                  );
+                })}
+              </div>
+              <h3 className="px-4 py-3 text-sm font-bold text-primary">{pair.title}</h3>
+            </article>
+          ))}
+        </div>
+        <p className="mt-2 text-xs font-semibold text-ink-soft md:hidden">Swipe to see all three results →</p>
       </div>
-      <p id="paid-house-pricing-title" className="mt-3 max-w-2xl text-sm leading-6 text-white/82">
-        {guide.intro}
-      </p>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
-        {guide.examples.map((example) => (
-          <div
-            key={`${example.home}-${example.size}`}
-            className="min-w-0 rounded-2xl border border-white/12 bg-primary-light/40 p-4"
-          >
-            <div className="min-w-0">
-              <span className="block break-words text-xs font-semibold leading-5 text-white/88 sm:text-sm">{example.home}</span>
-              <span className="mt-0.5 block text-xs leading-5 text-white/62">{example.size}</span>
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {example.prices.map((option) => (
-                <div key={option.label} className="rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5">
-                  <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-white/75">
-                    {option.label}
-                  </span>
-                  <span className="mt-1 block font-display text-xl text-white">{option.price}</span>
-                </div>
-              ))}
-            </div>
+    </section>
+  );
+}
+
+function ProcessStrip() {
+  const steps = [
+    ["1", "Share size & timing"],
+    ["2", "We confirm scope & price"],
+    ["3", "You choose the date"],
+  ];
+
+  return (
+    <section className="border-b border-slate-200 bg-slate-50" aria-label="How the quote works">
+      <div className="mx-auto grid max-w-5xl grid-cols-3 divide-x divide-slate-200 px-4 sm:px-6 lg:px-8">
+        {steps.map(([number, label]) => (
+          <div key={number} className="flex flex-col items-center gap-2 px-2 py-5 text-center sm:flex-row sm:justify-center sm:px-5 sm:text-left">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-white">{number}</span>
+            <span className="text-sm font-bold text-primary">{label}</span>
           </div>
         ))}
       </div>
-      <p className="mt-4 text-xs leading-5 text-white/75">{guide.footnote}</p>
-    </section>
-  );
-}
-
-function RealWorkProof({ proof }: { proof: PaidProofMedia }) {
-  return (
-    <section className="border-y border-slate-200 bg-white" aria-labelledby="paid-real-work-title">
-      <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:px-8 lg:py-14">
-        <div>
-          <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
-            {proof.eyebrow}
-          </div>
-          <h2 id="paid-real-work-title" className="mt-3 font-display text-3xl leading-tight text-primary md:text-4xl">
-            {proof.title}
-          </h2>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-ink-soft md:text-base">
-            {proof.copy}
-          </p>
-          {proof.note ? (
-            <p className="mt-4 border-l-2 border-accent pl-4 text-xs font-semibold leading-5 text-primary/75">
-              {proof.note}
-            </p>
-          ) : null}
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          {proof.images.map((image) => (
-            <figure key={image.src} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-              <div className="relative aspect-square">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  sizes="(max-width: 767px) 46vw, 360px"
-                  className="object-cover"
-                />
-                <figcaption className="absolute left-3 top-3 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-white sm:text-xs">
-                  {image.label}
-                </figcaption>
-              </div>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SectionCard({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="rounded-[2rem] border border-line bg-white p-6 md:p-8">
-      <h2 className="font-display text-2xl leading-tight text-primary md:text-3xl">{title}</h2>
-      <div className="mt-5 text-sm leading-7 text-ink-soft md:text-base">{children}</div>
     </section>
   );
 }
 
 function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
     <div className="space-y-3">
       {faqs.map((faq, index) => (
         <div key={faq.question} className="overflow-hidden rounded-2xl border border-line bg-white">
           <button
+            id={`paid-faq-trigger-${index}`}
             type="button"
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-primary transition hover:bg-slate-50 md:text-base"
+            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-bold text-primary transition hover:bg-slate-50 md:text-base"
+            aria-expanded={openIndex === index}
+            aria-controls={`paid-faq-panel-${index}`}
           >
             <span>{faq.question}</span>
-            <span className="text-xl text-accent">{openIndex === index ? "−" : "+"}</span>
+            <span className="text-xl text-accent" aria-hidden="true">{openIndex === index ? "−" : "+"}</span>
           </button>
-          <div className={openIndex === index ? "px-5 pb-5 text-sm leading-7 text-ink-soft" : "hidden"}>
+          <div
+            id={`paid-faq-panel-${index}`}
+            role="region"
+            aria-labelledby={`paid-faq-trigger-${index}`}
+            className={openIndex === index ? "px-5 pb-5 text-sm leading-6 text-ink-soft" : "hidden"}
+          >
             {faq.answer}
           </div>
         </div>
@@ -618,6 +348,21 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
 }
 
 function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const form = document.getElementById("booking-form");
+    if (!form) return;
+
+    const observer = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), {
+      threshold: 0.05,
+    });
+    observer.observe(form);
+    return () => observer.disconnect();
+  }, []);
+
+  if (!visible) return null;
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
@@ -672,132 +417,79 @@ export default function GoogleAdsLandingPageClient() {
   };
 
   return (
-    <div className="bg-slate-50 pb-24 text-ink md:pb-0">
-      <section className="relative overflow-hidden bg-primary">
-        <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
-        <div className="mx-auto grid min-w-0 max-w-6xl gap-4 px-4 py-7 sm:gap-8 sm:px-6 sm:py-10 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
-          <div className="flex min-w-0 flex-col justify-center text-white lg:col-start-1 lg:row-start-1">
+    <div className="bg-white pb-24 text-ink md:pb-0">
+      <section className="bg-primary text-white">
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+          <div className="flex items-center justify-between gap-4">
             <PaidBrand />
-            <div className="mb-4 inline-flex max-w-full self-start whitespace-normal rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
-              {intent.eyebrow}
+            <a
+              href={"tel:+1" + "559" + "785" + "2822"}
+              className="rounded-xl border border-white/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-white/10 sm:px-4 sm:text-sm"
+            >
+              <span className="sm:hidden">Call</span>
+              <span className="hidden sm:inline">Call (559) 785-2822</span>
+            </a>
+          </div>
+
+          <div className="mt-7 grid min-w-0 gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
+            <div className="min-w-0 lg:col-start-1 lg:row-start-1 lg:self-center">
+              <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">{intent.eyebrow}</div>
+              <h1 className="mt-3 max-w-2xl break-words font-display text-[2.45rem] leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl lg:text-[3.6rem]">
+                {intent.h1(city.label)}
+              </h1>
+              <p className="mt-4 max-w-xl text-base leading-7 text-white/78 sm:text-lg sm:leading-8">
+                {intent.subhead}
+              </p>
             </div>
-            <h1 className="max-w-3xl break-words font-display text-3xl leading-[1.03] tracking-[-0.03em] text-white sm:text-5xl lg:text-[4.6rem]">
-              {intent.h1(city.label)}
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-white/82 sm:mt-5 sm:text-lg">
-              {intent.subhead}
+
+            <div id="booking-form" className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+              <QuickQuoteForm
+                source="google-ads"
+                title={intent.formTitle}
+                subtitle=""
+                defaultCity={city.formValue}
+                defaultService={intent.serviceDefault}
+                extended
+                paidSearch
+              />
+            </div>
+
+            <div className="space-y-5 lg:col-start-1 lg:row-start-2">
+              {intent.priceContext ? <PriceContext context={intent.priceContext} /> : null}
+              <TrustLine />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <BeforeAfterGallery order={intent.proofOrder} />
+      <ProcessStrip />
+
+      <section className="bg-white">
+        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:px-8 lg:py-14">
+          <div>
+            <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">Two quick answers</div>
+            <h2 className="mt-2 font-display text-3xl leading-tight text-primary sm:text-4xl">Questions before you request a quote.</h2>
+            <div className="mt-6">
+              <FAQAccordion faqs={intent.faqs} />
+            </div>
+          </div>
+
+          <div className="rounded-3xl bg-primary p-6 text-white sm:p-8">
+            <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">Ready when you are</div>
+            <h2 className="mt-3 font-display text-3xl leading-tight">Get a price for your home.</h2>
+            <p className="mt-3 text-sm leading-6 text-white/72">
+              Share the basics and we’ll call or text with pricing and available dates.
             </p>
-            <div className="mt-6 hidden lg:block">
-              <TrustBar />
-            </div>
-          </div>
-
-          <div id="booking-form" className="min-w-0 self-start lg:col-start-2 lg:row-span-2 lg:row-start-1">
-            <QuickQuoteForm
-              source="google-ads"
-              title={intent.formTitle}
-              subtitle={intent.formSubtitle}
-              defaultCity={city.formValue}
-              defaultService={intent.serviceDefault}
-              extended
-              paidSearch
-            />
-          </div>
-
-          <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-            <div className="mb-6 lg:hidden">
-              <TrustBar />
-            </div>
-            {intent.pricingGuide ? <PricingGuide guide={intent.pricingGuide} /> : null}
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a href="#booking-form" onClick={() => trackQuoteCta("hero")} className="btn btn-accent !text-sm">
-                Request my quote
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !px-4 !text-sm">
+                Get my quote
               </a>
-              <a href="tel:+15597852822" className="btn btn-ghost-dark !text-sm">
-                Call (559) 785-2822
+              <a href={"tel:+1" + "559" + "785" + "2822"} className="btn btn-ghost-dark !px-4 !text-sm">
+                Call us
               </a>
             </div>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
-              {intent.heroBullets.map((bullet) => (
-                <div key={bullet} className="flex items-start gap-3 rounded-2xl border border-white/12 bg-white/8 p-4">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
-                  <span className="text-sm font-semibold leading-6 text-white/90">{bullet}</span>
-                </div>
-              ))}
-            </div>
           </div>
-        </div>
-      </section>
-
-      <RealWorkProof proof={intent.proofMedia} />
-
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.75fr] lg:px-8 lg:py-14">
-        <SectionCard title={intent.scopeTitle}>
-          <p>{intent.scopeIntro}</p>
-          <ul className="mt-5 grid gap-3">
-            {intent.scopeBullets.map((item) => (
-              <li key={item} className="flex gap-3">
-                <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </SectionCard>
-
-        <SectionCard title={intent.addonTitle}>
-          <ul className="grid gap-3">
-            {intent.addonBullets.map((item) => (
-              <li key={item} className="rounded-2xl border border-line bg-slate-50 px-4 py-3 font-semibold text-primary">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </SectionCard>
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-5 px-4 pb-10 sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-14">
-        <SectionCard title={intent.boundaryTitle}>
-          <ul className="grid gap-3">
-            {intent.boundaryBullets.map((item) => (
-              <li key={item} className="flex gap-3">
-                <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </SectionCard>
-
-        <section className="rounded-[2rem] border border-primary/15 bg-primary p-6 text-white md:p-8">
-          <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">How we price your cleaning</div>
-          <h2 className="mt-4 font-display text-2xl leading-tight md:text-3xl">{intent.proofTitle}</h2>
-          <p className="mt-5 text-sm leading-7 text-white/82 md:text-base">{intent.proofCopy}</p>
-          <div className="mt-6 grid gap-3 text-sm font-semibold text-white/90 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/12 bg-white/8 p-4">Fresno, Clovis, Madera</div>
-            <div className="rounded-2xl border border-white/12 bg-white/8 p-4">Quote before booking</div>
-          </div>
-        </section>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 pb-14 sm:px-6 lg:px-8">
-        <div className="mb-6 text-center">
-          <div className="eyebrow eyebrow-dot justify-center">Questions before booking</div>
-          <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">A few things homeowners ask us</h2>
-        </div>
-        <FAQAccordion faqs={intent.faqs} />
-      </section>
-
-      <section className="border-t border-line bg-white px-4 py-12 text-center sm:px-6 lg:px-8">
-        <h2 className="font-display text-3xl text-primary md:text-4xl">Ready to get a price for your home?</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-ink-soft md:text-base">
-          Tell us about the home and when you need it cleaned. We&apos;ll send pricing and available days.
-        </p>
-        <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !text-sm">
-            Request my quote
-          </a>
-          <a href="tel:+15597852822" className="btn btn-outline !text-sm">
-            Call (559) 785-2822
-          </a>
         </div>
       </section>
 

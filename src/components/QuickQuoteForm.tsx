@@ -161,7 +161,7 @@ function initialForm(defaultCity?: string, defaultService?: string): FormState {
 
 function FieldLabel({ htmlFor, children, required = false }: { htmlFor: string; children: string; required?: boolean }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-mute">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-xs font-bold tracking-[0.03em] text-ink-soft">
       {children} {required ? <span className="text-accent">*</span> : null}
     </label>
   );
@@ -189,7 +189,7 @@ function SubmitButton({
         : commercial
           ? "Request a walkthrough"
           : paidSearch
-            ? "Request my quote"
+            ? "Get my quote"
             : compact
               ? "Get my quote"
               : "Get pricing & availability"}
@@ -436,7 +436,7 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderExtendedDetails = () => (
+  const renderExtendedDetails = (paid = false) => (
     <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -516,6 +516,27 @@ export default function QuickQuoteForm({
         </div>
       )}
 
+      {paid && (isRecurringRequest || isPaidHouseRequest) ? (
+        <div>
+          <FieldLabel htmlFor="quote-frequency">How often?</FieldLabel>
+          <select
+            id="quote-frequency"
+            name="frequency"
+            value={formData.frequency}
+            onChange={(event) => updateField("frequency", event.target.value)}
+            className={fieldClass}
+          >
+            <option value="">Select…</option>
+            {isPaidHouseRequest ? <option value="one-time">One-Time</option> : null}
+            <option value="weekly">Weekly</option>
+            <option value="bi-weekly">Biweekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+      ) : null}
+
+      {!paid ? (
+        <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <FieldLabel htmlFor="quote-contact-preference">Best way to reach you</FieldLabel>
@@ -581,6 +602,9 @@ export default function QuickQuoteForm({
           />
         </div>
       </div>
+        </>
+      ) : null}
+
     </>
   );
 
@@ -615,27 +639,14 @@ export default function QuickQuoteForm({
   return (
     <div
       id="quote"
-      className={`rounded-3xl border bg-white ${paidSearch ? "border-slate-200 p-5 sm:p-7 lg:p-8" : "border-line p-6 shadow-elev sm:p-7 lg:p-8"}`}
+      className={`border bg-white ${paidSearch ? "rounded-[1.5rem] border-slate-200 p-5 sm:p-6 lg:p-7" : "rounded-3xl border-line p-6 shadow-elev sm:p-7 lg:p-8"}`}
     >
-      <div className={paidSearch ? "mb-4 sm:mb-6" : "mb-6"}>
+      <div className={paidSearch ? "mb-4" : "mb-6"}>
         <span className="eyebrow eyebrow-dot">{paidSearch ? "Pricing & availability" : "Fast local quote"}</span>
         <h2 className={`mt-3 font-display leading-tight text-ink lg:text-[1.6rem] ${paidSearch ? "text-xl sm:text-2xl" : "text-2xl"}`}>
           {title}
         </h2>
-        <p className={paidSearch ? "mt-2 hidden text-sm leading-relaxed text-ink-soft md:block" : "mt-2 text-sm leading-relaxed text-ink-soft"}>
-          {subtitle}
-        </p>
-
-        {paidSearch ? (
-          <div className="mt-4 hidden gap-2 sm:grid">
-            <a
-              href="tel:+15597852822"
-              className="btn btn-outline !min-h-11 !px-4 !text-sm"
-            >
-              Prefer to talk? Call (559) 785-2822
-            </a>
-          </div>
-        ) : null}
+        {subtitle ? <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p> : null}
       </div>
 
       <form
@@ -656,9 +667,9 @@ export default function QuickQuoteForm({
             validationField: field || "unknown",
           });
         }}
-        className="space-y-4"
+        className={paidSearch ? "space-y-3.5" : "space-y-4"}
       >
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className={paidSearch ? "grid gap-3.5 min-[380px]:grid-cols-2" : "grid gap-4 sm:grid-cols-2"}>
           <div>
             <FieldLabel htmlFor="quote-name" required>Name</FieldLabel>
             <input
@@ -685,7 +696,7 @@ export default function QuickQuoteForm({
               value={formData.phone}
               onChange={(event) => updateField("phone", event.target.value)}
               autoComplete="tel"
-              placeholder="(559) 000-0000"
+              placeholder={paidSearch ? "559-000-0000" : "(559) 000-0000"}
               className={fieldClass}
             />
           </div>
@@ -737,7 +748,7 @@ export default function QuickQuoteForm({
           : (!compact ? renderServiceField() : null)}
         {paidSearch && paidServicePrefilled ? <input type="hidden" name="service" value={formData.service} readOnly /> : null}
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className={paidSearch ? "grid gap-3.5 min-[380px]:grid-cols-2" : "grid gap-4 sm:grid-cols-2"}>
           <div>
             <FieldLabel htmlFor="quote-timeline" required>Timeline</FieldLabel>
             <select
@@ -840,14 +851,14 @@ export default function QuickQuoteForm({
           paidSearch={paidSearch}
         />
 
-        <p className="text-center text-xs leading-relaxed text-ink-soft">
+        <p className={`text-center text-ink-soft ${paidSearch ? "text-[10px] leading-4" : "text-xs leading-relaxed"}`}>
           By submitting, you consent to service-related calls/texts from New Star Cleaning about your quote, pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out. Consent is not required to purchase services.
           &nbsp;·&nbsp;
           <Link href="/privacy" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>
         </p>
 
         {showPaidOptionalDetails ? (
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div className="border-t border-slate-200 pt-3">
             <button
               type="button"
               onClick={() => {
@@ -861,28 +872,15 @@ export default function QuickQuoteForm({
                 }
                 setShowPaidDetails((current) => !current);
               }}
-              className="flex w-full items-center justify-between gap-4 text-left text-sm font-bold text-primary"
+              className="flex w-full items-center justify-between gap-4 text-left text-xs font-bold text-primary"
               aria-expanded={showPaidDetails}
             >
-              <span>{showPaidDetails ? "Hide extra details" : "Add details for a more accurate quote (optional)"}</span>
+              <span>{showPaidDetails ? "Hide home details" : "Add home details (optional)"}</span>
               <span className="text-lg text-accent">{showPaidDetails ? "−" : "+"}</span>
             </button>
             {showPaidDetails ? (
               <div className="mt-4 space-y-4">
-                <div>
-                  <FieldLabel htmlFor="quote-email">Email</FieldLabel>
-                  <input
-                    id="quote-email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(event) => updateField("email", event.target.value)}
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    className={fieldClass}
-                  />
-                </div>
-                {renderExtendedDetails()}
+                {renderExtendedDetails(true)}
                 <div>
                   <FieldLabel htmlFor="quote-message">Anything we should know?</FieldLabel>
                   <textarea

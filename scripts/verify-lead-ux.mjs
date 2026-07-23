@@ -130,15 +130,20 @@ assert(
 
 assert(
   quickQuoteForm.includes("showPaidDetails") &&
-    quickQuoteForm.includes("Add details for a more accurate quote (optional)") &&
+    quickQuoteForm.includes("Add home details (optional)") &&
     quickQuoteForm.includes("How much cleaning does the home need?") &&
-    quickQuoteForm.includes("Request my quote") &&
+    quickQuoteForm.includes("Get my quote") &&
     quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
     quickQuoteForm.includes("paidCityPrefilled") &&
     quickQuoteForm.includes("paidServicePrefilled") &&
     quickQuoteForm.includes("isPaidHouseRequest"),
   "paid quote form captures the core lead first and moves qualification details behind progressive disclosure",
+);
+assert(
+  !quickQuoteForm.includes("Prefer to talk? Call") &&
+    quickQuoteForm.includes("renderExtendedDetails(true)"),
+  "paid quote card removes the competing call box and suppresses low-value extended fields",
 );
 
 assert(

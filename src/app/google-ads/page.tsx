@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function GoogleAdsLandingPage() {
   return (
-    <div data-paid-layout-version="proof-voice-v3">
+    <div data-paid-layout-version="proof-led-v4">
       <Suspense fallback={null}>
         <GoogleAdsLandingPageClient />
       </Suspense>

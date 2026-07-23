@@ -12,7 +12,7 @@
     "verify:service-scope": "node scripts/verify-service-scope.mjs",
     "verify:lead-ux": "node scripts/verify-lead-ux.mjs",
     "verify:paid-attribution": "node scripts/verify-paid-attribution.mjs && node scripts/verify-paid-attribution-runtime.mjs",
-    "verify:paid-intent-routing": "node scripts/verify-paid-intent-routing.mjs",
+    "verify:paid-intent-routing": "node scripts/verify-paid-intent-routing.mjs && node scripts/verify-paid-page-density.mjs",
     "verify:funnel-events": "node scripts/verify-funnel-events.mjs"
   },
   "dependencies": {

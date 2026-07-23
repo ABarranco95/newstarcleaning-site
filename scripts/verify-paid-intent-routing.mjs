@@ -21,26 +21,23 @@ assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring 
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(
-  paidPage.includes("House cleaning in") && paidPage.includes("quoted for your home"),
-  "generic house headline uses direct local quote language",
+  paidPage.includes("House cleaning in") && paidPage.includes("without the guesswork"),
+  "generic house headline uses concise local quote language",
 );
 assert(
-  paidPage.includes("For context, a typical 3-bedroom, 2-bath home around 1,600 sq ft") &&
-    paidPage.includes("is about $225 for Standard or $360 for Deep"),
-  "generic house hero labels representative Standard and Deep prices as approximate",
+  paidPage.includes("Typical 3 bed / 2 bath") &&
+    paidPage.includes("Around $225 Standard · $360 Deep"),
+  "generic house hero keeps one compact representative price context",
 );
-assert(paidPage.includes("Representative price examples"), "generic house page labels its price examples as representative");
-for (const expectedPrice of ["$225", "$300", "$360", "$475"]) {
+for (const expectedPrice of ["$225", "$360"]) {
   assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
 }
 assert(
-  paidPage.includes("These examples show how scope changes the price") &&
-    paidPage.includes("Examples are not fixed quotes") &&
-    paidPage.includes("Are these exact cleaning prices?") &&
-    paidPage.includes("No. They are representative examples."),
-  "generic house pricing guide keeps one concise estimate boundary without minimum-price bait",
+  paidPage.includes("Final price depends on condition and requested work") &&
+    paidPage.includes("They’re representative examples"),
+  "generic house price context keeps a concise estimate boundary",
 );
-for (const rejectedPrice of ["$165", "$195"]) {
+for (const rejectedPrice of ["$165", "$195", "$300", "$475"]) {
   assert(!houseBlock.includes(rejectedPrice), `generic house price lane omits floor-price anchor: ${rejectedPrice}`);
 }
 for (const rejectedFrequencyPhrase of ["weekly", "every other week", "every-other-week", "monthly"]) {
@@ -60,9 +57,14 @@ assert(
 assert(
   paidPage.includes("shower-detail-before.webp") &&
     paidPage.includes("vent-detail-before.webp") &&
-    paidPage.includes("oven-interior-before.webp"),
-  "paid intents use route-specific real-work proof",
+    paidPage.includes("oven-interior-before.webp") &&
+    paidPage.includes("Three real before-and-after results") &&
+    paidPage.includes("BeforeAfterGallery"),
+  "every paid intent renders three real before-and-after proof pairs",
 );
+for (const removedBloat of ["PricingGuide", "SectionCard", "scopeBullets", "addonBullets", "boundaryBullets", "heroBullets"]) {
+  assert(!paidPage.includes(removedBloat), `paid page removes obsolete text-wall structure: ${removedBloat}`);
+}
 
 if (failures.length) {
   console.error("Paid intent routing verification failed:");

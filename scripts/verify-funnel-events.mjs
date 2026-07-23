@@ -54,7 +54,7 @@ assert(form.includes("trackLeadConversion"), "quote form instruments Apex-accept
 assert(form.includes('data-clarity-mask="true"'), "quote form explicitly masks customer fields for replay tools");
 assert(form.includes("metadata?.apex?.success === true"), "paid conversion requires explicit Apex acceptance metadata");
 assert(paidPage.includes("paid_landing_view") && paidPage.includes("quote_cta_click"), "paid page instruments landing and CTA events");
-assert(paidPage.includes("RealWorkProof") && paidPage.includes("Real New Star work"), "paid page renders route-specific real-work proof");
+assert(paidPage.includes("BeforeAfterGallery") && paidPage.includes("Real New Star work"), "paid page renders the three-pair real-work gallery");
 assert(callTracker.includes('a[href^="tel:"]') && callTracker.includes("trackWebsitePhoneClick"), "website phone tracker diagnoses all tel-link clicks");
 assert(callTracker.includes("phone_conversion_number") && callTracker.includes("phone_conversion_callback"), "direct website-call path installs Google's forwarding-number phone snippet");
 assert(callTracker.includes('window.gtag("config"') && callTracker.includes("updateWebsitePhoneLinks"), "phone snippet updates displayed and clickable forwarding numbers");
