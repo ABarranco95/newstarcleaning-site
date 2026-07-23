@@ -22,7 +22,7 @@ const questionCount = (intentConfig.match(/question:/g) || []).length;
 assert(marker.includes('data-paid-layout-version="proof-led-v4-accurate"'), "paid page exposes the condition-accurate proof-led v4 marker");
 assert(page.includes("BeforeAfterGallery") && page.includes("ProcessStrip"), "paid page uses proof and process components");
 assert(page.includes("snap-mandatory") && page.includes("Swipe to see all six results"), "mobile proof uses a compact six-result swipe gallery");
-assert(page.includes("IntersectionObserver") && page.includes("setVisible(!entry.isIntersecting)"), "mobile sticky CTA stays hidden while the quote form is visible");
+assert(page.includes("getBoundingClientRect().bottom <= 0") && page.includes('addEventListener("scroll"'), "mobile sticky CTA stays hidden while the quote form is visible");
 assert(directSectionCount === 2, `paid render has two direct sections instead of stacked content walls (found ${directSectionCount})`);
 assert(questionCount === 8, `each of four intents carries exactly two FAQs (found ${questionCount} questions)`);
 for (const asset of [
@@ -53,7 +53,8 @@ for (const rejected of [
   assert(!page.includes(rejected), `paid page excludes bloated legacy pattern: ${rejected}`);
 }
 assert(!form.includes("Prefer to talk?"), "paid form contains no competing call box");
-assert(form.includes('id="booking-form"'), "paid form preserves the quote anchor and sticky-observer target");
+assert(page.includes('<div id="booking-form"'), "paid hero wrapper owns the quote anchor and sticky-observer target");
+assert(!form.includes('id="booking-form"'), "paid form does not duplicate the hero quote anchor ID");
 assert(form.includes("Add home details (optional)"), "paid form keeps optional details quiet and explicit");
 assert(form.includes("renderExtendedDetails(true)"), "paid form uses its reduced optional-detail surface");
 

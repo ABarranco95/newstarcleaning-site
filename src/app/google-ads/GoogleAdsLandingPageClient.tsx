@@ -392,11 +392,15 @@ function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
     const form = document.getElementById("booking-form");
     if (!form) return;
 
-    const observer = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), {
-      threshold: 0.05,
-    });
-    observer.observe(form);
-    return () => observer.disconnect();
+    const updateVisibility = () => setVisible(form.getBoundingClientRect().bottom <= 0);
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+    };
   }, []);
 
   if (!visible) return null;
@@ -469,13 +473,13 @@ export default function GoogleAdsLandingPageClient() {
             </a>
           </div>
 
-          <div className="mt-7 grid min-w-0 gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
+          <div className="mt-5 grid min-w-0 gap-5 sm:mt-7 sm:gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
             <div className="min-w-0 lg:col-start-1 lg:row-start-1 lg:self-center">
               <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">{intent.eyebrow}</div>
-              <h1 className="mt-3 max-w-2xl break-words font-display text-[2.45rem] leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl lg:text-[3.6rem]">
+              <h1 className="mt-3 max-w-2xl break-words font-display text-[2.25rem] leading-[1.04] tracking-[-0.035em] text-white sm:text-5xl lg:text-[3.6rem]">
                 {intent.h1(city.label)}
               </h1>
-              <p className="mt-4 max-w-xl text-base leading-7 text-white/78 sm:text-lg sm:leading-8">
+              <p className="mt-3 max-w-xl text-[0.98rem] leading-6 text-white/78 sm:mt-4 sm:text-lg sm:leading-8">
                 {intent.subhead}
               </p>
             </div>
