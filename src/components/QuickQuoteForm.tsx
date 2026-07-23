@@ -582,16 +582,19 @@ export default function QuickQuoteForm({
   }
 
   return (
-    <div id="quote" className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8">
-      <div className="mb-6">
+    <div
+      id="quote"
+      className={`rounded-3xl border border-line bg-white shadow-elev ${paidSearch ? "p-5 sm:p-7 lg:p-8" : "p-6 sm:p-7 lg:p-8"}`}
+    >
+      <div className={paidSearch ? "mb-4 sm:mb-6" : "mb-6"}>
         <span className="eyebrow eyebrow-dot">{paidSearch ? "Pricing & availability" : "Fast local quote"}</span>
-        <h2 className="mt-3 font-display text-2xl leading-tight text-ink lg:text-[1.6rem]">
+        <h2 className={`mt-3 font-display leading-tight text-ink lg:text-[1.6rem] ${paidSearch ? "text-xl sm:text-2xl" : "text-2xl"}`}>
           {title}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p>
 
         {paidSearch ? (
-          <div className="mt-4 grid gap-2">
+          <div className="mt-4 hidden gap-2 sm:grid">
             <a
               href="tel:+15597852822"
               className="btn btn-outline !min-h-11 !px-4 !text-sm"

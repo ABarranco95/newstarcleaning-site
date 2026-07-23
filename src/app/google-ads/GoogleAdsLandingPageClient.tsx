@@ -150,13 +150,16 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   move: {
     eyebrow: "Move-in / move-out cleaning · empty-home service",
-    h1: (city) => `Move-Out Cleaning in ${city} for a cleaner handoff`,
+    h1: (city) =>
+      city === "your area"
+        ? "Move-out cleaning for a cleaner handoff."
+        : `Move-out cleaning in ${city}, ready for handoff.`,
     subhead:
-      "Request pricing for an empty home, rental turnover, or move deadline. We confirm the home details, included work, and current appointment options before booking.",
+      "Get pricing for an empty home, rental turnover, or move deadline. We confirm scope and availability before booking.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Request move-out cleaning pricing",
+    formTitle: "Get move-out cleaning pricing",
     formSubtitle:
-      "Send home size and move timing first. Add condition or appliance details below if you want a tighter quote.",
+      "Share the home size and move date. Add condition details if needed.",
     heroBullets: [
       "Empty-home room cleaning",
       "Kitchen, bathrooms, baseboards, and floors",
@@ -365,19 +368,22 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
 
 function TrustBar() {
   const items = [
-    "Insured local cleaning company",
-    "Fresno, Clovis & Madera",
-    "Locally operated since 2020",
-    "Full price confirmed before booking",
+    "Insured local company",
+    "Fresno • Clovis • Madera",
+    "Local since 2020",
+    "Price confirmed first",
   ];
   return (
-    <div className="flex flex-wrap gap-2" aria-label="New Star Cleaning trust signals">
+    <ul className="grid grid-cols-2 gap-2" aria-label="New Star Cleaning trust signals">
       {items.map((item) => (
-        <div key={item} className="rounded-full border border-white/15 bg-white/8 px-3 py-2 text-xs font-semibold text-white/90">
+        <li
+          key={item}
+          className="flex items-center justify-center rounded-xl border border-white/15 bg-white/8 px-2 py-2 text-center text-[11px] font-semibold leading-tight text-white/90 sm:text-xs"
+        >
           {item}
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
@@ -512,7 +518,7 @@ export default function GoogleAdsLandingPageClient() {
     <div className="bg-cream-2 pb-24 text-ink md:pb-0">
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
-        <div className="mx-auto grid min-w-0 max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
+        <div className="mx-auto grid min-w-0 max-w-6xl gap-6 px-4 py-10 sm:gap-8 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-14">
           <div className="flex min-w-0 flex-col justify-center text-white lg:col-start-1 lg:row-start-1">
             <div className="mb-5 inline-flex max-w-full self-start whitespace-normal rounded-full border border-white/15 bg-white/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
               {intent.eyebrow}
@@ -523,7 +529,7 @@ export default function GoogleAdsLandingPageClient() {
             <p className="mt-5 max-w-2xl text-base leading-8 text-white/82 sm:text-lg">
               {intent.subhead}
             </p>
-            <div className="mt-6">
+            <div className="mt-5 sm:mt-6">
               <TrustBar />
             </div>
           </div>
