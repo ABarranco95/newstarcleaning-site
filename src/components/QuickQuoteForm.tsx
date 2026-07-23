@@ -650,6 +650,7 @@ export default function QuickQuoteForm({
       </div>
 
       <form
+        id="booking-form"
         onSubmit={handleSubmit}
         data-clarity-mask="true"
         onFocusCapture={trackFormStart}

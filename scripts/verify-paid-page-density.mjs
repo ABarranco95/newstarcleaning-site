@@ -46,7 +46,8 @@ for (const rejected of [
 ]) {
   assert(!page.includes(rejected), `paid page excludes bloated legacy pattern: ${rejected}`);
 }
-assert(!form.includes("Prefer to talk? Call"), "paid form contains no competing call box");
+assert(!form.includes("Prefer to talk?"), "paid form contains no competing call box");
+assert(form.includes('id="booking-form"'), "paid form preserves the quote anchor and sticky-observer target");
 assert(form.includes("Add home details (optional)"), "paid form keeps optional details quiet and explicit");
 assert(form.includes("renderExtendedDetails(true)"), "paid form uses its reduced optional-detail surface");
 
