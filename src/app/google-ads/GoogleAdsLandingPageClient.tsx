@@ -18,7 +18,7 @@ type CityKey =
   | "tower-district"
   | "near-me";
 
-type ProofPairKey = "shower" | "oven" | "vent";
+type ProofPairKey = "shower" | "tub" | "oven" | "refrigerator" | "refrigeratorDetail" | "vent";
 
 type ProofPair = {
   title: string;
@@ -48,12 +48,12 @@ const CITY_LABELS: Record<CityKey, string> = {
   "woodward-park": "Woodward Park",
   "fig-garden": "Fig Garden",
   "tower-district": "Tower District",
-  "near-me": "your area",
+  "near-me": "Fresno-area",
 };
 
 const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
   shower: {
-    title: "Shower detail",
+    title: "Shower wall and caddy detail",
     before: {
       src: "/photos/real-work/paid/shower-detail-before.webp",
       alt: "Shower wall and caddies with visible residue before cleaning",
@@ -61,6 +61,17 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
     after: {
       src: "/photos/real-work/paid/shower-detail-after.webp",
       alt: "The same shower wall and caddies after New Star Cleaning detail work",
+    },
+  },
+  tub: {
+    title: "Bathtub and tile surround",
+    before: {
+      src: "/photos/real-work/paid/tub-surround-before.webp",
+      alt: "Bathtub and tile surround with visible soil before cleaning",
+    },
+    after: {
+      src: "/photos/real-work/paid/tub-surround-after.webp",
+      alt: "The same bathtub and tile surround after New Star Cleaning detail work",
     },
   },
   oven: {
@@ -74,8 +85,30 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
       alt: "The same oven interior after New Star Cleaning detail work",
     },
   },
+  refrigerator: {
+    title: "Full refrigerator interior",
+    before: {
+      src: "/photos/real-work/paid/refrigerator-full-before.webp",
+      alt: "Empty refrigerator interior with visible residue before cleaning",
+    },
+    after: {
+      src: "/photos/real-work/paid/refrigerator-full-after.webp",
+      alt: "The same refrigerator interior after New Star Cleaning detail work",
+    },
+  },
+  refrigeratorDetail: {
+    title: "Refrigerator interior detail",
+    before: {
+      src: "/photos/real-work/paid/refrigerator-detail-before.webp",
+      alt: "Refrigerator interior surface with visible debris before cleaning",
+    },
+    after: {
+      src: "/photos/real-work/paid/refrigerator-detail-after.webp",
+      alt: "The same refrigerator interior surface after New Star Cleaning detail work",
+    },
+  },
   vent: {
-    title: "Reachable vent",
+    title: "Reachable return vent detail",
     before: {
       src: "/photos/real-work/paid/vent-detail-before.webp",
       alt: "Reachable return vent with visible dust before cleaning",
@@ -89,35 +122,35 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
-    eyebrow: "One-time house cleaning",
-    h1: (city) => `House cleaning in ${city}, without the guesswork.`,
-    subhead: "Tell us the home size and timing. We’ll send a clear price and available dates.",
+    eyebrow: "Professional house cleaning",
+    h1: (city) => `Professional house cleaning for ${city} homes.`,
+    subhead: "Share the size, current condition, and timing. We’ll confirm the right service level, total price, and available dates.",
     serviceDefault: "Not sure yet",
-    formTitle: "Get your cleaning quote",
+    formTitle: "Request a cleaning quote",
     priceContext: {
-      label: "Typical 3 bed / 2 bath",
-      value: "Around $225 Standard · $360 Deep",
-      note: "About 1,600 sq ft. Final price depends on condition and requested work.",
+      label: "3 bed / 2 bath · about 1,600 sq ft",
+      value: "Standard $225 · Deep about $360 when maintained, often $475+ with heavier buildup",
+      note: "Representative example. Final price depends on the home’s condition and requested work.",
     },
-    proofOrder: ["shower", "oven", "vent"],
+    proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
-        question: "Are those exact cleaning prices?",
-        answer: "They’re representative examples. We confirm the service, included work, and final price before you book.",
+        question: "How should I read the example prices?",
+        answer: "For a typical 3-bedroom, 2-bath home around 1,600 square feet, Standard is about $225. A $360 Deep assumes a maintained home; heavier or more detail-intensive Deep cleaning often starts around $475. We confirm the actual condition, scope, and total before booking.",
       },
       {
         question: "Should I request Standard or Deep?",
-        answer: "Standard fits regular kitchen, bathroom, dusting, and floor cleaning. If there’s buildup or extra detail, tell us and we’ll quote the right amount of time.",
+        answer: "Standard fits regular kitchen, bathroom, dusting, and floor cleaning. If there is buildup or the home needs more detailed work, tell us so we can quote enough time instead of forcing the job into a lighter service.",
       },
     ],
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: (city) => `Move-out cleaning in ${city}, priced before your deadline.`,
-    subhead: "Share the home size, move date, and condition. We’ll confirm scope, price, and an available day.",
+    h1: (city) => `Move-out cleaning for ${city} homes, with scope and pricing confirmed upfront.`,
+    subhead: "Share the size, condition, deadline, and any appliance or cabinet work. We’ll confirm the complete scope and price before booking.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Get move-out pricing",
-    proofOrder: ["oven", "shower", "vent"],
+    formTitle: "Request move-out pricing",
+    proofOrder: ["refrigerator", "refrigeratorDetail", "oven", "tub", "shower", "vent"],
     faqs: [
       {
         question: "Are oven, fridge, cabinets, or windows included?",
@@ -130,16 +163,21 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     ],
   },
   deep: {
-    eyebrow: "Deep cleaning",
-    h1: (city) => `Deep cleaning in ${city}, planned for the work your home needs.`,
-    subhead: "Share the home size, condition, and timing. We’ll price enough time for the detail work.",
+    eyebrow: "Detailed deep cleaning",
+    h1: (city) => `Deep cleaning for ${city} homes that need more than routine upkeep.`,
+    subhead: "A maintained home and a home with heavier buildup need different amounts of time. Tell us the condition and priorities so we can price the right amount of work.",
     serviceDefault: "Deep cleaning",
-    formTitle: "Get deep-cleaning pricing",
-    proofOrder: ["vent", "shower", "oven"],
+    formTitle: "Request deep-cleaning pricing",
+    priceContext: {
+      label: "3 bed / 2 bath · about 1,600 sq ft",
+      value: "About $360 when maintained · often $475+ with heavier buildup",
+      note: "We confirm the home’s condition, requested work, and total before booking.",
+    },
+    proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
-        question: "How is Deep different from regular cleaning?",
-        answer: "Deep cleaning allows more time for buildup, baseboards, trim, detail edges, bathrooms, and kitchen work beyond routine maintenance.",
+        question: "Why can one Deep clean cost more than another?",
+        answer: "A maintained home and a home with heavier buildup do not require the same labor. Size, bathrooms, condition, pet hair, and detail priorities determine how much time the cleaner needs.",
       },
       {
         question: "Can I choose priority areas?",
@@ -149,15 +187,15 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   recurring: {
     eyebrow: "Weekly · biweekly · monthly",
-    h1: (city) => `Recurring house cleaning in ${city}, built around your home.`,
-    subhead: "Tell us the home size and preferred frequency. We’ll confirm the first clean and ongoing price.",
+    h1: (city) => `Reliable recurring house cleaning for ${city} homes.`,
+    subhead: "Share the size and preferred frequency. We’ll confirm whether the first visit needs extra reset time and quote the ongoing service clearly.",
     serviceDefault: "Standard recurring cleaning",
-    formTitle: "Get recurring pricing",
-    proofOrder: ["shower", "vent", "oven"],
+    formTitle: "Request recurring pricing",
+    proofOrder: ["shower", "tub", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
         question: "Do I need a Deep clean first?",
-        answer: "Not always. If the home needs a reset before regular maintenance makes sense, we’ll tell you before booking.",
+        answer: "Not always. If the home needs a reset before regular maintenance makes sense, we’ll explain the first-visit scope and price before booking.",
       },
       {
         question: "Can I choose biweekly instead of weekly?",
@@ -168,10 +206,10 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
 };
 
 function normalizeCity(value: string | null): { key: CityKey; label: string; formValue: string } {
-  const normalized = (value || "fresno").trim().toLowerCase().replace(/_/g, "-");
+  const normalized = (value || "near-me").trim().toLowerCase().replace(/_/g, "-");
   const key = Object.prototype.hasOwnProperty.call(CITY_LABELS, normalized)
     ? (normalized as CityKey)
-    : "fresno";
+    : "near-me";
   const label = CITY_LABELS[key];
   return {
     key,
@@ -256,7 +294,7 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
           <div>
             <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">Real New Star work</div>
             <h2 id="paid-proof-title" className="mt-2 font-display text-3xl leading-tight text-primary sm:text-4xl">
-              Three real before-and-after results.
+              Six real before-and-after results.
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-ink-soft">Photographed from New Star jobs. No stock photography.</p>
@@ -288,7 +326,7 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
             </article>
           ))}
         </div>
-        <p className="mt-2 text-xs font-semibold text-ink-soft md:hidden">Swipe to see all three results →</p>
+        <p className="mt-2 text-xs font-semibold text-ink-soft md:hidden">Swipe to see all six results →</p>
       </div>
     </section>
   );

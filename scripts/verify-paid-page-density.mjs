@@ -19,9 +19,9 @@ const intentConfig = page.slice(page.indexOf("const INTENT_CONFIG"), page.indexO
 const directSectionCount = (render.match(/<section\b/g) || []).length;
 const questionCount = (intentConfig.match(/question:/g) || []).length;
 
-assert(marker.includes('data-paid-layout-version="proof-led-v4"'), "paid page exposes the proof-led v4 marker");
+assert(marker.includes('data-paid-layout-version="proof-led-v4-accurate"'), "paid page exposes the condition-accurate proof-led v4 marker");
 assert(page.includes("BeforeAfterGallery") && page.includes("ProcessStrip"), "paid page uses proof and process components");
-assert(page.includes("snap-mandatory") && page.includes("Swipe to see all three results"), "mobile proof uses a compact three-result swipe gallery");
+assert(page.includes("snap-mandatory") && page.includes("Swipe to see all six results"), "mobile proof uses a compact six-result swipe gallery");
 assert(page.includes("IntersectionObserver") && page.includes("setVisible(!entry.isIntersecting)"), "mobile sticky CTA stays hidden while the quote form is visible");
 assert(directSectionCount === 2, `paid render has two direct sections instead of stacked content walls (found ${directSectionCount})`);
 assert(questionCount === 8, `each of four intents carries exactly two FAQs (found ${questionCount} questions)`);
@@ -32,6 +32,12 @@ for (const asset of [
   "oven-interior-after.webp",
   "vent-detail-before.webp",
   "vent-detail-after.webp",
+  "tub-surround-before.webp",
+  "tub-surround-after.webp",
+  "refrigerator-full-before.webp",
+  "refrigerator-full-after.webp",
+  "refrigerator-detail-before.webp",
+  "refrigerator-detail-after.webp",
 ]) {
   assert(page.includes(asset), `paid gallery includes ${asset}`);
 }
