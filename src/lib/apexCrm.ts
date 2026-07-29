@@ -30,6 +30,7 @@ type LeadPayload = {
   firstReferrer?: string;
   landingService?: string;
   landingCity?: string;
+  moveOutAddons?: string[];
   capturedAt?: string;
   beds?: number;
   baths?: number;
@@ -58,6 +59,14 @@ export function splitFullName(name: string) {
 
 export function normalizeOptionalString(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+export function normalizeStringList(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  const normalized = value
+    .map(normalizeOptionalString)
+    .filter((item): item is string => Boolean(item));
+  return Array.from(new Set(normalized));
 }
 
 export function appendDetails(
@@ -119,6 +128,7 @@ export function validateLeadPayload(payload: LeadPayload) {
       firstReferrer: normalizeOptionalString(payload.firstReferrer),
       landingService: normalizeOptionalString(payload.landingService),
       landingCity: normalizeOptionalString(payload.landingCity),
+      moveOutAddons: normalizeStringList(payload.moveOutAddons),
       capturedAt: normalizeOptionalString(payload.capturedAt),
     },
   };

@@ -10,6 +10,7 @@ type QuickQuoteFormProps = {
   subtitle?: string;
   source?: string;
   defaultCity?: string;
+  landingCity?: string;
   defaultService?: string;
   compact?: boolean;
   extended?: boolean;
@@ -136,12 +137,12 @@ function normalizeFrequencyParam(value: string | null) {
   return frequencies[normalized] || "";
 }
 
-function initialForm(defaultCity?: string, defaultService?: string): FormState {
+function initialForm(defaultCity?: string, defaultService?: string, paidSearch = false): FormState {
   return {
     name: "",
     phone: "",
     email: "",
-    city: defaultCity || "",
+    city: paidSearch ? "" : defaultCity || "",
     service: defaultService || "",
     message: "",
     frequency: "",
@@ -207,12 +208,13 @@ export default function QuickQuoteForm({
   subtitle = "Tell us where to send availability and pricing — we'll follow up quickly with the best next step for your home.",
   source = "organic_website",
   defaultCity,
+  landingCity,
   defaultService,
   compact = false,
   extended = false,
   paidSearch = false,
 }: QuickQuoteFormProps) {
-  const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService));
+  const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService, paidSearch));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedCommercial, setSubmittedCommercial] = useState(false);
@@ -224,10 +226,10 @@ export default function QuickQuoteForm({
   useEffect(() => {
     setFormData((current) => ({
       ...current,
-      city: current.city || defaultCity || "",
+      city: paidSearch ? current.city : current.city || defaultCity || "",
       service: current.service || defaultService || "",
     }));
-  }, [defaultCity, defaultService]);
+  }, [defaultCity, defaultService, paidSearch]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -252,15 +254,20 @@ export default function QuickQuoteForm({
     const city = normalizeCityParam(params.get("city"));
     const service = normalizeServiceParam(params.get("service"));
     const frequency = normalizeFrequencyParam(params.get("frequency"));
-    if (city || service || frequency) {
+    if (!paidSearch && city) {
       setFormData((current) => ({
         ...current,
-        city: current.city || city || "",
+        city: current.city || city,
+      }));
+    }
+    if (service || frequency) {
+      setFormData((current) => ({
+        ...current,
         service: current.service || service || "",
         frequency: current.frequency || frequency || "",
       }));
     }
-  }, []);
+  }, [paidSearch]);
 
   const trackFormStart = () => {
     if (hasTrackedFormStart.current) return;
@@ -295,7 +302,6 @@ export default function QuickQuoteForm({
     formData.service.toLowerCase().includes("commercial") ||
     formData.service.toLowerCase().includes("office") ||
     formData.service.toLowerCase().includes("post-construction");
-  const paidCityPrefilled = paidSearch && Boolean(formData.city.trim());
   const paidServicePrefilled = paidSearch && Boolean(formData.service.trim());
   const showPaidOptionalDetails = extended && paidSearch;
   const showInlineExtendedDetails = extended && !paidSearch;
@@ -317,7 +323,7 @@ export default function QuickQuoteForm({
         firstLandingPage: window.location.pathname,
         firstReferrer: document.referrer,
         landingService: formData.service,
-        landingCity: formData.city,
+        landingCity,
       });
       const endpoint = paidSearch ? "/api/google-ads-lead" : "/api/lead";
       const response = await fetch(endpoint, {
@@ -382,7 +388,7 @@ export default function QuickQuoteForm({
       setSubmittedCommercial(isCommercialRequest);
       setIsSuccess(true);
       setShowPaidDetails(false);
-      setFormData(initialForm(defaultCity, defaultService));
+      setFormData(initialForm(defaultCity, defaultService, paidSearch));
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -728,8 +734,7 @@ export default function QuickQuoteForm({
           </div>
         ) : null}
 
-        {paidSearch && !paidCityPrefilled ? renderCityField() : null}
-        {paidSearch && paidCityPrefilled ? <input type="hidden" name="city" value={formData.city} readOnly /> : null}
+        {paidSearch ? renderCityField() : null}
 
         <div className="hidden" aria-hidden="true">
           <label htmlFor="quote-company">Company</label>

@@ -135,10 +135,12 @@ assert(
     quickQuoteForm.includes("Get my quote") &&
     quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
-    quickQuoteForm.includes("paidCityPrefilled") &&
+    quickQuoteForm.includes("landingCity?: string;") &&
+    quickQuoteForm.includes("{paidSearch ? renderCityField() : null}") &&
+    !quickQuoteForm.includes('<input type="hidden" name="city"') &&
     quickQuoteForm.includes("paidServicePrefilled") &&
     quickQuoteForm.includes("isPaidHouseRequest"),
-  "paid quote form captures the core lead first and moves qualification details behind progressive disclosure",
+  "paid quote form requires editable customer location and moves qualification details behind progressive disclosure",
 );
 assert(
   !quickQuoteForm.includes("Prefer to talk? Call") &&

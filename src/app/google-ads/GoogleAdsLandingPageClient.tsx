@@ -489,7 +489,7 @@ export default function GoogleAdsLandingPageClient() {
                 source="google-ads"
                 title={intent.formTitle}
                 subtitle=""
-                defaultCity={city.formValue}
+                landingCity={city.formValue || city.label}
                 defaultService={intent.serviceDefault}
                 extended
                 paidSearch

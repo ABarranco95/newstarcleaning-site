@@ -5,19 +5,19 @@ import {
   splitFullName,
   submitLeadToApex,
 } from "@/lib/apexCrm";
+import { normalizePaidLeadSubmission } from "@/lib/paidLeadContract";
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Record<string, unknown>;
-    const name = normalizeOptionalString(body.name);
-    const phone = normalizeOptionalString(body.phone);
+    const { name, phone, city, moveOutAddons } = normalizePaidLeadSubmission(body);
 
     if (normalizeOptionalString(body.company)) {
       return NextResponse.json({ success: true, filtered: true });
     }
 
-    if (!name || !phone) {
-      return NextResponse.json({ error: "Name and phone are required" }, { status: 400 });
+    if (!name || !phone || !city) {
+      return NextResponse.json({ error: "Name, phone, and city or ZIP are required" }, { status: 400 });
     }
 
     const homeSize = normalizeOptionalString(body.homeSize) || normalizeOptionalString(body.homesize) || normalizeOptionalString(body.sqft);
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         ["Timeline", body.timeline],
         ["Frequency", body.frequency],
         ["Condition", body.condition],
+        ["Move-out add-ons", moveOutAddons.join(", ")],
         ["Contact preference", body.contactPreference],
         ["Preferred contact time", body.preferredTime],
         ["Booking intent", body.bookingIntent],
@@ -64,7 +65,7 @@ export async function POST(req: NextRequest) {
         lastName,
         phone,
         email: normalizeOptionalString(body.email),
-        city: normalizeOptionalString(body.city),
+        city,
         service: normalizeOptionalString(body.service),
         message,
         source: "google_ads",
@@ -75,6 +76,7 @@ export async function POST(req: NextRequest) {
         firstReferrer,
         landingService,
         landingCity,
+        moveOutAddons,
         capturedAt: normalizeOptionalString(body.capturedAt),
         utm_source: normalizeOptionalString(body.utm_source),
         utm_medium: normalizeOptionalString(body.utm_medium),
@@ -87,7 +89,7 @@ export async function POST(req: NextRequest) {
         bookingIntent: normalizeOptionalString(body.bookingIntent) || "paid-search-quote-request",
         smsConsent: normalizeOptionalString(body.smsConsent) || "service_related_quote_follow_up",
         consentText: normalizeOptionalString(body.consentText),
-        websiteApiVersion: "2026-07-11-paid-search-v1",
+        websiteApiVersion: "2026-07-29-paid-location-scope-v2",
       },
       req.headers,
     );
