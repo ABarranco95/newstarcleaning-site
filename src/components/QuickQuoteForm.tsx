@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
 import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
+import { createSubmissionId } from "@/lib/submissionId";
 
 type QuickQuoteFormProps = {
   title?: string;
@@ -34,11 +35,12 @@ type FormState = {
   bookingIntent: string;
   condition: string;
   moveOutAddons: string[];
+  moveOutScopeConfirmed: boolean;
   organization: string;
   company: string;
 };
 
-type TextFormField = Exclude<keyof FormState, "moveOutAddons">;
+type TextFormField = Exclude<keyof FormState, "moveOutAddons" | "moveOutScopeConfirmed">;
 
 type LeadResponse = {
   error?: string;
@@ -60,10 +62,10 @@ const services = [
   "Not sure yet",
 ];
 
+// Empty oven, refrigerator, microwave, and empty cabinet/drawer interiors are
+// part of the published move-out base scope (see src/lib/services.ts), so they
+// are not offered as add-ons here. These are the genuine move-out extras.
 const moveOutAddons = [
-  "Inside oven",
-  "Inside refrigerator",
-  "Inside empty cabinets or drawers",
   "Interior window glass",
   "Garage, patio, or balcony sweeping",
   "Extra blind detail",
@@ -155,6 +157,7 @@ function initialForm(defaultCity?: string, defaultService?: string, paidSearch =
     bookingIntent: "",
     condition: "",
     moveOutAddons: [],
+    moveOutScopeConfirmed: false,
     organization: "",
     company: "",
   };
@@ -222,6 +225,9 @@ export default function QuickQuoteForm({
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
   const hasTrackedFormStart = useRef(false);
+  // One ID per submission attempt-session: reused on retry so Apex can
+  // replay-dedupe, regenerated only after an accepted submission.
+  const submissionIdRef = useRef("");
 
   useEffect(() => {
     setFormData((current) => ({
@@ -243,6 +249,7 @@ export default function QuickQuoteForm({
       "gclid",
       "gbraid",
       "wbraid",
+      "fbclid",
     ].forEach((key) => {
       const value = params.get(key);
       if (value) capture[key] = value;
@@ -295,6 +302,14 @@ export default function QuickQuoteForm({
     }));
   };
 
+  const toggleMoveOutScopeConfirmed = () => {
+    trackFormStart();
+    setFormData((current) => ({
+      ...current,
+      moveOutScopeConfirmed: !current.moveOutScopeConfirmed,
+    }));
+  };
+
   const isMoveOutRequest = formData.service.toLowerCase().includes("move");
   const isRecurringRequest = formData.service.toLowerCase().includes("recurring");
   const isPaidHouseRequest = paidSearch && formData.service === "Not sure yet";
@@ -326,6 +341,7 @@ export default function QuickQuoteForm({
         landingCity,
       });
       const endpoint = paidSearch ? "/api/google-ads-lead" : "/api/lead";
+      if (!submissionIdRef.current) submissionIdRef.current = createSubmissionId();
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -335,6 +351,8 @@ export default function QuickQuoteForm({
           ...attribution,
           homeSize: formData.sqft,
           source,
+          sourceForm: source,
+          submissionId: submissionIdRef.current,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),
           smsConsent: "service_related_quote_follow_up",
@@ -388,6 +406,7 @@ export default function QuickQuoteForm({
       setSubmittedCommercial(isCommercialRequest);
       setIsSuccess(true);
       setShowPaidDetails(false);
+      submissionIdRef.current = "";
       setFormData(initialForm(defaultCity, defaultService, paidSearch));
     } catch (submitError) {
       setError(
@@ -439,6 +458,43 @@ export default function QuickQuoteForm({
         placeholder="Fresno or 93711"
         className={fieldClass}
       />
+    </div>
+  );
+
+  const renderMoveOutScope = () => (
+    <div>
+      <div className="mb-2">
+        <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
+          Move-out scope
+        </span>
+        <p className="mt-1 text-xs leading-relaxed text-ink-soft">
+          Move-out cleaning includes the inside of an empty oven, refrigerator, and microwave plus empty cabinet and drawer interiors when they are accessible. Optional extras below are quoted separately.
+        </p>
+      </div>
+      <label className="mb-2 flex items-start gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
+        <input
+          type="checkbox"
+          checked={formData.moveOutScopeConfirmed}
+          onChange={toggleMoveOutScopeConfirmed}
+          className="mt-0.5 h-4 w-4 accent-accent"
+        />
+        <span>
+          The home will be empty, with appliances and cabinets cleared, so interiors can be cleaned.
+        </span>
+      </label>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {moveOutAddons.map((addon) => (
+          <label key={addon} className="flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
+            <input
+              type="checkbox"
+              checked={formData.moveOutAddons.includes(addon)}
+              onChange={() => toggleMoveOutAddon(addon)}
+              className="h-4 w-4 accent-accent"
+            />
+            <span>{addon}</span>
+          </label>
+        ))}
+      </div>
     </div>
   );
 
@@ -496,31 +552,7 @@ export default function QuickQuoteForm({
         </select>
       </div>
 
-      {isMoveOutRequest && (
-        <div>
-          <div className="mb-2">
-            <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
-              Optional move-out details
-            </span>
-            <p className="mt-1 text-xs leading-relaxed text-ink-soft">
-              Select the appliance, cabinet, window, or heavy-detail items you want included in the quote. We&apos;ll confirm the exact scope and any separate pricing before booking.
-            </p>
-          </div>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {moveOutAddons.map((addon) => (
-              <label key={addon} className="flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
-                <input
-                  type="checkbox"
-                  checked={formData.moveOutAddons.includes(addon)}
-                  onChange={() => toggleMoveOutAddon(addon)}
-                  className="h-4 w-4 accent-accent"
-                />
-                <span>{addon}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+      {isMoveOutRequest ? renderMoveOutScope() : null}
 
       {paid && (isRecurringRequest || isPaidHouseRequest) ? (
         <div>
@@ -797,7 +829,7 @@ export default function QuickQuoteForm({
         </div>
 
         {isCommercialRequest ? (
-          <div className="grid gap-4 sm:grid-cols-2">
+          <>
             <div>
               <FieldLabel htmlFor="quote-organization">Company or project</FieldLabel>
               <input
@@ -812,21 +844,27 @@ export default function QuickQuoteForm({
               />
             </div>
             <div>
-              <FieldLabel htmlFor="quote-commercial-message">Scope or deadline</FieldLabel>
-              <input
+              <FieldLabel htmlFor="quote-commercial-message" required>Areas and scope</FieldLabel>
+              <textarea
                 id="quote-commercial-message"
                 name="message"
-                type="text"
+                required
+                rows={2}
                 value={formData.message}
                 onChange={(event) => updateField("message", event.target.value)}
-                placeholder="Areas, frequency, handoff date, or access notes"
+                placeholder="Areas to clean, frequency or handoff date, access notes"
                 className={fieldClass}
               />
             </div>
-          </div>
+          </>
         ) : null}
 
         {showInlineExtendedDetails ? renderExtendedDetails() : null}
+
+        {/* Move-out scope is service-dependent, not "extended detail": the
+            confirmation drives Apex quote readiness, so it must appear even
+            in the compact form once move-out is selected. */}
+        {!showInlineExtendedDetails && !paidSearch && isMoveOutRequest ? renderMoveOutScope() : null}
 
         {!compact && !paidSearch && !isCommercialRequest && (
           <div>

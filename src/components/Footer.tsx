@@ -3,6 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+import { trackFunnelEvent } from "@/lib/conversionTracking";
+
+const directBookingUrl = resolveDirectBookingUrl();
+
+function footerBookingHref(): string | null {
+  if (!directBookingUrl) return null;
+  try {
+    const url = new URL(directBookingUrl);
+    url.searchParams.set("utm_source_page", "newstarcleaning.com-footer");
+    return url.toString();
+  } catch {
+    return directBookingUrl;
+  }
+}
 
 const serviceAreas = [
   { name: "Fresno", slug: "fresno" },
@@ -43,21 +58,36 @@ export default function Footer() {
             <a href="tel:+15597852822" className="btn btn-ghost-dark">
               (559) 785-2822
             </a>
+            {footerBookingHref() ? (
+              <a
+                href={footerBookingHref() ?? undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  trackFunnelEvent("booking_handoff_started", {
+                    source: "footer",
+                    page: typeof window !== "undefined" ? window.location.pathname : undefined,
+                  })
+                }
+                className="text-center text-sm font-semibold text-white/70 underline-offset-4 hover:text-white hover:underline"
+              >
+                Ready to self-schedule? Book online
+              </a>
+            ) : null}
           </div>
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center">
               <Image
-                src="/brand/star-warm-white.png"
-                alt=""
-                width={44}
-                height={42}
-                className="h-auto w-9"
+                src="/brand/nsc-lockup-horizontal-reverse.svg"
+                alt="New Star Cleaning"
+                width={640}
+                height={150}
+                className="h-11 w-auto"
               />
-              <span className="text-lg font-extrabold">New Star Cleaning</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-white/70">
               Locally owned residential, project, and commercial cleaning for Fresno, Clovis, Madera, and the listed Fresno neighborhoods.

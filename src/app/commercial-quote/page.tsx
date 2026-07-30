@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import QuickQuoteForm from "@/components/QuickQuoteForm";
+import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import { business } from "@/lib/business";
 
 export const metadata: Metadata = {
@@ -9,6 +9,12 @@ export const metadata: Metadata = {
     "Request a walkthrough for Fresno-area office, commercial, or post-construction cleaning.",
   alternates: { canonical: "/commercial-quote" },
   robots: { index: false, follow: true },
+  openGraph: {
+    title: "Request Commercial Cleaning Pricing | New Star Cleaning",
+    description:
+      "Walkthrough-based proposals for Fresno-area office, commercial, and post-construction cleaning.",
+    url: "https://newstarcleaning.com/commercial-quote",
+  },
 };
 
 export default function CommercialQuotePage() {
@@ -35,11 +41,10 @@ export default function CommercialQuotePage() {
             </div>
           </div>
           <div id="quote-form" className="relative scroll-mt-24">
-            <QuickQuoteForm
+            <CommercialQuoteForm
               title="Request a walkthrough"
-              subtitle="Start with the site, service, timing, and contact details. We will ask only the follow-up questions needed to assess the opportunity."
+              subtitle="Property, size, required areas, and timing. We confirm scope and crew capacity before any proposal."
               source="organic_commercial_quote_page"
-              compact
             />
           </div>
         </div>

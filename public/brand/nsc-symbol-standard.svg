@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Faceted symbol, standard">
+  <!-- Aura master. Original geometric-centre coordinates kept so this registers with every other Route A source. 48 px floor. No live text: letterforms are outlined. -->
+  <path d="M100 4 L122.57 68.93 L191.3 70.33 L136.52 111.87 L156.43 177.67 L100 138.4 L43.57 177.67 L63.48 111.87 L8.7 70.33 L77.43 68.93 Z" fill="#0E2A4D"/>
+  <g fill="#0E2A4D">
+    <path d="M100 100 L77.43 68.93 L100 4 Z"/>
+    <path d="M100 100 L122.57 68.93 L191.3 70.33 Z"/>
+    <path d="M100 100 L136.52 111.87 L156.43 177.67 Z"/>
+    <path d="M100 100 L100 138.4 L43.57 177.67 Z"/>
+    <path d="M100 100 L63.48 111.87 L8.7 70.33 Z"/>
+  </g>
+  <g fill="#1C3F6E">
+    <path d="M100 100 L100 4 L122.57 68.93 Z"/>
+    <path d="M100 100 L191.3 70.33 L136.52 111.87 Z"/>
+    <path d="M100 100 L156.43 177.67 L100 138.4 Z"/>
+    <path d="M100 100 L43.57 177.67 L63.48 111.87 Z"/>
+    <path d="M100 100 L8.7 70.33 L77.43 68.93 Z"/>
+  </g>
+</svg>

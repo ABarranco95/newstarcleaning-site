@@ -5,66 +5,58 @@ import { blogPosts } from "@/lib/blogPosts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://newstarcleaning.com";
-  const lastModified = new Date();
+  // No blanket lastModified: a build date is not a content-change date, and
+  // unreliable lastmod teaches crawlers to ignore the field. Blog posts keep
+  // their real publish dates below.
 
   const top: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${baseUrl}/book-now`,
-      lastModified,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/services`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.85,
     },
     {
       url: `${baseUrl}/services/post-construction-cleaning`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/services/commercial-cleaning`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/service-areas`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.85,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/checklist`,
-      lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified,
       changeFrequency: "weekly",
       priority: 0.7,
     },
@@ -72,14 +64,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const cityPages: MetadataRoute.Sitemap = serviceAreas.map((area) => ({
     url: `${baseUrl}/cleaning-services-${area.slug}`,
-    lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
   }));
 
   const servicePages: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${baseUrl}/services/${s.slug}`,
-    lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
   }));

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import RealWorkGallery from "@/components/RealWorkGallery";
+import HomeBookingLink from "@/components/HomeBookingLink";
 import { realWorkPhotos } from "@/lib/realWorkPhotos";
 
 const services = [
@@ -66,7 +67,11 @@ const faqs = [
   },
   {
     q: "Do you handle laundry, dishes, organizing, or packing?",
-    a: "No. New Star provides residential cleaning for accessible rooms and surfaces. Laundry, dishes, bed making, organizing, packing, unpacking, and personal-item handling are outside the service.",
+    a: "No. New Star is a cleaning service, not a maid or household helper service. We clean accessible rooms and surfaces. Laundry, dishes, bed making, organizing, packing, unpacking, and personal-item handling are outside the service.",
+  },
+  {
+    q: "Are you the cheapest cleaning service in Fresno?",
+    a: "No, and that is on purpose. Doing the work right takes time, so every quote includes enough hours to finish the listed scope instead of racing through it. We are not a heavily discounted in-and-out service, and we do not pad quotes either: the price follows the scope, and add-ons are only added when you request them.",
   },
   {
     q: "Can I call or text instead of using the quote form?",
@@ -135,6 +140,7 @@ export default function Home() {
             </div>
             <p className="mt-5 text-sm leading-6 text-white/60">
               No payment is collected with your quote request.
+              <HomeBookingLink />
             </p>
           </div>
 
@@ -268,9 +274,9 @@ export default function Home() {
           </div>
           <div className="grid gap-x-10 gap-y-0 sm:grid-cols-2">
             {[
+              ["Priced for enough time, not the lowest bid", "Doing it right takes time, so the quote covers the hours the job actually needs. That means we are rarely the cheapest option, and we are not trying to be. No rushed visits, no heavy discounts to win the job."],
               ["A quote built around the home", "Size, condition, service type, pets, and optional details are considered before the price is confirmed."],
               ["Supplies come with the cleaner", "Cleaners bring the supplies and equipment needed for the confirmed residential cleaning."],
-              ["A focused local service area", "Public routes stay within Fresno, Clovis, Madera, and the listed Fresno neighborhoods."],
               ["Support after the appointment", "If something included appears missed, contact us within 24 hours so the concern can be reviewed."],
             ].map(([title, text]) => (
               <div key={title} className="border-t border-white/15 py-6">

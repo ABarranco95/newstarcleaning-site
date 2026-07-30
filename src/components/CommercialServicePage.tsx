@@ -223,14 +223,7 @@ export default function CommercialServicePage({
             name: serviceName,
             serviceType: schemaServiceType,
             url: `${business.siteUrl}${pagePath}`,
-            provider: {
-              "@type": "LocalBusiness",
-              "@id": `${business.siteUrl}/#localbusiness`,
-              name: business.name,
-              url: business.siteUrl,
-              telephone: business.phoneE164,
-              address: { "@type": "PostalAddress", ...business.address },
-            },
+            provider: { "@id": `${business.siteUrl}/#localbusiness` },
             areaServed: businessAreaServed,
           }),
         }}

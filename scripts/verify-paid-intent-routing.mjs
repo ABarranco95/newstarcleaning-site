@@ -62,9 +62,9 @@ assert(
 );
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");
 assert(
-  paidPage.includes("Your quote will state exactly what is included") &&
-    !paidPage.includes("Inside an empty oven, refrigerator, microwave, cabinets, and drawers"),
-  "move intent avoids unverified appliance/cabinet inclusion claims",
+  paidPage.includes("includes the inside of an empty oven, refrigerator, and microwave") &&
+    paidPage.includes("when they are accessible"),
+  "move intent states the published empty-home appliance/cabinet scope with its accessibility condition",
 );
 assert(
   paidPage.includes("shower-detail-before.webp") &&

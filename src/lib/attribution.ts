@@ -19,6 +19,7 @@ export const ATTRIBUTION_FIELDS = [
   "gclid",
   "gbraid",
   "wbraid",
+  "fbclid",
 ] as const;
 
 type AttributionField = (typeof ATTRIBUTION_FIELDS)[number];
@@ -39,6 +40,7 @@ export type FirstPaidTouchRecord = {
   gclid?: string;
   gbraid?: string;
   wbraid?: string;
+  fbclid?: string;
 };
 
 export type PaidAttributionSubmission = Partial<FirstPaidTouchRecord>;
@@ -57,6 +59,9 @@ const QUERY_FIELD_MAP: ReadonlyArray<readonly [OptionalAttributionField, string]
   ["gclid", "gclid"],
   ["gbraid", "gbraid"],
   ["wbraid", "wbraid"],
+  // Captured for Meta paid attribution; deliberately NOT a paid-touch trigger
+  // in hasPaidQuerySignal because fbclid also rides organic Facebook clicks.
+  ["fbclid", "fbclid"],
 ];
 
 function sanitizeText(value: unknown): string | undefined {

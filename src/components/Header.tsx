@@ -4,6 +4,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+import { trackFunnelEvent } from "@/lib/conversionTracking";
+
+const directBookingUrl = resolveDirectBookingUrl();
+
+function headerBookingHref(placement: string): string | null {
+  if (!directBookingUrl) return null;
+  try {
+    const url = new URL(directBookingUrl);
+    url.searchParams.set("utm_source_page", `newstarcleaning.com-${placement}`);
+    return url.toString();
+  } catch {
+    return directBookingUrl;
+  }
+}
+
+function trackHeaderHandoff(placement: string) {
+  trackFunnelEvent("booking_handoff_started", {
+    source: placement,
+    page: typeof window !== "undefined" ? window.location.pathname : undefined,
+  });
+}
 
 export default function Header() {
   const pathname = usePathname();
@@ -34,26 +56,18 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex min-w-0 items-center gap-2.5 sm:gap-3"
+            className="flex min-w-0 items-center"
             aria-label="New Star Cleaning home"
           >
             <Image
-              src="/brand/star-ink-mono.png"
-              alt=""
-              width={52}
-              height={50}
-              sizes="52px"
-              className="h-auto w-10 shrink-0 lg:w-11"
+              src="/brand/nsc-lockup-horizontal.svg"
+              alt="New Star Cleaning"
+              width={640}
+              height={150}
+              sizes="(min-width: 1024px) 200px, 176px"
+              className="h-10 w-auto shrink-0 lg:h-11"
               priority
             />
-            <span className="flex min-w-0 flex-col leading-none">
-              <span className="text-[1.05rem] font-extrabold tracking-tight text-primary sm:text-lg lg:text-xl">
-                New Star Cleaning
-              </span>
-              <span className="mt-1 hidden text-[0.55rem] font-bold uppercase tracking-[0.22em] text-accent sm:block lg:text-[0.6rem]">
-                Fresno · Clovis · Madera
-              </span>
-            </span>
           </Link>
 
           {/* Desktop nav */}
@@ -73,6 +87,17 @@ export default function Header() {
             <Link href="/checklist" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
               Checklist
             </Link>
+            {headerBookingHref("header") ? (
+              <a
+                href={headerBookingHref("header") ?? undefined}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackHeaderHandoff("header")}
+                className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary"
+              >
+                Book online
+              </a>
+            ) : null}
             <a
               href="tel:+15597852822"
               className="flex flex-col items-end leading-none"
@@ -140,6 +165,20 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              {headerBookingHref("mobile-menu") ? (
+                <a
+                  href={headerBookingHref("mobile-menu") ?? undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    trackHeaderHandoff("mobile-menu");
+                    setMobileOpen(false);
+                  }}
+                  className="rounded-xl px-4 py-3 text-base font-semibold text-ink-soft hover:bg-cream-2 hover:text-primary"
+                >
+                  Book online
+                </a>
+              ) : null}
               <a
                 href="tel:+15597852822"
                 className="mt-2 flex items-center justify-between rounded-xl bg-cream-2 px-4 py-3 text-base font-extrabold text-primary"

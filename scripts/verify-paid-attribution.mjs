@@ -23,7 +23,7 @@ const landingPage = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
 const form = read("src/components/QuickQuoteForm.tsx");
 const paidAttributionTracker = read("src/components/PaidAttributionTracker.tsx");
 const rootLayout = read("src/app/layout.tsx");
-const paidRoute = read("src/app/api/google-ads-lead/route.ts");
+const paidContract = read("src/lib/paidLeadContract.ts");
 const apex = read("src/lib/apexCrm.ts");
 
 for (const field of [
@@ -66,7 +66,7 @@ assert(form.includes("mergeAttributionForSubmission"), "quote form merges attrib
 assert(form.includes('paidSearch ? "/api/google-ads-lead" : "/api/lead"'), "paid quote requests use the paid lead route");
 
 for (const field of ["firstLandingPage", "firstReferrer", "landingService", "landingCity"]) {
-  assert(paidRoute.includes(field), `paid lead route forwards ${field}`);
+  assert(paidContract.includes(field), `paid lead forward preserves ${field}`);
   assert(apex.includes(field), `Apex helper preserves ${field}`);
 }
 

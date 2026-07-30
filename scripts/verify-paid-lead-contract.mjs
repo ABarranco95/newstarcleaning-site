@@ -20,7 +20,7 @@ assert(form.includes("landingCity,"), "Paid submission must merge campaign landi
 
 assert(route.includes("normalizePaidLeadSubmission"), "Paid endpoint must use the typed paid lead contract");
 assert(route.includes("if (!name || !phone || !city)"), "Paid endpoint must require customer-entered city or ZIP");
-assert(route.includes("moveOutAddons,"), "Paid endpoint must forward selected move-out add-ons");
+assert(route.includes("buildPaidLeadForward"), "Paid endpoint must forward the full canonical payload builder output");
 assert(apex.includes("moveOutAddons?: string[];"), "Apex forwarding payload must type move-out add-ons");
 assert(apex.includes("moveOutAddons: normalizeStringList(payload.moveOutAddons)"), "Apex forwarding validation must preserve move-out add-ons");
 

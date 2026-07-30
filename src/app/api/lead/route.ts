@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
         consentText:
           text(body.consentText) ||
           "By requesting a quote, the visitor agreed to receive service-related calls/texts about pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out.",
-        websiteApiVersion: "2026-06-11",
+        websiteApiVersion: "2026-07-30-idempotent-canonical-v2",
       }),
     });
 

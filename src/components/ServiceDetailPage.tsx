@@ -1,13 +1,46 @@
 import Link from "next/link";
-import QuotePathPanel from "@/components/QuotePathPanel";
+import { Suspense } from "react";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import RealWorkGallery from "@/components/RealWorkGallery";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import type { ServiceDefinition } from "@/lib/services";
 import { getFullIncludedList } from "@/lib/services";
-import { bathroomResultPhotos, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
+import { business, businessAreaServed } from "@/lib/business";
+import {
+  bathroomResultPhotos,
+  emptyHomeResultPhotos,
+  homeResultPhotos,
+  ovenBuildupPair,
+} from "@/lib/realWorkPhotos";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const siteUrl = "https://newstarcleaning.com";
+
+// Detail comparisons per service. Deep gets tub/vent detail pairs; move-out
+// gets the oven pair because appliance interiors are part of its base scope.
+const deepDetailPairs: BeforeAfterItem[] = [
+  {
+    before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star deep cleaning" },
+    after: { src: "/photos/real-work/paid/tub-surround-after.webp", alt: "The same bathtub and tile surround after a New Star deep cleaning" },
+    label: "Tub and surround detail from a real deep-cleaning appointment.",
+  },
+  {
+    before: { src: "/photos/real-work/paid/vent-detail-before.webp", alt: "Reachable return vent with dust before cleaning" },
+    after: { src: "/photos/real-work/paid/vent-detail-after.webp", alt: "The same return vent after New Star detail work" },
+    label: "Reachable vent-face detail included in deep cleaning.",
+  },
+];
+
+const moveOutDetailPairs: BeforeAfterItem[] = [
+  {
+    before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
+    after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
+    label: ovenBuildupPair.label,
+  },
+];
 
 function quoteFormService(service: ServiceDefinition) {
   return service.slug === "standard-cleaning"
@@ -42,15 +75,25 @@ export default function ServiceDetailPage({
   const resultPhotos = service.slug === "deep-cleaning"
     ? bathroomResultPhotos
     : service.slug === "move-out-cleaning"
-      ? emptyHomeResultPhotos
-      : [];
+      ? [emptyHomeResultPhotos[0], emptyHomeResultPhotos[2], emptyHomeResultPhotos[4], emptyHomeResultPhotos[5]]
+      : homeResultPhotos;
   const resultTitle = service.slug === "deep-cleaning"
     ? "Bathroom detail from real appointments."
-    : "Empty-home details from real appointments.";
+    : service.slug === "move-out-cleaning"
+      ? "Empty-home details from real appointments."
+      : "Finished rooms from real appointments.";
   const resultIntro = service.slug === "deep-cleaning"
     ? "These customer-job photos show the kind of accessible bathroom surfaces addressed during detailed cleaning."
-    : "These customer-job photos show clean, empty interior areas without presenting them as a guaranteed result for every home.";
+    : service.slug === "move-out-cleaning"
+      ? "These customer-job photos show clean, empty interior areas without presenting them as a guaranteed result for every home."
+      : "Customer-job photos of kitchens, living areas, and bedrooms after New Star visits. No stock photography.";
+  const detailPairs = service.slug === "deep-cleaning"
+    ? deepDetailPairs
+    : service.slug === "move-out-cleaning"
+      ? moveOutDetailPairs
+      : [];
   const isMoveOut = service.slug === "move-out-cleaning";
+  const directBookingUrl = resolveDirectBookingUrl();
 
   return (
     <>
@@ -86,12 +129,28 @@ export default function ServiceDetailPage({
             </div>
 
             <div id="quote" className="scroll-mt-24">
-              <QuotePathPanel
+              <QuickQuoteForm
                 title={`Price ${service.shortName.toLowerCase()}`}
-                body="See the room-by-room details here, then use the short quote page when you are ready. This service will already be selected."
+                subtitle="Name, phone, city, timing, and approximate size. We confirm the price and what is included before anything is booked."
                 source={`organic_${service.slug}_service`}
-                service={quoteFormService(service)}
+                defaultService={quoteFormService(service)}
+                compact
               />
+              {directBookingUrl ? (
+                <p className="mt-3 text-center text-sm text-white/70">
+                  Ready to self-schedule instead?{" "}
+                  <Suspense fallback={null}>
+                    <BookingPortalLink
+                      baseUrl={directBookingUrl}
+                      service={quoteFormService(service)}
+                      sourcePage={`/services/${service.slug}`}
+                      label="Book online"
+                      showIcon={false}
+                      className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                    />
+                  </Suspense>
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
@@ -146,6 +205,21 @@ export default function ServiceDetailPage({
               title={resultTitle}
               intro={resultIntro}
             />
+            {detailPairs.length > 0 && (
+              <div className="mt-12 grid gap-8 border-t border-line pt-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+                <div>
+                  <h3 className="text-2xl text-ink">Same surface, before and after.</h3>
+                  <p className="mt-3 leading-relaxed text-ink-soft">
+                    {isMoveOut
+                      ? "Appliance interiors are part of the confirmed move-out scope. This oven is from a real appointment; aged surfaces can keep wear and staining."
+                      : "Detail comparisons from real appointments. Results vary with surface condition, buildup, and access."}
+                  </p>
+                </div>
+                <div className="mx-auto w-full max-w-sm">
+                  <BeforeAfterCarousel items={detailPairs} />
+                </div>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -371,29 +445,8 @@ export default function ServiceDetailPage({
             name: service.name,
             serviceType: service.schemaServiceType,
             description: service.description,
-            provider: {
-              "@type": "LocalBusiness",
-              "@id": `${siteUrl}/#localbusiness`,
-              name: "New Star Cleaning",
-              url: siteUrl,
-              telephone: "+1-559-785-2822",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "132 W Nees Ave Unit 106",
-                addressLocality: "Fresno",
-                addressRegion: "CA",
-                postalCode: "93711",
-                addressCountry: "US",
-              },
-            },
-            areaServed: [
-              { "@type": "City", name: "Fresno", addressRegion: "CA" },
-              { "@type": "City", name: "Clovis", addressRegion: "CA" },
-              { "@type": "City", name: "Madera", addressRegion: "CA" },
-              { "@type": "Place", name: "Tower District, Fresno", addressRegion: "CA" },
-              { "@type": "Place", name: "Fig Garden, Fresno", addressRegion: "CA" },
-              { "@type": "Place", name: "Woodward Park, Fresno", addressRegion: "CA" },
-            ],
+            provider: { "@id": `${business.siteUrl}/#localbusiness` },
+            areaServed: businessAreaServed,
           }),
         }}
       />

@@ -70,9 +70,23 @@ assert(
   "homepage uses quote-first CTA instead of embedded form",
 );
 
+// Service and area templates embed the compact prefilled form directly:
+// a high-intent CTA must never route through an explanation panel first.
 for (const file of [
   "src/components/ServiceDetailPage.tsx",
   "src/components/ServiceAreaPage.tsx",
+]) {
+  const contents = read(file);
+  assert(
+    contents.includes("QuickQuoteForm") &&
+      contents.includes("compact") &&
+      !contents.includes("QuotePathPanel"),
+    `${file} embeds the direct compact quote form with no panel detour`,
+  );
+}
+
+// Hub and thin service/city pages stay CTA-first without embedded long forms.
+for (const file of [
   "src/app/services/page.tsx",
   "src/app/service-areas/page.tsx",
   "src/app/[serviceCity]/page.tsx",

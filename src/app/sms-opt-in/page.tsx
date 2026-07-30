@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description:
     "Opt in to receive text messages from New Star Cleaning about your cleaning service, appointments, and follow-ups.",
   alternates: { canonical: "/sms-opt-in" },
+  // Compliance utility page reached from SMS disclosures, not a search target.
+  robots: { index: false, follow: true },
   openGraph: {
     title: "SMS Opt-In | New Star Cleaning",
     description: "Opt in to receive text messages from New Star Cleaning.",

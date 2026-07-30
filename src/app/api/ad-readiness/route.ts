@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const canonicalOrigin = (
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -48,7 +49,9 @@ export async function GET(req: NextRequest) {
   const leadRouting = {
     apexLeadUrlConfigured: hasEnv("APEX_LEAD_URL"),
     apexLeadSecretConfigured: hasEnv("APEX_LEAD_INTAKE_SECRET"),
-    directBookingConfigured: hasEnv("NEXT_PUBLIC_DIRECT_BOOKING_URL") || hasEnv("NEXT_PUBLIC_BOOKINGKOALA_URL"),
+    // Same resolver the booking pages use, so "configured" can never disagree
+    // with what actually renders.
+    directBookingConfigured: resolveDirectBookingUrl() !== null,
   };
   const domain = {
     canonicalOrigin,

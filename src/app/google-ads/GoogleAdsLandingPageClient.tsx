@@ -154,7 +154,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     faqs: [
       {
         question: "Are oven, fridge, cabinets, or windows included?",
-        answer: "List the details you need. Your quote will state exactly what is included and any separate pricing before booking.",
+        answer: "Move-out cleaning includes the inside of an empty oven, refrigerator, and microwave plus empty cabinet and drawer interiors when they are accessible. Interior window glass and garage or patio sweeping are optional extras. Your quote states the full scope before booking.",
       },
       {
         question: "What if the home has heavy buildup?",

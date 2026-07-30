@@ -1,16 +1,26 @@
 import Link from "next/link";
-import QuotePathPanel from "@/components/QuotePathPanel";
+import Image from "next/image";
+import { Suspense } from "react";
+import QuickQuoteForm from "@/components/QuickQuoteForm";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceArea } from "@/lib/serviceAreas";
+import { emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const siteUrl = "https://newstarcleaning.com";
+
+// General New Star work proof. Deliberately captioned without a city claim:
+// current photos have no verified job-location ledger.
+const generalWorkPhoto = emptyHomeResultPhotos[1];
 
 function serviceAreaSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
+  const directBookingUrl = resolveDirectBookingUrl();
   const serviceCards = [
     {
       title: "Standard recurring cleaning",
@@ -29,6 +39,12 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       href: "/services/move-out-cleaning",
       desc: `Moving in or out of a ${area.name} property? We clean empty homes across kitchens, bathrooms, floors, appliances, empty cabinets, and accessible detail areas.`,
       features: ["Empty-home cleaning", "Oven, refrigerator, microwave, and empty cabinets", "Timing confirmed before booking"],
+    },
+    {
+      title: "Office, commercial & post-construction",
+      href: "/services/commercial-cleaning",
+      desc: `Offices, small commercial spaces, and construction or renovation final cleans in ${area.name} are scoped from a walkthrough or photo review before any proposal.`,
+      features: ["Walkthrough-based proposals", "Recurring or one-time project work", "Scope and capacity confirmed first"],
     },
   ];
 
@@ -100,12 +116,29 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             </div>
 
             <div id="quote" className="scroll-mt-24">
-              <QuotePathPanel
+              <QuickQuoteForm
                 title={`Check availability in ${area.name}`}
-                body="Review the local route notes here, then use the short quote page when you are ready for pricing."
-                city={area.name}
+                subtitle="Name, phone, service, timing, and approximate size. We confirm route availability and the price before anything is booked."
                 source={`organic_${area.slug}_service_area`}
+                defaultCity={area.name}
+                landingCity={area.name}
+                compact
               />
+              {directBookingUrl ? (
+                <p className="mt-3 text-center text-sm text-white/70">
+                  Ready to self-schedule instead?{" "}
+                  <Suspense fallback={null}>
+                    <BookingPortalLink
+                      baseUrl={directBookingUrl}
+                      city={area.name}
+                      sourcePage={`/cleaning-services-${area.slug}`}
+                      label="Book online"
+                      showIcon={false}
+                      className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                    />
+                  </Suspense>
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
@@ -125,18 +158,19 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 New Star Cleaning provides recurring, deep, and move-in/move-out house cleaning in {area.name}. We use the address, home size, service type, condition, and requested details to confirm the right quote before booking.
               </p>
 
-              <div className="mt-8 grid grid-cols-3 gap-3">
-                {[
-                  { k: "3", v: "Cleaning services" },
-                  { k: "Local", v: "Approved route" },
-                  { k: "Clear", v: "Quote before booking" },
-                ].map((s) => (
-                  <div key={s.v} className="rounded-2xl border border-line bg-white p-4 text-center shadow-soft">
-                    <div className="text-xl font-extrabold text-primary">{s.k}</div>
-                    <div className="mt-1 text-[0.7rem] uppercase tracking-wider text-mute">{s.v}</div>
-                  </div>
-                ))}
-              </div>
+              <figure className="mt-8 overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+                <Image
+                  src={generalWorkPhoto.src}
+                  alt={generalWorkPhoto.alt}
+                  width={1200}
+                  height={900}
+                  className="h-auto w-full object-cover"
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                />
+                <figcaption className="px-5 py-3 text-xs leading-relaxed text-mute">
+                  Real New Star work. Photo location is not tied to a specific city.
+                </figcaption>
+              </figure>
             </div>
 
             <div>
@@ -326,21 +360,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
             "@type": "Service",
             name: `House Cleaning Service in ${area.name}, CA`,
             description: area.description,
-            provider: {
-              "@type": "LocalBusiness",
-              "@id": "https://newstarcleaning.com/#localbusiness",
-              name: "New Star Cleaning",
-              url: "https://newstarcleaning.com",
-              telephone: "+1-559-785-2822",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "132 W Nees Ave Unit 106",
-                addressLocality: "Fresno",
-                addressRegion: "CA",
-                postalCode: "93711",
-                addressCountry: "US",
-              },
-            },
+            provider: { "@id": "https://newstarcleaning.com/#localbusiness" },
             areaServed: { "@type": "City", name: area.name, addressRegion: "CA" },
             hasOfferCatalog: {
               "@type": "OfferCatalog",

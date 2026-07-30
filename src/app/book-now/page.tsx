@@ -3,26 +3,19 @@ import { Suspense } from "react";
 import Link from "next/link";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import BookingPortalLink from "@/components/BookingPortalLink";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
-const rawPortalBaseUrl = process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL?.replace(/\/$/, "") ?? "";
-const rawPortalHostname = rawPortalBaseUrl ? new URL(rawPortalBaseUrl).hostname : "";
-const isDeploymentHostname = rawPortalHostname.endsWith(["vercel", "app"].join("."));
-const isPublicPortalUrl = rawPortalBaseUrl && !isDeploymentHostname;
-const apexBookingUrl = isPublicPortalUrl ? `${rawPortalBaseUrl}/book` : null;
-const directBookingUrl =
-  process.env.NEXT_PUBLIC_DIRECT_BOOKING_URL ||
-  process.env.NEXT_PUBLIC_BOOKINGKOALA_URL ||
-  apexBookingUrl;
+const directBookingUrl = resolveDirectBookingUrl();
 
 export const metadata: Metadata = {
   title: "Request Cleaning Pricing & Availability",
   description:
-    "Request pricing and availability for New Star Cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods. Clear quote before anything is booked.",
+    "Request residential or commercial cleaning pricing and availability from New Star Cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
   alternates: { canonical: "/book-now" },
   openGraph: {
     title: "Request Cleaning Pricing & Availability | New Star Cleaning",
     description:
-      "Get clear pricing and availability before confirming your Fresno-area house cleaning.",
+      "Get clear residential or commercial cleaning pricing and availability before confirming service.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
@@ -35,39 +28,54 @@ export default function BookNow() {
           className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
           aria-hidden="true"
         />
-        <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-20 lg:pt-14">
+        <div className="relative mx-auto grid max-w-7xl items-start gap-7 px-4 pb-12 pt-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:px-8 lg:pb-20 lg:pt-14">
           <div className="max-w-2xl lg:pt-4">
-            <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <nav className="mb-4 text-sm text-white/55 lg:mb-6" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-white">Home</Link>
               <span className="px-1.5">/</span>
               <span className="font-semibold text-white">Request pricing</span>
             </nav>
             <span className="eyebrow eyebrow-dot text-accent-light">Fresno / Clovis / Madera</span>
             <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
-              Request a cleaning quote for your home.
+              Request a cleaning quote.
             </h1>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-white/75">
-              Share the home details and preferred timing. We will confirm the price, what is included, and available appointments before you decide. No payment or booking is taken on this form.
+            <p className="mt-4 max-w-xl text-base leading-7 text-white/75 lg:mt-5 lg:text-lg lg:leading-8">
+              Share the property, service, and preferred timing. We will confirm the price, what is included, and available appointments before you decide. No payment or booking is taken on this form.
             </p>
 
             <div className="mt-7 hidden rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft sm:block">
               Serving Fresno, Clovis, Madera, Tower District, Fig Garden, and Woodward Park.
             </div>
 
-            <div className="mt-6">
-              <a href="tel:+15597852822" className="btn btn-outline">
+            <div className="mt-5 lg:mt-6">
+              <a href="tel:+15597852822" className="btn btn-outline !min-h-11 !px-5 !text-sm lg:!min-h-12">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 Call or text (559) 785-2822
               </a>
             </div>
+            {directBookingUrl ? (
+              <p className="mt-5 hidden text-sm leading-6 text-white/70 lg:block">
+                Need pricing or help choosing? Use the quote form.
+                Ready to pick a service and time yourself?{" "}
+                <Suspense fallback={null}>
+                  <BookingPortalLink
+                    baseUrl={directBookingUrl}
+                    sourcePage="/book-now"
+                    label="Book online"
+                    showIcon={false}
+                    className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                  />
+                </Suspense>
+              </p>
+            ) : null}
           </div>
 
           <div id="quote-form" className="relative scroll-mt-24">
             <QuickQuoteForm
               title="Get pricing & availability"
-              subtitle="Start with your contact information, city, service, timing, and approximate home size. We will ask only the follow-up details needed for an accurate quote."
+              subtitle="Start with your contact information, city, service, timing, and approximate property size. We will ask only the follow-up details needed for an accurate quote."
               source="organic_quote_page"
               compact
             />
@@ -110,12 +118,14 @@ export default function BookNow() {
 
             {directBookingUrl ? (
               <div className="rounded-3xl border border-line bg-white p-7 shadow-soft sm:p-8">
-                <h2 className="text-2xl text-ink">Already have your quote?</h2>
+                <h2 className="text-2xl text-ink">Ready to schedule online?</h2>
                 <p className="mt-3 text-ink-soft">
-                  Continue to the secure scheduling portal. Your tracking source is preserved for reporting.
+                  If you already know the service and time you want, you can book directly in the
+                  secure scheduling portal. Pricing shown there matches what we quote here, and
+                  you can still call or text with any question before confirming.
                 </p>
                 <Suspense fallback={null}>
-                  <BookingPortalLink baseUrl={directBookingUrl} />
+                  <BookingPortalLink baseUrl={directBookingUrl} sourcePage="/book-now" />
                 </Suspense>
               </div>
             ) : null}

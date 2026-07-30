@@ -36,7 +36,7 @@ export default function AboutPage() {
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">
             New Star Cleaning is a locally owned house cleaning company serving Fresno, Clovis,
             Madera, and nearby Fresno neighborhoods. We built this business around one idea: home
-            is sacred — and the people who clean it should be careful, consistent, and someone you
+            is sacred, and the people who clean it should be careful, consistent, and someone you
             actually want in your space.
           </p>
           <div className="mt-8">
@@ -56,6 +56,15 @@ export default function AboutPage() {
                 hiring help: no-shows, generic cleaning that misses the details, and quotes that
                 do not match the actual condition of the home. We keep the roster tighter, scope
                 jobs carefully, and make the expected result clear before booking.
+              </p>
+              <p className="mt-4">
+                We are not the cheapest option in town, and that is deliberate. Doing the work
+                right takes time, so every quote includes the hours the job actually needs
+                instead of racing the clock. We are not a discount service, and we are not a maid
+                service either: the work is cleaning, with add-ons like appliance interiors or
+                interior windows available when you request them. Homes are the core of it, and
+                we also take on office, commercial, and post-construction projects when they fit
+                the route.
               </p>
             </div>
 

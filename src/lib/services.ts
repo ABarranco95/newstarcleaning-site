@@ -167,6 +167,11 @@ export const services: ServiceDefinition[] = [
         answer:
           "If there is heavy buildup, neglected areas, or first-time detail work, we may recommend a deep cleaning so the cleaner has enough time to reset the home properly.",
       },
+      {
+        question: "How is recurring cleaning priced?",
+        answer:
+          "The quote is built from size, condition, frequency, and any add-ons, with enough time scheduled to finish the checklist. We will rarely be the cheapest quote you get, because cheap usually means rushed. A regular schedule is the honest way to keep the price down: a maintained home takes less time each visit.",
+      },
     ],
     localNotes:
       "New Star Cleaning provides recurring house cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Route availability depends on the address, frequency, home size, and requested work, so we confirm timing before booking.",
@@ -303,6 +308,11 @@ export const services: ServiceDefinition[] = [
         answer:
           "Laundry, dishes, bed making, organizing, heavy furniture moving, biohazards, exterior windows, carpet shampooing, and restoration work are not included.",
       },
+      {
+        question: "Why does deep cleaning cost more than standard cleaning?",
+        answer:
+          "Time. Baseboards, fixtures, buildup, edges, and detail work take hours a standard visit does not have. Doing it right takes time, so we quote the hours the reset actually needs instead of promising a low price and skimming the detail work.",
+      },
     ],
     localNotes:
       "New Star Cleaning provides deep cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Availability depends on the home, requested details, and local route capacity; we confirm the options before booking.",
@@ -437,6 +447,11 @@ export const services: ServiceDefinition[] = [
         question: "What should be done before a move-out cleaning?",
         answer:
           "Remove belongings, trash, dishes, food, and loose items. Empty appliances, cabinets, drawers, closets, and rooms so the cleaner can access the surfaces.",
+      },
+      {
+        question: "Why do move-out quotes include the whole home?",
+        answer:
+          "An empty home gets cleaned everywhere: appliance interiors, cabinets, drawers, closets, baseboards, and floors edge to edge. That takes real hours, so we quote the full scope up front instead of adding surprise charges on site. If a cheaper bid sounds too good for that scope, it usually is.",
       },
     ],
     localNotes:

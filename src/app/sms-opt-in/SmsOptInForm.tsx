@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { createSubmissionId } from "@/lib/submissionId";
 
 type FormState = {
   firstName: string;
@@ -9,6 +10,7 @@ type FormState = {
   phone: string;
   email: string;
   smsConsent: boolean;
+  company: string;
 };
 
 const initialFormState: FormState = {
@@ -17,6 +19,7 @@ const initialFormState: FormState = {
   phone: "",
   email: "",
   smsConsent: false,
+  company: "",
 };
 
 const fieldClass =
@@ -35,6 +38,8 @@ export default function SmsOptInForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  // Reused on retry so Apex can replay-dedupe; regenerated after acceptance.
+  const submissionIdRef = useRef("");
 
   const updateField = (field: keyof FormState, value: string | boolean) => {
     setFormData((current) => ({ ...current, [field]: value }));
@@ -46,11 +51,13 @@ export default function SmsOptInForm() {
     setError("");
 
     try {
+      if (!submissionIdRef.current) submissionIdRef.current = createSubmissionId();
       const response = await fetch("/api/sms-opt-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          submissionId: submissionIdRef.current,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),
         }),
@@ -62,6 +69,7 @@ export default function SmsOptInForm() {
       }
 
       setIsSuccess(true);
+      submissionIdRef.current = "";
       setFormData(initialFormState);
     } catch (submitError) {
       setError(
@@ -91,7 +99,18 @@ export default function SmsOptInForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} data-clarity-mask="true" className="space-y-4">
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="sms-company">Company</label>
+        <input
+          id="sms-company"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+          value={formData.company}
+          onChange={(event) => updateField("company", event.target.value)}
+        />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <FieldLabel htmlFor="firstName">

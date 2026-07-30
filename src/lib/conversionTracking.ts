@@ -8,6 +8,7 @@ export type FunnelEventName =
   | "quote_submit_attempt"
   | "quote_validation_error"
   | "lead_submit_accepted"
+  | "booking_handoff_started"
   | "website_phone_click";
 
 export type FunnelEventPayload = {
@@ -20,6 +21,7 @@ export type FunnelEventPayload = {
   ctaLocation?: string;
   validationField?: string;
   phoneLocation?: string;
+  handoffId?: string;
 };
 
 type FunnelDataLayerEvent = {
@@ -33,6 +35,7 @@ type FunnelDataLayerEvent = {
   cta_location?: string;
   validation_field?: string;
   phone_location?: string;
+  handoff_id?: string;
 };
 
 declare global {
@@ -76,6 +79,7 @@ function funnelEvent(
     cta_location: payload.ctaLocation || undefined,
     validation_field: payload.validationField || undefined,
     phone_location: payload.phoneLocation || undefined,
+    handoff_id: payload.handoffId || undefined,
   };
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export type BeforeAfterItem = {
   before: { src: string; alt: string };
@@ -40,22 +40,32 @@ export default function BeforeAfterCarousel({
     [count],
   );
 
-  useEffect(() => {
+  // Arrow keys work only while focus is inside this carousel, so a page with
+  // a carousel does not hijack arrow-key scrolling or other widgets.
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (count <= 1) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowLeft") go(-1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [go, count]);
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      go(1);
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      go(-1);
+    }
+  };
 
   if (!count) return null;
   const item = items![index];
   const current = showAfter ? item.after : item.before;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
+    <div
+      onKeyDown={onKeyDown}
+      role="group"
+      aria-roledescription="carousel"
+      aria-label="Before and after comparison"
+      className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft"
+    >
       <div className="relative aspect-[3/4] bg-cream-2">
         <Image
           src={current.src}
