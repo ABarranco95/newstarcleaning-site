@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import RealWorkGallery from "@/components/RealWorkGallery";
 import HomeBookingLink from "@/components/HomeBookingLink";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import { ovenBuildupPair, realWorkPhotos } from "@/lib/realWorkPhotos";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const services = [
   {
@@ -147,6 +150,7 @@ function ArrowIcon() {
 }
 
 export default function Home() {
+  const directBookingUrl = resolveDirectBookingUrl();
   return (
     <>
       <section className="bg-primary text-white">
@@ -261,7 +265,26 @@ export default function Home() {
               </li>
             ))}
           </ol>
-          <Link href="/book-now" className="btn btn-accent mt-10">Request a quote <ArrowIcon /></Link>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link href="/book-now" className="btn btn-accent">Request a quote <ArrowIcon /></Link>
+            {directBookingUrl ? (
+              <Suspense fallback={null}>
+                <BookingPortalLink
+                  baseUrl={directBookingUrl}
+                  sourcePage="/"
+                  label="Book online"
+                  showIcon={false}
+                  className="btn btn-outline"
+                />
+              </Suspense>
+            ) : null}
+          </div>
+          {directBookingUrl ? (
+            <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft">
+              Book online if you already know the service and time you want. The scheduling
+              portal shows the same pricing we confirm on quotes.
+            </p>
+          ) : null}
         </div>
       </section>
 

@@ -45,10 +45,10 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-200 ${
+      className={`bg-primary sticky top-0 z-50 transition-all duration-200 ${
         scrolled
-          ? "border-b border-line bg-white/90 shadow-[0_6px_24px_-18px_rgba(15,27,45,0.35)] backdrop-blur-md"
-          : "border-b border-transparent bg-white/80 backdrop-blur-md"
+          ? "border-b border-white/15 shadow-[0_10px_28px_-18px_rgba(7,24,47,0.8)]"
+          : "border-b border-white/10"
       }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -60,7 +60,7 @@ export default function Header() {
             aria-label="New Star Cleaning home"
           >
             <Image
-              src="/brand/nsc-lockup-horizontal.svg"
+              src="/brand/nsc-lockup-horizontal-reverse.svg"
               alt="New Star Cleaning"
               width={640}
               height={150}
@@ -72,19 +72,19 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-7 lg:flex">
-            <Link href="/services" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
+            <Link href="/services" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               Services
             </Link>
-            <Link href="/#how-it-works" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
+            <Link href="/#how-it-works" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               How it works
             </Link>
-            <Link href="/service-areas" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
+            <Link href="/service-areas" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               Service areas
             </Link>
-            <Link href="/#reviews" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
+            <Link href="/#reviews" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               Reviews
             </Link>
-            <Link href="/checklist" className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary">
+            <Link href="/checklist" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               Checklist
             </Link>
             {headerBookingHref("header") ? (
@@ -93,7 +93,7 @@ export default function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackHeaderHandoff("header")}
-                className="text-sm font-semibold text-ink-soft transition-colors hover:text-primary"
+                className="btn btn-ghost-dark !min-h-10 !px-4 !text-sm"
               >
                 Book online
               </a>
@@ -102,8 +102,8 @@ export default function Header() {
               href="tel:+15597852822"
               className="flex flex-col items-end leading-none"
             >
-              <span className="text-sm font-extrabold text-primary">(559) 785-2822</span>
-              <span className="mt-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-mute">Call or text</span>
+              <span className="text-sm font-extrabold text-white">(559) 785-2822</span>
+              <span className="mt-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-white/60">Call or text</span>
             </a>
             <Link href="/book-now" className="btn btn-accent">
               Request a quote
@@ -117,7 +117,7 @@ export default function Header() {
             </Link>
             <a
               href="tel:+15597852822"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-cream-2 text-primary"
               aria-label="Call (559) 785-2822"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,7 +126,7 @@ export default function Header() {
             </a>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white text-ink"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white"
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
             >
@@ -145,7 +145,7 @@ export default function Header() {
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <div className="border-t border-line pb-5 lg:hidden">
+          <div className="border-t border-white/15 pb-5 lg:hidden">
             <nav className="flex flex-col gap-1 pt-3">
               {[
                 { href: "/services", label: "Services" },
@@ -160,7 +160,7 @@ export default function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-xl px-4 py-3 text-base font-semibold text-ink-soft hover:bg-cream-2 hover:text-primary"
+                  className="rounded-xl px-4 py-3 text-base font-semibold text-white/85 hover:bg-white/10 hover:text-white"
                 >
                   {link.label}
                 </Link>
@@ -174,17 +174,17 @@ export default function Header() {
                     trackHeaderHandoff("mobile-menu");
                     setMobileOpen(false);
                   }}
-                  className="rounded-xl px-4 py-3 text-base font-semibold text-ink-soft hover:bg-cream-2 hover:text-primary"
+                  className="mt-1 rounded-xl border border-white/25 px-4 py-3 text-center text-base font-semibold text-white hover:bg-white/10"
                 >
                   Book online
                 </a>
               ) : null}
               <a
                 href="tel:+15597852822"
-                className="mt-2 flex items-center justify-between rounded-xl bg-cream-2 px-4 py-3 text-base font-extrabold text-primary"
+                className="mt-2 flex items-center justify-between rounded-xl bg-white/10 px-4 py-3 text-base font-extrabold text-white"
               >
                 <span>Call (559) 785-2822</span>
-                <span className="text-xs font-semibold text-mute">Call or text</span>
+                <span className="text-xs font-semibold text-white/60">Call or text</span>
               </a>
             </nav>
           </div>
