@@ -59,7 +59,7 @@ const faqs = [
   {
     question: "Which commercial properties do you clean?",
     answer:
-      "We evaluate offices, professional suites, small commercial facilities, property-management spaces, and similar workplaces within the approved route area. Regulated, industrial, medical, food-production, or hazardous environments require separate qualification and may not be accepted.",
+      "We evaluate offices, professional suites, retail spaces, small commercial facilities, property-management spaces, and similar workplaces within the approved route area. Medical, dental, and other specialized facilities are welcome to reach out: the walkthrough is where we confirm what the space needs and whether we are the right fit. Industrial, food-production, and hazardous environments may need work outside our scope, and we will say so directly.",
   },
   {
     question: "Do you provide nightly janitorial service?",

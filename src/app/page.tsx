@@ -2,7 +2,7 @@ import Link from "next/link";
 import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import RealWorkGallery from "@/components/RealWorkGallery";
 import HomeBookingLink from "@/components/HomeBookingLink";
-import { realWorkPhotos } from "@/lib/realWorkPhotos";
+import { ovenBuildupPair, realWorkPhotos } from "@/lib/realWorkPhotos";
 
 const services = [
   {
@@ -86,6 +86,35 @@ const trustPoints = [
   "Quote confirmed before booking",
 ];
 
+// Opening-slide proof: the five strongest verified same-surface pairs.
+const heroPairs: BeforeAfterItem[] = [
+  {
+    before: { src: "/photos/before1.jpg", alt: "Shower before a New Star deep cleaning" },
+    after: { src: "/photos/after1.jpg", alt: "Shower after a New Star deep cleaning" },
+    label: "Shower buildup removed from accessible tile and basin surfaces.",
+  },
+  {
+    before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star cleaning" },
+    after: { src: "/photos/real-work/paid/tub-surround-after.webp", alt: "The same bathtub and tile surround after a New Star cleaning" },
+    label: "Tub and surround detail from a real appointment.",
+  },
+  {
+    before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
+    after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
+    label: ovenBuildupPair.label,
+  },
+  {
+    before: { src: "/photos/before4.jpg", alt: "Window blinds before detailed cleaning" },
+    after: { src: "/photos/after4.jpg", alt: "Window blinds after detailed cleaning" },
+    label: "Accessible blind detail from a real New Star appointment.",
+  },
+  {
+    before: { src: "/photos/real-work/paid/refrigerator-full-before.webp", alt: "Empty refrigerator interior before a New Star cleaning" },
+    after: { src: "/photos/real-work/paid/refrigerator-full-after.webp", alt: "The same refrigerator interior after a New Star cleaning" },
+    label: "Refrigerator interior from a real move-out appointment.",
+  },
+];
+
 const resultsPairs: BeforeAfterItem[] = [
   {
     before: { src: "/photos/before1.jpg", alt: "Shower before a New Star deep cleaning" },
@@ -147,9 +176,9 @@ export default function Home() {
           <div className="mx-auto w-full max-w-sm">
             <div className="mb-3 flex items-center justify-between text-xs font-bold uppercase tracking-[0.16em] text-white/65">
               <span>Real New Star work</span>
-              <span>View to compare</span>
+              <span>Same surface, before &amp; after</span>
             </div>
-            <BeforeAfterCarousel items={[resultsPairs[0], resultsPairs[3]]} />
+            <BeforeAfterCarousel items={heroPairs} />
           </div>
         </div>
       </section>

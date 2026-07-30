@@ -2,9 +2,10 @@
 
 @theme {
   /*
-    Brand system: confident ink navy as the anchor, a cleaner energetic
-    ember orange as the accent, and white-dominant bright surfaces.
-    Premium local cleaning — bright, calm, conversion-first.
+    Approved Route A brand system (active-tokens.json): deep navy anchor
+    #0E2A4D, navy-light facet #1C3F6E as the action color, reverse facet
+    tint #AFC2D9 on navy, warm white #F7F2E8 canvas tint, white digital
+    canvas. Ember/orange accents are retired in the brand guide.
   */
 
   /* Navy — authoritative, on-brand with the New Star mark. */
@@ -12,14 +13,14 @@
   --color-primary-light: #1c3f6e;
   --color-primary-dark: #07182f;
 
-  /* Ember orange — accent (AA-safe on white for text), brighter tint for dark surfaces. */
-  --color-accent: #c2461b;
-  --color-accent-hover: #a83a13;
-  --color-accent-light: #ff9b5c;
+  /* Action blue (approved light-field facet tone); pale reverse tint on navy. */
+  --color-accent: #1c3f6e;
+  --color-accent-hover: #0e2a4d;
+  --color-accent-light: #afc2d9;
 
-  /* Cool near-white surfaces (white-dominant canvas). */
+  /* White digital canvas with the warm-white brand tint for alternate sections. */
   --color-cream: #ffffff;
-  --color-cream-2: #f5f8fc;
+  --color-cream-2: #f7f2e8;
 
   /* Ink + neutrals. */
   --color-ink: #0f1b2d;
@@ -141,11 +142,30 @@
   .btn-accent {
     background-color: var(--color-accent);
     color: #fff;
-    box-shadow: 0 12px 26px -14px rgba(194, 70, 27, 0.75);
+    box-shadow: 0 12px 26px -14px rgba(14, 42, 77, 0.55);
   }
   .btn-accent:hover {
     background-color: var(--color-accent-hover);
     transform: translateY(-1px);
+  }
+
+  /* On navy fields the primary action flips to warm white so it pops while
+     staying inside the approved palette. White cards nested in navy sections
+     restore the light-surface style. */
+  .bg-primary .btn-accent {
+    background-color: var(--color-cream-2);
+    color: var(--color-primary);
+    box-shadow: 0 12px 26px -14px rgba(7, 24, 47, 0.6);
+  }
+  .bg-primary .btn-accent:hover {
+    background-color: #fff;
+  }
+  .bg-primary .bg-white .btn-accent {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+  .bg-primary .bg-white .btn-accent:hover {
+    background-color: var(--color-accent-hover);
   }
 
   .btn-primary {
