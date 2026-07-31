@@ -38,7 +38,7 @@ const steps = [
   },
   {
     title: "Receive a clear quote",
-    text: "We confirm the price, what is included, and any optional details before you book.",
+    text: "We confirm the price, what's included, and any optional details before you book.",
   },
   {
     title: "Choose an appointment",
@@ -161,7 +161,7 @@ export default function Home() {
               House cleaning in Fresno, Clovis &amp; Madera—done with care.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">
-              Choose recurring, deep, or move-in/move-out cleaning. Tell us about the home and we will confirm the price, what is included, and available times before you book.
+              Choose recurring, deep, or move-in/move-out cleaning. Tell us about the home and we&apos;ll confirm the price, what&apos;s included, and available times before you book.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link href="/book-now" className="btn btn-accent">

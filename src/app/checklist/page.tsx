@@ -46,7 +46,7 @@ const faqs = [
   {
     question: "Which detail items are optional?",
     answer:
-      "For standard and deep cleaning, the inside of the oven and refrigerator, cabinet interiors, and interior window glass are optional. The inside of an empty microwave is included when accessible. For move-in/move-out cleaning, oven, refrigerator, and cabinet or drawer interiors are priced add-ons for the empty home. Interior window glass, garage sweeping, patio or balcony sweeping, extra blind detail, and heavy buildup time can be added when quoted.",
+      "The inside of the oven and refrigerator, cabinet and drawer interiors, and interior window glass are priced add-ons on every service, including move-in/move-out. The inside of an empty microwave is included when accessible. Move-outs can also add garage or patio sweeping, extra blind detail, and heavy-buildup time. Whatever you select is written into the quote, so the appointment has the hours to cover it.",
   },
   {
     question: "Does deep cleaning include every add-on?",
@@ -83,14 +83,12 @@ const comparisonRows = [
   { label: "Reachable grout & buildup detail", standard: false, deep: true, moveOut: true },
   { label: "Under furniture vacuumed", standard: false, deep: true, moveOut: true },
   { label: "Floor edges & corners detailed", standard: false, deep: true, moveOut: true },
-  { label: "Inside oven", standard: false, deep: false, moveOut: true },
-  { label: "Inside refrigerator", standard: false, deep: false, moveOut: true },
-  { label: "Inside microwave", standard: false, deep: false, moveOut: true },
-  { label: "Inside empty cabinets & drawers", standard: false, deep: false, moveOut: true },
+  { label: "Inside microwave (when empty)", standard: true, deep: true, moveOut: true },
   { label: "Blinds dusted", standard: false, deep: false, moveOut: true },
   { label: "Closet shelves & rods wiped", standard: false, deep: false, moveOut: true },
   { label: "Dishwasher interior checked", standard: false, deep: false, moveOut: true },
-  { label: "Range hood & filter degreased", standard: false, deep: false, moveOut: true },
+  { label: "Range hood cleaned", standard: true, deep: true, moveOut: true },
+  { label: "Range hood filter degreased", standard: false, deep: false, moveOut: true },
 ];
 
 function ComparisonCheck() {
@@ -144,12 +142,12 @@ export default function ChecklistPage() {
           </nav>
           <span className="eyebrow eyebrow-dot text-accent-light">Service checklist</span>
           <h1 className="mt-4 max-w-4xl text-4xl text-white lg:text-[3.2rem]">
-            Included, add-ons, and what we do not clean
+            What&apos;s included, what&apos;s optional, and what we don&apos;t clean
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/75">
-            This page is the plain-English cleaning scope for New Star Cleaning. It shows what is
-            included in each service, what can be added, and what is outside our work so clients
-            know exactly what to expect before booking.
+            This is the full New Star scope in plain English: what every service covers, what
+            you can add, and where our work stops. Read it once and you&apos;ll know exactly what
+            you&apos;re paying for before you book.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a href="#services" className="btn btn-accent !min-h-12 !px-5 !text-sm">Review service scopes</a>
@@ -170,9 +168,10 @@ export default function ChecklistPage() {
               </div>
               <p className="text-sm leading-relaxed text-ink-soft">
                 We clean accessible surfaces, rooms, fixtures, appliances,
-                bathrooms, kitchens, and floors. We do not do laundry, dishes,
-                bed making, organizing, packing, unpacking, personal item
-                handling, furniture moving, or restoration work.
+                bathrooms, kitchens, and floors. We don&apos;t do laundry, dishes,
+                bed making, organizing, packing, moving furniture, or
+                restoration work. If it&apos;s a household chore rather than
+                cleaning, it&apos;s not on the truck.
               </p>
             </div>
           </div>
@@ -187,9 +186,9 @@ export default function ChecklistPage() {
               Base cleaning scope by service
             </h2>
             <p className="mt-5 leading-relaxed text-ink-soft">
-              Each service below separates the base cleaning scope from
-              available add-ons. If an add-on is not listed in your quote, it is
-              not included in that appointment.
+              Every service below separates base scope from add-ons. The rule is
+              simple: if it isn&apos;t in your quote, it isn&apos;t in the appointment.
+              No surprise work, no surprise charges.
             </p>
           </div>
 
@@ -218,6 +217,12 @@ export default function ChecklistPage() {
               </table>
             </div>
           </div>
+
+          <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+            Inside the oven, inside the refrigerator, and empty cabinet or drawer interiors are
+            priced add-ons on any service, most often added to move-outs. Request them with your
+            quote and they&apos;re written into the appointment.
+          </p>
 
           {/* ── When to choose ── */}
           <div className="mt-6 grid gap-4 lg:grid-cols-3">
@@ -324,12 +329,13 @@ export default function ChecklistPage() {
             <div>
               <span className="eyebrow eyebrow-dot">Not included</span>
               <h2 className="mt-4 text-3xl lg:text-4xl text-ink">
-                Work we do not offer
+                What we don&apos;t do
               </h2>
               <p className="mt-5 leading-relaxed text-ink-soft">
-                These exclusions apply across standard, deep, and move-out
-                cleaning. If a request is outside this list but still unusual,
-                we will clarify before quoting.
+                These apply across standard, deep, and move-out cleaning. Not
+                sure whether your request fits? Ask when you send the quote
+                form and we&apos;ll give you a straight answer before pricing
+                anything.
               </p>
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
@@ -355,8 +361,9 @@ export default function ChecklistPage() {
                 How to get the best result
               </h2>
               <p className="mt-5 leading-relaxed text-ink-soft">
-                A cleaner can work faster and more thoroughly when surfaces are
-                accessible before arrival.
+                Every quoted hour should go into cleaning, not clearing. A few
+                minutes of pickup before we arrive turns directly into a more
+                thorough clean.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">

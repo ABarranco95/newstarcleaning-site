@@ -20,7 +20,7 @@ import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 const siteUrl = "https://newstarcleaning.com";
 
 // Detail comparisons per service. Deep gets tub/vent detail pairs; move-out
-// gets the oven pair because appliance interiors are part of its base scope.
+// gets the oven pair because inside-oven is its most-requested priced add-on.
 const deepDetailPairs: BeforeAfterItem[] = [
   {
     before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star deep cleaning" },
@@ -211,7 +211,7 @@ export default function ServiceDetailPage({
                   <h3 className="text-2xl text-ink">Same surface, before and after.</h3>
                   <p className="mt-3 leading-relaxed text-ink-soft">
                     {isMoveOut
-                      ? "Appliance interiors are part of the confirmed move-out scope. This oven is from a real appointment; aged surfaces can keep wear and staining."
+                      ? "Inside-oven cleaning is one of the most-requested move-out add-ons. This oven is from a real appointment; aged surfaces can keep wear and staining."
                       : "Detail comparisons from real appointments. Results vary with surface condition, buildup, and access."}
                   </p>
                 </div>

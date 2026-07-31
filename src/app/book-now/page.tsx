@@ -59,7 +59,7 @@ export default function BookNow() {
               Request a cleaning quote.
             </h1>
             <p className="mt-4 max-w-xl text-base leading-7 text-white/75 lg:mt-5 lg:text-lg lg:leading-8">
-              Share the property, service, and preferred timing. We will confirm the price, what is included, and available appointments before you decide. No payment or booking is taken on this form.
+              Share the property, service, and preferred timing. We&apos;ll confirm the price, what&apos;s included, and available appointments before you decide. Nothing is charged or booked from this form.
             </p>
 
             <div className="mt-7 hidden rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft sm:block">

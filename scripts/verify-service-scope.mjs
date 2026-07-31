@@ -64,7 +64,7 @@ assert(
     checklist.includes("FAQPage") &&
     checklist.includes("BreadcrumbSchema") &&
     checklist.includes("Cleaning service, not household task service") &&
-    checklist.includes("Work we do not offer"),
+    checklist.includes("What we don&apos;t do"),
   "checklist page renders scope, prep, exclusions, breadcrumbs, and FAQ schema",
 );
 

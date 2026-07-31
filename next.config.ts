@@ -4,14 +4,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  // Only local, real New Star photography is served; no remote image hosts.
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
-    ],
+    remotePatterns: [],
   },
   async headers() {
     return [

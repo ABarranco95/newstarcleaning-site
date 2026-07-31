@@ -38,7 +38,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       title: "Move-in / move-out cleaning",
       href: "/services/move-out-cleaning",
       desc: `Moving in or out of a ${area.name} property? We clean empty homes across kitchens, bathrooms, floors, appliances, empty cabinets, and accessible detail areas.`,
-      features: ["Empty-home cleaning", "Oven, refrigerator, microwave, and empty cabinets", "Timing confirmed before booking"],
+      features: ["Empty-home cleaning", "Appliance and cabinet interiors as priced add-ons", "Timing confirmed before booking"],
     },
     {
       title: "Office, commercial & post-construction",
@@ -307,7 +307,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
             <span className="eyebrow text-accent-light">Request availability</span>
             <h2 className="mt-4 text-3xl text-white lg:text-5xl">
-              Ready for a spotless {area.name} home?
+              Ready to get your {area.name} home cleaned?
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
               Tell us about the home and preferred date. We will confirm the price, what is included, and the appointment options before you book.

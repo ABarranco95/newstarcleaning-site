@@ -33,11 +33,11 @@ export default function ContactPage() {
             <div className="max-w-2xl">
               <span className="eyebrow eyebrow-dot text-accent-light">Talk to us</span>
               <h1 className="mt-4 text-4xl text-white lg:text-[3.2rem]">
-                Let&apos;s get your home sparkling.
+                Talk to a real person about your home.
               </h1>
               <p className="mt-5 text-lg leading-8 text-white/75">
-                Send us a quick message and we&apos;ll follow up with availability, pricing, and
-                the best next step. We respond fast — usually same-day during business hours.
+                Call, text, or send the form. You reach us directly, not a call center, and
+                we usually respond the same business day with pricing and availability.
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <a href="tel:+15597852822" className="btn btn-accent !min-h-12 !px-5 !text-sm">
