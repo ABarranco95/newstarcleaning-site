@@ -159,7 +159,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     faqs: [
       {
         question: "Are oven, fridge, cabinets, or windows included?",
-        answer: "The base move-out clean covers the empty home itself: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Interior oven, refrigerator, and cabinet or drawer cleaning are priced add-ons, and reachable interior window glass is optional too. Your quote lists the full scope before booking.",
+        answer: "The base move-out clean covers the empty home itself: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Interior oven, refrigerator, and cabinet or drawer cleaning are priced add-ons, and reachable interior window glass and tracks are optional too. Your quote lists the full scope before booking.",
       },
       {
         question: "What if the home has heavy buildup?",

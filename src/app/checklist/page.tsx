@@ -46,7 +46,7 @@ const faqs = [
   {
     question: "Which detail items are optional?",
     answer:
-      "The inside of the oven and refrigerator, cabinet and drawer interiors, and interior window glass are priced add-ons on every service, including move-in/move-out. The inside of an empty microwave is included when accessible. Move-outs can also add garage or patio sweeping, extra blind detail, and heavy-buildup time. Whatever you select is written into the quote, so the appointment has the hours to cover it.",
+      "The inside of the oven and refrigerator, cabinet and drawer interiors, and interior window glass and tracks are priced add-ons on every service, including move-in/move-out. The inside of an empty microwave is included when accessible. Move-outs can also add garage or patio sweeping, extra blind detail, and heavy-buildup time. Whatever you select is written into the quote, so the appointment has the hours to cover it.",
   },
   {
     question: "Does deep cleaning include every add-on?",
@@ -229,7 +229,7 @@ export default function ChecklistPage() {
             {[
               { tier: "Standard", price: "from $165", desc: "Maintenance cleaning for accessible kitchen and bathroom surfaces, bedrooms, living areas, dusting, and floors.", when: "Choose this for an already maintained home on a weekly, bi-weekly, or monthly schedule." },
               { tier: "Deep", price: "from $235", desc: "Detailed cleaning for accessible kitchens, bathrooms, living areas, floors, baseboards, vents, fans, trim, and reachable buildup.", when: "Choose this for a first visit, seasonal reset, or a home that needs more detail than maintenance cleaning." },
-              { tier: "Move-Out", price: "from $245", desc: "Empty-home cleaning for rooms, kitchens, bathrooms, floors, appliances, empty cabinets and drawers, blinds, and closet interiors.", when: "Choose this for a move-in, move-out, sale, rental turnover, or other empty-home transition." },
+              { tier: "Move-Out", price: "from $245", desc: "Empty-home cleaning for rooms, kitchens, bathrooms, floors edge to edge, baseboards, blinds, and closet interiors, with appliance and cabinet interiors as quoted add-ons.", when: "From $245 covers a maintained 1 bed / 1 bath under 1,000 sq ft. Lived-in condition and add-ons raise the quote; we confirm the number before booking." },
             ].map((card) => (
               <div key={card.tier} className="rounded-2xl border border-line bg-white p-5 shadow-soft">
                 <div className="flex items-baseline justify-between">

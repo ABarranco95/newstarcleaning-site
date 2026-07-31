@@ -99,7 +99,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Interior window glass",
         description:
-          "Reachable interior window glass can be added. Tracks, screens, exterior windows, and ladder work are not included.",
+          "Reachable interior window glass and window tracks can be added. Screens, exterior windows, and ladder work are not included.",
       },
       {
         title: "Extra pet hair detail",
@@ -240,7 +240,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Interior window glass",
         description:
-          "Reachable interior window glass can be added. Exterior windows, screens, tracks, and ladder work are not included.",
+          "Reachable interior window glass and window tracks can be added. Exterior windows, screens, and ladder work are not included.",
       },
       {
         title: "Heavy pet hair detail",
@@ -379,7 +379,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Interior window glass",
         description:
-          "Reachable interior window glass can be added. Exterior windows, screens, and ladder work are not included.",
+          "Reachable interior window glass and window tracks can be added. Exterior windows, screens, and ladder work are not included.",
       },
       {
         title: "Garage sweeping",
@@ -438,6 +438,16 @@ export const services: ServiceDefinition[] = [
       },
     ],
     faqs: [
+      {
+        question: "Is everything included in a move-out clean?",
+        answer:
+          "Almost everything in the empty home is: kitchens, bathrooms, floors edge to edge, baseboards, fixtures, blinds, closet interiors, and accessible detail work. A short list is quoted separately because it adds real hours: the inside of the oven, refrigerator, and cabinets or drawers, plus interior window glass and tracks. Ask for what you need and the quote lists it before booking, so the appointment actually has time to finish it.",
+      },
+      {
+        question: "How much does move-out cleaning cost?",
+        answer:
+          "A maintained 1 bed, 1 bath under 1,000 square feet starts around $245. Average lived-in condition adds cleaning time and can bring that same size closer to $360, and larger homes commonly land in the $450 to $600 range. Size, condition, and requested add-ons set the final number, and we confirm it before anything is booked.",
+      },
       {
         question: "Does move-out cleaning include inside the oven, fridge, and cabinets?",
         answer:
