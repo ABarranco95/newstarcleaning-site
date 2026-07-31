@@ -146,15 +146,20 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: (city) => `Move-out cleaning for ${city} homes, with scope and pricing confirmed upfront.`,
-    subhead: "Share the size, condition, deadline, and any appliance or cabinet work. We’ll confirm the complete scope and price before booking.",
+    h1: (city) => `Move-out cleaning for ${city} homes, ready for the final walkthrough.`,
+    subhead: "Share the size, condition, deadline, and any oven, fridge, or cabinet add-ons. We’ll confirm the complete scope and price before booking.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out pricing",
+    priceContext: {
+      label: "3 bed / 2 bath · empty home",
+      value: "Most run $450–$600 · appliance & cabinet interiors are add-ons",
+      note: "Representative range. We confirm the exact scope and total before booking.",
+    },
     proofOrder: ["refrigerator", "refrigeratorDetail", "oven", "tub", "shower", "vent"],
     faqs: [
       {
         question: "Are oven, fridge, cabinets, or windows included?",
-        answer: "Move-out cleaning includes the inside of an empty oven, refrigerator, and microwave plus empty cabinet and drawer interiors when they are accessible. Interior window glass and garage or patio sweeping are optional extras. Your quote states the full scope before booking.",
+        answer: "The base move-out clean covers the empty home itself: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Interior oven, refrigerator, and cabinet or drawer cleaning are priced add-ons, and reachable interior window glass is optional too. Your quote lists the full scope before booking.",
       },
       {
         question: "What if the home has heavy buildup?",
@@ -258,7 +263,7 @@ function PaidBrand() {
 }
 
 function TrustLine() {
-  const items = ["Insured local company", "Cleaning homes since 2020", "Price before booking"];
+  const items = ["5.0★ Google rating", "Insured local company", "Price before booking"];
 
   return (
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-white/82" aria-label="New Star Cleaning trust signals">

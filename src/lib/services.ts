@@ -324,15 +324,15 @@ export const services: ServiceDefinition[] = [
     tagline:
       "Empty-home cleaning for move-outs, move-ins, sellers, landlords, and property turnovers.",
     description:
-      "Move-out cleaning is a detailed empty-home service for tenants, owners, buyers, sellers, and property turnovers. It covers accessible room surfaces, kitchens, bathrooms, floors, baseboards, fixtures, inside the oven, refrigerator and microwave, and empty cabinet and drawer interiors.",
+      "Move-out cleaning is a detailed empty-home service for tenants, owners, buyers, sellers, and property turnovers. It covers accessible room surfaces, kitchens, bathrooms, floors, baseboards, and fixtures, with oven, refrigerator, and cabinet or drawer interiors available as priced add-ons.",
     whatsIncluded: [
       {
         title: "Kitchen",
         items: [
           "Counters, sink, backsplash, stovetop, range hood, and filter detailed",
-          "Inside oven, microwave, and refrigerator cleaned when empty and accessible",
+          "Oven, microwave, and refrigerator exteriors detailed; interior cleaning available as add-ons",
           "Exterior appliances and dishwasher interior and filter cleaned where accessible",
-          "Empty cabinets and drawers wiped inside and out; fronts and handles detailed",
+          "Cabinet and drawer fronts and handles detailed; interior wipe-outs available as add-ons",
           "Floors vacuumed edge to edge and mopped; accessible trash emptied",
         ],
       },
@@ -342,7 +342,7 @@ export const services: ServiceDefinition[] = [
           "Toilet cleaned inside, behind, and around the base",
           "Tub, shower, tile, glass, and fixtures cleaned",
           "Sink, vanity, counters, mirrors, and chrome polished",
-          "Empty cabinets, drawers, and vanity interiors wiped",
+          "Vanity and cabinet exteriors detailed; empty interior wipe-outs available as add-ons",
           "Floor edges and corners detailed; floors vacuumed or swept and mopped",
           "Trash emptied from accessible bins",
         ],
@@ -361,6 +361,21 @@ export const services: ServiceDefinition[] = [
       },
     ],
     availableAddOns: [
+      {
+        title: "Inside oven",
+        description:
+          "Interior oven cleaning can be added when the oven is empty, cool, and safe to clean.",
+      },
+      {
+        title: "Inside refrigerator",
+        description:
+          "Interior refrigerator cleaning can be added when the refrigerator is emptied before arrival.",
+      },
+      {
+        title: "Inside cabinets or drawers",
+        description:
+          "Interior cabinet and drawer wipe-outs can be added when they are emptied before the visit.",
+      },
       {
         title: "Interior window glass",
         description:
@@ -391,7 +406,7 @@ export const services: ServiceDefinition[] = [
     scopeNotes: [
       "Move-out cleaning assumes the home is empty or mostly empty before we arrive.",
       "We do not haul trash, move furniture, pack belongings, repair damage, or guarantee a landlord deposit decision.",
-      "Appliances and cabinets must be emptied before interior cleaning.",
+      "Appliance and cabinet interior cleaning is a priced add-on; interiors must be emptied before the visit.",
     ],
     bestFor: [
       "Tenants moving out",
@@ -414,7 +429,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Full empty-home clean",
         description:
-          "We clean kitchens, bathrooms, empty cabinets, closets, accessible trim, fixtures, and floors based on the agreed scope.",
+          "We clean kitchens, bathrooms, cabinet fronts, closets, accessible trim, fixtures, and floors, plus any quoted add-on interiors.",
       },
       {
         title: "Final scope check",
@@ -426,7 +441,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "Does move-out cleaning include inside the oven, fridge, and cabinets?",
         answer:
-          "Yes, for move-out cleaning those interiors are included when they are empty, accessible, safe to clean, and part of the confirmed move-out scope.",
+          "They are the most common move-out add-ons. Interior oven, refrigerator, and cabinet or drawer cleaning is priced separately and added to your quote when you request it, as long as everything is empty and accessible. Tell us what the walkthrough requires and the quote lists it before booking.",
       },
       {
         question: "Do you remove trash, furniture, or leftover belongings?",
@@ -451,7 +466,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "Why do move-out quotes include the whole home?",
         answer:
-          "An empty home gets cleaned everywhere: appliance interiors, cabinets, drawers, closets, baseboards, and floors edge to edge. That takes real hours, so we quote the full scope up front instead of adding surprise charges on site. If a cheaper bid sounds too good for that scope, it usually is.",
+          "An empty home still gets cleaned everywhere the base scope covers: kitchens, bathrooms, closets, baseboards, and floors edge to edge, with appliance and cabinet interiors quoted as add-ons so you only pay for what the walkthrough requires. That takes real hours, so we price the full scope up front instead of adding surprise charges on site. If a cheaper bid sounds too good for that scope, it usually is.",
       },
     ],
     localNotes:
