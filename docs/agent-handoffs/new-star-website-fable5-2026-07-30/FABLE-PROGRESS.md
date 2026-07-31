@@ -98,3 +98,6 @@ Unblocked next workstream: attended visual pass (screenshots 390/1440 for eviden
 First next command: cd /c/Users/abarr/.openclaw/workspace/newstarcleaning-site && git status --short && npm run verify:lead-contract
 Commit/push/deploy/live mutations: Angel approved deploy in chat 2026-07-30. Commit 875f06d pushed to main; Vercel auto-deploy verified live: 10 key routes 200, new brand/photo assets 200, commercial intake + direct service forms + area prefill + honest photo caption in production HTML, /sms-opt-in noindex,follow, sitemap lastmod only on 5 blog posts, /api/ad-readiness readyForPaidTraffic=true with directBookingConfigured=true, and Book online links live (3 on homepage) pointing at BookingKoala.
 ```
+
+---
+2026-07-30 late session (Google Ads relaunch, Apex-session Fable): Angel ruled the move-out scope question: oven/fridge/cabinet interiors are PRICED ADD-ONS, not included. Commit 2e79f4a (pushed to main) flips services.ts move-out entry, move-out page OG description, paid landing move FAQ + new $450-$600 move price screen, TrustLine chip -> "5.0★ Google rating", and updates verify-service-scope + verify-paid-intent-routing assertions to the new truth. Do not re-harmonize move-out copy back to "included". Google Ads RSAs were updated the same day to match (price screens pinned H2, add-on framing).
