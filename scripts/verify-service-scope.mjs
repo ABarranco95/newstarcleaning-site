@@ -109,6 +109,8 @@ assert(
 );
 
 const oldRiskyClaims = [
+  "cleaning includes the inside of an empty oven",
+  "cleaning includes an empty oven",
   "Beds made",
   "Laundry (wash/dry/fold)",
   "Get Your Full Deposit Back",
@@ -131,6 +133,8 @@ for (const [fileName, contents] of [
   ["service areas", read("src/components/ServiceAreaPage.tsx")],
   ["deep page", deepPage],
   ["move-out page", moveOutPage],
+  ["quick quote form", quickQuoteForm],
+  ["services data", services],
 ]) {
   const matched = oldRiskyClaims.filter((claim) => contents.includes(claim));
   assert(matched.length === 0, `${fileName} has no old risky claims`);

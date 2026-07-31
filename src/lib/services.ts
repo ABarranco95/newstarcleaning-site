@@ -330,7 +330,7 @@ export const services: ServiceDefinition[] = [
         title: "Kitchen",
         items: [
           "Counters, sink, backsplash, stovetop, range hood, and filter detailed",
-          "Oven, microwave, and refrigerator exteriors detailed; interior cleaning available as add-ons",
+          "Oven and refrigerator interiors available as add-ons; empty microwave interior cleaned when accessible",
           "Exterior appliances and dishwasher interior and filter cleaned where accessible",
           "Cabinet and drawer fronts and handles detailed; interior wipe-outs available as add-ons",
           "Floors vacuumed edge to edge and mopped; accessible trash emptied",

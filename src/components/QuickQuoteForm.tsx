@@ -62,10 +62,13 @@ const services = [
   "Not sure yet",
 ];
 
-// Empty oven, refrigerator, microwave, and empty cabinet/drawer interiors are
-// part of the published move-out base scope (see src/lib/services.ts), so they
-// are not offered as add-ons here. These are the genuine move-out extras.
+// Oven, refrigerator, and cabinet/drawer interiors are priced add-ons for
+// move-in/out (see src/lib/services.ts), so they are offered here alongside
+// the other genuine move-out extras.
 const moveOutAddons = [
+  "Inside oven",
+  "Inside refrigerator",
+  "Inside cabinets or drawers",
   "Interior window glass",
   "Garage, patio, or balcony sweeping",
   "Extra blind detail",
@@ -468,7 +471,7 @@ export default function QuickQuoteForm({
           Move-out scope
         </span>
         <p className="mt-1 text-xs leading-relaxed text-ink-soft">
-          Move-out cleaning includes the inside of an empty oven, refrigerator, and microwave plus empty cabinet and drawer interiors when they are accessible. Optional extras below are quoted separately.
+          The base move-out clean covers the empty home: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Oven, refrigerator, and cabinet or drawer interiors are priced add-ons; pick what the walkthrough needs below.
         </p>
       </div>
       <label className="mb-2 flex items-start gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
@@ -479,7 +482,7 @@ export default function QuickQuoteForm({
           className="mt-0.5 h-4 w-4 accent-accent"
         />
         <span>
-          The home will be empty, with appliances and cabinets cleared, so interiors can be cleaned.
+          The home will be empty, with appliances and cabinets cleared, so any requested interiors can be cleaned.
         </span>
       </label>
       <div className="grid gap-2 sm:grid-cols-2">
