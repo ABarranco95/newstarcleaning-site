@@ -124,7 +124,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
     h1: (city) => `Professional house cleaning for ${city} homes.`,
-    subhead: "Share the size, current condition, and timing. We’ll confirm the right service level, total price, and available dates.",
+    subhead: "No teaser rates, no memberships. Tell us about the home and you’ll get the real price and the next open days.",
     serviceDefault: "Not sure yet",
     formTitle: "Request a cleaning quote",
     priceContext: {

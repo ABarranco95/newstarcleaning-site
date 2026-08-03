@@ -660,7 +660,7 @@ export default function QuickQuoteForm({
         <h2 className="font-display text-2xl text-ink">Quote request received.</h2>
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">
           {paidSearch
-            ? "We'll review the details and call or text during business hours with pricing and available dates."
+            ? "Angel or the team will call or text you with your price and the next open days."
             : `We'll follow up with pricing, availability, and the next step for your ${submittedCommercial ? "property or project" : "home"}.`}
         </p>
         <button
