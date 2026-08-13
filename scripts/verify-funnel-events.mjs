@@ -33,6 +33,8 @@ for (const event of [
   "quote_submit_attempt",
   "quote_validation_error",
   "lead_submit_accepted",
+  "booking_cta_click",
+  "booking_handoff_started",
   "website_phone_click",
 ]) {
   assert(tracking.includes(event), `typed funnel contract includes ${event}`);
@@ -69,6 +71,22 @@ assert(readiness.includes("NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURE
 assert(readiness.includes("googleAdsFormConversionReady") && readiness.includes("googleAdsPhoneConversionReady"), "readiness distinguishes form and phone conversion configuration");
 assert(!tracking.includes("qualified_call"), "phone clicks are not mislabeled as qualified calls");
 assert(!callTracker.includes('window.gtag("event", "conversion"'), "diagnostic phone clicks never fire an Ads conversion directly");
+
+
+const portalLink = read("src/components/BookingPortalLink.tsx");
+assert(
+  portalLink.includes("booking_cta_click") && portalLink.includes("booking_handoff_started"),
+  "booking CTA instruments click and handoff funnel events",
+);
+assert(
+  !portalLink.includes('window.gtag("event", "conversion"'),
+  "booking CTA clicks never fire an Ads conversion directly",
+);
+const paidLanding = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
+assert(
+  paidLanding.includes("BookingPortalLink") && paidLanding.includes("paid_under_form") && paidLanding.includes("directBookingUrl"),
+  "paid page renders the env-gated self-book lane with located CTA events",
+);
 
 if (failures.length) {
   console.error("Funnel event verification failed:");

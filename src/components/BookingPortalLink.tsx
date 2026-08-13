@@ -25,6 +25,7 @@ type BookingPortalLinkProps = {
   city?: string;
   frequency?: string;
   sourcePage?: string;
+  ctaLocation?: string;
   label?: string;
   className?: string;
   showIcon?: boolean;
@@ -39,6 +40,7 @@ export default function BookingPortalLink({
   city,
   frequency,
   sourcePage,
+  ctaLocation,
   label = "Start my booking",
   className =
     "mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-accent px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-accent-hover hover:shadow-xl sm:w-auto",
@@ -77,6 +79,13 @@ export default function BookingPortalLink({
     } catch {
       // The handoff still proceeds on the unstamped URL.
     }
+    trackFunnelEvent("booking_cta_click", {
+      source: "booking_portal_link",
+      service,
+      city,
+      page: typeof window !== "undefined" ? window.location.pathname : sourcePage,
+      ctaLocation,
+    });
     trackFunnelEvent("booking_handoff_started", {
       source: "booking_portal_link",
       service,

@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
 import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
+import BookingPortalLink from "@/components/BookingPortalLink";
+import { business as BUSINESS } from "@/lib/business";
 
 type QuickQuoteFormProps = {
   title?: string;
@@ -196,7 +198,7 @@ function SubmitButton({
         : commercial
           ? "Request a walkthrough"
           : paidSearch
-            ? "Get my quote"
+            ? "Get my price"
             : compact
               ? "Get my quote"
               : "Get pricing & availability"}
@@ -219,11 +221,14 @@ export default function QuickQuoteForm({
   compact = false,
   extended = false,
   paidSearch = false,
-}: QuickQuoteFormProps) {
+  directBookingUrl = null,
+}: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService, paidSearch));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedCommercial, setSubmittedCommercial] = useState(false);
+  const [submittedService, setSubmittedService] = useState("");
+  const [submittedCity, setSubmittedCity] = useState("");
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
@@ -393,7 +398,7 @@ export default function QuickQuoteForm({
         : data.filtered !== true;
 
       if (paidSearch && !apexAccepted) {
-        throw new Error("We could not receive your quote request. Please call us directly.");
+        throw new Error("We couldn't send your request — call or text us and we'll price it over the phone.");
       }
 
       if (apexAccepted) {
@@ -407,6 +412,8 @@ export default function QuickQuoteForm({
       }
 
       setSubmittedCommercial(isCommercialRequest);
+      setSubmittedService(formData.service);
+      setSubmittedCity(formData.city);
       setIsSuccess(true);
       setShowPaidDetails(false);
       submissionIdRef.current = "";
@@ -663,13 +670,31 @@ export default function QuickQuoteForm({
             ? "Angel or the team will call or text you with your price and the next open days."
             : `We'll follow up with pricing, availability, and the next step for your ${submittedCommercial ? "property or project" : "home"}.`}
         </p>
+        {paidSearch && directBookingUrl && !submittedCommercial ? (
+          <>
+            <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+              Don&apos;t want to wait for the call? Pick your date online now. You&apos;ll see the price before you confirm anything.
+            </p>
+            <Suspense fallback={null}>
+              <BookingPortalLink
+                baseUrl={directBookingUrl}
+                sourcePage="/google-ads"
+                ctaLocation="paid_success_card"
+                service={submittedService}
+                city={submittedCity || undefined}
+                label="Pick my date online"
+                className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
+              />
+            </Suspense>
+          </>
+        ) : null}
         <button
           type="button"
           onClick={() => {
             setSubmittedCommercial(false);
             setIsSuccess(false);
           }}
-          className="mt-5 text-sm font-semibold text-primary underline-offset-4 hover:underline"
+          className="mt-5 block w-full text-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           Send another request
         </button>
@@ -733,7 +758,8 @@ export default function QuickQuoteForm({
               name="phone"
               type="tel"
               required
-              minLength={10}
+              pattern="[0-9()+\-\s.]{10,}"
+              title="Enter a 10-digit phone number"
               value={formData.phone}
               onChange={(event) => updateField("phone", event.target.value)}
               autoComplete="tel"
@@ -802,7 +828,7 @@ export default function QuickQuoteForm({
               <option value="">Select timing…</option>
               <option value="this-week">This week</option>
               <option value="next-week">Next week</option>
-              <option value="specific-deadline">Specific deadline</option>
+              <option value="specific-deadline">Specific deadline (walkthrough or lease date)</option>
               <option value="flexible">Flexible</option>
             </select>
           </div>
@@ -823,10 +849,19 @@ export default function QuickQuoteForm({
               <option value="2000-2499">2,000 – 2,499</option>
               <option value="2500-2999">2,500 – 2,999</option>
               <option value="3000-3499">3,000 – 3,499</option>
-              <option value="3500-4999">3,500 – 4,999</option>
-              <option value="5000-9999">5,000 – 9,999</option>
-              <option value="10000-19999">10,000 – 19,999</option>
-              <option value="20000+">20,000+</option>
+              {paidSearch ? (
+                <>
+                  <option value="3500+">3,500+</option>
+                  <option value="not-sure">Not sure — Angel can confirm</option>
+                </>
+              ) : (
+                <>
+                  <option value="3500-4999">3,500 – 4,999</option>
+                  <option value="5000-9999">5,000 – 9,999</option>
+                  <option value="10000-19999">10,000 – 19,999</option>
+                  <option value="20000+">20,000+</option>
+                </>
+              )}
             </select>
           </div>
         </div>
@@ -887,6 +922,14 @@ export default function QuickQuoteForm({
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
             {error}
+            {paidSearch ? (
+              <>
+                {" "}
+                <a href={BUSINESS.phoneHref} className="font-bold underline">
+                  Call {BUSINESS.phoneDisplay}
+                </a>
+              </>
+            ) : null}
           </div>
         )}
 
@@ -897,10 +940,10 @@ export default function QuickQuoteForm({
           paidSearch={paidSearch}
         />
 
-        <p className={`text-center text-ink-soft ${paidSearch ? "text-[10px] leading-4" : "text-xs leading-relaxed"}`}>
+        <p className={`text-center text-ink-soft ${paidSearch ? "text-[11px] leading-4" : "text-xs leading-relaxed"}`}>
           By submitting, you consent to service-related calls/texts from New Star Cleaning about your quote, pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out. Consent is not required to purchase services.
           &nbsp;·&nbsp;
-          <Link href="/privacy" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>
+          <Link href="/privacy" target="_blank" rel="noopener" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>
         </p>
 
         {showPaidOptionalDetails ? (
@@ -921,7 +964,7 @@ export default function QuickQuoteForm({
               className="flex w-full items-center justify-between gap-4 text-left text-xs font-bold text-primary"
               aria-expanded={showPaidDetails}
             >
-              <span>{showPaidDetails ? "Hide home details" : "Add home details (optional)"}</span>
+              <span>{showPaidDetails ? "Hide home details" : isMoveOutRequest ? "Add move-out scope (oven, fridge, add-ons)" : "Add home details (optional)"}</span>
               <span className="text-lg text-accent">{showPaidDetails ? "−" : "+"}</span>
             </button>
             {showPaidDetails ? (

@@ -11,8 +11,8 @@ function assert(condition, message) {
   (condition ? passes : failures).push(message);
 }
 
-assert(paidPage.includes('type PaidIntent = "house" | "move" | "deep" | "recurring"'), "paid intent contract includes generic house separately from recurring");
-for (const intent of ["house", "recurring", "deep", "move"]) {
+assert(paidPage.includes('type PaidIntent = "house" | "move" | "deep" | "recurring" | "postConstruction"'), "paid intent contract includes generic house separately from recurring");
+for (const intent of ["house", "recurring", "deep", "move", "postConstruction"]) {
   assert(paidPage.includes(`${intent}: {`), `paid page defines ${intent} configuration`);
 }
 assert(paidPage.includes('return "house";'), "missing or unknown paid service falls back to generic house intent");
@@ -65,6 +65,12 @@ assert(
   paidPage.includes("Interior oven, refrigerator, and cabinet or drawer cleaning are priced add-ons") &&
     paidPage.includes("appliance & cabinet interiors are add-ons"),
   "move intent states the published add-on scope in both the FAQ and the price context",
+);
+assert(
+  paidPage.includes('serviceDefault: "Post-construction cleaning"') &&
+    paidPage.includes("not demo waste") &&
+    paidPage.includes("priced as a separate return visit"),
+  "post-construction intent states hauling exclusion and return-visit pricing honestly",
 );
 assert(
   paidPage.includes("shower-detail-before.webp") &&

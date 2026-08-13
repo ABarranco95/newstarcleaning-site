@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import GoogleAdsLandingPageClient from "./GoogleAdsLandingPageClient";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+
+const directBookingUrl = resolveDirectBookingUrl();
 
 export const metadata: Metadata = {
   title: "House Cleaning Pricing Request",
@@ -19,7 +22,7 @@ export default function GoogleAdsLandingPage() {
   return (
     <div data-paid-layout-version="proof-led-v4-accurate">
       <Suspense fallback={null}>
-        <GoogleAdsLandingPageClient />
+        <GoogleAdsLandingPageClient directBookingUrl={directBookingUrl} />
       </Suspense>
     </div>
   );

@@ -8,6 +8,7 @@ export type FunnelEventName =
   | "quote_submit_attempt"
   | "quote_validation_error"
   | "lead_submit_accepted"
+  | "booking_cta_click"
   | "booking_handoff_started"
   | "website_phone_click";
 

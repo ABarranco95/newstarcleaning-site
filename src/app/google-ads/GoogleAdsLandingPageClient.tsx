@@ -4,10 +4,11 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 
-type PaidIntent = "house" | "move" | "deep" | "recurring";
+type PaidIntent = "house" | "move" | "deep" | "recurring" | "postConstruction";
 
 type CityKey =
   | "fresno"
@@ -146,8 +147,8 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: (city) => `Move-out cleaning for ${city} homes, ready for the final walkthrough.`,
-    subhead: "Share the size, condition, deadline, and any oven, fridge, or cabinet add-ons. We’ll confirm the complete scope and price before booking.",
+    h1: (city) => `Move-out cleaning for ${city} homes.`,
+    subhead: "Ready for the final walkthrough. Share the size, condition, deadline, and any oven, fridge, or cabinet add-ons. We’ll confirm the complete scope and price before booking.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out pricing",
     priceContext: {
@@ -169,7 +170,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   deep: {
     eyebrow: "Detailed deep cleaning",
-    h1: (city) => `Deep cleaning for ${city} homes that need more than routine upkeep.`,
+    h1: (city) => `Deep cleaning for ${city} homes.`,
     subhead: "A maintained home and a home with heavier buildup need different amounts of time. Tell us the condition and priorities so we can price the right amount of work.",
     serviceDefault: "Deep cleaning",
     formTitle: "Request deep-cleaning pricing",
@@ -187,6 +188,24 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       {
         question: "Can I choose priority areas?",
         answer: "Yes. Add the rooms or surfaces that matter most and we’ll reflect them in the confirmed quote.",
+      },
+    ],
+  },
+  postConstruction: {
+    eyebrow: "Post-construction cleaning",
+    h1: (city) => `Post-construction cleaning for ${city} projects.`,
+    subhead: "Construction dust gets into everything. Tell us the square footage, what stage the site is at, and the handoff date. We scope the final clean and confirm the price before a crew is scheduled.",
+    serviceDefault: "Post-construction cleaning",
+    formTitle: "Request a final-clean price",
+    proofOrder: ["vent", "oven", "shower", "tub", "refrigeratorDetail", "refrigerator"],
+    faqs: [
+      {
+        question: "Is debris hauling included?",
+        answer: "No. Lumber, drywall, packaging, and bulk waste need to be out before we clean. We handle the dust and detail work on the finished surfaces, not demo waste.",
+      },
+      {
+        question: "When should the final clean happen?",
+        answer: "After the dusty trades are done, utilities are on, and the debris is out. If trades come back through after we clean, that gets priced as a separate return visit so nobody is rushing a free re-clean.",
       },
     ],
   },
@@ -227,6 +246,7 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
   const normalizedService = (service || "").trim().toLowerCase();
   const normalizedFrequency = (frequency || "").trim().toLowerCase();
 
+  if (normalizedService.includes("post")) return "postConstruction";
   if (normalizedService.includes("deep")) return "deep";
   if (normalizedService.includes("move")) return "move";
   if (
@@ -240,24 +260,15 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
 
 function PaidBrand() {
   return (
-    <div className="flex items-center gap-2.5" aria-label="New Star Cleaning">
+    <div aria-label="New Star Cleaning">
       <Image
-        src="/brand/star-ink-mono.png"
-        alt=""
-        width={28}
-        height={27}
-        sizes="28px"
-        className="h-7 w-auto brightness-0 invert"
+        src="/brand/nsc-lockup-horizontal-reverse.svg"
+        alt="New Star Cleaning"
+        width={640}
+        height={150}
+        className="h-9 w-auto sm:h-10"
         priority
       />
-      <span className="flex flex-col leading-none">
-        <span className="text-sm font-extrabold tracking-tight text-white sm:text-base">
-          New Star Cleaning
-        </span>
-        <span className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">
-          Fresno · Clovis · Madera
-        </span>
-      </span>
     </div>
   );
 }
@@ -269,7 +280,7 @@ function TrustLine() {
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-white/82" aria-label="New Star Cleaning trust signals">
       {items.map((item) => (
         <li key={item} className="flex items-center gap-2">
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-black text-white" aria-hidden="true">
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent-light text-[10px] font-black text-primary" aria-hidden="true">
             ✓
           </span>
           <span>{item}</span>
@@ -281,7 +292,7 @@ function TrustLine() {
 
 function PriceContext({ context }: { context: NonNullable<PaidIntentConfig["priceContext"]> }) {
   return (
-    <div className="border-l-2 border-accent pl-4">
+    <div className="border-l-2 border-accent-light pl-4">
       <span className="block text-[11px] font-bold uppercase tracking-[0.16em] text-white/58">{context.label}</span>
       <strong className="mt-1 block text-base font-bold text-white">{context.value}</strong>
       <span className="mt-1 block text-xs leading-5 text-white/62">{context.note}</span>
@@ -293,7 +304,7 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
   const pairs = order.map((key) => ({ key, ...PROOF_PAIRS[key] }));
 
   return (
-    <section className="border-b border-slate-200 bg-white" aria-labelledby="paid-proof-title">
+    <section className="border-b border-line bg-white" aria-labelledby="paid-proof-title">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -307,12 +318,12 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
 
         <div className="mt-7 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
           {pairs.map((pair) => (
-            <article key={pair.key} className="min-w-[84%] snap-center overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 sm:min-w-[62%] md:min-w-0">
-              <div className="grid grid-cols-2 gap-px bg-slate-200">
+            <article key={pair.key} className="min-w-[84%] snap-center overflow-hidden rounded-2xl border border-line bg-cream-2 sm:min-w-[62%] md:min-w-0">
+              <div className="grid grid-cols-2 gap-px bg-line">
                 {(["before", "after"] as const).map((stage) => {
                   const image = pair[stage];
                   return (
-                    <figure key={stage} className="relative aspect-[4/5] bg-slate-100">
+                    <figure key={stage} className="relative aspect-[4/5] bg-cream-2">
                       <Image
                         src={image.src}
                         alt={image.alt}
@@ -320,7 +331,7 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
                         sizes="(max-width: 767px) 50vw, 190px"
                         className="object-cover"
                       />
-                      <figcaption className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-white ${stage === "before" ? "bg-primary" : "bg-accent"}`}>
+                      <figcaption className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] ${stage === "before" ? "bg-primary/85 text-white" : "bg-cream-2 text-primary"}`}>
                         {stage}
                       </figcaption>
                     </figure>
@@ -337,6 +348,32 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
   );
 }
 
+
+// Verbatim Google reviews only — never invent quotes (voice rules). Populate
+// from the GBP export; the strip renders nothing while this list is empty.
+const REVIEW_QUOTES: Array<{ quote: string; name: string; city: string }> = [];
+
+function ReviewStrip() {
+  if (REVIEW_QUOTES.length === 0) return null;
+  return (
+    <section className="border-b border-line bg-white" aria-labelledby="paid-reviews-title">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <h2 id="paid-reviews-title" className="font-display text-3xl leading-tight text-primary">
+          5.0 from 24 Google reviews.
+        </h2>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {REVIEW_QUOTES.map((r) => (
+            <blockquote key={r.name} className="rounded-2xl border border-line bg-white p-5">
+              <p className="text-sm leading-6 text-ink-soft">&ldquo;{r.quote}&rdquo;</p>
+              <footer className="mt-3 text-xs font-bold text-primary">{r.name} — {r.city}</footer>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ProcessStrip() {
   const steps = [
     ["1", "Share size & timing"],
@@ -345,8 +382,8 @@ function ProcessStrip() {
   ];
 
   return (
-    <section className="border-b border-slate-200 bg-slate-50" aria-label="How the quote works">
-      <div className="mx-auto grid max-w-5xl grid-cols-3 divide-x divide-slate-200 px-4 sm:px-6 lg:px-8">
+    <section className="border-b border-line bg-cream-2" aria-label="How the quote works">
+      <div className="mx-auto grid max-w-5xl grid-cols-3 divide-x divide-line px-4 sm:px-6 lg:px-8">
         {steps.map(([number, label]) => (
           <div key={number} className="flex flex-col items-center gap-2 px-2 py-5 text-center sm:flex-row sm:justify-center sm:px-5 sm:text-left">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-white">{number}</span>
@@ -369,7 +406,7 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
             id={`paid-faq-trigger-${index}`}
             type="button"
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-bold text-primary transition hover:bg-slate-50 md:text-base"
+            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-bold text-primary transition hover:bg-cream-2 md:text-base"
             aria-expanded={openIndex === index}
             aria-controls={`paid-faq-panel-${index}`}
           >
@@ -417,14 +454,18 @@ function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
           Call
         </a>
         <a href="#booking-form" onClick={onQuoteClick} className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
-          Request quote
+          Get my quote
         </a>
       </div>
     </div>
   );
 }
 
-export default function GoogleAdsLandingPageClient() {
+export default function GoogleAdsLandingPageClient({
+  directBookingUrl = null,
+}: {
+  directBookingUrl?: string | null;
+}) {
   const searchParams = useSearchParams();
   const hasTrackedLandingView = useRef(false);
   const city = useMemo(() => normalizeCity(searchParams.get("city")), [searchParams]);
@@ -481,35 +522,54 @@ export default function GoogleAdsLandingPageClient() {
           <div className="mt-5 grid min-w-0 gap-5 sm:mt-7 sm:gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
             <div className="min-w-0 lg:col-start-1 lg:row-start-1 lg:self-center">
               <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">{intent.eyebrow}</div>
-              <h1 className="mt-3 max-w-2xl break-words font-display text-[2.25rem] leading-[1.04] tracking-[-0.035em] text-white sm:text-5xl lg:text-[3.6rem]">
+              <h1 className="mt-3 max-w-2xl break-words font-display text-[2.25rem] leading-[1.04] text-white sm:text-5xl lg:text-[3.6rem]">
                 {intent.h1(city.label)}
               </h1>
               <p className="mt-3 max-w-xl text-[0.98rem] leading-6 text-white/78 sm:mt-4 sm:text-lg sm:leading-8">
                 {intent.subhead}
               </p>
+              <div className="mt-4">
+                <TrustLine />
+              </div>
             </div>
 
             <div id="booking-form" className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
               <QuickQuoteForm
                 source="google-ads"
                 title={intent.formTitle}
-                subtitle=""
+                subtitle="You’ll hear back from Angel with a real price, usually the same day."
                 landingCity={city.formValue || city.label}
                 defaultService={intent.serviceDefault}
+                directBookingUrl={directBookingUrl}
                 extended
                 paidSearch
               />
+              {directBookingUrl ? (
+                <p className="mt-3 text-center text-sm text-white/70">
+                  Prefer to book it yourself?{" "}
+                  <BookingPortalLink
+                    baseUrl={directBookingUrl}
+                    sourcePage="/google-ads"
+                    ctaLocation="paid_under_form"
+                    service={intent.serviceDefault}
+                    city={city.formValue || undefined}
+                    label="Pick a date online"
+                    showIcon={false}
+                    className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                  />
+                </p>
+              ) : null}
             </div>
 
             <div className="space-y-5 lg:col-start-1 lg:row-start-2">
               {intent.priceContext ? <PriceContext context={intent.priceContext} /> : null}
-              <TrustLine />
             </div>
           </div>
         </div>
       </section>
 
       <BeforeAfterGallery order={intent.proofOrder} />
+      <ReviewStrip />
       <ProcessStrip />
 
       <section className="bg-white">
@@ -536,6 +596,22 @@ export default function GoogleAdsLandingPageClient() {
                 Call us
               </a>
             </div>
+            {directBookingUrl ? (
+              <p className="mt-4 text-sm text-white/70">
+                Or skip the callback and{" "}
+                <BookingPortalLink
+                  baseUrl={directBookingUrl}
+                  sourcePage="/google-ads"
+                  ctaLocation="paid_closing"
+                  service={intent.serviceDefault}
+                  city={city.formValue || undefined}
+                  label="book online"
+                  showIcon={false}
+                  className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                />
+                .
+              </p>
+            ) : null}
           </div>
         </div>
       </section>
