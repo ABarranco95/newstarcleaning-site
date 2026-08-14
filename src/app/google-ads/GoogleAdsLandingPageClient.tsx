@@ -359,7 +359,7 @@ function ReviewStrip() {
     <section className="border-b border-line bg-white" aria-labelledby="paid-reviews-title">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <h2 id="paid-reviews-title" className="font-display text-3xl leading-tight text-primary">
-          5.0 from 24 Google reviews.
+          5.0 stars on Google.
         </h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {REVIEW_QUOTES.map((r) => (
