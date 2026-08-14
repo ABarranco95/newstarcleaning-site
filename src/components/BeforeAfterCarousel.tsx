@@ -37,10 +37,10 @@ export default function BeforeAfterCarousel({
     [count],
   );
 
-  // Arrow keys work only while focus is inside this carousel, so a page with
-  // a carousel does not hijack arrow-key scrolling or other widgets.
+  // Arrow keys change results only when the carousel group itself has focus.
+  // Nested buttons keep their native keyboard behavior.
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (count <= 1) return;
+    if (count <= 1 || e.target !== e.currentTarget) return;
     if (e.key === "ArrowRight") {
       e.preventDefault();
       go(1);
@@ -65,10 +65,11 @@ export default function BeforeAfterCarousel({
   return (
     <div
       onKeyDown={onKeyDown}
+      tabIndex={count > 1 ? 0 : undefined}
       role="group"
       aria-roledescription="carousel"
-      aria-label="Before and after comparison"
-      className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft"
+      aria-label={`Before and after comparison, result ${index + 1} of ${count}`}
+      className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <button
         type="button"
@@ -94,13 +95,12 @@ export default function BeforeAfterCarousel({
       <div className="flex items-center gap-3 px-4 py-3">
         <div
           className="flex flex-1 gap-1 rounded-xl border border-line bg-cream-2 p-1"
-          role="tablist"
-          aria-label="Compare the same surface"
+          role="group"
+          aria-label="Choose before or after photo"
         >
           <button
             type="button"
-            role="tab"
-            aria-selected={!showAfter}
+            aria-pressed={!showAfter}
             onClick={() => setShowAfter(false)}
             className={segmentClass(!showAfter)}
           >
@@ -108,8 +108,7 @@ export default function BeforeAfterCarousel({
           </button>
           <button
             type="button"
-            role="tab"
-            aria-selected={showAfter}
+            aria-pressed={showAfter}
             onClick={() => setShowAfter(true)}
             className={segmentClass(showAfter)}
           >
