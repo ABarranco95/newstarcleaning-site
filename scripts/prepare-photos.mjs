@@ -80,6 +80,48 @@ const PHOTOS = [
     sha1: null,
     out: "pairs/oven-buildup-after.webp",
   },
+  // Aug 2026 move-out job pairs (same surface/location, verified frame by
+  // frame). Sources carry the faint centered New Star watermark by design.
+  {
+    source: "aug-2026-pairs/pair-01-kitchen-cooktop-1-before.jpg",
+    sha1: null,
+    out: "pairs/cooktop-grates-before.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-01-kitchen-cooktop-2-after.jpg",
+    sha1: null,
+    out: "pairs/cooktop-grates-after.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-05-bathroom-under-sink-cabinet-1-before.jpg",
+    sha1: null,
+    out: "pairs/under-sink-cabinet-before.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-05-bathroom-under-sink-cabinet-2-after.jpg",
+    sha1: null,
+    out: "pairs/under-sink-cabinet-after.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-09-laundry-sink-counter-1-before.jpg",
+    sha1: null,
+    out: "pairs/laundry-sink-before.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-09-laundry-sink-counter-2-after.jpg",
+    sha1: null,
+    out: "pairs/laundry-sink-after.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-10-laundry-alcove-1-before.jpg",
+    sha1: null,
+    out: "pairs/laundry-alcove-before.webp",
+  },
+  {
+    source: "aug-2026-pairs/pair-10-laundry-alcove-2-after.jpg",
+    sha1: null,
+    out: "pairs/laundry-alcove-after.webp",
+  },
 ];
 
 async function run() {

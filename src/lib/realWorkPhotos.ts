@@ -101,6 +101,63 @@ export const ovenBuildupPair: RealWorkPair = {
   label: "Inside-oven detail from a real appointment. Wear and staining on aged surfaces can remain.",
 };
 
+// Aug 2026 move-out pairs: same surface/location, verified frame by frame.
+export const cooktopGratesPair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/cooktop-grates-before.webp",
+    alt: "White gas cooktop with greasy burner grates and drip stains before New Star cleaning",
+    caption: "Cooktop before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/cooktop-grates-after.webp",
+    alt: "The same gas cooktop with visibly cleaner enamel, knobs, and grates after New Star detail work",
+    caption: "Cooktop after",
+  },
+  label: "Cooktop and grates from a real move-out appointment.",
+};
+
+export const underSinkCabinetPair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/under-sink-cabinet-before.webp",
+    alt: "Under-sink cabinet floor with heavy staining before New Star cleaning",
+    caption: "Under-sink before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/under-sink-cabinet-after.webp",
+    alt: "The same under-sink cabinet interior visibly cleaned after New Star detail work",
+    caption: "Under-sink after",
+  },
+  label: "Empty under-sink cabinet add-on from a real appointment.",
+};
+
+export const laundrySinkPair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/laundry-sink-before.webp",
+    alt: "Laundry room sink and tile counter with built-up grime before New Star cleaning",
+    caption: "Laundry sink before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/laundry-sink-after.webp",
+    alt: "The same laundry sink and tile counter visibly cleaned after a New Star move-out cleaning",
+    caption: "Laundry sink after",
+  },
+  label: "Laundry sink and counter from a real move-out appointment.",
+};
+
+export const laundryAlcovePair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/laundry-alcove-before.webp",
+    alt: "Washer alcove with wall splatter and soiled tile floor before New Star cleaning",
+    caption: "Washer alcove before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/laundry-alcove-after.webp",
+    alt: "The same washer alcove with visibly cleaner wall and tile surfaces after New Star cleaning",
+    caption: "Washer alcove after",
+  },
+  label: "Washer alcove result from a real move-out appointment. Full wall washing is not included.",
+};
+
 // Curated homepage set: varied rooms, no repeats of one surface.
 export const realWorkPhotos: RealWorkPhoto[] = [
   homeResultPhotos[0],
