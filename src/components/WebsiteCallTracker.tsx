@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { trackWebsitePhoneClick } from "@/lib/conversionTracking";
+import { trackWebsitePhoneClick, trackWebsiteTextClick } from "@/lib/conversionTracking";
 
 const googleTagManagerConfigured = Boolean(process.env.NEXT_PUBLIC_GTM_ID);
 const googleAdsConversionId = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID;
@@ -64,14 +64,26 @@ export default function WebsiteCallTracker() {
 
     const handleClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
-      const phoneLink = event.target.closest<HTMLAnchorElement>('a[href^="tel:"]');
-      if (!phoneLink) return;
+      const source = window.location.pathname === "/google-ads" ? "google-ads" : "website";
 
-      trackWebsitePhoneClick({
-        source: window.location.pathname === "/google-ads" ? "google-ads" : "website",
-        page: window.location.pathname,
-        phoneLocation: phoneLink.dataset.phoneLocation || "website_link",
-      });
+      const phoneLink = event.target.closest<HTMLAnchorElement>('a[href^="tel:"]');
+      if (phoneLink) {
+        trackWebsitePhoneClick({
+          source,
+          page: window.location.pathname,
+          phoneLocation: phoneLink.dataset.phoneLocation || "website_link",
+        });
+        return;
+      }
+
+      const textLink = event.target.closest<HTMLAnchorElement>('a[href^="sms:"]');
+      if (textLink) {
+        trackWebsiteTextClick({
+          source,
+          page: window.location.pathname,
+          phoneLocation: textLink.dataset.phoneLocation || "website_link",
+        });
+      }
     };
 
     document.addEventListener("click", handleClick);

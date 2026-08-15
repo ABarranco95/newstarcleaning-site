@@ -50,6 +50,11 @@ export const homeResultPhotos: RealWorkPhoto[] = [
     alt: "Clean bedroom with made bed and wood-look floors from a New Star appointment",
     caption: "Bedroom result",
   },
+  {
+    src: "/photos/real-work/living-room-vacuumed-new-star.webp",
+    alt: "Living room with freshly vacuumed carpet, sofa, and large grid window after a New Star visit",
+    caption: "Vacuumed living room",
+  },
 ];
 
 // Empty-home / turnover work.
@@ -83,6 +88,16 @@ export const emptyHomeResultPhotos: RealWorkPhoto[] = [
     src: "/photos/real-work/clean-empty-closet-new-star.webp",
     alt: "Clean empty closet with shelving and tile floor from New Star Cleaning work",
     caption: "Closet detail",
+  },
+  {
+    src: "/photos/real-work/den-built-ins-clean-new-star.webp",
+    alt: "Empty den with wiped full-wall oak built-in bookcases and bay window after a New Star move-out cleaning",
+    caption: "Den built-ins",
+  },
+  {
+    src: "/photos/real-work/walk-in-pantry-clean-new-star.webp",
+    alt: "Empty walk-in corner pantry with wiped shelves and clean tile floor after a New Star move-out cleaning",
+    caption: "Walk-in pantry",
   },
 ];
 

@@ -122,6 +122,22 @@ const PHOTOS = [
     sha1: "b5a9bb750f253947751990138197cdb27076cc8e",
     out: "pairs/laundry-alcove-after.webp",
   },
+  // Aug 2026 finished-room singles from the same jobs.
+  {
+    source: "aug-2026-pairs/single-01-den-built-ins-after.jpg",
+    sha1: "fe0e1aa000515f5257bc3fbf7303c4e227ccc9e1",
+    out: "den-built-ins-clean-new-star.webp",
+  },
+  {
+    source: "aug-2026-pairs/single-02-walk-in-pantry-after.jpg",
+    sha1: "4a565f4ef4dc25ff3fdd95a123dfecf69e9dcad2",
+    out: "walk-in-pantry-clean-new-star.webp",
+  },
+  {
+    source: "aug-2026-pairs/single-03-living-room-vacuumed-after.jpg",
+    sha1: "01c799b5deab419f4e442ea11dc91935e64cf671",
+    out: "living-room-vacuumed-new-star.webp",
+  },
 ];
 
 async function run() {

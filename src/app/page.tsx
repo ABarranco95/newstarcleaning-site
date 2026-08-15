@@ -4,7 +4,7 @@ import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAf
 import RealWorkGallery from "@/components/RealWorkGallery";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import BookingPortalLink from "@/components/BookingPortalLink";
-import { ovenBuildupPair, realWorkPhotos } from "@/lib/realWorkPhotos";
+import { cooktopGratesPair, ovenBuildupPair, realWorkPhotos } from "@/lib/realWorkPhotos";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const services = [
@@ -107,9 +107,9 @@ const heroPairs: BeforeAfterItem[] = [
     label: ovenBuildupPair.label,
   },
   {
-    before: { src: "/photos/before4.jpg", alt: "Window blinds before detailed cleaning" },
-    after: { src: "/photos/after4.jpg", alt: "Window blinds after detailed cleaning" },
-    label: "Accessible blind detail from a real New Star appointment.",
+    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
+    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
+    label: cooktopGratesPair.label,
   },
   {
     before: { src: "/photos/real-work/paid/refrigerator-full-before.webp", alt: "Empty refrigerator interior before a New Star cleaning" },

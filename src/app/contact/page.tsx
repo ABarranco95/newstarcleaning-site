@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import MapEmbed from "@/components/MapEmbed";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 
 export const metadata: Metadata = {
@@ -40,11 +41,17 @@ export default function ContactPage() {
                 we usually respond the same business day with pricing and availability.
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
-                <a href="tel:+15597852822" className="btn btn-accent !min-h-12 !px-5 !text-sm">
+                <a href="tel:+15597852822" data-phone-location="contact_hero" className="btn btn-accent !min-h-12 !px-5 !text-sm">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   (559) 785-2822
+                </a>
+                <a href="sms:+15597852822" data-phone-location="contact_hero" className="btn btn-outline !min-h-12 !px-5 !text-sm">
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  Text us
                 </a>
                 <a href="mailto:support@newstarcleaning.com" className="btn btn-outline !min-h-12 !px-5 !text-sm">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -106,6 +113,20 @@ export default function ContactPage() {
         </div>
       </section>
 
+      <section className="bg-cream pb-14 lg:pb-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="eyebrow eyebrow-dot">Find us</span>
+            <h2 className="mt-3 text-2xl text-ink">Our Fresno location</h2>
+            <p className="mt-3 leading-relaxed text-ink-soft">
+              Based off Nees Ave in north Fresno, with cleaning routes across Fresno,
+              Clovis, and Madera.
+            </p>
+          </div>
+          <MapEmbed className="mt-6" />
+        </div>
+      </section>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -120,8 +141,10 @@ export default function ContactPage() {
               areaServed: ["Fresno", "Clovis", "Madera", "Tower District", "Fig Garden", "Woodward Park"],
               address: {
                 "@type": "PostalAddress",
+                streetAddress: "132 W Nees Ave Unit 106",
                 addressLocality: "Fresno",
                 addressRegion: "CA",
+                postalCode: "93711",
                 addressCountry: "US",
               },
             },

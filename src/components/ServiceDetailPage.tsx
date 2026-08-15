@@ -99,7 +99,7 @@ export default function ServiceDetailPage({
   const resultPhotos = service.slug === "deep-cleaning"
     ? bathroomResultPhotos
     : service.slug === "move-out-cleaning"
-      ? [emptyHomeResultPhotos[0], emptyHomeResultPhotos[2], emptyHomeResultPhotos[4], emptyHomeResultPhotos[5]]
+      ? [emptyHomeResultPhotos[0], emptyHomeResultPhotos[2], emptyHomeResultPhotos[4], emptyHomeResultPhotos[5], emptyHomeResultPhotos[6], emptyHomeResultPhotos[7]]
       : homeResultPhotos;
   const resultTitle = service.slug === "deep-cleaning"
     ? "Bathroom detail from real appointments."

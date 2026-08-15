@@ -1,19 +1,30 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Suspense } from "react";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import TrustBadges from "@/components/TrustBadges";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import type { ServiceArea } from "@/lib/serviceAreas";
-import { emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
+import { cooktopGratesPair, laundrySinkPair } from "@/lib/realWorkPhotos";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const siteUrl = "https://newstarcleaning.com";
 
 // General New Star work proof. Deliberately captioned without a city claim:
 // current photos have no verified job-location ledger.
-const generalWorkPhoto = emptyHomeResultPhotos[1];
+const areaProofPairs: BeforeAfterItem[] = [
+  {
+    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
+    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
+    label: cooktopGratesPair.label,
+  },
+  {
+    before: { src: laundrySinkPair.before.src, alt: laundrySinkPair.before.alt },
+    after: { src: laundrySinkPair.after.src, alt: laundrySinkPair.after.alt },
+    label: laundrySinkPair.label,
+  },
+];
 
 function serviceAreaSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -158,19 +169,13 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                 New Star Cleaning provides recurring, deep, and move-in/move-out house cleaning in {area.name}. We use the address, home size, service type, condition, and requested details to confirm the right quote before booking.
               </p>
 
-              <figure className="mt-8 overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
-                <Image
-                  src={generalWorkPhoto.src}
-                  alt={generalWorkPhoto.alt}
-                  width={1200}
-                  height={900}
-                  className="h-auto w-full object-cover"
-                  sizes="(min-width: 1024px) 560px, 100vw"
-                />
-                <figcaption className="px-5 py-3 text-xs leading-relaxed text-mute">
-                  Real New Star work. Photo location is not tied to a specific city.
-                </figcaption>
-              </figure>
+              <div className="mx-auto mt-8 w-full max-w-sm lg:mx-0">
+                <BeforeAfterCarousel items={areaProofPairs} />
+                <p className="mt-2 text-xs leading-relaxed text-mute">
+                  Real New Star work, same surface before and after. Photo locations are
+                  not tied to a specific city.
+                </p>
+              </div>
             </div>
 
             <div>

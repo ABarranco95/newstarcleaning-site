@@ -10,7 +10,8 @@ export type FunnelEventName =
   | "lead_submit_accepted"
   | "booking_cta_click"
   | "booking_handoff_started"
-  | "website_phone_click";
+  | "website_phone_click"
+  | "website_text_click";
 
 export type FunnelEventPayload = {
   source?: string;
@@ -131,4 +132,8 @@ export function trackLeadConversion(payload: FunnelEventPayload = {}) {
 
 export function trackWebsitePhoneClick(payload: FunnelEventPayload = {}) {
   trackFunnelEvent("website_phone_click", payload);
+}
+
+export function trackWebsiteTextClick(payload: FunnelEventPayload = {}) {
+  trackFunnelEvent("website_text_click", payload);
 }

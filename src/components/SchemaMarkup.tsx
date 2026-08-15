@@ -4,21 +4,29 @@ export default function SchemaMarkup() {
   const localBusinessId = `${business.siteUrl}/#localbusiness`;
   const organizationId = `${business.siteUrl}/#organization`;
   const websiteId = `${business.siteUrl}/#website`;
-  const cleaningServices = [
+  const cleaningServices: Array<{
+    name: string;
+    description: string;
+    url: string;
+    image?: string;
+  }> = [
     {
       name: "Standard Recurring Cleaning",
       description: "Weekly, bi-weekly, or monthly recurring house cleaning service.",
       url: `${business.siteUrl}/services/standard-cleaning`,
+      image: `${business.siteUrl}/photos/real-work/kitchen-island-clean-new-star.webp`,
     },
     {
       name: "Deep Cleaning",
       description: "Detailed one-time deep cleaning for Fresno-area homes.",
       url: `${business.siteUrl}/services/deep-cleaning`,
+      image: `${business.siteUrl}/photos/real-work/pairs/under-sink-cabinet-after.webp`,
     },
     {
       name: "Move-In/Move-Out Cleaning",
       description: "Detailed cleaning for empty homes during move-ins, move-outs, and property turnovers.",
       url: `${business.siteUrl}/services/move-out-cleaning`,
+      image: `${business.siteUrl}/photos/real-work/pairs/cooktop-grates-after.webp`,
     },
     {
       name: "Post-Construction Cleaning",
@@ -43,6 +51,7 @@ export default function SchemaMarkup() {
         name: service.name,
         description: service.description,
         url: service.url,
+        ...(service.image ? { image: service.image } : {}),
         provider: { "@id": localBusinessId },
         areaServed: businessAreaServed,
       },
@@ -60,7 +69,13 @@ export default function SchemaMarkup() {
         description:
           "Professional residential, office, commercial, and post-construction cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
         url: business.siteUrl,
-        image: `${business.siteUrl}/og-image.png`,
+        image: [
+          `${business.siteUrl}/og-image.png`,
+          `${business.siteUrl}/photos/real-work/pairs/cooktop-grates-after.webp`,
+          `${business.siteUrl}/photos/real-work/pairs/laundry-sink-after.webp`,
+          `${business.siteUrl}/photos/real-work/pairs/under-sink-cabinet-after.webp`,
+          `${business.siteUrl}/photos/real-work/kitchen-turnover-new-star.webp`,
+        ],
         logo: `${business.siteUrl}/logo.png`,
         telephone: business.phoneE164,
         email: business.email,
