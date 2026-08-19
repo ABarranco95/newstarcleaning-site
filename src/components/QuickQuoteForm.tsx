@@ -471,27 +471,90 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderMoveOutScope = () => (
+  const renderBedBathFields = () => (
+    <div className={paidSearch ? "grid gap-3.5 min-[380px]:grid-cols-2" : "grid gap-4 sm:grid-cols-2"}>
+      <div>
+        <FieldLabel htmlFor="quote-bedrooms" required>
+          Bedrooms
+        </FieldLabel>
+        <select
+          id="quote-bedrooms"
+          name="bedrooms"
+          required
+          value={formData.bedrooms}
+          onChange={(event) => updateField("bedrooms", event.target.value)}
+          className={fieldClass}
+        >
+          <option value="">Select bedrooms…</option>
+          {["1", "2", "3", "4", "5", "6+"].map((value) => (
+            <option key={value} value={value}>{value}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <FieldLabel htmlFor="quote-bathrooms" required>
+          Bathrooms
+        </FieldLabel>
+        <select
+          id="quote-bathrooms"
+          name="bathrooms"
+          required
+          value={formData.bathrooms}
+          onChange={(event) => updateField("bathrooms", event.target.value)}
+          className={fieldClass}
+        >
+          <option value="">Select bathrooms…</option>
+          {["1", "1.5", "2", "2.5", "3", "3.5", "4+"].map((value) => (
+            <option key={value} value={value}>{value}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+
+  const renderConditionField = () => (
+    <div>
+      <FieldLabel htmlFor="quote-condition" required>
+        What&apos;s the home like right now?
+      </FieldLabel>
+      <select
+        id="quote-condition"
+        name="condition"
+        required
+        value={formData.condition}
+        onChange={(event) => updateField("condition", event.target.value)}
+        className={fieldClass}
+      >
+        <option value="">Choose one…</option>
+        <option value="mostly-maintained">Regular upkeep, no major buildup</option>
+        <option value="some-buildup-needs-detail">Some areas need extra detail</option>
+        <option value="heavy-buildup-pet-hair-neglected">Heavy buildup or a lot of pet hair</option>
+      </select>
+    </div>
+  );
+
+  const renderMoveOutEmpty = () => (
+    <label className="flex items-start gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
+      <input
+        type="checkbox"
+        checked={formData.moveOutScopeConfirmed}
+        onChange={toggleMoveOutScopeConfirmed}
+        className="mt-0.5 h-4 w-4 accent-accent"
+      />
+      <span>The home will be empty when we clean, with appliances and cabinets cleared.</span>
+    </label>
+  );
+
+  const renderMoveOutAddons = () => (
     <div>
       <div className="mb-2">
         <span className="block text-xs font-semibold uppercase tracking-wider text-mute">
-          Move-out scope
+          Move-out add-ons
         </span>
         <p className="mt-1 text-xs leading-relaxed text-ink-soft">
-          The base move-out clean covers the empty home: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Oven, refrigerator, and cabinet or drawer interiors are priced add-ons; pick what the walkthrough needs below.
+          Base move-out covers the empty home: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Oven, refrigerator, and cabinet interiors are extra.
         </p>
       </div>
-      <label className="mb-2 flex items-start gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
-        <input
-          type="checkbox"
-          checked={formData.moveOutScopeConfirmed}
-          onChange={toggleMoveOutScopeConfirmed}
-          className="mt-0.5 h-4 w-4 accent-accent"
-        />
-        <span>
-          The home will be empty, with appliances and cabinets cleared, so any requested interiors can be cleaned.
-        </span>
-      </label>
       <div className="grid gap-2 sm:grid-cols-2">
         {moveOutAddons.map((addon) => (
           <label key={addon} className="flex items-center gap-3 rounded-xl border border-line bg-white px-3 py-3 text-sm font-medium text-ink-soft">
@@ -510,59 +573,7 @@ export default function QuickQuoteForm({
 
   const renderExtendedDetails = (paid = false) => (
     <>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <FieldLabel htmlFor="quote-bedrooms">Bedrooms</FieldLabel>
-          <select
-            id="quote-bedrooms"
-            name="bedrooms"
-            value={formData.bedrooms}
-            onChange={(event) => updateField("bedrooms", event.target.value)}
-            className={fieldClass}
-          >
-            <option value="">Select bedrooms…</option>
-            {["1", "2", "3", "4", "5", "6+"].map((value) => (
-              <option key={value} value={value}>{value}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <FieldLabel htmlFor="quote-bathrooms">Bathrooms</FieldLabel>
-          <select
-            id="quote-bathrooms"
-            name="bathrooms"
-            value={formData.bathrooms}
-            onChange={(event) => updateField("bathrooms", event.target.value)}
-            className={fieldClass}
-          >
-            <option value="">Select bathrooms…</option>
-            {["1", "1.5", "2", "2.5", "3", "3.5", "4+"].map((value) => (
-              <option key={value} value={value}>{value}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div>
-        <FieldLabel htmlFor="quote-condition">How much cleaning does the home need?</FieldLabel>
-        <p className="mb-2 text-xs leading-relaxed text-ink-soft">
-          A quick answer helps us price the right amount of time.
-        </p>
-        <select
-          id="quote-condition"
-          name="condition"
-          value={formData.condition}
-          onChange={(event) => updateField("condition", event.target.value)}
-          className={fieldClass}
-        >
-          <option value="">Choose one…</option>
-          <option value="mostly-maintained">Regular cleaning, no major buildup</option>
-          <option value="some-buildup-needs-detail">Some buildup or areas needing extra detail</option>
-          <option value="heavy-buildup-pet-hair-neglected">Heavy buildup or a lot of pet hair</option>
-        </select>
-      </div>
-
-      {isMoveOutRequest ? renderMoveOutScope() : null}
+      {paid && isMoveOutRequest ? renderMoveOutAddons() : null}
 
       {paid && (isRecurringRequest || isPaidHouseRequest) ? (
         <div>
@@ -866,6 +877,10 @@ export default function QuickQuoteForm({
           </div>
         </div>
 
+        {!isCommercialRequest ? renderBedBathFields() : null}
+        {!isCommercialRequest ? renderConditionField() : null}
+        {isMoveOutRequest ? renderMoveOutEmpty() : null}
+
         {isCommercialRequest ? (
           <>
             <div>
@@ -899,10 +914,9 @@ export default function QuickQuoteForm({
 
         {showInlineExtendedDetails ? renderExtendedDetails() : null}
 
-        {/* Move-out scope is service-dependent, not "extended detail": the
-            confirmation drives Apex quote readiness, so it must appear even
-            in the compact form once move-out is selected. */}
-        {!showInlineExtendedDetails && !paidSearch && isMoveOutRequest ? renderMoveOutScope() : null}
+        {/* Empty confirmation is always on the main form for move-out.
+            Organic forms also collect add-ons here; paid keeps add-ons optional. */}
+        {!showInlineExtendedDetails && !paidSearch && isMoveOutRequest ? renderMoveOutAddons() : null}
 
         {!compact && !paidSearch && !isCommercialRequest && (
           <div>
