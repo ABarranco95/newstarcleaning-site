@@ -122,8 +122,13 @@ assert(
     quickQuoteForm.includes('id="quote-service"') &&
     quickQuoteForm.includes('id="quote-timeline"') &&
     quickQuoteForm.includes('id="quote-sqft"') &&
-    quickQuoteForm.includes('service-related calls/texts'),
-  "quote form captures the lean required routing fields with visible SMS consent",
+    quickQuoteForm.includes('id="quote-bedrooms"') &&
+    quickQuoteForm.includes('id="quote-bathrooms"') &&
+    quickQuoteForm.includes('id="quote-condition"') &&
+    quickQuoteForm.includes("renderBedBathFields") &&
+    quickQuoteForm.includes("renderConditionField") &&
+    quickQuoteForm.includes("service-related calls/texts"),
+  "quote form captures routing fields plus bedrooms, bathrooms, and condition so first-touch is not a cold call",
 );
 
 assert(
@@ -145,7 +150,7 @@ assert(
 assert(
   quickQuoteForm.includes("showPaidDetails") &&
     quickQuoteForm.includes("Add home details (optional)") &&
-    quickQuoteForm.includes("How much cleaning does the home need?") &&
+    quickQuoteForm.includes("home like right now") &&
     quickQuoteForm.includes("Get my price") &&
     quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
@@ -154,7 +159,7 @@ assert(
     !quickQuoteForm.includes('<input type="hidden" name="city"') &&
     quickQuoteForm.includes("paidServicePrefilled") &&
     quickQuoteForm.includes("isPaidHouseRequest"),
-  "paid quote form requires editable customer location and moves qualification details behind progressive disclosure",
+  "paid quote form requires location, bedrooms, bathrooms, and condition; optional extras stay behind progressive disclosure",
 );
 assert(
   !quickQuoteForm.includes("Prefer to talk? Call") &&
