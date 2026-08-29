@@ -111,7 +111,7 @@ export default function Footer() {
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li><Link href="/services" className="text-white/75 transition-colors hover:text-white">All cleaning services</Link></li>
-              <li><Link href="/services/standard-cleaning" className="text-white/75 transition-colors hover:text-white">Standard recurring</Link></li>
+              <li><Link href="/services/standard-cleaning" className="text-white/75 transition-colors hover:text-white">Standard house cleaning</Link></li>
               <li><Link href="/services/deep-cleaning" className="text-white/75 transition-colors hover:text-white">Deep cleaning</Link></li>
               <li><Link href="/services/move-out-cleaning" className="text-white/75 transition-colors hover:text-white">Move-in / move-out</Link></li>
               <li><Link href="/services/post-construction-cleaning" className="text-white/75 transition-colors hover:text-white">Post-construction</Link></li>

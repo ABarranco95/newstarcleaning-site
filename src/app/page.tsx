@@ -10,9 +10,10 @@ import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 const services = [
   {
     number: "01",
-    title: "Standard recurring cleaning",
+    title: "Standard house cleaning",
     href: "/services/standard-cleaning",
-    lead: "Weekly, bi-weekly, or monthly cleaning for homes that are already maintained and ready for a reliable routine.",
+    lead:
+      "Weekly, bi-weekly, or monthly house cleaning for homes that are already maintained and ready for a reliable routine.",
     fit: "Best for ongoing home care",
   },
   {
