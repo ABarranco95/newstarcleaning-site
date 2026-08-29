@@ -11,9 +11,13 @@ import { getFullIncludedList } from "@/lib/services";
 import { business, businessAreaServed } from "@/lib/business";
 import {
   bathroomResultPhotos,
+  cooktopGratesPair,
   emptyHomeResultPhotos,
   homeResultPhotos,
+  laundryAlcovePair,
+  laundrySinkPair,
   ovenBuildupPair,
+  underSinkCabinetPair,
 } from "@/lib/realWorkPhotos";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
@@ -28,6 +32,11 @@ const deepDetailPairs: BeforeAfterItem[] = [
     label: "Tub and surround detail from a real deep-cleaning appointment.",
   },
   {
+    before: { src: underSinkCabinetPair.before.src, alt: underSinkCabinetPair.before.alt },
+    after: { src: underSinkCabinetPair.after.src, alt: underSinkCabinetPair.after.alt },
+    label: underSinkCabinetPair.label,
+  },
+  {
     before: { src: "/photos/real-work/paid/vent-detail-before.webp", alt: "Reachable return vent with dust before cleaning" },
     after: { src: "/photos/real-work/paid/vent-detail-after.webp", alt: "The same return vent after New Star detail work" },
     label: "Reachable vent-face detail included in deep cleaning.",
@@ -36,9 +45,24 @@ const deepDetailPairs: BeforeAfterItem[] = [
 
 const moveOutDetailPairs: BeforeAfterItem[] = [
   {
+    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
+    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
+    label: cooktopGratesPair.label,
+  },
+  {
     before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
     after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
     label: ovenBuildupPair.label,
+  },
+  {
+    before: { src: laundrySinkPair.before.src, alt: laundrySinkPair.before.alt },
+    after: { src: laundrySinkPair.after.src, alt: laundrySinkPair.after.alt },
+    label: laundrySinkPair.label,
+  },
+  {
+    before: { src: laundryAlcovePair.before.src, alt: laundryAlcovePair.before.alt },
+    after: { src: laundryAlcovePair.after.src, alt: laundryAlcovePair.after.alt },
+    label: laundryAlcovePair.label,
   },
 ];
 
@@ -75,7 +99,7 @@ export default function ServiceDetailPage({
   const resultPhotos = service.slug === "deep-cleaning"
     ? bathroomResultPhotos
     : service.slug === "move-out-cleaning"
-      ? [emptyHomeResultPhotos[0], emptyHomeResultPhotos[2], emptyHomeResultPhotos[4], emptyHomeResultPhotos[5]]
+      ? [emptyHomeResultPhotos[0], emptyHomeResultPhotos[2], emptyHomeResultPhotos[4], emptyHomeResultPhotos[5], emptyHomeResultPhotos[6], emptyHomeResultPhotos[7]]
       : homeResultPhotos;
   const resultTitle = service.slug === "deep-cleaning"
     ? "Bathroom detail from real appointments."
@@ -211,7 +235,7 @@ export default function ServiceDetailPage({
                   <h3 className="text-2xl text-ink">Same surface, before and after.</h3>
                   <p className="mt-3 leading-relaxed text-ink-soft">
                     {isMoveOut
-                      ? "Inside-oven cleaning is one of the most-requested move-out add-ons. This oven is from a real appointment; aged surfaces can keep wear and staining."
+                      ? "Cooktop, oven, and laundry surfaces from real move-out appointments, shown before and after cleaning. Aged surfaces can keep wear and staining."
                       : "Detail comparisons from real appointments. Results vary with surface condition, buildup, and access."}
                   </p>
                 </div>

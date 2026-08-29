@@ -50,6 +50,11 @@ export const homeResultPhotos: RealWorkPhoto[] = [
     alt: "Clean bedroom with made bed and wood-look floors from a New Star appointment",
     caption: "Bedroom result",
   },
+  {
+    src: "/photos/real-work/living-room-vacuumed-new-star.webp",
+    alt: "Living room with freshly vacuumed carpet, sofa, and large grid window after a New Star visit",
+    caption: "Vacuumed living room",
+  },
 ];
 
 // Empty-home / turnover work.
@@ -84,6 +89,16 @@ export const emptyHomeResultPhotos: RealWorkPhoto[] = [
     alt: "Clean empty closet with shelving and tile floor from New Star Cleaning work",
     caption: "Closet detail",
   },
+  {
+    src: "/photos/real-work/den-built-ins-clean-new-star.webp",
+    alt: "Empty den with wiped full-wall oak built-in bookcases and bay window after a New Star move-out cleaning",
+    caption: "Den built-ins",
+  },
+  {
+    src: "/photos/real-work/walk-in-pantry-clean-new-star.webp",
+    alt: "Empty walk-in corner pantry with wiped shelves and clean tile floor after a New Star move-out cleaning",
+    caption: "Walk-in pantry",
+  },
 ];
 
 // Same oven, same angle: verified before/after pair.
@@ -99,6 +114,63 @@ export const ovenBuildupPair: RealWorkPair = {
     caption: "Oven after",
   },
   label: "Inside-oven detail from a real appointment. Wear and staining on aged surfaces can remain.",
+};
+
+// Aug 2026 move-out pairs: same surface/location, verified frame by frame.
+export const cooktopGratesPair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/cooktop-grates-before.webp",
+    alt: "White gas cooktop with greasy burner grates and drip stains before New Star cleaning",
+    caption: "Cooktop before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/cooktop-grates-after.webp",
+    alt: "The same gas cooktop with visibly cleaner enamel, knobs, and grates after New Star detail work",
+    caption: "Cooktop after",
+  },
+  label: "Cooktop and grates from a real move-out appointment.",
+};
+
+export const underSinkCabinetPair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/under-sink-cabinet-before.webp",
+    alt: "Under-sink cabinet floor with heavy staining before New Star cleaning",
+    caption: "Under-sink before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/under-sink-cabinet-after.webp",
+    alt: "The same under-sink cabinet interior visibly cleaned after New Star detail work",
+    caption: "Under-sink after",
+  },
+  label: "Empty under-sink cabinet add-on from a real appointment.",
+};
+
+export const laundrySinkPair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/laundry-sink-before.webp",
+    alt: "Laundry room sink and tile counter with built-up grime before New Star cleaning",
+    caption: "Laundry sink before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/laundry-sink-after.webp",
+    alt: "The same laundry sink and tile counter visibly cleaned after a New Star move-out cleaning",
+    caption: "Laundry sink after",
+  },
+  label: "Laundry sink and counter from a real move-out appointment.",
+};
+
+export const laundryAlcovePair: RealWorkPair = {
+  before: {
+    src: "/photos/real-work/pairs/laundry-alcove-before.webp",
+    alt: "Washer alcove with wall splatter and soiled tile floor before New Star cleaning",
+    caption: "Washer alcove before",
+  },
+  after: {
+    src: "/photos/real-work/pairs/laundry-alcove-after.webp",
+    alt: "The same washer alcove with visibly cleaner wall and tile surfaces after New Star cleaning",
+    caption: "Washer alcove after",
+  },
+  label: "Washer alcove result from a real move-out appointment. Full wall washing is not included.",
 };
 
 // Curated homepage set: varied rooms, no repeats of one surface.

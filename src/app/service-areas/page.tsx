@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import MapEmbed from "@/components/MapEmbed";
 import QuotePathPanel from "@/components/QuotePathPanel";
 import { serviceAreas } from "@/lib/serviceAreas";
 
@@ -140,6 +141,20 @@ export default function ServiceAreasPage() {
               <Link href="/services" className="btn btn-outline !min-h-12 !px-5 !text-sm">Compare cleaning services</Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="ns-section bg-cream-2">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <span className="eyebrow eyebrow-dot">Home base</span>
+            <h2 className="mt-4 text-3xl text-ink">Routes run from north Fresno</h2>
+            <p className="mt-5 leading-relaxed text-ink-soft">
+              The office sits off Nees Ave in north Fresno, which keeps Fresno and Clovis
+              inside core route windows and Madera within a confirmed drive.
+            </p>
+          </div>
+          <MapEmbed className="mt-8" />
         </div>
       </section>
 
