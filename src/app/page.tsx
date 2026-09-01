@@ -155,13 +155,13 @@ export default function Home() {
   return (
     <>
       <section className="bg-primary text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-20">
           <div>
             <span className="eyebrow text-accent-light">Serving Fresno, Clovis &amp; Madera</span>
             <h1 className="mt-5 max-w-3xl text-4xl text-white sm:text-5xl lg:text-[3.6rem]">
               House cleaning in Fresno, Clovis &amp; Madera—done with care.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/78 sm:mt-6 sm:text-lg sm:leading-8">
               Choose recurring, deep, or move-in/move-out cleaning. Tell us about the home and we&apos;ll confirm the price, what&apos;s included, and available times before you book.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -202,12 +202,12 @@ export default function Home() {
       </section>
 
       <section id="services" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
             <div>
               <span className="eyebrow eyebrow-dot">Cleaning services</span>
               <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Choose the right level of cleaning.</h2>
-              <p className="mt-4 text-lg leading-8 text-ink-soft">
+              <p className="mt-4 line-clamp-2 text-base leading-7 text-ink-soft sm:line-clamp-none sm:text-lg sm:leading-8">
                 Each service page lists the room-by-room work, optional additions, and exclusions in plain English.
               </p>
               <Link href="/checklist" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent">
@@ -217,11 +217,11 @@ export default function Home() {
 
             <div className="divide-y divide-line border-y border-line">
               {services.map((service) => (
-                <Link key={service.title} href={service.href} className="group grid gap-4 py-7 transition-colors sm:grid-cols-[3rem_1fr_auto] sm:items-start sm:gap-6 hover:text-primary">
+                <Link key={service.title} href={service.href} className="group grid gap-2 py-6 transition-colors sm:grid-cols-[3rem_1fr_auto] sm:items-start sm:gap-4 sm:py-7 sm:gap-6 hover:text-primary">
                   <span className="text-sm font-extrabold text-accent">{service.number}</span>
                   <span>
                     <span className="block text-xl font-bold text-ink group-hover:text-primary">{service.title}</span>
-                    <span className="mt-2 block max-w-xl text-sm leading-6 text-ink-soft">{service.lead}</span>
+                    <span className="mt-2 line-clamp-2 block max-w-xl text-sm leading-6 text-ink-soft sm:line-clamp-none">{service.lead}</span>
                     <span className="mt-3 block text-xs font-bold uppercase tracking-[0.12em] text-mute">{service.fit}</span>
                   </span>
                   <span className="hidden pt-1 text-primary transition-transform group-hover:translate-x-1 sm:block" aria-hidden="true">→</span>
@@ -252,7 +252,7 @@ export default function Home() {
       </section>
 
       <section id="how-it-works" className="border-y border-line bg-cream-2">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <span className="eyebrow eyebrow-dot">How it works</span>
             <h2 className="mt-4 text-3xl text-ink sm:text-4xl">From home details to a confirmed appointment.</h2>
@@ -290,12 +290,12 @@ export default function Home() {
       </section>
 
       <section id="results" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
             <div>
               <span className="eyebrow eyebrow-dot">Real results</span>
               <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Real before-and-after work from New Star appointments.</h2>
-              <p className="mt-5 text-lg leading-8 text-ink-soft">
+              <p className="mt-5 line-clamp-2 text-base leading-7 text-ink-soft sm:line-clamp-none sm:text-lg sm:leading-8">
                 These are customer-job photos, not stock images. Use the toggle to compare the same surface before and after cleaning.
               </p>
               <p className="mt-4 text-sm leading-6 text-mute">
@@ -342,12 +342,12 @@ export default function Home() {
       </section>
 
       <section id="areas" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
             <div className="max-w-2xl">
               <span className="eyebrow eyebrow-dot">Service areas</span>
               <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Fresno-based routes, kept intentionally local.</h2>
-              <p className="mt-4 text-lg leading-8 text-ink-soft">
+              <p className="mt-4 line-clamp-2 text-base leading-7 text-ink-soft sm:line-clamp-none sm:text-lg sm:leading-8">
                 Fresno and Clovis are core routes. Madera appointments depend on route capacity. The neighborhood pages cover approved areas within Fresno.
               </p>
             </div>
@@ -367,7 +367,7 @@ export default function Home() {
       </section>
 
       <section id="reviews" className="border-y border-line bg-cream-2">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8 lg:py-16">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8 lg:py-16">
           <div>
             <span className="eyebrow eyebrow-dot">Customer feedback</span>
             <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Read recent New Star reviews on Google.</h2>
@@ -382,7 +382,7 @@ export default function Home() {
       </section>
 
       <section className="bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <span className="eyebrow eyebrow-dot">FAQ</span>
           <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Before you request a quote.</h2>
           <div className="mt-10 divide-y divide-line border-y border-line">
