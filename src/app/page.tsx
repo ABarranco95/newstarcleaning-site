@@ -322,13 +322,13 @@ export default function Home() {
             <span className="eyebrow text-accent-light">Why New Star</span>
             <h2 className="mt-4 text-3xl text-white sm:text-4xl">Local cleaning with clear expectations.</h2>
             <p className="mt-5 text-lg leading-8 text-white/70">
-              The goal is simple: the customer knows what was requested, the cleaner knows the job, and the appointment has enough time for the work.
+              Clear scope, honest hours, no surprises.
             </p>
           </div>
           <div className="grid gap-x-10 gap-y-0 sm:grid-cols-2">
             {[
-              ["Priced for enough time, not the lowest bid", "Doing it right takes time, so the quote covers the hours the job actually needs. That means we are rarely the cheapest option, and we are not trying to be. No rushed visits, no heavy discounts to win the job."],
-              ["A quote built around the home", "Size, condition, service type, pets, and optional details are considered before the price is confirmed."],
+              ["Priced for enough time, not the lowest bid", "The quote covers the hours the job actually needs. We are rarely the cheapest, and we are not trying to be."],
+              ["A quote built around the home", "Size, condition, service type, and pets are priced before anything is confirmed."],
               ["Supplies come with the cleaner", "Cleaners bring the supplies and equipment needed for the confirmed residential cleaning."],
               ["Support after the appointment", "If something included appears missed, contact us within 24 hours so the concern can be reviewed."],
             ].map(([title, text]) => (

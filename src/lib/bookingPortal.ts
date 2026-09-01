@@ -1,8 +1,7 @@
-// BookingKoala owns pricing, calendar, availability, and provider assignment.
-// The BookingKoala configuration below is the ONLY direct-booking destination.
-// Never fall back to an Apex URL here: Apex owns lead intake and follow-up,
-// not customer self-booking, and sending a visitor to an Apex /book surface
-// would violate that boundary.
+// Apex CRM owns the booking engine as of 2026-08-26 (Angel-approved): instant
+// pricing, calendar, card-on-file. NEXT_PUBLIC_DIRECT_BOOKING_URL should point
+// at the Apex wizard (https://apex-crm-abarranco95-s-team.vercel.app/book).
+// BookingKoala remains available only during the parallel-run comparison.
 export function resolveDirectBookingUrl(): string | null {
   const raw = (
     process.env.NEXT_PUBLIC_DIRECT_BOOKING_URL ||
