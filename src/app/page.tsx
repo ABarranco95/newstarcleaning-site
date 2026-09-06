@@ -63,7 +63,7 @@ const faqs = [
   },
   {
     q: "Are the oven, refrigerator, cabinets, and windows included?",
-    a: "Standard and deep cleaning treat the inside of the oven and refrigerator, cabinet interiors, and interior window glass as optional additions. The inside of an empty microwave is included when accessible. Move-in/move-out cleaning works the same way: oven, refrigerator, and cabinet or drawer interiors are priced add-ons for the empty home. Interior window glass and reachable window tracks are optional add-ons; exterior windows, screens, and ladder work are not included.",
+    a: "Move-in/move-out cleaning includes empty cabinet, drawer, and closet interiors. Cabinet interiors are optional for standard and deep cleaning. Inside the oven and refrigerator, interior window glass, and reachable window tracks are optional additions for all three services. An empty, accessible microwave is included. Exterior windows, screens, and ladder work are not included.",
   },
   {
     q: "Do cleaners bring supplies and equipment?",
@@ -74,8 +74,8 @@ const faqs = [
     a: "No. New Star is a cleaning service, not a maid or household helper service. We clean accessible rooms and surfaces. Laundry, dishes, bed making, organizing, packing, unpacking, and personal-item handling are outside the service.",
   },
   {
-    q: "Are you the cheapest cleaning service in Fresno?",
-    a: "No, and that is on purpose. Doing the work right takes time, so every quote includes enough hours to finish the listed scope instead of racing through it. We are not a heavily discounted in-and-out service, and we do not pad quotes either: the price follows the scope, and add-ons are only added when you request them.",
+    q: "How much does house cleaning cost?",
+    a: "Standard cleaning starts at $165, deep cleaning at $235, and move-in/move-out cleaning at $325. Your total depends on the home’s size, condition, visit frequency, and optional work. We confirm the price before booking.",
   },
   {
     q: "Can I call or text instead of using the quote form?",
@@ -155,14 +155,14 @@ export default function Home() {
   return (
     <>
       <section className="bg-primary text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-20">
-          <div>
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-20">
+          <div className="min-w-0">
             <span className="eyebrow text-accent-light">Serving Fresno, Clovis &amp; Madera</span>
             <h1 className="mt-5 max-w-3xl text-4xl text-white sm:text-5xl lg:text-[3.6rem]">
               House cleaning in Fresno, Clovis &amp; Madera—done with care.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/78 sm:mt-6 sm:text-lg sm:leading-8">
-              Choose recurring, deep, or move-in/move-out cleaning. Tell us about the home and we&apos;ll confirm the price, what&apos;s included, and available times before you book.
+              Weekly, bi-weekly, or monthly visits that keep cleaning off your to-do list. Need a fresh start? Choose a deep clean or move-out clean. We bring the supplies and confirm your price before you book.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link href="/book-now" className="btn btn-accent">
@@ -178,8 +178,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mx-auto w-full max-w-sm">
-            <div className="mb-3 flex items-center justify-between text-xs font-bold uppercase tracking-[0.16em] text-white/65">
+          <div className="mx-auto w-full min-w-0 max-w-sm">
+            <div className="mb-3 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.16em] text-white/65">
               <span>Real New Star work</span>
               <span>Same surface, before &amp; after</span>
             </div>
@@ -207,7 +207,7 @@ export default function Home() {
             <div>
               <span className="eyebrow eyebrow-dot">Cleaning services</span>
               <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Choose the right level of cleaning.</h2>
-              <p className="mt-4 line-clamp-2 text-base leading-7 text-ink-soft sm:line-clamp-none sm:text-lg sm:leading-8">
+              <p className="mt-4 text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
                 Each service page lists the room-by-room work, optional additions, and exclusions in plain English.
               </p>
               <Link href="/checklist" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent">
@@ -221,7 +221,7 @@ export default function Home() {
                   <span className="text-sm font-extrabold text-accent">{service.number}</span>
                   <span>
                     <span className="block text-xl font-bold text-ink group-hover:text-primary">{service.title}</span>
-                    <span className="mt-2 line-clamp-2 block max-w-xl text-sm leading-6 text-ink-soft sm:line-clamp-none">{service.lead}</span>
+                    <span className="mt-2 block max-w-xl text-sm leading-6 text-ink-soft">{service.lead}</span>
                     <span className="mt-3 block text-xs font-bold uppercase tracking-[0.12em] text-mute">{service.fit}</span>
                   </span>
                   <span className="hidden pt-1 text-primary transition-transform group-hover:translate-x-1 sm:block" aria-hidden="true">→</span>
@@ -236,7 +236,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[0.78fr_1.22fr] md:items-center lg:px-8">
           <div>
             <span className="eyebrow eyebrow-dot">Properties and projects</span>
-            <h2 className="mt-3 text-2xl text-ink sm:text-3xl">Need cleaning beyond an occupied home?</h2>
+            <h2 className="mt-3 text-2xl text-ink sm:text-3xl">For your workplace. For your next handoff.</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Link href="/services/post-construction-cleaning" className="group border-l-2 border-primary pl-5">
@@ -282,8 +282,7 @@ export default function Home() {
           </div>
           {directBookingUrl ? (
             <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft">
-              Book online if you already know the service and time you want. The scheduling
-              portal shows the same pricing we confirm on quotes.
+              Review residential cleaning options, pricing, and available times online before confirming.
             </p>
           ) : null}
         </div>
@@ -327,7 +326,7 @@ export default function Home() {
           </div>
           <div className="grid gap-x-10 gap-y-0 sm:grid-cols-2">
             {[
-              ["Priced for enough time, not the lowest bid", "The quote covers the hours the job actually needs. We are rarely the cheapest, and we are not trying to be."],
+              ["A routine that works for your home", "Choose weekly, bi-weekly, or monthly visits. We review the starting condition and let you know if a deep clean is the right first step."],
               ["A quote built around the home", "Size, condition, service type, and pets are priced before anything is confirmed."],
               ["Supplies come with the cleaner", "Cleaners bring the supplies and equipment needed for the confirmed residential cleaning."],
               ["Support after the appointment", "If something included appears missed, contact us within 24 hours so the concern can be reviewed."],

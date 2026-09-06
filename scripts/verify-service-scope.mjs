@@ -156,13 +156,14 @@ assert(
 );
 
 assert(
-  header.includes('href="/checklist"') && footer.includes('href="/checklist"'),
+  header.includes('href: "/checklist"') && footer.includes('href="/checklist"'),
   "header and footer link the service checklist",
 );
 
 assert(
   deepPage.includes("Optional add-ons quoted separately") &&
-    moveOutPage.includes("appliance and cabinet interiors as add-ons") &&
+    moveOutPage.includes("empty cabinet and closet interiors") &&
+    moveOutPage.includes("Oven and refrigerator interiors are optional add-ons") &&
     !moveOutPage.toLowerCase().includes("same-week"),
   "service metadata avoids base-scope overpromises",
 );

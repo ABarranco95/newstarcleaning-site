@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title:
       "Move-In / Move-Out Cleaning in Fresno, CA | New Star Cleaning",
     description:
-      "Move-out cleaning across Fresno, Clovis & Madera. Detailed empty-home cleaning for kitchens, bathrooms, baseboards, and floors, with appliance and cabinet interiors as add-ons.",
+      "Move-out cleaning across Fresno, Clovis & Madera. Detailed empty-home cleaning for kitchens, bathrooms, baseboards, and floors, including empty cabinet and closet interiors. Oven and refrigerator interiors are optional add-ons.",
     url: "https://newstarcleaning.com/services/move-out-cleaning",
   },
 };

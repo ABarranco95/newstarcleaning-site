@@ -148,19 +148,19 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   move: {
     eyebrow: "Move-in / move-out cleaning",
     h1: (city) => `Move-out cleaning for ${city} homes.`,
-    subhead: "Ready for the final walkthrough. Share the size, condition, deadline, and any oven, fridge, or cabinet add-ons. We’ll confirm the complete scope and price before booking.",
+    subhead: "Ready for the final walkthrough. Share the size, condition, deadline, and any oven, fridge, or window add-ons. We’ll confirm the complete scope and price before booking.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out pricing",
     priceContext: {
-      label: "3 bed / 2 bath · empty home",
-      value: "Most run $450–$600 · appliance & cabinet interiors are add-ons",
-      note: "Representative range. We confirm the exact scope and total before booking.",
+      label: "Move-out cleaning · empty home",
+      value: "From $325 · empty cabinet & closet interiors included",
+      note: "Starting price. Your home's size, condition, and add-ons determine the confirmed total.",
     },
     proofOrder: ["refrigerator", "refrigeratorDetail", "oven", "tub", "shower", "vent"],
     faqs: [
       {
         question: "Are oven, fridge, cabinets, or windows included?",
-        answer: "The base move-out clean covers the empty home itself: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Interior oven, refrigerator, and cabinet or drawer cleaning are priced add-ons, and reachable interior window glass and tracks are optional too. Your quote lists the full scope before booking.",
+        answer: "Move-out cleaning covers the empty home: kitchen, bathrooms, floors, baseboards, and empty cabinet, drawer, and closet interiors. Inside the oven and refrigerator, plus reachable interior window glass and tracks, are optional add-ons. Your quote lists the full scope before booking.",
       },
       {
         question: "What if the home has heavy buildup?",
@@ -474,6 +474,8 @@ export default function GoogleAdsLandingPageClient({
     [searchParams]
   );
   const intent = INTENT_CONFIG[intentKey];
+  const isProjectRequest = intentKey === "postConstruction";
+  const residentialBookingUrl = isProjectRequest ? null : directBookingUrl;
 
   useEffect(() => {
     captureFirstPaidTouch({
@@ -537,18 +539,18 @@ export default function GoogleAdsLandingPageClient({
               <QuickQuoteForm
                 source="google-ads"
                 title={intent.formTitle}
-                subtitle="You’ll hear back from Angel with a real price, usually the same day."
+                subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : "You’ll hear back from Angel with a real price, usually the same day."}
                 landingCity={city.formValue || city.label}
                 defaultService={intent.serviceDefault}
-                directBookingUrl={directBookingUrl}
+                directBookingUrl={residentialBookingUrl}
                 extended
                 paidSearch
               />
-              {directBookingUrl ? (
+              {residentialBookingUrl ? (
                 <p className="mt-3 text-center text-sm text-white/70">
                   Prefer to book it yourself?{" "}
                   <BookingPortalLink
-                    baseUrl={directBookingUrl}
+                    baseUrl={residentialBookingUrl}
                     sourcePage="/google-ads"
                     ctaLocation="paid_under_form"
                     service={intent.serviceDefault}
@@ -568,7 +570,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
-      <BeforeAfterGallery order={intent.proofOrder} />
+      {!isProjectRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
       <ReviewStrip />
       <ProcessStrip />
 
@@ -584,9 +586,9 @@ export default function GoogleAdsLandingPageClient({
 
           <div className="rounded-3xl bg-primary p-6 text-white sm:p-8">
             <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">Ready when you are</div>
-            <h2 className="mt-3 font-display text-3xl leading-tight">Get a price for your home.</h2>
+            <h2 className="mt-3 font-display text-3xl leading-tight">{isProjectRequest ? "Plan the final clean for your project." : "Get a price for your home."}</h2>
             <p className="mt-3 text-sm leading-6 text-white/72">
-              Share the basics and we’ll call or text with pricing and available dates.
+              {isProjectRequest ? "Send the site details and handoff date. We’ll confirm scope, access, and capacity before proposing the work." : "Share the basics and we’ll follow up with pricing and available dates."}
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !px-4 !text-sm">
@@ -596,11 +598,11 @@ export default function GoogleAdsLandingPageClient({
                 Call us
               </a>
             </div>
-            {directBookingUrl ? (
+            {residentialBookingUrl ? (
               <p className="mt-4 text-sm text-white/70">
                 Or skip the callback and{" "}
                 <BookingPortalLink
-                  baseUrl={directBookingUrl}
+                  baseUrl={residentialBookingUrl}
                   sourcePage="/google-ads"
                   ctaLocation="paid_closing"
                   service={intent.serviceDefault}

@@ -49,7 +49,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       title: "Move-in / move-out cleaning",
       href: "/services/move-out-cleaning",
       desc: `Moving in or out of a ${area.name} property? We clean empty homes across kitchens, bathrooms, floors, appliances, empty cabinets, and accessible detail areas.`,
-      features: ["Empty-home cleaning", "Appliance and cabinet interiors as priced add-ons", "Timing confirmed before booking"],
+      features: ["Empty-home cleaning", "Empty cabinet and closet interiors included", "Timing confirmed before booking"],
     },
     {
       title: "Office, commercial & post-construction",

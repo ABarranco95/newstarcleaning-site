@@ -3,21 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
-import { trackFunnelEvent } from "@/lib/conversionTracking";
 
 const directBookingUrl = resolveDirectBookingUrl();
-
-function footerBookingHref(): string | null {
-  if (!directBookingUrl) return null;
-  try {
-    const url = new URL(directBookingUrl);
-    url.searchParams.set("utm_source_page", "newstarcleaning.com-footer");
-    return url.toString();
-  } catch {
-    return directBookingUrl;
-  }
-}
 
 const serviceAreas = [
   { name: "Fresno", slug: "fresno" },
@@ -30,6 +20,10 @@ const serviceAreas = [
 
 export default function Footer() {
   const pathname = usePathname();
+  const isCommercial = pathname === "/commercial-quote" || pathname === "/services/commercial-cleaning" || pathname === "/services/post-construction-cleaning";
+  const quoteHref = isCommercial
+    ? pathname === "/commercial-quote" ? "#quote-form" : `/commercial-quote?service=${encodeURIComponent(pathname.includes("post-construction") ? "Post-construction cleaning" : "Office / commercial cleaning")}`
+    : "/book-now";
 
   if (pathname.startsWith("/google-ads")) {
     return null;
@@ -45,34 +39,23 @@ export default function Footer() {
               Ready for a cleaning quote?
             </span>
             <h2 className="mt-2 text-2xl font-extrabold text-white sm:text-3xl">
-              Tell us about the home.
+              {isCommercial ? "Tell us about the property or project." : "Tell us about the home."}
             </h2>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/70">
-              Share the service, home size, condition, and preferred timing. We will confirm pricing and available appointment options before you book.
+              {isCommercial ? "Share the location, size, and timing. We will review the details and confirm the next step." : "Share the service, home size, condition, and preferred timing. We will confirm pricing and available appointment options before you book."}
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row md:flex-col">
-            <Link href="/book-now" className="btn btn-accent">
-              Request a quote
+            <Link href={quoteHref} className="btn btn-accent">
+              {isCommercial ? "Request a walkthrough" : "Request a quote"}
             </Link>
             <a href="tel:+15597852822" className="btn btn-ghost-dark">
               (559) 785-2822
             </a>
-            {footerBookingHref() ? (
-              <a
-                href={footerBookingHref() ?? undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  trackFunnelEvent("booking_handoff_started", {
-                    source: "footer",
-                    page: typeof window !== "undefined" ? window.location.pathname : undefined,
-                  })
-                }
-                className="text-center text-sm font-semibold text-white/70 underline-offset-4 hover:text-white hover:underline"
-              >
-                Ready to self-schedule? Book online
-              </a>
+            {directBookingUrl && !isCommercial ? (
+              <Suspense fallback={null}>
+                <BookingPortalLink baseUrl={directBookingUrl} sourcePage={pathname} ctaLocation="footer" label="Book online" showIcon={false} className="text-center text-sm font-semibold text-white/70 underline-offset-4 hover:text-white hover:underline" />
+              </Suspense>
             ) : null}
           </div>
         </div>

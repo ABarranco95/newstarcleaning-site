@@ -17,9 +17,9 @@ export type RealWorkPair = {
 
 export const bathroomResultPhotos: RealWorkPhoto[] = [
   {
-    src: "/photos/real-work/clean-bathroom-new-star.webp",
-    alt: "Clean bathroom with shower, tub, vanity, and tile floor from New Star Cleaning work",
-    caption: "Bathroom result",
+    src: "/photos/real-work/glass-shower-freestanding-tub-new-star.webp",
+    alt: "Glass shower, freestanding bathtub, and wood-look floor from New Star Cleaning work",
+    caption: "Shower and bathtub detail",
   },
   {
     src: "/photos/real-work/primary-bathroom-clean-new-star.webp",
@@ -142,7 +142,7 @@ export const underSinkCabinetPair: RealWorkPair = {
     alt: "The same under-sink cabinet interior visibly cleaned after New Star detail work",
     caption: "Under-sink after",
   },
-  label: "Empty under-sink cabinet add-on from a real appointment.",
+  label: "Empty under-sink cabinet detail from a real appointment.",
 };
 
 export const laundrySinkPair: RealWorkPair = {
@@ -177,6 +177,6 @@ export const laundryAlcovePair: RealWorkPair = {
 export const realWorkPhotos: RealWorkPhoto[] = [
   homeResultPhotos[0],
   homeResultPhotos[1],
-  bathroomResultPhotos[1],
+  bathroomResultPhotos[0],
   emptyHomeResultPhotos[0],
 ];

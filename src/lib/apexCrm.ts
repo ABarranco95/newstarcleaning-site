@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isAcceptedLeadReceipt } from "@/lib/leadReceipt";
 
 const APEX_CRM_BASE_URL = (
   process.env.APEX_CRM_BASE_URL ||
@@ -189,12 +190,15 @@ export async function submitLeadToApex(
   try {
     const response = await fetch(APEX_INCOMING_URL, {
       method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(15000),
       headers: apexForwardedHeaders(sourceHeaders),
       body: JSON.stringify(validation.payload),
     });
     apexStatus = response.status;
 
-    if (response.ok) {
+    const receipt: unknown = response.ok ? await response.json().catch(() => null) : null;
+    if (response.ok && isAcceptedLeadReceipt(receipt)) {
       const result: LeadRoutingResult = {
         success: true,
         metadata: {

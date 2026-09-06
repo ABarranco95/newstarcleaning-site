@@ -10,7 +10,7 @@ const directBookingUrl = resolveDirectBookingUrl();
 const bookNowFaqs = [
   {
     q: "How fast do quotes come back?",
-    a: "Most quote requests get a call or text back the same business day, usually within a few hours during business hours. We confirm the price, what is included, and available appointment times before anything is booked.",
+    a: "We review the home details and contact you about pricing and available times. If your timing is urgent, call (559) 785-2822 to check availability. A quote request does not reserve an appointment.",
   },
   {
     q: "Do I pay anything when I request a quote?",
@@ -18,7 +18,7 @@ const bookNowFaqs = [
   },
   {
     q: "Can I skip the quote and book directly?",
-    a: "Yes. If you already know the service and time you want, the Book online option goes straight to our secure scheduling portal, and the pricing there matches what we quote here. If your home has heavy buildup or unusual scope, a quote first usually gets you a more accurate price.",
+    a: directBookingUrl ? "Yes. Book online lets you review residential cleaning options, pricing, and available times before confirming. For heavy buildup or unusual scope, request a quote so we can review the home first." : "Online booking is not currently available. Request a quote or call us to review pricing and appointment times.",
   },
   {
     q: "What if I'm not sure which cleaning service I need?",
@@ -43,30 +43,27 @@ export default function BookNow() {
   return (
     <>
       <section className="relative overflow-hidden bg-primary text-white">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
-          aria-hidden="true"
-        />
+
         <div className="relative mx-auto grid max-w-7xl items-start gap-7 px-4 pb-12 pt-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 lg:px-8 lg:pb-20 lg:pt-14">
           <div className="max-w-2xl lg:pt-4">
-            <nav className="mb-4 text-sm text-white/55 lg:mb-6" aria-label="Breadcrumb">
+            <nav className="mb-6 hidden text-sm text-white/70 lg:block" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-white">Home</Link>
               <span className="px-1.5">/</span>
               <span className="font-semibold text-white">Request pricing</span>
             </nav>
             <span className="eyebrow eyebrow-dot text-accent-light">Fresno / Clovis / Madera</span>
-            <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
+            <h1 className="mt-3 text-3xl text-white lg:text-[3.4rem]">
               Request a cleaning quote.
             </h1>
             <p className="mt-4 max-w-xl text-base leading-7 text-white/75 lg:mt-5 lg:text-lg lg:leading-8">
-              Share the property, service, and preferred timing. We&apos;ll confirm the price, what&apos;s included, and available appointments before you decide. Nothing is charged or booked from this form.
+              Tell us about your home. We’ll confirm the price and available times. This form takes no payment and books nothing.
             </p>
 
-            <div className="mt-7 hidden rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-ink-soft shadow-soft sm:block">
+            <div className="mt-7 hidden border-l border-white/30 pl-5 text-sm leading-relaxed text-white/80 lg:block">
               Serving Fresno, Clovis, Madera, Tower District, Fig Garden, and Woodward Park.
             </div>
 
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:mt-6">
+            <div className="mt-6 hidden flex-col gap-3 lg:flex">
               <a href="tel:+15597852822" className="btn btn-outline !min-h-11 !px-5 !text-sm lg:!min-h-12">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -95,8 +92,8 @@ export default function BookNow() {
 
           <div id="quote-form" className="relative scroll-mt-24">
             <QuickQuoteForm
-              title="Get pricing & availability"
-              subtitle="Start with your contact information, city, service, timing, and approximate property size. We will ask only the follow-up details needed for an accurate quote."
+              title="Your home & contact details"
+              subtitle="Required fields are marked with an asterisk."
               source="organic_quote_page"
               compact
             />
@@ -142,8 +139,7 @@ export default function BookNow() {
                 <h2 className="text-2xl text-ink">Ready to schedule online?</h2>
                 <p className="mt-3 text-ink-soft">
                   If you already know the service and time you want, you can book directly in the
-                  secure scheduling portal. Pricing shown there matches what we quote here, and
-                  you can still call or text with any question before confirming.
+                  scheduling portal. Review the price and appointment details there before confirming.
                 </p>
                 <Suspense fallback={null}>
                   <BookingPortalLink baseUrl={directBookingUrl} sourcePage="/book-now" />

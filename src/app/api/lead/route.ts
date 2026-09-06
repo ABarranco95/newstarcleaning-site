@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAcceptedLeadReceipt } from "@/lib/leadReceipt";
 
 // Proxy leads to Apex CRM: keeps secrets server-side and gives the website a
 // stable submit URL even if the CRM host changes later.
@@ -42,7 +43,10 @@ function forwardedHeaders(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "Please check the form and try again." }, { status: 400 });
+    }
     const name = text(body.name);
     const phone = text(body.phone);
     const email = text(body.email);
@@ -65,7 +69,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!validEmail(email)) {
+    if (!validEmail(email) || (body.contactPreference === "email" && !email)) {
       return NextResponse.json(
         { error: "Please enter a valid email address." },
         { status: 400 }
@@ -74,6 +78,8 @@ export async function POST(req: NextRequest) {
 
     const apexRes = await fetch(APEX_LEAD_URL, {
       method: "POST",
+      redirect: "error",
+      signal: AbortSignal.timeout(15000),
       headers: forwardedHeaders(req),
       body: JSON.stringify({
         ...body,
@@ -81,9 +87,7 @@ export async function POST(req: NextRequest) {
         phone,
         email: email || undefined,
         source: text(body.source) || "newstarcleaning.com",
-        consentText:
-          text(body.consentText) ||
-          "By requesting a quote, the visitor agreed to receive service-related calls/texts about pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out.",
+        consentText: text(body.consentText) || undefined,
         websiteApiVersion: "2026-07-30-idempotent-canonical-v2",
       }),
     });
@@ -96,6 +100,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const receipt: unknown = await apexRes.json().catch(() => null);
+    if (!isAcceptedLeadReceipt(receipt)) {
+      return NextResponse.json({ error: "We could not confirm receipt. Please retry or call us." }, { status: 502 });
+    }
+
     return NextResponse.json(
       {
         success: true,
@@ -104,7 +113,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Lead proxy error:", error);
+    console.error("Lead proxy error:", { name: error instanceof Error ? error.name : "UnknownError" });
     return NextResponse.json(
       { error: "Something went wrong. Please call or text us at (559) 785-2822." },
       { status: 500 }

@@ -62,9 +62,11 @@ assert(
 );
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");
 assert(
-  paidPage.includes("Interior oven, refrigerator, and cabinet or drawer cleaning are priced add-ons") &&
-    paidPage.includes("appliance & cabinet interiors are add-ons"),
-  "move intent states the published add-on scope in both the FAQ and the price context",
+  paidPage.includes("empty cabinet, drawer, and closet interiors") &&
+    paidPage.includes("Inside the oven and refrigerator") &&
+    paidPage.includes("From $325 · empty cabinet & closet interiors included") &&
+    !paidPage.includes("appliance & cabinet interiors are add-ons"),
+  "move intent agrees with the current floor and included empty-cabinet scope",
 );
 assert(
   paidPage.includes('serviceDefault: "Post-construction cleaning"') &&

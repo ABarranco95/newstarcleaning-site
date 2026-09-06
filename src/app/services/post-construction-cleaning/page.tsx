@@ -88,25 +88,25 @@ export default function PostConstructionCleaningPage() {
     <CommercialServicePage
       eyebrow="Fresno-area project cleaning"
       h1="Post-construction cleaning in Fresno, CA"
-      intro="Final cleaning for new homes, renovations, tenant improvements, and property handoffs. Every project starts with the actual site condition, deadline, access, and written scope—not a generic square-foot promise."
+      intro="The build is nearly finished. Let’s get the space ready for handoff. Final interior cleaning for new homes, remodels, and tenant improvements, with the work and deadline reviewed before scheduling."
       serviceName="Post-Construction Cleaning"
       schemaServiceType="Post-construction cleaning"
       quoteService="Post-construction cleaning"
       source="organic_post_construction_service"
       fitTitle="Final cleaning built around the handoff"
-      fitIntro="Construction cleaning is not the same as an occupied-home clean. Dust can return after trades move through, deadlines are fixed, and the difference between rough, final, glass, and punch work has to be explicit before pricing."
+      fitIntro="Once dusty trades are finished and bulk debris is removed, we focus on the interior details: settled dust, fixtures, cabinetry, bathrooms, and finished floors. Glass detail and return visits are listed separately in the proposal so the handoff is clear."
       scopes={scopes}
       bestFor={[
-        "Home builders and general contractors approaching buyer or owner handoff",
-        "Remodelers finishing kitchens, bathrooms, additions, and whole-home renovations",
-        "Property owners preparing newly completed or improved space for occupancy",
-        "Project teams that need one paid pilot before approving repeat work",
+        "Builders preparing for owner handoff",
+        "Remodelers finishing kitchens, baths, and homes",
+        "Property owners preparing for occupancy",
+        "Tenant improvements and renovation projects",
       ]}
       process={process}
       boundaries={[
         "No hazardous dust, lead, asbestos, mold remediation, biohazards, active demolition, or unsafe unfinished areas.",
         "Bulk construction debris, sharp materials, paint disposal, and hauling remain the contractor’s responsibility unless separately approved.",
-        "Exterior elevations, lifts, roof access, high glass, pressure washing, floor refinishing, and restoration require separate specialty scope.",
+        "Exterior elevations, lifts, roof access, high glass, pressure washing, floor refinishing, and restoration are not part of final interior cleaning.",
         "The site needs working utilities, safe access, cured surfaces, and major dusty trades substantially complete before final cleaning.",
       ]}
       faqs={faqs}

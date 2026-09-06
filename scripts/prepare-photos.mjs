@@ -21,6 +21,11 @@ const MAX_WIDTH = 1600;
 const WEBP_QUALITY = 80;
 
 const PHOTOS = [
+  {
+    source: "b4aftr/732706681_998904959538275_4179846580063816355_n.jpg",
+    sha1: "8c9dfce12c20e41ec28a4107651c08aed2d7abe8",
+    out: "glass-shower-freestanding-tub-new-star.webp",
+  },
   // Empty-home / turnover set (posted album "Ads")
   {
     source: "747674609_1011513198277451_1484866233981358716_n.jpg",

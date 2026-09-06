@@ -92,7 +92,7 @@ export default function BeforeAfterCarousel({
         </span>
       </button>
 
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div className="flex flex-wrap items-center gap-3 px-4 py-3">
         <div
           className="flex flex-1 gap-1 rounded-xl border border-line bg-cream-2 p-1"
           role="group"

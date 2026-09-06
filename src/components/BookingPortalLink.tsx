@@ -20,7 +20,7 @@ const TRACKING_PARAMS = [
 
 type BookingPortalLinkProps = {
   baseUrl: string;
-  // Allowlisted non-sensitive context BookingKoala reporting can use.
+  // Allowlisted non-sensitive context for the receiving booking application.
   service?: string;
   city?: string;
   frequency?: string;
@@ -31,9 +31,8 @@ type BookingPortalLinkProps = {
   showIcon?: boolean;
 };
 
-// Outbound handoff into BookingKoala. A click here is a handoff start, never a
-// completed booking; booking_completed may only come from verified
-// BookingKoala confirmation, which this repo does not have.
+// An outbound click is a handoff start, never a completed booking.
+// Only the receiving booking application can verify booking completion.
 export default function BookingPortalLink({
   baseUrl,
   service,
@@ -68,7 +67,7 @@ export default function BookingPortalLink({
   }, [baseUrl, searchParams, service, city, frequency, sourcePage]);
 
   // The correlation ID is minted at click time and stamped onto the anchor
-  // before navigation, so the analytics event and the BookingKoala URL carry
+  // before navigation, so the analytics event and the booking URL carry
   // the same value without server/client markup drift.
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const handoffId = createSubmissionId();

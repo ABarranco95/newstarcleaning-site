@@ -3,34 +3,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
-import { trackFunnelEvent } from "@/lib/conversionTracking";
 
 const directBookingUrl = resolveDirectBookingUrl();
-
-function headerBookingHref(placement: string): string | null {
-  if (!directBookingUrl) return null;
-  try {
-    const url = new URL(directBookingUrl);
-    url.searchParams.set("utm_source_page", `newstarcleaning.com-${placement}`);
-    return url.toString();
-  } catch {
-    return directBookingUrl;
-  }
-}
-
-function trackHeaderHandoff(placement: string) {
-  trackFunnelEvent("booking_handoff_started", {
-    source: placement,
-    page: typeof window !== "undefined" ? window.location.pathname : undefined,
-  });
-}
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const isCommercial = pathname === "/commercial-quote" || pathname === "/services/commercial-cleaning" || pathname === "/services/post-construction-cleaning";
+  const quoteHref = isCommercial
+    ? pathname === "/commercial-quote" ? "/commercial-quote#quote-form" : `/commercial-quote?service=${encodeURIComponent(pathname.includes("post-construction") ? "Post-construction cleaning" : "Office / commercial cleaning")}`
+    : "/book-now";
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -71,12 +70,15 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-7 lg:flex">
+          <nav aria-label="Main navigation" className="hidden items-center gap-5 xl:flex">
             <Link href="/services" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
-              Services
+              Home cleaning
             </Link>
-            <Link href="/#how-it-works" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
-              How it works
+            <Link href="/services/commercial-cleaning" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
+              Commercial
+            </Link>
+            <Link href="/services/post-construction-cleaning" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
+              Post-construction
             </Link>
             <Link href="/service-areas" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               Service areas
@@ -84,35 +86,26 @@ export default function Header() {
             <Link href="/#reviews" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
               Reviews
             </Link>
-            <Link href="/checklist" className="text-sm font-semibold text-white/80 transition-colors hover:text-white">
-              Checklist
-            </Link>
-            {headerBookingHref("header") ? (
-              <a
-                href={headerBookingHref("header") ?? undefined}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackHeaderHandoff("header")}
-                className="btn btn-ghost-dark !min-h-10 !px-4 !text-sm"
-              >
-                Book online
-              </a>
+            {directBookingUrl && !isCommercial ? (
+              <Suspense fallback={null}>
+                <BookingPortalLink baseUrl={directBookingUrl} sourcePage={pathname} ctaLocation="header" label="Book online" showIcon={false} className="btn btn-ghost-dark !min-h-11 !px-4 !text-sm" />
+              </Suspense>
             ) : null}
             <a
               href="tel:+15597852822"
-              className="flex flex-col items-end leading-none"
+              className="hidden flex-col items-end leading-none 2xl:flex"
             >
               <span className="text-sm font-extrabold text-white">(559) 785-2822</span>
               <span className="mt-0.5 text-[0.62rem] font-semibold uppercase tracking-wider text-white/60">Call or text</span>
             </a>
-            <Link href="/book-now" className="btn btn-accent">
-              Request a quote
+            <Link href={quoteHref} className="btn btn-accent !px-4 !text-sm">
+              {isCommercial ? "Request a walkthrough" : "Request a quote"}
             </Link>
           </nav>
 
           {/* Mobile actions */}
-          <div className="flex items-center gap-2 lg:hidden">
-            <Link href="/book-now" className="btn btn-accent hidden !min-h-10 !px-4 !text-xs sm:inline-flex">
+          <div className="flex items-center gap-2 xl:hidden">
+            <Link href={quoteHref} className="btn btn-accent hidden !min-h-10 !px-4 !text-xs sm:inline-flex">
               Quote
             </Link>
             <a
@@ -136,10 +129,12 @@ export default function Header() {
               </svg>
             </a>
             <button
+              ref={menuButton}
               onClick={() => setMobileOpen(!mobileOpen)}
               className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 text-white"
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileOpen ? (
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,10 +151,13 @@ export default function Header() {
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <div className="border-t border-white/15 pb-5 lg:hidden">
-            <nav className="flex flex-col gap-1 pt-3">
+          <div id="mobile-navigation" className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-white/15 pb-5 xl:hidden">
+            <nav aria-label="Mobile navigation" className="flex flex-col gap-1 pt-3">
               {[
-                { href: "/services", label: "Services" },
+                { href: quoteHref, label: isCommercial ? "Request a walkthrough" : "Request a quote" },
+                { href: "/services", label: "Home cleaning services" },
+                { href: "/services/commercial-cleaning", label: "Office & commercial cleaning" },
+                { href: "/services/post-construction-cleaning", label: "Post-construction cleaning" },
                 { href: "/#how-it-works", label: "How it works" },
                 { href: "/service-areas", label: "Service areas" },
                 { href: "/#reviews", label: "Reviews" },
@@ -176,19 +174,10 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              {headerBookingHref("mobile-menu") ? (
-                <a
-                  href={headerBookingHref("mobile-menu") ?? undefined}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    trackHeaderHandoff("mobile-menu");
-                    setMobileOpen(false);
-                  }}
-                  className="mt-1 rounded-xl border border-white/25 px-4 py-3 text-center text-base font-semibold text-white hover:bg-white/10"
-                >
-                  Book online
-                </a>
+              {directBookingUrl && !isCommercial ? (
+                <Suspense fallback={null}>
+                  <BookingPortalLink baseUrl={directBookingUrl} sourcePage={pathname} ctaLocation="mobile_menu" label="Book online" showIcon={false} className="mt-1 rounded-xl border border-white/25 px-4 py-3 text-center text-base font-semibold text-white hover:bg-white/10" />
+                </Suspense>
               ) : null}
               <a
                 href="tel:+15597852822"

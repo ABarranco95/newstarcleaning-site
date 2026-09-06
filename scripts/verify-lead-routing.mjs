@@ -42,9 +42,9 @@ assert(!read("src/lib/apexCrm.ts").includes("data: apexData"), "Apex upstream re
 includes("src/lib/apexCrm.ts", "landingService", "Apex helper must preserve paid landing service");
 includes("src/lib/apexCrm.ts", "landingCity", "Apex helper must preserve paid landing city");
 includes("src/lib/bookingPortal.ts", "NEXT_PUBLIC_DIRECT_BOOKING_URL", "booking resolver must support the direct booking CTA URL");
-includes("src/lib/bookingPortal.ts", "NEXT_PUBLIC_BOOKINGKOALA_URL", "booking resolver must support the BookingKoala URL");
-assert(!read("src/lib/bookingPortal.ts").includes("APEX"), "direct booking must never fall back to an Apex URL");
-includes("src/app/book-now/page.tsx", "resolveDirectBookingUrl", "book-now page must use the shared BookingKoala resolver");
+assert(!read("src/lib/bookingPortal.ts").includes("NEXT_PUBLIC_BOOKINGKOALA_URL"), "legacy booking config must not restore a public CTA");
+assert(!read("src/lib/bookingPortal.ts").includes("APEX_CRM_BASE_URL"), "public booking must never derive its URL from a server integration setting");
+includes("src/app/book-now/page.tsx", "resolveDirectBookingUrl", "book-now page must use the shared explicit booking resolver");
 includes("src/components/AnalyticsTags.tsx", "NEXT_PUBLIC_GTM_ID", "analytics tags must support GTM");
 includes("src/components/AnalyticsTags.tsx", "NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID", "analytics tags must support Google Ads conversion config");
 includes("src/lib/conversionTracking.ts", "lead_submit_accepted", "conversion tracker must push an accepted-lead funnel event");

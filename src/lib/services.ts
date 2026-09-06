@@ -170,7 +170,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "How is recurring cleaning priced?",
         answer:
-          "The quote is built from size, condition, frequency, and any add-ons, with enough time scheduled to finish the checklist. We will rarely be the cheapest quote you get, because cheap usually means rushed. A regular schedule is the honest way to keep the price down: a maintained home takes less time each visit.",
+          "Standard cleaning starts at $165. Your quote reflects the home’s size, condition, visit frequency, and any optional work. Choose weekly, bi-weekly, or monthly visits; if the home needs an initial deep clean, we explain that before you commit.",
       },
     ],
     localNotes:
@@ -324,7 +324,7 @@ export const services: ServiceDefinition[] = [
     tagline:
       "Empty-home cleaning for move-outs, move-ins, sellers, landlords, and property turnovers.",
     description:
-      "Move-out cleaning is a detailed empty-home service for tenants, owners, buyers, sellers, and property turnovers. It covers accessible room surfaces, kitchens, bathrooms, floors, baseboards, and fixtures, with oven, refrigerator, and cabinet or drawer interiors available as priced add-ons.",
+      "Move-out cleaning is a detailed empty-home service for tenants, owners, buyers, sellers, and property turnovers. It covers accessible room surfaces, kitchens, bathrooms, floors, baseboards, fixtures, and empty cabinet, drawer, and closet interiors. Inside the oven and refrigerator can be added separately.",
     whatsIncluded: [
       {
         title: "Kitchen",
@@ -332,7 +332,7 @@ export const services: ServiceDefinition[] = [
           "Counters, sink, backsplash, stovetop, range hood, and filter detailed",
           "Oven and refrigerator interiors available as add-ons; empty microwave interior cleaned when accessible",
           "Exterior appliances and dishwasher interior and filter cleaned where accessible",
-          "Cabinet and drawer fronts and handles detailed; interior wipe-outs available as add-ons",
+          "Empty cabinet and drawer interiors wiped; fronts and handles detailed",
           "Floors vacuumed edge to edge and mopped; accessible trash emptied",
         ],
       },
@@ -342,7 +342,7 @@ export const services: ServiceDefinition[] = [
           "Toilet cleaned inside, behind, and around the base",
           "Tub, shower, tile, glass, and fixtures cleaned",
           "Sink, vanity, counters, mirrors, and chrome polished",
-          "Vanity and cabinet exteriors detailed; empty interior wipe-outs available as add-ons",
+          "Vanity and cabinet exteriors detailed; empty cabinet and drawer interiors wiped",
           "Floor edges and corners detailed; floors vacuumed or swept and mopped",
           "Trash emptied from accessible bins",
         ],
@@ -370,11 +370,6 @@ export const services: ServiceDefinition[] = [
         title: "Inside refrigerator",
         description:
           "Interior refrigerator cleaning can be added when the refrigerator is emptied before arrival.",
-      },
-      {
-        title: "Inside cabinets or drawers",
-        description:
-          "Interior cabinet and drawer wipe-outs can be added when they are emptied before the visit.",
       },
       {
         title: "Interior window glass",
@@ -406,7 +401,7 @@ export const services: ServiceDefinition[] = [
     scopeNotes: [
       "Move-out cleaning assumes the home is empty or mostly empty before we arrive.",
       "We do not haul trash, move furniture, pack belongings, repair damage, or guarantee a landlord deposit decision.",
-      "Appliance and cabinet interior cleaning is a priced add-on; interiors must be emptied before the visit.",
+      "Empty cabinet, drawer, and closet interiors are included. Oven and refrigerator interiors are optional add-ons; all interiors must be emptied before cleaning.",
     ],
     bestFor: [
       "Tenants moving out",
@@ -429,7 +424,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Full empty-home clean",
         description:
-          "We clean kitchens, bathrooms, cabinet fronts, closets, accessible trim, fixtures, and floors, plus any quoted add-on interiors.",
+          "We clean kitchens, bathrooms, empty cabinet and drawer interiors, closets, accessible trim, fixtures, and floors, plus any requested appliance add-ons.",
       },
       {
         title: "Final scope check",
@@ -441,17 +436,17 @@ export const services: ServiceDefinition[] = [
       {
         question: "Is everything included in a move-out clean?",
         answer:
-          "Almost everything in the empty home is: kitchens, bathrooms, floors edge to edge, baseboards, fixtures, blinds, closet interiors, and accessible detail work. A short list is quoted separately because it adds real hours: the inside of the oven, refrigerator, and cabinets or drawers, plus interior window glass and tracks. Ask for what you need and the quote lists it before booking, so the appointment actually has time to finish it.",
+          "The service covers the empty home: kitchens, bathrooms, floors, baseboards, fixtures, accessible blinds, and empty cabinet, drawer, and closet interiors. Inside the oven and refrigerator, interior window glass, and reachable window tracks are optional add-ons. The quote lists the work before you book.",
       },
       {
         question: "How much does move-out cleaning cost?",
         answer:
-          "A maintained 1 bed, 1 bath under 1,000 square feet starts around $245. Average lived-in condition adds cleaning time and can bring that same size closer to $360, and larger homes commonly land in the $450 to $600 range. Size, condition, and requested add-ons set the final number, and we confirm it before anything is booked.",
+          "Move-out cleaning starts at $325. The final quote depends on home size, condition, and optional work such as oven, refrigerator, or window cleaning. Empty cabinet, drawer, and closet interiors are included. We confirm the total before booking.",
       },
       {
         question: "Does move-out cleaning include inside the oven, fridge, and cabinets?",
         answer:
-          "They are the most common move-out add-ons. Interior oven, refrigerator, and cabinet or drawer cleaning is priced separately and added to your quote when you request it, as long as everything is empty and accessible. Tell us what the walkthrough requires and the quote lists it before booking.",
+          "Empty cabinet and drawer interiors are included in move-out cleaning. Inside the oven and refrigerator are priced separately when requested. Empty these areas before the visit so the cleaner can reach the surfaces.",
       },
       {
         question: "Do you remove trash, furniture, or leftover belongings?",
@@ -476,7 +471,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "Why do move-out quotes include the whole home?",
         answer:
-          "An empty home still gets cleaned everywhere the base scope covers: kitchens, bathrooms, closets, baseboards, and floors edge to edge, with appliance and cabinet interiors quoted as add-ons so you only pay for what the walkthrough requires. That takes real hours, so we price the full scope up front instead of adding surprise charges on site. If a cheaper bid sounds too good for that scope, it usually is.",
+          "Move-out cleaning covers the empty home rather than a few selected rooms: kitchens, bathrooms, cabinets, drawers, closets, baseboards, and floors. Oven, refrigerator, and window work can be added. The quote accounts for the home’s size and condition before the appointment.",
       },
     ],
     localNotes:

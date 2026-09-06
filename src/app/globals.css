@@ -4,7 +4,7 @@
   /*
     Approved Route A brand system (active-tokens.json): deep navy anchor
     #0E2A4D, navy-light facet #1C3F6E as the action color, reverse facet
-    tint #AFC2D9 on navy, warm white #F7F2E8 canvas tint, white digital
+    tint #AFC2D9 on navy, cool slate canvas tint, white digital
     canvas. Ember/orange accents are retired in the brand guide.
   */
 
@@ -18,9 +18,9 @@
   --color-accent-hover: #0e2a4d;
   --color-accent-light: #afc2d9;
 
-  /* White digital canvas with the warm-white brand tint for alternate sections. */
+  /* Retain the established token names; digital surfaces stay cool white. */
   --color-cream: #ffffff;
-  --color-cream-2: #f7f2e8;
+  --color-cream-2: #f8fafc;
 
   /* Ink + neutrals. */
   --color-ink: #0f1b2d;
@@ -46,6 +46,20 @@
   body {
     background-color: var(--color-cream);
     color: var(--color-ink);
+  }
+
+  :where(a, button, summary, input, select, textarea):focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   ::selection {
@@ -135,7 +149,7 @@
   }
 
   .btn:focus-visible {
-    outline: 3px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+    outline: 3px solid var(--color-accent-light);
     outline-offset: 3px;
   }
 
@@ -149,7 +163,7 @@
     transform: translateY(-1px);
   }
 
-  /* On navy fields the primary action flips to warm white so it pops while
+  /* On navy fields the primary action flips to cool white so it pops while
      staying inside the approved palette. White cards nested in navy sections
      restore the light-surface style. */
   .bg-primary .btn-accent {

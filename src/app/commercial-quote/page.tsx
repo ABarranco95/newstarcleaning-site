@@ -21,29 +21,28 @@ export default function CommercialQuotePage() {
   return (
     <>
       <section className="relative overflow-hidden bg-primary text-white">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-20 lg:pt-14">
+        <div className="mx-auto grid max-w-7xl items-start gap-6 px-4 pb-12 pt-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:px-8 lg:pb-20 lg:pt-14">
           <div className="max-w-2xl lg:pt-4">
-            <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
+            <nav className="mb-6 hidden text-sm text-white/70 lg:block" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-white">Home</Link>
               <span className="px-1.5">/</span>
               <Link href="/services" className="hover:text-white">Services</Link>
               <span className="px-1.5">/</span>
               <span className="font-semibold text-white">Commercial request</span>
             </nav>
-            <span className="eyebrow eyebrow-dot text-accent-light">Walkthrough request</span>
-            <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">Tell us about the property or project.</h1>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-white/75">
-              Share the location, service type, approximate square footage, required areas, timing, and best contact. We will confirm whether it fits current route and crew capacity before proposing work.
+            <span className="eyebrow text-accent-light">Fresno / Clovis / Madera</span>
+            <h1 className="mt-3 text-3xl text-white lg:text-[3.4rem]">Let’s price your cleaning.</h1>
+            <p className="mt-4 max-w-xl text-base leading-7 text-white/80 lg:text-lg">
+              Tell us about your workplace or project. We’ll arrange a walkthrough or photo review, then send a written proposal.
             </p>
-            <div className="mt-7">
+            <div className="mt-7 hidden lg:block">
               <a href={business.phoneHref} className="btn btn-ghost-dark">Call {business.phoneDisplay}</a>
             </div>
           </div>
           <div id="quote-form" className="relative scroll-mt-24">
             <CommercialQuoteForm
-              title="Request a walkthrough"
-              subtitle="Property, size, required areas, and timing. We confirm scope and crew capacity before any proposal."
+              title="Property & contact details"
+              subtitle="No payment or booking with this request."
               source="organic_commercial_quote_page"
             />
           </div>

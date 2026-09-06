@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
 import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
+import { buildQuoteSmsConsent, QUOTE_SMS_DISCLOSURE } from "@/lib/quoteSmsConsent";
 
 // Commercial and post-construction work is quoted from a walkthrough or
 // photo/plan review, never self-booked. This form collects what a real
@@ -20,7 +21,7 @@ type CommercialFormState = {
   propertyType: string;
   city: string;
   sqft: string;
-  frequency: string;
+  commercialFrequency: string;
   timeline: string;
   deadline: string;
   scope: string;
@@ -100,7 +101,7 @@ function initialForm(defaultService?: string): CommercialFormState {
     propertyType: "",
     city: "",
     sqft: "",
-    frequency: "",
+    commercialFrequency: "",
     timeline: "",
     deadline: "",
     scope: "",
@@ -134,6 +135,7 @@ export default function CommercialQuoteForm({
 }: CommercialQuoteFormProps) {
   const [formData, setFormData] = useState<CommercialFormState>(() => initialForm(defaultService));
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [smsOptIn, setSmsOptIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
@@ -180,6 +182,7 @@ export default function CommercialQuoteForm({
 
   const updateField = (field: keyof CommercialFormState, value: string) => {
     trackFormStart();
+    if (field === "contactPreference" && (value === "call" || value === "email")) setSmsOptIn(false);
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
@@ -210,6 +213,9 @@ export default function CommercialQuoteForm({
       // Walkthrough preference rides along as a labeled line the CRM keeps.
       const messageLines = [
         formData.scope.trim(),
+        formData.organization.trim() ? `Company/project: ${formData.organization.trim()}` : "",
+        `Property category: ${formData.propertyType}`,
+        formData.commercialFrequency ? `Commercial schedule: ${formData.commercialFrequency}` : "",
         formData.walkthroughPreference
           ? `Walkthrough preference: ${formData.walkthroughPreference}`
           : "",
@@ -231,7 +237,7 @@ export default function CommercialQuoteForm({
           city: formData.city,
           sqft: formData.sqft,
           homeSize: formData.sqft,
-          frequency: formData.frequency,
+          commercialFrequency: formData.commercialFrequency,
           timeline: formData.timeline,
           requestedDate: needsDeadline ? formData.deadline.trim() || undefined : undefined,
           contactPreference: formData.contactPreference,
@@ -245,14 +251,14 @@ export default function CommercialQuoteForm({
           submissionId: submissionIdRef.current,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),
-          smsConsent: "service_related_quote_follow_up",
-          consentText:
-            "By requesting a quote, the visitor agreed to receive service-related calls/texts about pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out.",
+          smsConsent: buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source),
+          consentText: QUOTE_SMS_DISCLOSURE,
         }),
       });
 
       const data = (await response.json().catch(() => ({}))) as {
         error?: string;
+        metadata?: { apex?: { success?: boolean } };
         details?: unknown;
         filtered?: boolean;
       };
@@ -275,6 +281,9 @@ export default function CommercialQuoteForm({
         );
       }
 
+      if (data.filtered !== true && data.metadata?.apex?.success !== true) {
+        throw new Error("We couldn't confirm your request. Please retry or call us.");
+      }
       if (data.filtered !== true) {
         trackLeadConversion({
           source,
@@ -314,7 +323,7 @@ export default function CommercialQuoteForm({
         </p>
         <button
           type="button"
-          onClick={() => setIsSuccess(false)}
+          onClick={() => { setSmsOptIn(false); setIsSuccess(false); }}
           className="mt-5 text-sm font-semibold text-primary underline-offset-4 hover:underline"
         >
           Send another request
@@ -324,10 +333,9 @@ export default function CommercialQuoteForm({
   }
 
   return (
-    <div className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8">
+    <div className="rounded-2xl border border-line bg-white p-5 sm:p-7 lg:p-8">
       <div className="mb-6">
-        <span className="eyebrow eyebrow-dot">Commercial & project work</span>
-        <h2 className="mt-3 font-display text-2xl leading-tight text-ink lg:text-[1.6rem]">{title}</h2>
+        <h2 className="font-display text-xl leading-tight text-ink lg:text-2xl">{title}</h2>
         {subtitle ? <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p> : null}
       </div>
 
@@ -399,11 +407,12 @@ export default function CommercialQuoteForm({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <FieldLabel htmlFor="commercial-email">Email</FieldLabel>
+            <FieldLabel htmlFor="commercial-email" required={formData.contactPreference === "email"}>Email</FieldLabel>
             <input
               id="commercial-email"
               name="email"
               type="email"
+              required={formData.contactPreference === "email"}
               value={formData.email}
               onChange={(event) => updateField("email", event.target.value)}
               autoComplete="email"
@@ -501,10 +510,10 @@ export default function CommercialQuoteForm({
             </FieldLabel>
             <select
               id="commercial-frequency"
-              name="frequency"
+              name="commercialFrequency"
               required
-              value={formData.frequency}
-              onChange={(event) => updateField("frequency", event.target.value)}
+              value={formData.commercialFrequency}
+              onChange={(event) => updateField("commercialFrequency", event.target.value)}
               className={fieldClass}
             >
               <option value="">Select…</option>
@@ -610,8 +619,12 @@ export default function CommercialQuoteForm({
           </div>
         </div>
 
+        <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-ink-soft">
+          <input type="checkbox" name="smsOptIn" checked={smsOptIn && formData.contactPreference !== "call" && formData.contactPreference !== "email"} disabled={formData.contactPreference === "call" || formData.contactPreference === "email"} onChange={(event) => setSmsOptIn(event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-primary" />
+          <span>{QUOTE_SMS_DISCLOSURE}</span>
+        </label>
         {error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
             {error}
           </div>
         )}
@@ -630,9 +643,7 @@ export default function CommercialQuoteForm({
         </button>
 
         <p className="text-center text-xs leading-relaxed text-ink-soft">
-          By submitting, you consent to service-related calls/texts from New Star Cleaning about
-          your quote, scheduling, and follow-ups. Reply STOP to opt out. Consent is not required
-          to purchase services.
+          We will use your contact preference. Without text permission, we can call or email.
           &nbsp;·&nbsp;
           <Link href="/privacy" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>
         </p>

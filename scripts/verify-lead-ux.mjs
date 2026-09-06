@@ -127,7 +127,7 @@ assert(
     quickQuoteForm.includes('id="quote-condition"') &&
     quickQuoteForm.includes("renderBedBathFields") &&
     quickQuoteForm.includes("renderConditionField") &&
-    quickQuoteForm.includes("service-related calls/texts"),
+    quickQuoteForm.includes("buildQuoteSmsConsent") && quickQuoteForm.includes("QUOTE_SMS_DISCLOSURE"),
   "quote form captures routing fields plus bedrooms, bathrooms, and condition so first-touch is not a cold call",
 );
 

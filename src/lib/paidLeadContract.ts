@@ -92,7 +92,9 @@ export function buildPaidLeadForward(body: Record<string, unknown>): PaidLeadFor
     moveOutScopeConfirmed: body.moveOutScopeConfirmed === true,
     organization: optionalText(body.organization),
     bookingIntent: optionalText(body.bookingIntent) || "paid-search-quote-request",
-    smsConsent: optionalText(body.smsConsent) || "service_related_quote_follow_up",
+    smsConsent: typeof body.smsConsent === "boolean" || (body.smsConsent && typeof body.smsConsent === "object" && !Array.isArray(body.smsConsent))
+      ? body.smsConsent
+      : optionalText(body.smsConsent),
     consentText: optionalText(body.consentText),
     firstLandingPage: optionalText(body.firstLandingPage),
     firstReferrer: optionalText(body.firstReferrer),

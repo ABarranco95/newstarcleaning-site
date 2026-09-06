@@ -58,13 +58,11 @@ export default function AboutPage() {
                 jobs carefully, and make the expected result clear before booking.
               </p>
               <p className="mt-4">
-                We are not the cheapest option in town, and that is deliberate. Doing the work
-                right takes time, so every quote includes the hours the job actually needs
-                instead of racing the clock. We are not a discount service, and we are not a maid
-                service either: the work is cleaning, with add-ons like appliance interiors or
-                interior windows available when you request them. Homes are the core of it, and
-                we also take on office, commercial, and post-construction projects when they fit
-                the route.
+                Your quote accounts for the home’s size, condition, and the work you need.
+                Cleaning supplies come with the cleaner, and appliance interiors or interior
+                windows can be added when requested. Homes are the core of our work. We also
+                provide <Link href="/services/commercial-cleaning" className="text-primary underline">office and commercial cleaning</Link> and{" "}
+                <Link href="/services/post-construction-cleaning" className="text-primary underline">post-construction final cleaning</Link> by proposal.
               </p>
             </div>
 

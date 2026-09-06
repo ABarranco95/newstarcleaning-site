@@ -138,7 +138,7 @@ for (const badConsent of [false, undefined, "true", "granted", 1]) {
   assert.equal(rejected.ok, false, `non-boolean consent ${String(badConsent)} must never forward as granted`);
 }
 
-// --- Direct booking: BookingKoala config is the only destination ---
+// --- Direct booking: explicit Apex wizard configuration, no legacy fallback ---
 function loadBookingResolver(env) {
   return loadTsModule("src/lib/bookingPortal.ts", { process: { env } });
 }
@@ -155,16 +155,21 @@ assert.equal(
 );
 assert.equal(
   loadBookingResolver({ NEXT_PUBLIC_BOOKINGKOALA_URL: "https://newstar.bookingkoala.com/booknow" }).resolveDirectBookingUrl(),
-  "https://newstar.bookingkoala.com/booknow",
-  "BookingKoala URL must resolve when configured",
+  null,
+  "legacy BookingKoala configuration must not restore a public CTA",
 );
 assert.equal(
   loadBookingResolver({
-    NEXT_PUBLIC_DIRECT_BOOKING_URL: "https://newstar.bookingkoala.com/direct",
+    NEXT_PUBLIC_DIRECT_BOOKING_URL: "https://book.example.com/book",
     NEXT_PUBLIC_BOOKINGKOALA_URL: "https://newstar.bookingkoala.com/booknow",
   }).resolveDirectBookingUrl(),
-  "https://newstar.bookingkoala.com/direct",
+  "https://book.example.com/book",
   "explicit direct-booking URL wins",
+);
+assert.equal(
+  loadBookingResolver({ NEXT_PUBLIC_DIRECT_BOOKING_URL: "https://newstar.bookingkoala.com/booknow" }).resolveDirectBookingUrl(),
+  null,
+  "explicit configuration must not restore the retired public destination",
 );
 assert.equal(
   loadBookingResolver({ NEXT_PUBLIC_DIRECT_BOOKING_URL: "not-a-url" }).resolveDirectBookingUrl(),
@@ -188,8 +193,8 @@ assert(smsRoute.includes("buildSmsOptInForward"), "SMS route must forward throug
 assert(!smsRoute.includes("appendDetails"), "SMS route must not bury consent in message text");
 
 const bookNow = readFileSync("src/app/book-now/page.tsx", "utf8");
-assert(bookNow.includes("resolveDirectBookingUrl"), "book-now must resolve booking URL through the shared BookingKoala resolver");
-assert(!bookNow.includes("APEX_CRM_BASE_URL"), "book-now must not reference Apex as a booking destination");
+assert(bookNow.includes("resolveDirectBookingUrl"), "book-now must resolve booking URL through the shared explicit resolver");
+assert(!bookNow.includes("APEX_CRM_BASE_URL"), "book-now must not derive public URLs from server integration settings");
 
 const quoteForm = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
 assert(quoteForm.includes("submissionId: submissionIdRef.current"), "quote form must send a stable submissionId");

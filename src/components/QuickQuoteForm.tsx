@@ -5,6 +5,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
 import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
+import { buildQuoteSmsConsent, QUOTE_SMS_DISCLOSURE } from "@/lib/quoteSmsConsent";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import { business as BUSINESS } from "@/lib/business";
 
@@ -64,13 +65,11 @@ const services = [
   "Not sure yet",
 ];
 
-// Oven, refrigerator, and cabinet/drawer interiors are priced add-ons for
-// move-in/out (see src/lib/services.ts), so they are offered here alongside
-// the other genuine move-out extras.
+// Empty cabinet, drawer, and closet interiors are included in move-out.
+// Offer only the optional work here; see src/lib/services.ts.
 const moveOutAddons = [
   "Inside oven",
   "Inside refrigerator",
-  "Inside cabinets or drawers",
   "Interior window glass",
   "Garage, patio, or balcony sweeping",
   "Extra blind detail",
@@ -99,6 +98,8 @@ function normalizeServiceParam(value: string | null) {
   }
   if (
     normalized === "move-out-cleaning" ||
+    normalized === "move-out cleaning" ||
+    normalized === "move-in / move-out cleaning" ||
     normalized === "move-out" ||
     normalized === "moveinout"
   ) {
@@ -150,7 +151,7 @@ function initialForm(defaultCity?: string, defaultService?: string, paidSearch =
     phone: "",
     email: "",
     city: paidSearch ? "" : defaultCity || "",
-    service: defaultService || "",
+    service: normalizeServiceParam(defaultService || null),
     message: "",
     frequency: "",
     bedrooms: "",
@@ -225,6 +226,7 @@ export default function QuickQuoteForm({
 }: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService, paidSearch));
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [smsOptIn, setSmsOptIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedCommercial, setSubmittedCommercial] = useState(false);
   const [submittedService, setSubmittedService] = useState("");
@@ -241,7 +243,7 @@ export default function QuickQuoteForm({
     setFormData((current) => ({
       ...current,
       city: paidSearch ? current.city : current.city || defaultCity || "",
-      service: current.service || defaultService || "",
+      service: current.service || normalizeServiceParam(defaultService || null),
     }));
   }, [defaultCity, defaultService, paidSearch]);
 
@@ -297,6 +299,7 @@ export default function QuickQuoteForm({
 
   const updateField = (field: TextFormField, value: string) => {
     trackFormStart();
+    if (field === "contactPreference" && (value === "call" || value === "email")) setSmsOptIn(false);
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
@@ -363,9 +366,8 @@ export default function QuickQuoteForm({
           submissionId: submissionIdRef.current,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),
-          smsConsent: "service_related_quote_follow_up",
-          consentText:
-            "By requesting a quote, the visitor agreed to receive service-related calls/texts about pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out.",
+          smsConsent: buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source),
+          consentText: QUOTE_SMS_DISCLOSURE,
         }),
       });
 
@@ -393,12 +395,13 @@ export default function QuickQuoteForm({
       // Only fire conversion pixels for real Apex-accepted leads.
       // Honeypot-filtered bot submissions return { filtered: true } — show the
       // bot a success state but never fire a conversion or pollute attribution.
-      const apexAccepted = paidSearch
-        ? data.metadata?.apex?.success === true
-        : data.filtered !== true;
+      const apexAccepted = data.filtered !== true && data.metadata?.apex?.success === true;
 
       if (paidSearch && !apexAccepted) {
         throw new Error("We couldn't send your request — call or text us and we'll price it over the phone.");
+      }
+      if (!paidSearch && data.filtered !== true && !apexAccepted) {
+        throw new Error("We couldn't confirm your request. Please retry or call us.");
       }
 
       if (apexAccepted) {
@@ -418,6 +421,7 @@ export default function QuickQuoteForm({
       setShowPaidDetails(false);
       submissionIdRef.current = "";
       setFormData(initialForm(defaultCity, defaultService, paidSearch));
+      setSmsOptIn(false);
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -552,7 +556,7 @@ export default function QuickQuoteForm({
           Move-out add-ons
         </span>
         <p className="mt-1 text-xs leading-relaxed text-ink-soft">
-          Base move-out covers the empty home: kitchen, bathrooms, floors, baseboards, closets, and cabinet fronts. Oven, refrigerator, and cabinet interiors are extra.
+          Move-out cleaning includes empty cabinet, drawer, and closet interiors. Inside the oven and refrigerator, window glass, and tracks are optional additions.
         </p>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
@@ -577,10 +581,11 @@ export default function QuickQuoteForm({
 
       {paid && (isRecurringRequest || isPaidHouseRequest) ? (
         <div>
-          <FieldLabel htmlFor="quote-frequency">How often?</FieldLabel>
+          <FieldLabel htmlFor="quote-frequency" required={isRecurringRequest}>How often?</FieldLabel>
           <select
             id="quote-frequency"
             name="frequency"
+            required={isRecurringRequest}
             value={formData.frequency}
             onChange={(event) => updateField("frequency", event.target.value)}
             className={fieldClass}
@@ -632,10 +637,11 @@ export default function QuickQuoteForm({
       <div className="grid gap-4 sm:grid-cols-2">
         {(!paidSearch || isRecurringRequest || isPaidHouseRequest) && (
           <div>
-            <FieldLabel htmlFor="quote-frequency">How often?</FieldLabel>
+            <FieldLabel htmlFor="quote-frequency" required={isRecurringRequest}>How often?</FieldLabel>
             <select
               id="quote-frequency"
               name="frequency"
+              required={isRecurringRequest}
               value={formData.frequency}
               onChange={(event) => updateField("frequency", event.target.value)}
               className={fieldClass}
@@ -703,6 +709,7 @@ export default function QuickQuoteForm({
           type="button"
           onClick={() => {
             setSubmittedCommercial(false);
+            setSmsOptIn(false);
             setIsSuccess(false);
           }}
           className="mt-5 block w-full text-sm font-semibold text-primary underline-offset-4 hover:underline"
@@ -783,11 +790,12 @@ export default function QuickQuoteForm({
         {!paidSearch && !compact ? (
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <FieldLabel htmlFor="quote-email">Email</FieldLabel>
+              <FieldLabel htmlFor="quote-email" required={formData.contactPreference === "email"}>Email</FieldLabel>
               <input
                 id="quote-email"
                 name="email"
                 type="email"
+                required={formData.contactPreference === "email"}
                 value={formData.email}
                 onChange={(event) => updateField("email", event.target.value)}
                 autoComplete="email"
@@ -860,19 +868,11 @@ export default function QuickQuoteForm({
               <option value="2000-2499">2,000 – 2,499</option>
               <option value="2500-2999">2,500 – 2,999</option>
               <option value="3000-3499">3,000 – 3,499</option>
-              {paidSearch ? (
-                <>
-                  <option value="3500+">3,500+</option>
-                  <option value="not-sure">Not sure — Angel can confirm</option>
-                </>
-              ) : (
-                <>
-                  <option value="3500-4999">3,500 – 4,999</option>
-                  <option value="5000-9999">5,000 – 9,999</option>
-                  <option value="10000-19999">10,000 – 19,999</option>
-                  <option value="20000+">20,000+</option>
-                </>
-              )}
+              <option value="3500-4999">3,500 – 4,999</option>
+              <option value="5000-9999">5,000 – 9,999</option>
+              <option value="10000-19999">10,000 – 19,999</option>
+              <option value="20000+">20,000+</option>
+              {paidSearch ? <option value="not-sure">Not sure — Angel can confirm</option> : null}
             </select>
           </div>
         </div>
@@ -914,6 +914,18 @@ export default function QuickQuoteForm({
 
         {showInlineExtendedDetails ? renderExtendedDetails() : null}
 
+        {isRecurringRequest && !showInlineExtendedDetails && !showPaidDetails ? (
+          <div>
+            <FieldLabel htmlFor="quote-frequency" required>How often would you like cleaning?</FieldLabel>
+            <select id="quote-frequency" name="frequency" required value={formData.frequency} onChange={(event) => updateField("frequency", event.target.value)} className={fieldClass}>
+              <option value="">Choose a frequency…</option>
+              <option value="weekly">Weekly</option>
+              <option value="bi-weekly">Biweekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+        ) : null}
+
         {/* Empty confirmation is always on the main form for move-out.
             Organic forms also collect add-ons here; paid keeps add-ons optional. */}
         {!showInlineExtendedDetails && !paidSearch && isMoveOutRequest ? renderMoveOutAddons() : null}
@@ -933,8 +945,12 @@ export default function QuickQuoteForm({
           </div>
         )}
 
+        <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-ink-soft">
+          <input type="checkbox" name="smsOptIn" checked={smsOptIn && formData.contactPreference !== "call" && formData.contactPreference !== "email"} disabled={formData.contactPreference === "call" || formData.contactPreference === "email"} onChange={(event) => setSmsOptIn(event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-primary" />
+          <span>{QUOTE_SMS_DISCLOSURE}</span>
+        </label>
         {error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
             {error}
             {paidSearch ? (
               <>
@@ -954,8 +970,8 @@ export default function QuickQuoteForm({
           paidSearch={paidSearch}
         />
 
-        <p className={`text-center text-ink-soft ${paidSearch ? "text-[11px] leading-4" : "text-xs leading-relaxed"}`}>
-          By submitting, you consent to service-related calls/texts from New Star Cleaning about your quote, pricing, appointment confirmations, reminders, and follow-ups. Reply STOP to opt out. Consent is not required to purchase services.
+        <p className="text-center text-xs leading-relaxed text-ink-soft">
+          We will use your contact preference, or call if none is selected. Nothing is booked by submitting.
           &nbsp;·&nbsp;
           <Link href="/privacy" target="_blank" rel="noopener" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>
         </p>
