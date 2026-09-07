@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import MapEmbed from "@/components/MapEmbed";
+import GoogleRating from "@/components/GoogleRating";
+import { business } from "@/lib/business";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 
 export const metadata: Metadata = {
@@ -18,115 +19,9 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <>
-      <section className="relative overflow-hidden bg-primary text-white">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
-          aria-hidden="true"
-        />
-        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
-          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white">Home</Link>
-            <span className="px-1.5">/</span>
-            <span className="font-semibold text-white">Contact</span>
-          </nav>
-          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-            <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot text-accent-light">Talk to us</span>
-              <h1 className="mt-4 text-4xl text-white lg:text-[3.2rem]">
-                Talk to a real person about your home.
-              </h1>
-              <p className="mt-5 text-lg leading-8 text-white/75">
-                Call, text, or send the form. You reach us directly, not a call center, and
-                we usually respond the same business day with pricing and availability.
-              </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <a href="tel:+15597852822" data-phone-location="contact_hero" className="btn btn-accent !min-h-12 !px-5 !text-sm">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  (559) 785-2822
-                </a>
-                <a href="sms:+15597852822" data-phone-location="contact_hero" className="btn btn-outline !min-h-12 !px-5 !text-sm">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  Text us
-                </a>
-                <a href="mailto:support@newstarcleaning.com" className="btn btn-outline !min-h-12 !px-5 !text-sm">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  support@newstarcleaning.com
-                </a>
-              </div>
-              <p className="mt-6 text-sm leading-relaxed text-white/55">
-                Clear quote path, local service routes, and service-related follow-up for Fresno,
-                Clovis, Madera &amp; nearby Fresno neighborhoods.
-              </p>
-            </div>
-            <div className="relative">
-              <QuickQuoteForm
-                title="Get in touch"
-                subtitle="Tell us a bit about what you need. We'll get back to you with availability and pricing."
-                source="contact_page"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-cream py-14 lg:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-4 lg:grid-cols-3">
-            <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-              <span className="eyebrow eyebrow-dot">Service area</span>
-              <h2 className="mt-3 text-xl text-ink">Where we serve</h2>
-              <p className="mt-3 leading-relaxed text-ink-soft">
-                Fresno, Clovis, Madera, plus close-in Fresno neighborhoods including Tower
-                District, Fig Garden, and Woodward Park.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-              <span className="eyebrow eyebrow-dot">Hours</span>
-              <h2 className="mt-3 text-xl text-ink">Office availability</h2>
-              <p className="mt-3 leading-relaxed text-ink-soft">
-                Monday – Friday: 8 AM – 6 PM
-                <br />
-                Saturday: 8 AM – 5 PM
-                <br />
-                Sunday: closed
-              </p>
-            </div>
-            <div className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-              <span className="eyebrow eyebrow-dot">Quote path</span>
-              <h2 className="mt-3 text-xl text-ink">Request pricing</h2>
-              <p className="mt-3 leading-relaxed text-ink-soft">
-                Already know what you need? Send the service details and we&apos;ll reply with
-                clear pricing and availability before anything is booked.
-              </p>
-              <Link href="/book-now" className="btn btn-accent mt-4 !min-h-11 !px-5 !text-sm">
-                Request quote
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-cream pb-14 lg:pb-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <span className="eyebrow eyebrow-dot">Find us</span>
-            <h2 className="mt-3 text-2xl text-ink">Our Fresno location</h2>
-            <p className="mt-3 leading-relaxed text-ink-soft">
-              Based off Nees Ave in north Fresno, with cleaning routes across Fresno,
-              Clovis, and Madera.
-            </p>
-          </div>
-          <MapEmbed className="mt-6" />
-        </div>
-      </section>
-
+    <div className="site-reference">
+      <section className="site-form-layout"><div className="site-form-heading"><nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav><h1>Talk to New Star.</h1><p>Call, text, or send your cleaning details. We’ll help with the service, price, and available dates.</p><div className="site-links"><a href={business.phoneHref} data-phone-location="contact_hero">Call {business.phoneDisplay}</a><a href={business.phoneHref.replace("tel:", "sms:")}>Text us</a><a href="mailto:support@newstarcleaning.com">Email us</a></div><div className="site-proof-row"><GoogleRating /></div></div><div className="site-form-panel"><QuickQuoteForm title="Get in touch" subtitle="Share the basics so we can review your request." source="contact_page" compact /></div></section>
+      <section className="site-section site-split site-rule"><h2>Local, and easy to reach.</h2><div><p className="site-intro">Based in Fresno. Serving Fresno, Clovis, Tower District, Fig Garden, and Woodward Park. Madera dates depend on route availability.</p><div className="site-links"><Link href="/service-areas">Check your area ↗</Link><a href={business.googleMapsUrl} target="_blank" rel="noopener noreferrer">Our Google profile ↗</a></div><div className="site-disclosures"><details><summary>Office hours</summary><p>Monday–Friday: 8 AM–6 PM. Saturday: 8 AM–5 PM. Sunday: closed.</p></details><details><summary>Commercial or construction work?</summary><p>We review the property and task list before providing a written proposal.</p><Link href="/commercial-quote" className="home-text-link">Request a walkthrough ↗</Link></details></div></div></section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -151,6 +46,6 @@ export default function ContactPage() {
           }),
         }}
       />
-    </>
+    </div>
   );
 }

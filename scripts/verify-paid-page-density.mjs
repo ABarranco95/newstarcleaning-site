@@ -24,7 +24,7 @@ assert(page.includes("BeforeAfterGallery") && page.includes("ProcessStrip"), "pa
 assert(page.includes("snap-mandatory") && page.includes("Swipe to see all six results"), "mobile proof uses a compact six-result swipe gallery");
 assert(page.includes("getBoundingClientRect().bottom <= 0") && page.includes('addEventListener("scroll"'), "mobile sticky CTA stays hidden while the quote form is visible");
 assert(directSectionCount === 2, `paid render has two direct sections instead of stacked content walls (found ${directSectionCount})`);
-assert(questionCount === 10, `each of five intents carries exactly two FAQs (found ${questionCount} questions)`);
+assert(questionCount === 12, `each of six intents carries exactly two FAQs (found ${questionCount} questions)`);
 for (const asset of [
   "shower-detail-before.webp",
   "shower-detail-after.webp",

@@ -15,6 +15,12 @@ export type RealWorkPair = {
   label: string;
 };
 
+export const vanityDetailPhoto: RealWorkPhoto = {
+  src: "/photos/real-work/double-vanity-detail-new-star.webp",
+  alt: "Double bathroom vanity with dark wood cabinets, mirrors, and a light tile floor",
+  caption: "Bathroom vanity detail",
+};
+
 export const bathroomResultPhotos: RealWorkPhoto[] = [
   {
     src: "/photos/real-work/glass-shower-freestanding-tub-new-star.webp",

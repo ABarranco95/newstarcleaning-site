@@ -29,8 +29,8 @@ const postConstructionPage = read("src/app/services/post-construction-cleaning/p
 const commercialCleaningPage = read("src/app/services/commercial-cleaning/page.tsx");
 const business = read("src/lib/business.ts");
 const serviceAreasHub = read("src/app/service-areas/page.tsx");
-const header = read("src/components/Header.tsx");
-const footer = read("src/components/Footer.tsx");
+const header = read("src/components/Header.tsx") + read("src/components/HomeHeader.tsx");
+const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const robots = read("src/app/robots.ts");
 
 const areaSlugs = [
@@ -108,9 +108,9 @@ assert(
 );
 
 assert(
-  serviceAreaPage.includes("Local service notes") &&
+  serviceAreaPage.includes("{area.localContent}") &&
     serviceAreaPage.includes("Google profile") &&
-    serviceAreaPage.includes("Local FAQs") &&
+    serviceAreaPage.includes("areaFaqs.map") &&
     serviceAreaPage.includes("FAQPage") &&
     serviceAreaPage.includes("BreadcrumbSchema") &&
     serviceAreaPage.includes("homeProfiles") &&
@@ -163,11 +163,11 @@ for (const href of [
   "/services/commercial-cleaning",
   "/service-areas",
 ]) {
-  assert(footer.includes(`href="${href}"`), `footer links ${href}`);
+  assert(footer.includes(`"${href}"`) && footer.includes("href={href}"), `footer links ${href}`);
 }
 
 for (const href of ["/services", "/service-areas"]) {
-  assert(header.includes(`href="${href}"`), `header links ${href}`);
+  assert(header.includes(`"${href}"`) && header.includes("href={link.href}"), `header links ${href}`);
 }
 
 assert(

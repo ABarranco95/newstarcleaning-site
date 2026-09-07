@@ -1,5 +1,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import vm from "node:vm";
+import { createRequire } from "node:module";
+import ts from "typescript";
 
 const root = process.cwd();
 const paidPage = readFileSync(path.join(root, "src/app/google-ads/GoogleAdsLandingPageClient.tsx"), "utf8");
@@ -12,7 +15,7 @@ function assert(condition, message) {
 }
 
 assert(paidPage.includes('type PaidIntent = "house" | "move" | "deep" | "recurring" | "postConstruction"'), "paid intent contract includes generic house separately from recurring");
-for (const intent of ["house", "recurring", "deep", "move", "postConstruction"]) {
+for (const intent of ["house", "recurring", "deep", "move", "postConstruction", "commercial"]) {
   assert(paidPage.includes(`${intent}: {`), `paid page defines ${intent} configuration`);
 }
 assert(paidPage.includes('return "house";'), "missing or unknown paid service falls back to generic house intent");
@@ -71,7 +74,7 @@ assert(
 assert(
   paidPage.includes('serviceDefault: "Post-construction cleaning"') &&
     paidPage.includes("not demo waste") &&
-    paidPage.includes("priced as a separate return visit"),
+    paidPage.includes("a return visit is quoted separately"),
   "post-construction intent states hauling exclusion and return-visit pricing honestly",
 );
 assert(
@@ -83,11 +86,81 @@ assert(
     paidPage.includes("refrigerator-detail-before.webp") &&
     paidPage.includes("Six real before-and-after results") &&
     paidPage.includes("BeforeAfterGallery"),
-  "every paid intent renders six real before-and-after proof pairs",
+  "residential paid intents retain six real before-and-after proof pairs",
 );
 for (const removedBloat of ["PricingGuide", "SectionCard", "scopeBullets", "addonBullets", "boundaryBullets", "heroBullets"]) {
   assert(!paidPage.includes(removedBloat), `paid page removes obsolete text-wall structure: ${removedBloat}`);
 }
+
+// Execute the real page and resolver with inert form/tracking boundaries.
+// No browser, build, lead submission, or external API is used by this matrix.
+const require = createRequire(import.meta.url);
+const jsx = require("react/jsx-runtime");
+let params = new URLSearchParams();
+const boundary = (name) => (props) => jsx.jsx("test-boundary", { ...props, "data-boundary": name });
+const compiled = ts.transpileModule(`${paidPage}\nexports.routingTest = { detectIntent, INTENT_CONFIG };`, {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2020, esModuleInterop: true },
+  reportDiagnostics: true,
+});
+assert(!(compiled.diagnostics || []).some((item) => item.category === ts.DiagnosticCategory.Error), "paid page transpiles without syntax errors");
+const runtimeModule = { exports: {} };
+vm.runInNewContext(compiled.outputText, {
+  exports: runtimeModule.exports,
+  module: runtimeModule,
+  require: (name) => {
+    if (name === "react/jsx-runtime") return jsx;
+    if (name === "react") return {
+      useMemo: (fn) => fn(), useRef: (current) => ({ current }), useEffect: () => {},
+      // Exercise the sticky CTA visible branch as well as the regular render.
+      useState: (initial) => [initial === false ? true : initial, () => {}],
+    };
+    if (name === "next/navigation") return { useSearchParams: () => params };
+    if (name === "next/image") return boundary("Image");
+    if (name.startsWith("@/components/")) return boundary(name.split("/").at(-1));
+    if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => {} };
+    if (name === "@/lib/conversionTracking") return { trackFunnelEvent: () => {} };
+    throw new Error(`Unexpected paid dependency: ${name}`);
+  },
+});
+const { detectIntent, INTENT_CONFIG } = runtimeModule.exports.routingTest;
+const render = (service, frequency = "") => {
+  params = new URLSearchParams({ service: service || "", frequency, city: "clovis", gclid: "regression-only" });
+  const nodes = [];
+  const text = [];
+  function visit(node) {
+    if (node == null || typeof node === "boolean") return;
+    if (Array.isArray(node)) return node.forEach(visit);
+    if (typeof node !== "object") { text.push(String(node)); return; }
+    if (typeof node.type === "function") return visit(node.type(node.props));
+    nodes.push(node);
+    visit(node.props?.children);
+  }
+  visit(runtimeModule.exports.default({ directBookingUrl: "https://booking.example.test/" }));
+  return { nodes, text: text.join(" "), forms: nodes.filter((node) => /QuoteForm$/.test(node.props?.["data-boundary"] || "")) };
+};
+const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
+for (const alias of commercialAliases) {
+  for (const frequency of ["", "recurring", "weekly", "biweekly", "bi-weekly", "monthly"]) {
+    const result = render(alias, frequency);
+    const form = result.forms[0];
+    const label = `${alias} / ${frequency || "no frequency"}`;
+    assert(detectIntent(alias, frequency) === "commercial", `${label}: commercial outranks residential frequency/deep signals`);
+    assert(result.forms.length === 1 && form?.props["data-boundary"] === "CommercialQuoteForm" && form.props.source === "google-ads" && form.props.defaultService === "Office / commercial cleaning" && !form.props.directBookingUrl, `${label}: paid proposal form with known service and no booking URL`);
+    assert(!result.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "") || /book-now|booking\.example/.test(node.props?.href || "")), `${label}: zero residential imagery or self-book exits`);
+    assert(result.text.includes("Commercial cleaning proposals for Clovis workplaces.") && result.text.includes("Review your written proposal") && !/\$\d|clean home|homes\.|You choose the date|Get my quote|Before you book|Pick a date|book online|floors\./i.test(result.text), `${label}: proposal-only headline, process, closing and sticky copy`);
+  }
+}
+assert(INTENT_CONFIG.commercial.proofOrder.length === 0 && !INTENT_CONFIG.commercial.priceContext, "commercial config carries no residential photo mapping or price anchor");
+for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "", "house"], ["standard-cleaning", "", "house"], ["standard-cleaning", "weekly", "recurring"], ["recurring-cleaning", "", "recurring"], ["deep-cleaning", "monthly", "deep"], ["move-out-cleaning", "weekly", "move"]]) {
+  const result = render(service, frequency);
+  const form = result.forms[0];
+  assert(detectIntent(service, frequency) === expected && form?.props["data-boundary"] === "QuickQuoteForm" && form.props.source === "google-ads" && form.props.paidSearch === true && form.props.extended === true && form.props.defaultService === INTENT_CONFIG[expected].serviceDefault && form.props.landingCity === "Clovis" && form.props.directBookingUrl === "https://booking.example.test/", `${service || "missing"} / ${frequency}: preserves residential intent and paid form props`);
+  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").length === 2 && result.nodes.filter((node) => /\/photos\/real-work\/paid\//.test(node.props?.src || "")).length === 12, `${service || "missing"} / ${frequency}: preserves both booking exits and all six proof pairs`);
+}
+const project = render("post-construction-cleaning", "weekly");
+assert(detectIntent("post-construction-cleaning", "weekly") === "postConstruction" && project.forms[0]?.props["data-boundary"] === "QuickQuoteForm" && project.forms[0].props.defaultService === "Post-construction cleaning" && project.forms[0].props.directBookingUrl === null && !project.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "")), "post-construction retains its existing conditional form and no residential booking/proof");
+for (const intent of Object.keys(INTENT_CONFIG)) assert(INTENT_CONFIG[intent].faqs.length === 2, `${intent}: exactly two scoped FAQs`);
+assert(paidPage.includes("captureFirstPaidTouch({") && paidPage.includes("if (!hasTrackedLandingView.current)") && paidPage.includes('trackFunnelEvent("paid_landing_view"') && paidPage.includes('trackFunnelEvent("quote_cta_click"'), "first-touch and once-only paid attribution guards remain intact");
 
 if (failures.length) {
   console.error("Paid intent routing verification failed:");

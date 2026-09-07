@@ -4,11 +4,13 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
+import CommercialQuoteForm from "@/components/CommercialQuoteForm";
+import GoogleRating from "@/components/GoogleRating";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 
-type PaidIntent = "house" | "move" | "deep" | "recurring" | "postConstruction";
+type PaidIntent = "house" | "move" | "deep" | "recurring" | "postConstruction" | "commercial";
 
 type CityKey =
   | "fresno"
@@ -191,6 +193,24 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       },
     ],
   },
+  commercial: {
+    eyebrow: "Office & commercial cleaning",
+    h1: (city) => `Commercial cleaning proposals for ${city} workplaces.`,
+    subhead: "Tell us about your facility, required areas, access, and preferred frequency. We arrange a walkthrough or photo review, then confirm scope and availability in a written proposal.",
+    serviceDefault: "Office / commercial cleaning",
+    formTitle: "Request a walkthrough",
+    proofOrder: [],
+    faqs: [
+      {
+        question: "How is commercial cleaning priced?",
+        answer: "We review the facility size, required areas, frequency, and access before preparing a written proposal. The proposal defines the task list, exclusions, price, and start conditions.",
+      },
+      {
+        question: "Can you work around our business hours?",
+        answer: "Share your occupied hours, security requirements, and preferred service window. We confirm access and capacity before proposing a schedule.",
+      },
+    ],
+  },
   postConstruction: {
     eyebrow: "Post-construction cleaning",
     h1: (city) => `Post-construction cleaning for ${city} projects.`,
@@ -205,7 +225,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       },
       {
         question: "When should the final clean happen?",
-        answer: "After the dusty trades are done, utilities are on, and the debris is out. If trades come back through after we clean, that gets priced as a separate return visit so nobody is rushing a free re-clean.",
+        answer: "After dusty trades are finished, utilities are on, and debris is removed. If more trade work leaves new dust after cleaning, a return visit is quoted separately.",
       },
     ],
   },
@@ -247,6 +267,7 @@ function detectIntent(service: string | null, frequency: string | null): PaidInt
   const normalizedFrequency = (frequency || "").trim().toLowerCase();
 
   if (normalizedService.includes("post")) return "postConstruction";
+  if (normalizedService.includes("commercial") || normalizedService.includes("office")) return "commercial";
   if (normalizedService.includes("deep")) return "deep";
   if (normalizedService.includes("move")) return "move";
   if (
@@ -266,36 +287,28 @@ function PaidBrand() {
         alt="New Star Cleaning"
         width={640}
         height={150}
-        className="h-9 w-auto sm:h-10"
+        className="h-auto w-36 sm:w-44"
         priority
       />
     </div>
   );
 }
 
-function TrustLine() {
-  const items = ["5.0★ Google rating", "Insured local company", "Price before booking"];
-
+function TrustLine({ commercial = false }: { commercial?: boolean }) {
   return (
-    <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-white/82" aria-label="New Star Cleaning trust signals">
-      {items.map((item) => (
-        <li key={item} className="flex items-center gap-2">
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent-light text-[10px] font-black text-primary" aria-hidden="true">
-            ✓
-          </span>
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-ink-soft">
+      <GoogleRating />
+      <span className="text-xs">{commercial ? "Locally owned · Written proposal before scheduling" : "Locally owned · Price before booking"}</span>
+    </div>
   );
 }
 
 function PriceContext({ context }: { context: NonNullable<PaidIntentConfig["priceContext"]> }) {
   return (
-    <div className="border-l-2 border-accent-light pl-4">
-      <span className="block text-[11px] font-bold uppercase tracking-[0.16em] text-white/58">{context.label}</span>
-      <strong className="mt-1 block text-base font-bold text-white">{context.value}</strong>
-      <span className="mt-1 block text-xs leading-5 text-white/62">{context.note}</span>
+    <div className="border-t border-line pt-4">
+      <span className="block text-xs text-ink-soft">{context.label}</span>
+      <strong className="mt-2 block text-base font-semibold leading-6 text-primary">{context.value}</strong>
+      <span className="mt-2 block text-xs leading-5 text-ink-soft">{context.note}</span>
     </div>
   );
 }
@@ -305,25 +318,25 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
 
   return (
     <section className="border-b border-line bg-white" aria-labelledby="paid-proof-title">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <div className="site-section">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">Real New Star work</div>
-            <h2 id="paid-proof-title" className="mt-2 font-display text-3xl leading-tight text-primary sm:text-4xl">
+            <div className="text-xs text-ink-soft">Real New Star work</div>
+            <h2 id="paid-proof-title" className="mt-2 text-primary">
               Six real before-and-after results.
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-ink-soft">Photographed from New Star jobs. No stock photography.</p>
         </div>
 
-        <div className="mt-7 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
+        <div className="mt-7 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10 md:overflow-visible md:pb-0">
           {pairs.map((pair) => (
-            <article key={pair.key} className="min-w-[84%] snap-center overflow-hidden rounded-2xl border border-line bg-cream-2 sm:min-w-[62%] md:min-w-0">
-              <div className="grid grid-cols-2 gap-px bg-line">
+            <article key={pair.key} className="min-w-[84%] snap-center sm:min-w-[62%] md:min-w-0">
+              <div className="grid grid-cols-2 gap-2">
                 {(["before", "after"] as const).map((stage) => {
                   const image = pair[stage];
                   return (
-                    <figure key={stage} className="relative aspect-[4/5] bg-cream-2">
+                    <figure key={stage} className="relative aspect-[4/5] bg-slate-100">
                       <Image
                         src={image.src}
                         alt={image.alt}
@@ -331,14 +344,14 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
                         sizes="(max-width: 767px) 50vw, 190px"
                         className="object-cover"
                       />
-                      <figcaption className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] ${stage === "before" ? "bg-primary/85 text-white" : "bg-cream-2 text-primary"}`}>
+                      <figcaption className="absolute bottom-0 inset-x-0 bg-white px-2 py-2 text-xs text-primary">
                         {stage}
                       </figcaption>
                     </figure>
                   );
                 })}
               </div>
-              <h3 className="px-4 py-3 text-sm font-bold text-primary">{pair.title}</h3>
+              <h3 className="pt-3 text-sm font-medium text-primary">{pair.title}</h3>
             </article>
           ))}
         </div>
@@ -359,7 +372,7 @@ function ReviewStrip() {
     <section className="border-b border-line bg-white" aria-labelledby="paid-reviews-title">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <h2 id="paid-reviews-title" className="font-display text-3xl leading-tight text-primary">
-          5.0 stars on Google.
+          Customer feedback
         </h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {REVIEW_QUOTES.map((r) => (
@@ -374,20 +387,24 @@ function ReviewStrip() {
   );
 }
 
-function ProcessStrip() {
-  const steps = [
+function ProcessStrip({ commercial = false }: { commercial?: boolean }) {
+  const steps = commercial ? [
+    ["1", "Share facility details"],
+    ["2", "Walkthrough & scope review"],
+    ["3", "Review your written proposal"],
+  ] : [
     ["1", "Share size & timing"],
     ["2", "We confirm scope & price"],
     ["3", "You choose the date"],
   ];
 
   return (
-    <section className="border-b border-line bg-cream-2" aria-label="How the quote works">
+    <section className="border-b border-line bg-white" aria-label="How the quote works">
       <div className="mx-auto grid max-w-5xl grid-cols-3 divide-x divide-line px-4 sm:px-6 lg:px-8">
         {steps.map(([number, label]) => (
           <div key={number} className="flex flex-col items-center gap-2 px-2 py-5 text-center sm:flex-row sm:justify-center sm:px-5 sm:text-left">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-white">{number}</span>
-            <span className="text-sm font-bold text-primary">{label}</span>
+            <span className="text-xs tabular-nums text-ink-soft">{number}</span>
+            <span className="text-sm font-medium text-primary">{label}</span>
           </div>
         ))}
       </div>
@@ -399,25 +416,25 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="space-y-3">
+    <div className="border-t border-line">
       {faqs.map((faq, index) => (
-        <div key={faq.question} className="overflow-hidden rounded-2xl border border-line bg-white">
+        <div key={faq.question} className="border-b border-line bg-white">
           <button
             id={`paid-faq-trigger-${index}`}
             type="button"
             onClick={() => setOpenIndex(openIndex === index ? null : index)}
-            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-bold text-primary transition hover:bg-cream-2 md:text-base"
+            className="flex min-h-14 w-full items-center justify-between gap-4 py-4 text-left text-sm font-medium text-primary transition hover:text-primary-light md:text-base"
             aria-expanded={openIndex === index}
             aria-controls={`paid-faq-panel-${index}`}
           >
             <span>{faq.question}</span>
-            <span className="text-xl text-accent" aria-hidden="true">{openIndex === index ? "−" : "+"}</span>
+            <span className="text-xl text-primary" aria-hidden="true">{openIndex === index ? "−" : "+"}</span>
           </button>
           <div
             id={`paid-faq-panel-${index}`}
             role="region"
             aria-labelledby={`paid-faq-trigger-${index}`}
-            className={openIndex === index ? "px-5 pb-5 text-sm leading-6 text-ink-soft" : "hidden"}
+            className={openIndex === index ? "pb-5 pr-5 text-sm leading-6 text-ink-soft" : "hidden"}
           >
             {faq.answer}
           </div>
@@ -427,7 +444,7 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   );
 }
 
-function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
+function StickyMobileCTA({ onQuoteClick, commercial = false }: { onQuoteClick: () => void; commercial?: boolean }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -450,11 +467,11 @@ function StickyMobileCTA({ onQuoteClick }: { onQuoteClick: () => void }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
-        <a href={"tel:+1" + "559" + "785" + "2822"} className="flex-1 rounded-xl border border-line px-4 py-3 text-center text-sm font-bold text-primary">
+        <a href={"tel:+1" + "559" + "785" + "2822"} className="home-text-link flex-1 justify-center">
           Call
         </a>
-        <a href="#booking-form" onClick={onQuoteClick} className="flex-1 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-white">
-          Get my quote
+        <a href="#booking-form" onClick={onQuoteClick} className="home-button flex-1">
+          {commercial ? "Request a proposal" : "Get my quote"}
         </a>
       </div>
     </div>
@@ -475,7 +492,9 @@ export default function GoogleAdsLandingPageClient({
   );
   const intent = INTENT_CONFIG[intentKey];
   const isProjectRequest = intentKey === "postConstruction";
-  const residentialBookingUrl = isProjectRequest ? null : directBookingUrl;
+  const isCommercialRequest = intentKey === "commercial";
+  const isBusinessRequest = isProjectRequest || isCommercialRequest;
+  const residentialBookingUrl = isBusinessRequest ? null : directBookingUrl;
 
   useEffect(() => {
     captureFirstPaidTouch({
@@ -507,47 +526,59 @@ export default function GoogleAdsLandingPageClient({
   };
 
   return (
-    <div className="bg-white pb-24 text-ink md:pb-0">
-      <section className="bg-primary text-white">
-        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
-          <div className="flex items-center justify-between gap-4">
-            <PaidBrand />
-            <a
-              href={"tel:+1" + "559" + "785" + "2822"}
-              className="rounded-xl border border-white/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-white/10 sm:px-4 sm:text-sm"
-            >
-              <span className="sm:hidden">Call</span>
-              <span className="hidden sm:inline">Call (559) 785-2822</span>
-            </a>
-          </div>
+    <div className="site-reference bg-white pb-24 text-ink md:pb-0">
+      <header className="bg-primary text-white">
+        <div className="home-wrap flex h-16 items-center justify-between gap-4">
+          <PaidBrand />
+          <a
+            href={"tel:+1" + "559" + "785" + "2822"}
+            className="home-header-quote"
+          >
+            <span className="sm:hidden">Call us</span>
+            <span className="hidden sm:inline">Call (559) 785-2822</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </header>
 
-          <div className="mt-5 grid min-w-0 gap-5 sm:mt-7 sm:gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
-            <div className="min-w-0 lg:col-start-1 lg:row-start-1 lg:self-center">
-              <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">{intent.eyebrow}</div>
-              <h1 className="mt-3 max-w-2xl break-words font-display text-[2.25rem] leading-[1.04] text-white sm:text-5xl lg:text-[3.6rem]">
+      <section className="border-b border-line bg-white" aria-labelledby="paid-title">
+        <div className="home-wrap py-5 sm:py-8 lg:py-10">
+          <div className="grid min-w-0 gap-5 sm:gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
+            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <p className="text-xs text-ink-soft">{intent.eyebrow}</p>
+              <h1 id="paid-title" className="mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]">
                 {intent.h1(city.label)}
               </h1>
-              <p className="mt-3 max-w-xl text-[0.98rem] leading-6 text-white/78 sm:mt-4 sm:text-lg sm:leading-8">
+              <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
                 {intent.subhead}
               </p>
-              <div className="mt-4">
-                <TrustLine />
+              <div className="mt-3">
+                <TrustLine commercial={isCommercialRequest} />
               </div>
             </div>
 
-            <div id="booking-form" className="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-              <QuickQuoteForm
-                source="google-ads"
-                title={intent.formTitle}
-                subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : "You’ll hear back from Angel with a real price, usually the same day."}
-                landingCity={city.formValue || city.label}
-                defaultService={intent.serviceDefault}
-                directBookingUrl={residentialBookingUrl}
-                extended
-                paidSearch
-              />
+            <div id="booking-form" className="site-form-panel min-w-0 scroll-mt-4 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+              {isCommercialRequest ? (
+                <CommercialQuoteForm
+                  source="google-ads"
+                  defaultService={intent.serviceDefault}
+                  title={intent.formTitle}
+                  subtitle="Share your facility details. We confirm scope and availability before proposing work."
+                />
+              ) : (
+                <QuickQuoteForm
+                  source="google-ads"
+                  title={intent.formTitle}
+                  subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : "We’ll follow up with your price and available dates."}
+                  landingCity={city.formValue || city.label}
+                  defaultService={intent.serviceDefault}
+                  directBookingUrl={residentialBookingUrl}
+                  extended
+                  paidSearch
+                />
+              )}
               {residentialBookingUrl ? (
-                <p className="mt-3 text-center text-sm text-white/70">
+                <p className="mt-1 text-center text-xs text-ink-soft">
                   Prefer to book it yourself?{" "}
                   <BookingPortalLink
                     baseUrl={residentialBookingUrl}
@@ -557,7 +588,7 @@ export default function GoogleAdsLandingPageClient({
                     city={city.formValue || undefined}
                     label="Pick a date online"
                     showIcon={false}
-                    className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                    className="home-text-link"
                   />
                 </p>
               ) : null}
@@ -565,41 +596,54 @@ export default function GoogleAdsLandingPageClient({
 
             <div className="space-y-5 lg:col-start-1 lg:row-start-2">
               {intent.priceContext ? <PriceContext context={intent.priceContext} /> : null}
+              {!isBusinessRequest ? (
+                <figure className="hidden border-t border-line pt-5 lg:flex lg:items-center lg:gap-5">
+                  <Image
+                    src={`/illustrations/${intentKey === "move" ? "cleaning-empty-home" : intentKey === "deep" ? "cleaning-deep" : "cleaning-regular"}.svg`}
+                    alt=""
+                    width={180}
+                    height={130}
+                    className="w-36 shrink-0"
+                  />
+                  <figcaption className="max-w-52 text-sm leading-6 text-ink-soft">
+                    {intentKey === "move" ? "An empty home, ready for its next chapter." : intentKey === "deep" ? "More attention for edges, fixtures, and buildup." : "Kitchens, bathrooms, dusting, and floors."}
+                  </figcaption>
+                </figure>
+              ) : null}
             </div>
           </div>
         </div>
       </section>
 
-      {!isProjectRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
+      {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
       <ReviewStrip />
-      <ProcessStrip />
+      <ProcessStrip commercial={isCommercialRequest} />
 
       <section className="bg-white">
-        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:px-8 lg:py-14">
+        <div className="site-section grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
           <div>
-            <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent">Two quick answers</div>
-            <h2 className="mt-2 font-display text-3xl leading-tight text-primary sm:text-4xl">Questions before you request a quote.</h2>
+            <h2 className="text-primary">{isCommercialRequest ? "Before we propose the work." : "Before you book."}</h2>
             <div className="mt-6">
               <FAQAccordion faqs={intent.faqs} />
             </div>
           </div>
 
-          <div className="rounded-3xl bg-primary p-6 text-white sm:p-8">
-            <div className="text-xs font-bold uppercase tracking-[0.18em] text-accent-light">Ready when you are</div>
-            <h2 className="mt-3 font-display text-3xl leading-tight">{isProjectRequest ? "Plan the final clean for your project." : "Get a price for your home."}</h2>
-            <p className="mt-3 text-sm leading-6 text-white/72">
-              {isProjectRequest ? "Send the site details and handoff date. We’ll confirm scope, access, and capacity before proposing the work." : "Share the basics and we’ll follow up with pricing and available dates."}
+          <div className="border-t border-line pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+            <h2 className="text-primary">{isCommercialRequest ? "Let’s scope your facility." : isProjectRequest ? "Let’s scope your project." : "A clean home starts here."}</h2>
+            <p className="mt-4 max-w-md text-sm leading-6 text-ink-soft">
+              {isCommercialRequest ? "Share your facility details and preferred service window. We’ll confirm scope, access, and capacity before sending a written proposal." : isProjectRequest ? "Send the site details and handoff date. We’ll confirm scope, access, and capacity before proposing the work." : "Share the basics. We’ll confirm your price and available dates before you book."}
             </p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="btn btn-accent !px-4 !text-sm">
-                Get my quote
+            <div className="site-actions">
+              <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="home-button">
+                {isBusinessRequest ? "Request a proposal" : "Get my quote"}
+                <span aria-hidden="true">↗</span>
               </a>
-              <a href={"tel:+1" + "559" + "785" + "2822"} className="btn btn-ghost-dark !px-4 !text-sm">
+              <a href={"tel:+1" + "559" + "785" + "2822"} className="home-text-link">
                 Call us
               </a>
             </div>
             {residentialBookingUrl ? (
-              <p className="mt-4 text-sm text-white/70">
+              <p className="mt-2 text-xs text-ink-soft">
                 Or skip the callback and{" "}
                 <BookingPortalLink
                   baseUrl={residentialBookingUrl}
@@ -609,7 +653,7 @@ export default function GoogleAdsLandingPageClient({
                   city={city.formValue || undefined}
                   label="book online"
                   showIcon={false}
-                  className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
+                  className="home-text-link"
                 />
                 .
               </p>
@@ -618,7 +662,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
-      <StickyMobileCTA onQuoteClick={() => trackQuoteCta("sticky_mobile")} />
+      <StickyMobileCTA commercial={isCommercialRequest} onQuoteClick={() => trackQuoteCta("sticky_mobile")} />
     </div>
   );
 }

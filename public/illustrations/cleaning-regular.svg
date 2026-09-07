@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" fill="none">
+  <title>Kitchen counter, sink and everyday floor cleaning</title>
+  <desc>A wall-aligned kitchen counter with an inset sink, arched faucet and closed cabinets. Blue identifies the countertop and floor surfaces.</desc>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="180,114 48,180 180,246 312,180" fill="#E9EFF6" stroke="none" stroke-width="1.7"/>
+    <polygon points="48,180 48,88 180,22 180,114" fill="#F8FAFC" stroke="#0E2A4D" stroke-width="1.4"/>
+    <polygon points="180,114 180,22 312,88 312,180" fill="#F8FAFC" stroke="#0E2A4D" stroke-width="1.4"/>
+    <polyline points="48,180 180,246 312,180" fill="none" stroke="#0E2A4D" stroke-width="2"/>
+    <polyline points="51,173.5 180,109 309,173.5" fill="none" stroke="#AFC2D9" stroke-width="3"/>
+    <polygon points="152,60 78,97 78,77 152,40" fill="white" stroke="#0E2A4D" stroke-width="1.4"/>
+    <polyline points="115,78.5 115,58.5" fill="none" stroke="#647088" stroke-width="1"/>
+    <polyline points="121,71.5 121,66.5" fill="none" stroke="#0E2A4D" stroke-width="1.8"/>
+    <polyline points="109,77.5 109,72.5" fill="none" stroke="#0E2A4D" stroke-width="1.8"/>
+    <polygon points="172,118 216,140 216,94 172,72" fill="#DCE6F1" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polygon points="216,140 112,192 112,146 216,94" fill="white" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polyline points="164,166 164,122" fill="none" stroke="#647088" stroke-width="1.2"/>
+    <polyline points="210,136 118,182" fill="none" stroke="#AFC2D9" stroke-width="1.2"/>
+    <polyline points="175,125.5 168,129" fill="none" stroke="#0E2A4D" stroke-width="2.2"/>
+    <polyline points="160,133 153,136.5" fill="none" stroke="#0E2A4D" stroke-width="2.2"/>
+    <polygon points="172,66 60,122 112,148 224,92" fill="#AFC2D9" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polygon points="129,102.5 95,119.5 119,131.5 153,114.5" fill="white" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polygon points="129,106.5 103,119.5 119,127.5 145,114.5" fill="#AFC2D9" stroke="#647088" stroke-width="1"/>
+    <polyline points="129,106.5 129,110.5 103,123.5" fill="none" stroke="#647088" stroke-width="1"/>
+    <path d="M109 109.5v-16c0-8 12-8 12 0v5" fill="none" stroke="#0E2A4D" stroke-width="2.3"/>
+  </g>
+</svg>

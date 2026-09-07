@@ -2,31 +2,15 @@
 
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import { Suspense } from "react";
-import BookingPortalLink from "@/components/BookingPortalLink";
+import HomeBookingContextLink from "@/components/HomeBookingContextLink";
 
 const directBookingUrl = resolveDirectBookingUrl();
 
-// Restrained secondary path in the homepage opening area: visible to
-// schedule-ready visitors without competing with the quote CTA.
-export default function HomeBookingLink() {
+export default function HomeBookingLink({ onDark = true, placement = "hero" }: { onDark?: boolean; placement?: "hero" | "footer" }) {
   if (!directBookingUrl) return null;
-
-
   return (
-    <>
-      {" "}
-      Already know exactly what you need?{" "}
-      <Suspense fallback={null}>
-        <BookingPortalLink
-          baseUrl={directBookingUrl}
-          sourcePage="/"
-          ctaLocation="home-hero"
-          label="Book online"
-          showIcon={false}
-          className="font-semibold text-white/85 underline underline-offset-4 hover:text-white"
-        />
-      </Suspense>
-      .
-    </>
+    <Suspense fallback={null}>
+      <HomeBookingContextLink baseUrl={directBookingUrl} onDark={onDark} placement={placement} />
+    </Suspense>
   );
 }

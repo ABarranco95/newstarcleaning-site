@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" fill="none">
+  <title>Shower tile, glass, fixtures and floor-edge detail cleaning</title>
+  <desc>A tiled walk-in shower with a wall-mounted rain head, one glass screen and a separate sink vanity. Blue marks tile, shower tray and reachable floor edges.</desc>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="180,114 48,180 180,246 312,180" fill="#E9EFF6" stroke="none" stroke-width="1.7"/>
+    <polygon points="48,180 48,88 180,22 180,114" fill="#F8FAFC" stroke="#0E2A4D" stroke-width="1.4"/>
+    <polygon points="180,114 180,22 312,88 312,180" fill="#F8FAFC" stroke="#0E2A4D" stroke-width="1.4"/>
+    <polyline points="48,180 180,246 312,180" fill="none" stroke="#0E2A4D" stroke-width="2"/>
+    <polyline points="51,173.5 180,109 309,173.5" fill="none" stroke="#AFC2D9" stroke-width="3"/>
+    <polygon points="162,118 68,165 68,84 162,37" fill="#DCE6F1" stroke="#0E2A4D" stroke-width="1.5"/>
+    <polyline points="162,91 68,138" fill="none" stroke="#AFC2D9" stroke-width="0.8"/>
+    <polyline points="162,64 68,111" fill="none" stroke="#AFC2D9" stroke-width="0.8"/>
+    <polyline points="131,133.5 131,52.5" fill="none" stroke="#AFC2D9" stroke-width="0.8"/>
+    <polyline points="99,149.5 99,68.5" fill="none" stroke="#AFC2D9" stroke-width="0.8"/>
+    <polygon points="162,118 68,165 118,190 212,143" fill="#AFC2D9" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polyline points="68,165 118,190 212,143" fill="none" stroke="#0E2A4D" stroke-width="2.6"/>
+    <polyline points="126,113 126,66 143,74.5" fill="none" stroke="#0E2A4D" stroke-width="2.4"/>
+    <polygon points="146,69 130,77 144,84 160,76" fill="white" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polyline points="133,108.5 121,114.5" fill="none" stroke="#0E2A4D" stroke-width="2.5"/>
+    <polygon points="158,168 118,188 118,111 158,91" fill="#DCE6F1" fill-opacity="0.28" stroke="#647088" stroke-width="1.4"/>
+    <polyline points="118,188 118,111" fill="none" stroke="#0E2A4D" stroke-width="1.9"/>
+    <polyline points="158,168 158,91" fill="none" stroke="#0E2A4D" stroke-width="1.9"/>
+    <polygon points="258,95 296,114 296,85 258,66" fill="#DCE6F1" stroke="#0E2A4D" stroke-width="1.4"/>
+    <polygon points="256,146 220,164 220,128 256,110" fill="#DCE6F1" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polygon points="220,164 268,188 268,152 220,128" fill="white" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polyline points="244,174 244,143" fill="none" stroke="#647088" stroke-width="1"/>
+    <polygon points="252,106 212,126 268,154 308,134" fill="white" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polygon points="263,115.5 229,132.5 253,144.5 287,127.5" fill="white" stroke="#0E2A4D" stroke-width="1.7"/>
+    <polygon points="263,119.5 237,132.5 253,140.5 279,127.5" fill="#AFC2D9" stroke="#647088" stroke-width="1"/>
+    <polyline points="263,119.5 263,123.5 237,136.5" fill="none" stroke="#647088" stroke-width="1"/>
+    <path d="M243 122.5v-16c0-8 12-8 12 0v5" fill="none" stroke="#0E2A4D" stroke-width="2.3"/>
+  </g>
+</svg>

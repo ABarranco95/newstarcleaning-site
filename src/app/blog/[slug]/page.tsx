@@ -39,93 +39,12 @@ export default async function BlogPostPage({ params }: RouteParams) {
   const post = getBlogPost(slug);
   if (!post) notFound();
   const isTurnoverGuide = post.slug === "move-out-cleaning-checklist-before-inspection";
-
   return (
-    <>
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-3xl px-4 pt-10 pb-10 sm:px-6 lg:px-8 lg:pt-14">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
-            <span className="px-1.5">/</span>
-            <Link href="/blog" className="hover:text-primary">Cleaning tips</Link>
-          </nav>
-          <span className="eyebrow eyebrow-dot">{post.category}</span>
-          <h1 className="mt-4 text-4xl text-ink lg:text-[3rem]">
-            {post.title}
-          </h1>
-          <div className="mt-5 text-sm font-semibold uppercase tracking-wider text-mute">
-            {new Date(post.publishedAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}{" "}
-            · {post.readMinutes} min read
-          </div>
-        </div>
-      </section>
-
-      <article className="ns-section bg-cream">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-ink">
-          {post.body.map((section, i) => (
-            <div key={i} className="mb-8">
-              {section.heading ? (
-                <h2 className="text-2xl text-ink mt-6 mb-3">
-                  {section.heading}
-                </h2>
-              ) : null}
-              {section.paragraphs.map((p, j) => (
-                <p
-                  key={j}
-                  className="text-ink-soft leading-relaxed mb-4 text-base"
-                >
-                  {p}
-                </p>
-              ))}
-            </div>
-          ))}
-
-          <div className="mt-12 rounded-2xl border border-line bg-white p-6 shadow-soft">
-            <h3 className="text-xl text-ink">
-              {isTurnoverGuide ? "Planning a Fresno-area turnover?" : "Need a cleaning team you can trust?"}
-            </h3>
-            <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-              {isTurnoverGuide
-                ? "Share the property size, deadline, occupancy, and current condition. We will price the cleaning scope before scheduling the work."
-                : "New Star Cleaning serves Fresno, Clovis, and Madera with recurring, deep, and move-in/move-out residential cleaning."}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link
-                href="/book-now"
-                className="btn btn-accent !min-h-11 !px-5 !text-sm"
-              >
-                {isTurnoverGuide ? "Request turnover pricing" : "Request a cleaning quote"}
-              </Link>
-              <Link
-                href={isTurnoverGuide ? "/services/move-out-cleaning" : "/services/standard-cleaning"}
-                className="btn btn-outline !min-h-11 !px-5 !text-sm"
-              >
-                {isTurnoverGuide ? "Review move-out scope" : "Standard cleaning"}
-              </Link>
-              {isTurnoverGuide ? (
-                <Link
-                  href="/commercial-quote"
-                  className="btn btn-outline !min-h-11 !px-5 !text-sm"
-                >
-                  Property manager walkthrough
-                </Link>
-              ) : (
-                <Link
-                  href="/services/deep-cleaning"
-                  className="btn btn-outline !min-h-11 !px-5 !text-sm"
-                >
-                  Deep cleaning
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
+    <div className="site-reference"><article className="site-document"><nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><Link href="/blog">Cleaning notes</Link></nav><p className="home-kicker">{post.category}</p><h1>{post.title}</h1><p className="site-note"><time dateTime={post.publishedAt}>{new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" })}</time> · {post.readMinutes} min read</p>
+      <nav className="site-disclosures" aria-label="In this guide"><details><summary>In this guide</summary><ul className="site-list">{post.body.map((section,i) => section.heading ? <li key={i}><a href={`#section-${i}`}>{section.heading}</a></li> : null)}</ul></details></nav>
+      {post.body.map((section,i) => <section id={`section-${i}`} key={i}>{section.heading ? <h2>{section.heading}</h2> : null}{section.paragraphs.map((paragraph,j) => <p key={j}>{paragraph}</p>)}</section>)}
+      <aside className="site-rule"><h2>{isTurnoverGuide ? "Planning a move?" : "Ready for a cleaning quote?"}</h2><p>Send the property details and date. We’ll confirm the scope and price before booking. Fresno and Clovis are our core areas; Madera depends on the route.</p><div className="site-actions"><Link href={isTurnoverGuide ? "/book-now?service=Move-in%2Fmove-out+cleaning" : "/book-now"} className="home-button">Request a quote ↗</Link><Link href={isTurnoverGuide ? "/services/move-out-cleaning" : "/services/standard-cleaning"} className="home-text-link">Review the scope</Link>{isTurnoverGuide ? <Link href="/commercial-quote" className="home-text-link">Property manager inquiry</Link> : null}</div></aside>
       </article>
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -147,6 +66,6 @@ export default async function BlogPostPage({ params }: RouteParams) {
           }),
         }}
       />
-    </>
+    </div>
   );
 }

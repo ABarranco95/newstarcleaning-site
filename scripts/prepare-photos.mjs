@@ -22,6 +22,11 @@ const WEBP_QUALITY = 80;
 
 const PHOTOS = [
   {
+    source: "b4aftr/749036329_1012329288195842_7247785626001234424_n.jpg",
+    sha1: "2c6cbc758d9e7123256491fb4aab189f4adad5eb",
+    out: "double-vanity-detail-new-star.webp",
+  },
+  {
     source: "b4aftr/732706681_998904959538275_4179846580063816355_n.jpg",
     sha1: "8c9dfce12c20e41ec28a4107651c08aed2d7abe8",
     out: "glass-shower-freestanding-tub-new-star.webp",

@@ -18,7 +18,7 @@ function assert(condition, message) {
 }
 
 const layout = read("src/app/layout.tsx");
-const footer = read("src/components/Footer.tsx");
+const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const home = read("src/app/page.tsx");
 const quickQuoteForm = read("src/components/QuickQuoteForm.tsx");
 const contactForm = read("src/components/ContactForm.tsx");
@@ -56,16 +56,16 @@ assert(
 
 assert(
   !footer.includes("ContactForm") &&
-    footer.includes("Ready for a cleaning quote?") &&
-    footer.includes("Tell us about the home.") &&
-    footer.includes('href="/book-now"'),
+    footer.includes("Tell us about") &&
+    footer.includes("<HomeQuoteLink") && footer.includes("siteQuoteHref(pathname"),
   "footer uses a CTA instead of a site-wide form",
 );
 
 assert(
   !home.includes("ContactForm") &&
     !home.includes("QuickQuoteForm") &&
-    home.includes("House cleaning in Fresno, Clovis &amp; Madera") &&
+    home.includes("<HomeQuoteLink") &&
+    home.includes('href="/book-now"') &&
     home.includes("Request a quote"),
   "homepage uses quote-first CTA instead of embedded form",
 );
@@ -93,10 +93,12 @@ for (const file of [
 ]) {
   const contents = read(file);
   assert(
-    contents.includes("QuotePathPanel") &&
+    contents.includes("/book-now") &&
+      (contents.includes('href="/book-now"') || contents.includes("href={quoteHref}")) &&
+      !contents.includes("QuotePathPanel") &&
       !contents.includes("QuickQuoteForm") &&
       !contents.includes("ContactForm"),
-    `${file} uses quote path panel instead of embedded forms`,
+    `${file} links directly to the quote page without explanation panels or embedded forms`,
   );
 }
 
@@ -142,8 +144,8 @@ assert(
 assert(
   !googleAds.includes("<main") &&
     !googleAds.includes("</main>") &&
-    !googleAds.includes("<header") &&
-    !googleAds.includes("</header>"),
+    read("src/components/Header.tsx").includes('pathname.startsWith("/google-ads")') &&
+    read("src/components/Header.tsx").includes("return null"),
   "Google Ads landing page does not duplicate the global header or nest a second main landmark",
 );
 

@@ -17,34 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function SmsOptIn() {
-  return (
-    <>
-      <section className="bg-cream-2">
-        <div className="mx-auto max-w-3xl px-4 pt-12 pb-10 sm:px-6 lg:px-8 lg:pt-16">
-          <nav className="mb-6 text-sm text-mute" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-primary">Home</Link>
-            <span className="px-1.5">/</span>
-            <span className="font-semibold text-ink">SMS opt-in</span>
-          </nav>
-          <span className="eyebrow eyebrow-dot">Text updates</span>
-          <h1 className="mt-4 text-3xl text-ink lg:text-4xl">
-            Stay updated via text
-          </h1>
-          <p className="mt-4 text-lg leading-8 text-ink-soft">
-            Get appointment confirmations, reminders, and service updates directly to your phone.
-          </p>
-        </div>
-      </section>
-
-      <section className="bg-cream py-12 lg:py-16">
-        <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-line bg-white p-8 shadow-elev">
-            <h2 className="text-2xl text-ink">Opt in to SMS notifications</h2>
-            <div className="mt-6">
-              <SmsOptInForm />
-            </div>
-
-            <div className="mt-6 border-t border-line pt-6">
+  return <div className="site-reference"><section className="site-form-layout"><div className="site-form-heading"><nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav><h1>Text updates, if you want them.</h1><p>Opt in for appointment confirmations, reminders, and service updates. You can stop messages at any time.</p></div><div className="site-form-panel"><h2>Opt in to SMS notifications</h2><SmsOptInForm /><div className="site-rule mt-6 pt-6">
               <p className="text-xs leading-relaxed text-mute">
                 By submitting this form, you expressly consent to receive recurring automated
                 text messages from New Star Cleaning at the phone number you provide. Message
@@ -62,10 +35,5 @@ export default function SmsOptIn() {
                 <Link href="/terms" className="text-primary underline">Terms of Service</Link> for
                 more details.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
-  );
+</div></div></section></div>;
 }

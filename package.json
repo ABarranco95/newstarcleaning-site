@@ -15,7 +15,11 @@
     "verify:paid-attribution": "node scripts/verify-paid-attribution.mjs && node scripts/verify-paid-attribution-runtime.mjs && node scripts/verify-paid-lead-contract.mjs",
     "verify:paid-intent-routing": "node scripts/verify-paid-intent-routing.mjs && node scripts/verify-paid-page-density.mjs",
     "verify:funnel-events": "node scripts/verify-funnel-events.mjs",
-    "verify:site-readiness": "node scripts/verify-site-readiness.mjs"
+    "verify:site-readiness": "node scripts/verify-site-readiness.mjs",
+    "verify:trust-proof": "node scripts/verify-trust-proof.mjs",
+    "verify:photo-led": "node scripts/verify-photo-led.mjs",
+    "verify:home-reference": "node scripts/verify-home-reference.mjs",
+    "verify:sitewide-reference": "node scripts/verify-sitewide-reference.mjs"
   },
   "dependencies": {
     "next": "^16.3.4",

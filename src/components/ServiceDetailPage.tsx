@@ -1,497 +1,216 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import BookingPortalLink from "@/components/BookingPortalLink";
-import RealWorkGallery from "@/components/RealWorkGallery";
-import TrustBadges from "@/components/TrustBadges";
+import SiteHero from "@/components/SiteHero";
+import GoogleRating from "@/components/GoogleRating";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import type { ServiceDefinition } from "@/lib/services";
-import { getFullIncludedList } from "@/lib/services";
+import { clientPrepChecklist, getFullIncludedList } from "@/lib/services";
 import { business, businessAreaServed } from "@/lib/business";
-import {
-  bathroomResultPhotos,
-  cooktopGratesPair,
-  emptyHomeResultPhotos,
-  homeResultPhotos,
-  laundryAlcovePair,
-  laundrySinkPair,
-  ovenBuildupPair,
-  underSinkCabinetPair,
-} from "@/lib/realWorkPhotos";
+import { ovenBuildupPair, vanityDetailPhoto, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
+import { servicePresentation } from "@/lib/servicePresentation";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const siteUrl = "https://newstarcleaning.com";
-
-// Detail comparisons per service. Deep gets tub/vent detail pairs; move-out
-// gets the oven pair because inside-oven is its most-requested priced add-on.
-const deepDetailPairs: BeforeAfterItem[] = [
-  {
-    before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star deep cleaning" },
-    after: { src: "/photos/real-work/paid/tub-surround-after.webp", alt: "The same bathtub and tile surround after a New Star deep cleaning" },
-    label: "Tub and surround detail from a real deep-cleaning appointment.",
-  },
-  {
-    before: { src: underSinkCabinetPair.before.src, alt: underSinkCabinetPair.before.alt },
-    after: { src: underSinkCabinetPair.after.src, alt: underSinkCabinetPair.after.alt },
-    label: underSinkCabinetPair.label,
-  },
-  {
-    before: { src: "/photos/real-work/paid/vent-detail-before.webp", alt: "Reachable return vent with dust before cleaning" },
-    after: { src: "/photos/real-work/paid/vent-detail-after.webp", alt: "The same return vent after New Star detail work" },
-    label: "Reachable vent-face detail included in deep cleaning.",
-  },
-];
-
-const moveOutDetailPairs: BeforeAfterItem[] = [
-  {
-    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
-    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
-    label: cooktopGratesPair.label,
-  },
-  {
-    before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
-    after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
-    label: ovenBuildupPair.label,
-  },
-  {
-    before: { src: laundrySinkPair.before.src, alt: laundrySinkPair.before.alt },
-    after: { src: laundrySinkPair.after.src, alt: laundrySinkPair.after.alt },
-    label: laundrySinkPair.label,
-  },
-  {
-    before: { src: laundryAlcovePair.before.src, alt: laundryAlcovePair.before.alt },
-    after: { src: laundryAlcovePair.after.src, alt: laundryAlcovePair.after.alt },
-    label: laundryAlcovePair.label,
-  },
-];
+const illustrations = {
+  "standard-cleaning": "cleaning-regular",
+  "deep-cleaning": "cleaning-deep",
+  "move-out-cleaning": "cleaning-empty-home",
+};
+const deepDetailPairs: BeforeAfterItem[] = [{
+  before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star deep cleaning" },
+  after: { src: "/photos/real-work/paid/tub-surround-after.webp", alt: "The same bathtub and tile surround after a New Star deep cleaning" },
+  label: "Tub and surround detail from a real deep-cleaning appointment.",
+}];
+const moveOutDetailPairs: BeforeAfterItem[] = [{
+  before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
+  after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
+  label: ovenBuildupPair.label,
+}];
 
 function quoteFormService(service: ServiceDefinition) {
-  return service.slug === "standard-cleaning"
-    ? "Standard recurring cleaning"
-    : service.shortName;
+  return service.slug === "standard-cleaning" ? "Standard recurring cleaning" : service.shortName;
 }
 
-function CheckIcon() {
-  return (
-    <svg
-      className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M5 13l4 4L19 7" />
-    </svg>
-  );
-}
-
-export default function ServiceDetailPage({
-  service,
-  h1,
-  intro,
-}: {
+export default function ServiceDetailPage({ service, h1, intro }: {
   service: ServiceDefinition;
   h1: string;
   intro?: string;
 }) {
   const fullIncluded = getFullIncludedList(service.slug);
-  const resultPhotos = service.slug === "deep-cleaning"
-    ? bathroomResultPhotos
-    : service.slug === "move-out-cleaning"
-      ? [emptyHomeResultPhotos[0], emptyHomeResultPhotos[2], emptyHomeResultPhotos[4], emptyHomeResultPhotos[5], emptyHomeResultPhotos[6], emptyHomeResultPhotos[7]]
-      : homeResultPhotos;
-  const resultTitle = service.slug === "deep-cleaning"
-    ? "Bathroom detail from real appointments."
-    : service.slug === "move-out-cleaning"
-      ? "Empty-home details from real appointments."
-      : "Finished rooms from real appointments.";
-  const resultIntro = service.slug === "deep-cleaning"
-    ? "These customer-job photos show the kind of accessible bathroom surfaces addressed during detailed cleaning."
-    : service.slug === "move-out-cleaning"
-      ? "These customer-job photos show clean, empty interior areas without presenting them as a guaranteed result for every home."
-      : "Customer-job photos of kitchens, living areas, and bedrooms after New Star visits. No stock photography.";
-  const detailPairs = service.slug === "deep-cleaning"
-    ? deepDetailPairs
-    : service.slug === "move-out-cleaning"
-      ? moveOutDetailPairs
-      : [];
+  const presentation = servicePresentation[service.slug];
   const isMoveOut = service.slug === "move-out-cleaning";
+  const detailPairs = service.slug === "deep-cleaning" ? deepDetailPairs : isMoveOut ? moveOutDetailPairs : [];
   const directBookingUrl = resolveDirectBookingUrl();
+  const supportingPhoto = service.slug === "deep-cleaning" ? vanityDetailPhoto : isMoveOut ? emptyHomeResultPhotos[6] : null;
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-primary text-white">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
-          aria-hidden="true"
-        />
-        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
-          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white">Home</Link>
-            <span className="px-1.5">/</span>
-            <Link href="/services" className="hover:text-white">Services</Link>
-            <span className="px-1.5">/</span>
-            <span className="font-semibold text-white">{service.shortName}</span>
-          </nav>
+    <div className="site-reference">
+      <SiteHero
+        title={h1}
+        description={presentation.summary}
+        eyebrow={service.shortName}
+        photo={presentation.photo}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
+      >
+        <p className="site-price">From <strong>{presentation.startingPrice}</strong></p>
+        <div className="site-actions">
+          <a href="#quote" className="home-button">Request a quote <span aria-hidden="true">↗</span></a>
+          <a href={business.phoneHref} className="home-text-link">Call us</a>
+        </div>
+        <a href="#whats-included" className="home-text-link">What&apos;s included <span aria-hidden="true">→</span></a>
+      </SiteHero>
 
-          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-            <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot text-accent-light">{service.shortName}</span>
-              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">{h1}</h1>
-              <p className="mt-5 text-lg leading-8 text-white/75">
-                {intro ?? service.tagline}
-              </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a href="#quote" className="btn btn-accent">Request pricing</a>
-                <a href="#whats-included" className="btn btn-ghost-dark">See what&apos;s included</a>
-              </div>
-              <div className="mt-8">
-                <TrustBadges onDark />
-              </div>
-            </div>
+      <div className="home-wrap">
+        <div className="home-proof-line site-proof-row">
+          <p className="site-note">Locally owned. Photographs from our work.</p>
+          <GoogleRating />
+        </div>
+      </div>
 
-            <div id="quote" className="scroll-mt-24">
-              <QuickQuoteForm
-                title={`Price ${service.shortName.toLowerCase()}`}
-                subtitle="Name, phone, city, timing, and approximate size. We confirm the price and what is included before anything is booked."
-                source={`organic_${service.slug}_service`}
-                defaultService={quoteFormService(service)}
-                compact
+      <section className="site-section site-split">
+        <div className="site-copy">
+          <h2>Price your {service.shortName.toLowerCase()}.</h2>
+          <p className="site-intro">{intro ?? service.tagline}</p>
+          <p className="site-note">{presentation.boundary}</p>
+          <p className="site-note">Your total depends on home size, condition, frequency, and optional work. Add-ons must be requested before the appointment. We confirm price, scope, and availability before you book.</p>
+        </div>
+        <div className="min-w-0">
+          <QuickQuoteForm
+            title={`Price ${service.shortName.toLowerCase()}`}
+            subtitle="Share the basics. We confirm the price and included work before anything is booked."
+            source={`organic_${service.slug}_service`}
+            defaultService={quoteFormService(service)}
+            compact
+          />
+          {directBookingUrl ? (
+            <Suspense fallback={null}>
+              <BookingPortalLink
+                baseUrl={directBookingUrl}
+                service={quoteFormService(service)}
+                sourcePage={`/services/${service.slug}`}
+                label="Ready to self-schedule? Book online"
+                showIcon={false}
+                className="home-text-link"
               />
-              {directBookingUrl ? (
-                <p className="mt-3 text-center text-sm text-white/70">
-                  Ready to self-schedule instead?{" "}
-                  <Suspense fallback={null}>
-                    <BookingPortalLink
-                      baseUrl={directBookingUrl}
-                      service={quoteFormService(service)}
-                      sourcePage={`/services/${service.slug}`}
-                      label="Book online"
-                      showIcon={false}
-                      className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
-                    />
-                  </Suspense>
-                </p>
-              ) : null}
-            </div>
-          </div>
+            </Suspense>
+          ) : null}
         </div>
       </section>
 
-      {/* What's included — FULL cascading list */}
-      <section id="whats-included" className="ns-section bg-cream scroll-mt-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <span className="eyebrow eyebrow-dot">What&apos;s included</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                {service.name}: room-by-room details
-              </h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">{service.description}</p>
-              <div className="mt-7 rounded-2xl border border-primary/15 bg-white p-6 shadow-soft">
-                <h3 className="text-lg font-bold text-ink">Before your appointment</h3>
-                <ul className="mt-4 space-y-2">
-                  {service.scopeNotes.map((note) => (
-                    <li key={note} className="flex gap-2 text-sm leading-relaxed text-ink-soft">
-                      <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
-                      <span>{note}</span>
-                    </li>
-                  ))}
+      <section id="whats-included" className="site-muted scroll-mt-24">
+        <div className="site-section site-split">
+          <div className="site-copy">
+            <h2>{service.name}: room by room.</h2>
+            <p className="site-intro">{service.description}</p>
+            <div className="site-scope-media"><div className="site-scope-visual"><Image src={`/illustrations/${illustrations[service.slug]}.svg`} alt="" width={360} height={260} /></div>{supportingPhoto ? <figure className="site-support-photo"><Image src={supportingPhoto.src} alt={supportingPhoto.alt} width={360} height={480} sizes="(min-width: 1024px) 220px, 50vw" /><figcaption>{supportingPhoto.caption} · New Star work</figcaption></figure> : null}</div>
+            <p className="site-note">{service.slug === "standard-cleaning" ? "Open any room for its complete checklist." : "The full checklist includes the work carried over from the other cleaning levels."}</p>
+            <p className="site-note"><strong>Cleaning service, not household task service.</strong> Laundry, dishes, organizing, bed making, packing, and personal item handling are outside our service scope.</p>
+            <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">↗</span></Link>
+          </div>
+          <div className="site-disclosures">
+            {fullIncluded.map((group) => (
+              <details key={group.title}>
+                <summary>{group.title}<span aria-hidden="true">+</span></summary>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">
+                  {group.items.map((item) => <li key={item}>{item}</li>)}
                 </ul>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {fullIncluded.map((group) => (
-                <div key={group.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-                  <h3 className="text-xl text-ink">{group.title}</h3>
-                  <ul className="mt-3 space-y-1.5">
-                    {group.items.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-ink-soft">
-                        <CheckIcon />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {resultPhotos.length > 0 && (
-        <section className="ns-section border-y border-line bg-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <RealWorkGallery
-              photos={resultPhotos}
-              title={resultTitle}
-              intro={resultIntro}
-            />
+              </details>
+            ))}
+            <details>
+              <summary>Available add-ons<span aria-hidden="true">+</span></summary>
+              <p>Optional detail items are priced separately and need enough time on the schedule. They are not included unless your quote says so.</p>
+              <dl className="mt-4 space-y-4 text-sm leading-6">
+                {service.availableAddOns.map((addOn) => (
+                  <div key={addOn.title}><dt className="font-semibold">{addOn.title}</dt><dd className="text-ink-soft">{addOn.description}</dd></div>
+                ))}
+              </dl>
+            </details>
+            <details>
+              <summary>Not included<span aria-hidden="true">+</span></summary>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.notIncluded.map((item) => <li key={item}>{item}</li>)}</ul>
+            </details>
+            <details>
+              <summary>Is this the right cleaning for my home?<span aria-hidden="true">+</span></summary>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.bestFor.map((item) => <li key={item}>{item}</li>)}</ul>
+            </details>
+            <details>
+              <summary>Before your appointment<span aria-hidden="true">+</span></summary>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.scopeNotes.map((note) => <li key={note}>{note}</li>)}</ul>
+              <h3 className="mt-5 text-base font-semibold">Prepare your home</h3>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{clientPrepChecklist.map((item) => <li key={item}>{item}</li>)}</ul>
+              {service.processSteps && service.processSteps.length > 0 && (
+                <ol className="mt-5 space-y-4 text-sm leading-6">
+                  {service.processSteps.map((step) => <li key={step.title}><h3 className="font-semibold">{step.title}</h3><p>{step.description}</p></li>)}
+                </ol>
+              )}
+            </details>
             {detailPairs.length > 0 && (
-              <div className="mt-12 grid gap-8 border-t border-line pt-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-                <div>
-                  <h3 className="text-2xl text-ink">Same surface, before and after.</h3>
-                  <p className="mt-3 leading-relaxed text-ink-soft">
-                    {isMoveOut
-                      ? "Cooktop, oven, and laundry surfaces from real move-out appointments, shown before and after cleaning. Aged surfaces can keep wear and staining."
-                      : "Detail comparisons from real appointments. Results vary with surface condition, buildup, and access."}
-                  </p>
-                </div>
-                <div className="mx-auto w-full max-w-sm">
-                  <BeforeAfterCarousel items={detailPairs} />
-                </div>
-              </div>
+              <details>
+                <summary>{isMoveOut ? "See optional inside-oven detail" : "See a real tub before and after"}<span aria-hidden="true">+</span></summary>
+                <p>{isMoveOut ? "Inside-oven cleaning is priced separately, not included in the base move-out service. Request it before the visit." : "Tub and surround detail from a real deep-cleaning appointment."}</p>
+                <div className="mx-auto mt-4 w-full max-w-sm"><BeforeAfterCarousel items={detailPairs} /></div>
+                <p>Results vary with surface condition, buildup, and access. Aged surfaces can retain wear and staining.</p>
+              </details>
             )}
           </div>
-        </section>
-      )}
-
-      {/* Scope boundaries */}
-      <section className="ns-section bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-            <div>
-              <span className="eyebrow eyebrow-dot">Optional details</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                Additions are priced separately
-              </h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">
-                We price cleaning by the work agreed before the visit. Optional detail items
-                can be added when there is enough time on the schedule, but they are not
-                automatically included unless your quote says so.
-              </p>
-              <div className="mt-6 rounded-2xl border border-line bg-white p-5">
-                <h3 className="text-base font-bold text-ink">Cleaning service, not household task service</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-                  We focus on cleaning reachable surfaces, rooms, appliances, fixtures, and
-                  floors. Laundry, dishes, organizing, bed making, packing, and personal item
-                  handling are outside our service scope.
-                </p>
-              </div>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link
-                  href="/checklist"
-                  className="inline-flex items-center rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft transition-colors hover:border-primary hover:text-primary"
-                >
-                  Review the full service checklist
-                </Link>
-                {isMoveOut ? (
-                  <Link
-                    href="/blog/move-out-cleaning-checklist-before-inspection"
-                    className="inline-flex items-center rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft shadow-soft transition-colors hover:border-primary hover:text-primary"
-                  >
-                    Fresno rental turnover guide
-                  </Link>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-2">
-              <div>
-                <h3 className="text-xl text-ink">Available add-ons</h3>
-                <div className="mt-4 space-y-3">
-                  {service.availableAddOns.map((addOn) => (
-                    <div key={addOn.title} className="rounded-2xl border border-line bg-white p-5 shadow-soft">
-                      <h4 className="font-bold text-ink">{addOn.title}</h4>
-                      <p className="mt-2 text-sm leading-relaxed text-ink-soft">{addOn.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl text-ink">Not included</h3>
-                <ul className="mt-4 space-y-2 rounded-2xl border border-line bg-white p-5 shadow-soft">
-                  {service.notIncluded.map((item) => (
-                    <li key={item} className="flex gap-2 text-sm leading-relaxed text-ink-soft">
-                      <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* Best for */}
-      <section className="ns-section bg-cream">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
-          <span className="eyebrow eyebrow-dot">Best for</span>
-          <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Who this service is built for</h2>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {service.bestFor.map((b, i) => (
-              <div key={b} className="rounded-2xl border border-line bg-white p-6 text-left shadow-soft">
-                <div className="text-2xl font-extrabold text-primary">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <p className="mt-3 leading-relaxed text-ink-soft">{b}</p>
-              </div>
-            ))}
+      <section className="site-section site-split">
+        <div className="site-copy">
+          <h2>Good to know before you book.</h2>
+          {service.localNotes && <p className="site-intro">{service.localNotes}</p>}
+          <div className="site-links">
+            <Link href="/cleaning-services-fresno" className="home-text-link">Fresno</Link>
+            <Link href="/cleaning-services-clovis" className="home-text-link">Clovis</Link>
+            <Link href="/cleaning-services-madera" className="home-text-link">Madera</Link>
           </div>
+          <Link href={service.slug === "deep-cleaning" ? "/services/standard-cleaning" : "/services/deep-cleaning"} className="home-text-link">Compare {service.slug === "deep-cleaning" ? "standard" : "deep"} cleaning <span aria-hidden="true">→</span></Link>
+          {isMoveOut && <Link href="/blog/move-out-cleaning-checklist-before-inspection" className="home-text-link">Fresno rental turnover guide <span aria-hidden="true">↗</span></Link>}
         </div>
-      </section>
-
-      {/* How it works — process steps */}
-      {service.processSteps && service.processSteps.length > 0 && (
-        <section className="ns-section bg-cream-2">
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <span className="eyebrow eyebrow-dot">How it works</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                What to expect on {service.shortName.toLowerCase()} day
-              </h2>
-            </div>
-            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {service.processSteps.map((step, i) => (
-                <div key={step.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-                  <div className="text-3xl font-extrabold text-accent">{i + 1}</div>
-                  <h3 className="mt-3 text-lg font-bold text-ink">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Local notes / service area context */}
-      {service.localNotes && (
-        <section className="ns-section bg-cream">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-2xl border border-line bg-white p-8 shadow-soft">
-              <h2 className="text-2xl text-ink">Serving Fresno, Clovis &amp; Madera</h2>
-              <p className="mt-4 leading-relaxed text-ink-soft">{service.localNotes}</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/cleaning-services-fresno" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
-                  {service.shortName} in Fresno &rarr;
-                </Link>
-                <Link href="/cleaning-services-clovis" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
-                  Cleaning service in Clovis &rarr;
-                </Link>
-                <Link href="/cleaning-services-madera" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
-                  Cleaning service in Madera &rarr;
-                </Link>
-                <Link
-                  href="/book-now"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent"
-                >
-                  Get a {service.shortName.toLowerCase()} quote &rarr;
-                </Link>
-                {service.slug === "move-out-cleaning" && (
-                  <Link href="/services/deep-cleaning" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
-                    Compare deep cleaning &rarr;
-                  </Link>
-                )}
-                {service.slug === "deep-cleaning" && (
-                  <Link href="/services/standard-cleaning" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
-                    Compare standard cleaning &rarr;
-                  </Link>
-                )}
-                {service.slug === "standard-cleaning" && (
-                  <Link href="/services/deep-cleaning" className="inline-flex items-center gap-1.5 rounded-full border border-line bg-cream-2 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-white hover:border-accent hover:text-accent">
-                    Compare deep cleaning &rarr;
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* FAQs */}
-      {service.faqs && service.faqs.length > 0 && (
-        <section className="ns-section bg-cream-2">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <span className="eyebrow eyebrow-dot">FAQs</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                Common questions about {service.shortName.toLowerCase()}
-              </h2>
-            </div>
-            <div className="mt-10 space-y-3">
+        <div>
+          {service.faqs && service.faqs.length > 0 && (
+            <div className="site-disclosures">
               {service.faqs.map((faq) => (
-                <details key={faq.question} className="group rounded-2xl border border-line bg-white shadow-soft">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-6 text-lg font-bold text-ink hover:text-accent [&::-webkit-details-marker]:hidden">
-                    <span>{faq.question}</span>
-                    <svg className="h-5 w-5 flex-shrink-0 text-ink-soft transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </summary>
-                  <div className="px-6 pb-6 leading-relaxed text-ink-soft">{faq.answer}</div>
+                <details key={faq.question}>
+                  <summary>{faq.question}<span aria-hidden="true">+</span></summary>
+                  <p>{faq.answer}</p>
                 </details>
               ))}
             </div>
-            <div className="mt-8 text-center">
-              <Link href="/contact" className="text-sm font-semibold text-accent hover:text-accent-hover">
-                Still have questions? Contact us &rarr;
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* CTA */}
-      <section className="bg-cream py-14 lg:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
-            <span className="eyebrow text-accent-light">Request availability</span>
-            <h2 className="mt-4 text-3xl text-white lg:text-5xl">
-              Ready to price your {service.shortName.toLowerCase()}?
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
-              Tell us about the home and preferred date. We will confirm the price, included work, and appointment options before you book.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/book-now" className="btn btn-accent">Request your quote</Link>
-              <a href="tel:+15597852822" className="btn btn-ghost-dark">Call (559) 785-2822</a>
-            </div>
-          </div>
+          )}
+          <Link href="/contact" className="home-text-link">Still have questions? Contact us <span aria-hidden="true">→</span></Link>
         </div>
       </section>
 
-      {/* Schema — Service */}
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: siteUrl },
-          { name: "Services", url: `${siteUrl}/services` },
-          { name: service.name, url: `${siteUrl}/services/${service.slug}` },
-        ]}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            name: service.name,
-            serviceType: service.schemaServiceType,
-            description: service.description,
-            provider: { "@id": `${business.siteUrl}/#localbusiness` },
-            areaServed: businessAreaServed,
-          }),
-        }}
-      />
-
-      {/* Schema — FAQPage */}
+      <BreadcrumbSchema items={[
+        { name: "Home", url: siteUrl },
+        { name: "Services", url: `${siteUrl}/services` },
+        { name: service.name, url: `${siteUrl}/services/${service.slug}` },
+      ]} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: service.name,
+        serviceType: service.schemaServiceType,
+        description: service.description,
+        provider: { "@id": `${business.siteUrl}/#localbusiness` },
+        areaServed: businessAreaServed,
+      }) }} />
       {service.faqs && service.faqs.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: service.faqs.map((faq) => ({
-                "@type": "Question",
-                name: faq.question,
-                acceptedAnswer: { "@type": "Answer", text: faq.answer },
-              })),
-            }),
-          }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: service.faqs.map((faq) => ({
+            "@type": "Question", name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer },
+          })),
+        }) }} />
       )}
-    </>
+    </div>
   );
 }

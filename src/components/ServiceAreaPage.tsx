@@ -2,29 +2,16 @@ import Link from "next/link";
 import { Suspense } from "react";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import BookingPortalLink from "@/components/BookingPortalLink";
-import TrustBadges from "@/components/TrustBadges";
+import GoogleRating from "@/components/GoogleRating";
+import SiteHero from "@/components/SiteHero";
+import HomeServices from "@/components/HomeServices";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
-import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
 import type { ServiceArea } from "@/lib/serviceAreas";
-import { cooktopGratesPair, laundrySinkPair } from "@/lib/realWorkPhotos";
+import { homeResultPhotos } from "@/lib/realWorkPhotos";
+import { business } from "@/lib/business";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const siteUrl = "https://newstarcleaning.com";
-
-// General New Star work proof. Deliberately captioned without a city claim:
-// current photos have no verified job-location ledger.
-const areaProofPairs: BeforeAfterItem[] = [
-  {
-    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
-    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
-    label: cooktopGratesPair.label,
-  },
-  {
-    before: { src: laundrySinkPair.before.src, alt: laundrySinkPair.before.alt },
-    after: { src: laundrySinkPair.after.src, alt: laundrySinkPair.after.alt },
-    label: laundrySinkPair.label,
-  },
-];
 
 function serviceAreaSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -32,41 +19,10 @@ function serviceAreaSlug(value: string) {
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const directBookingUrl = resolveDirectBookingUrl();
-  const serviceCards = [
-    {
-      title: "Standard recurring cleaning",
-      href: "/services/standard-cleaning",
-      desc: `Keep your ${area.name} home consistently clean with weekly, bi-weekly, or monthly visits. We record the requested priorities for each appointment.`,
-      features: ["Weekly, bi-weekly, or monthly", "Kitchen, bathrooms, living areas, and floors", "Cleaners bring supplies and equipment"],
-    },
-    {
-      title: "Deep cleaning",
-      href: "/services/deep-cleaning",
-      desc: `A detailed reset for your ${area.name} home, built for seasonal resets, first-time cleans, and homes that need reachable detail work.`,
-      features: ["Reachable detail areas", "Add-ons quoted separately", "Baseboards, fans, trim, and vents"],
-    },
-    {
-      title: "Move-in / move-out cleaning",
-      href: "/services/move-out-cleaning",
-      desc: `Moving in or out of a ${area.name} property? We clean empty homes across kitchens, bathrooms, floors, appliances, empty cabinets, and accessible detail areas.`,
-      features: ["Empty-home cleaning", "Empty cabinet and closet interiors included", "Timing confirmed before booking"],
-    },
-    {
-      title: "Office, commercial & post-construction",
-      href: "/services/commercial-cleaning",
-      desc: `Offices, small commercial spaces, and construction or renovation final cleans in ${area.name} are scoped from a walkthrough or photo review before any proposal.`,
-      features: ["Walkthrough-based proposals", "Recurring or one-time project work", "Scope and capacity confirmed first"],
-    },
-  ];
-
-  const localPanels: Array<
-    { title: string; items: string[] } | { title: string; body: string }
-  > = [
+  const localPanels = [
     { title: `Homes we clean in ${area.name}`, items: area.homeProfiles },
     { title: "Common local requests", items: area.commonJobs },
-    { title: "Route and booking notes", body: area.bookingNote },
   ];
-
   const areaFaqs = [
     {
       question: `Do you provide house cleaning in ${area.name}, CA?`,
@@ -80,319 +36,145 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       question: `What cleaning services are available in ${area.name}?`,
       answer: `${area.name} clients can request recurring standard cleaning, one-time deep cleaning, and move-in/move-out cleaning. Common local requests include ${area.commonJobs.slice(0, 2).join(" and ")}.`,
     },
-    {
-      question: `How quickly can I book a cleaner in ${area.name}?`,
-      answer: area.bookingNote,
-    },
+    { question: `How quickly can I book a cleaner in ${area.name}?`, answer: area.bookingNote },
   ];
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-primary text-white">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
-          aria-hidden="true"
-        />
-        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
-          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white">Home</Link>
-            <span className="px-1.5">/</span>
-            <Link href="/service-areas" className="hover:text-white">Service areas</Link>
-            <span className="px-1.5">/</span>
-            <span className="font-semibold text-white">{area.name}</span>
-          </nav>
+    <div className="site-reference">
+      <SiteHero
+        title={`House cleaning in ${area.name}, CA.`}
+        description={area.description}
+        eyebrow={`${area.county} · ${area.areaType}`}
+        photo={homeResultPhotos[1]}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}
+      >
+        <div className="site-actions">
+          <a href="#quote" className="home-button">Get a {area.name} quote <span aria-hidden="true">↗</span></a>
+          <a href={business.phoneHref} className="home-text-link">Call us</a>
+        </div>
+      </SiteHero>
 
-          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-            <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot text-accent-light">
-                {area.county} · {area.areaType}
-              </span>
-              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
-                Professional house cleaning in {area.name}, CA
-              </h1>
-              <p className="mt-5 text-lg leading-8 text-white/75">{area.description}</p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a href="#quote" className="btn btn-accent">
-                  Get a {area.name} quote
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </a>
-                <Link href="/services" className="btn btn-ghost-dark">Compare services</Link>
-              </div>
-              <div className="mt-8">
-                <TrustBadges onDark />
-              </div>
-            </div>
+      <div className="home-wrap">
+        <div className="home-proof-line site-proof-row">
+          <p className="site-note">Fresno-based. Photographs from New Star appointments.</p>
+          <GoogleRating />
+        </div>
+      </div>
 
-            <div id="quote" className="scroll-mt-24">
-              <QuickQuoteForm
-                title={`Check availability in ${area.name}`}
-                subtitle="Name, phone, service, timing, and approximate size. We confirm route availability and the price before anything is booked."
-                source={`organic_${area.slug}_service_area`}
-                defaultCity={area.name}
-                landingCity={area.name}
-                compact
+      <section className="site-section site-split">
+        <div className="site-copy">
+          <h2>Check availability in {area.name}.</h2>
+          <p className="site-intro">{area.bookingNote}</p>
+          <p className="site-note">Tell us about your home, the service you need, and your preferred date. Your quote reflects the size, condition, visit frequency, and optional work.</p>
+        </div>
+        <div className="min-w-0">
+          <QuickQuoteForm
+            title={`Request your ${area.name} quote`}
+            subtitle="Share the basics. We confirm availability and the price before anything is booked."
+            source={`organic_${area.slug}_service_area`}
+            defaultCity={area.name}
+            landingCity={area.name}
+            compact
+          />
+          {directBookingUrl ? (
+            <Suspense fallback={null}>
+              <BookingPortalLink
+                baseUrl={directBookingUrl}
+                city={area.name}
+                sourcePage={`/cleaning-services-${area.slug}`}
+                label="Ready to self-schedule? Book online"
+                showIcon={false}
+                className="home-text-link"
               />
-              {directBookingUrl ? (
-                <p className="mt-3 text-center text-sm text-white/70">
-                  Ready to self-schedule instead?{" "}
-                  <Suspense fallback={null}>
-                    <BookingPortalLink
-                      baseUrl={directBookingUrl}
-                      city={area.name}
-                      sourcePage={`/cleaning-services-${area.slug}`}
-                      label="Book online"
-                      showIcon={false}
-                      className="font-semibold text-white underline underline-offset-4 hover:text-accent-light"
-                    />
-                  </Suspense>
-                </p>
-              ) : null}
-            </div>
-          </div>
+            </Suspense>
+          ) : null}
         </div>
       </section>
 
-      {/* Local content */}
-      <section className="ns-section bg-cream">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <span className="eyebrow eyebrow-dot">Local service area</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                House cleaning for {area.name} homes
-              </h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">{area.localContent}</p>
-              <p className="mt-4 leading-relaxed text-ink-soft">
-                New Star Cleaning provides recurring, deep, and move-in/move-out house cleaning in {area.name}. We use the address, home size, service type, condition, and requested details to confirm the right quote before booking.
-              </p>
-
-              <div className="mx-auto mt-8 w-full max-w-sm lg:mx-0">
-                <BeforeAfterCarousel items={areaProofPairs} />
-                <p className="mt-2 text-xs leading-relaxed text-mute">
-                  Real New Star work, same surface before and after. Photo locations are
-                  not tied to a specific city.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <span className="eyebrow eyebrow-dot">Available services</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Services available in {area.name}</h2>
-              <div className="mt-8 space-y-4">
-                {serviceCards.map((service) => (
-                  <div key={service.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-                    <h3 className="text-xl text-ink">
-                      <Link href={service.href} className="transition-colors hover:text-primary">{service.title}</Link>
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-ink-soft">{service.desc}</p>
-                    <ul className="mt-4 space-y-1.5">
-                      {service.features.map((f) => (
-                        <li key={f} className="flex items-start gap-2 text-sm text-ink-soft">
-                          <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M5 13l4 4L19 7" />
-                          </svg>
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-14">
-            <div className="max-w-3xl">
-              <span className="eyebrow eyebrow-dot">Local service notes</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">
-                Built around real {area.name} homes and cleaning needs
-              </h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">{area.localProof}</p>
-            </div>
-
-            <div className="mt-8 grid gap-4 lg:grid-cols-3">
-              {localPanels.map((panel) => (
-                <div key={panel.title} className="rounded-2xl border border-line bg-white p-6 shadow-soft">
-                  <h3 className="text-lg font-bold text-ink">{panel.title}</h3>
-                  {"items" in panel ? (
-                    <ul className="mt-4 space-y-2">
-                      {panel.items.map((item) => (
-                        <li key={item} className="flex gap-2 text-sm leading-relaxed text-ink-soft">
-                          <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mt-4 text-sm leading-relaxed text-ink-soft">{panel.body}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 grid gap-6 rounded-2xl border border-line bg-white p-6 shadow-soft md:grid-cols-3">
-              <div>
-                <div className="text-[0.7rem] uppercase tracking-wider text-mute">Local business</div>
-                <div className="mt-2 font-bold text-ink">New Star Cleaning LLC</div>
-                <div className="mt-1 text-sm text-ink-soft">Fresno-based house cleaning for our core route area.</div>
-              </div>
-              <div>
-                <div className="text-[0.7rem] uppercase tracking-wider text-mute">Call or text</div>
-                <a href="tel:+15597852822" className="mt-2 block font-bold text-primary hover:text-accent">
-                  (559) 785-2822
-                </a>
-                <div className="mt-1 text-sm text-ink-soft">Call or text for current availability</div>
-              </div>
-              <div>
-                <div className="text-[0.7rem] uppercase tracking-wider text-mute">Google profile</div>
-                <Link
-                  href="https://www.google.com/maps?cid=12575787905603463321"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 block font-bold text-primary hover:text-accent"
-                >
-                  View New Star on Google
-                </Link>
-                <div className="mt-1 text-sm text-ink-soft">Reviews, photos, directions, and business details.</div>
-              </div>
-            </div>
-          </div>
+      <section className="site-section site-rule">
+        <div className="home-section-heading">
+          <h2>Which cleaning<br />do you need?</h2>
+          <Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">↗</span></Link>
+        </div>
+        <Suspense fallback={null}><HomeServices defaultCity={area.name} /></Suspense>
+        <div className="home-service-notes">
+          <p>Oven and fridge interiors, interior window glass, and reachable window tracks are optional add-ons. Cabinet interiors are optional for standard and deep cleaning.</p>
+          <p>Move-in / move-out includes empty cabinet, drawer, and closet interiors. Deposit returns are not guaranteed. Cleaners bring supplies and equipment; final scope and price are confirmed before booking.</p>
         </div>
       </section>
 
-      {/* Neighborhoods */}
-      <section className="ns-section bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="eyebrow eyebrow-dot">Neighborhoods</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">{area.name} neighborhoods we serve</h2>
-            <p className="mt-4 text-ink-soft">
-              We serve the listed {area.name} neighborhoods when the address fits the route. If your exact area is not shown, send the address and we will confirm coverage before quoting.
-            </p>
+      <section className="site-muted">
+        <div className="site-section site-split">
+          <div className="site-copy">
+            <h2>Cleaning for {area.name} homes.</h2>
+            <p className="site-intro">{area.localContent}</p>
+            <p className="site-note">{area.localProof}</p>
+            <p className="site-note">New Star Cleaning LLC · Fresno-based house cleaning.</p>
+            <div className="site-links">
+              <a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a>
+              <Link href="https://www.google.com/maps?cid=12575787905603463321" target="_blank" rel="noopener noreferrer" className="home-text-link">Google profile <span aria-hidden="true">↗</span></Link>
+            </div>
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-2.5">
-            {area.neighborhoods.map((n) => (
-              <span key={n} className="rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold text-ink-soft shadow-soft">
-                {n}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Local FAQs */}
-      <section className="ns-section bg-cream">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="eyebrow eyebrow-dot">Local FAQs</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Questions about cleaning in {area.name}</h2>
-          </div>
-          <div className="mt-10 space-y-3">
-            {areaFaqs.map((faq) => (
-              <details key={faq.question} className="group rounded-2xl border border-line bg-white shadow-soft">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-6 text-lg font-bold text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
-                  <span>{faq.question}</span>
-                  <svg className="h-5 w-5 flex-shrink-0 text-ink-soft transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="px-6 pb-6 leading-relaxed text-ink-soft">{faq.answer}</div>
+          <div className="site-disclosures">
+            <details>
+              <summary>{area.name} neighborhoods we serve<span aria-hidden="true">+</span></summary>
+              <p>We serve these neighborhoods when the address fits the route. If your exact area is not shown, send the address and we will confirm coverage before quoting.</p>
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{area.neighborhoods.map((neighborhood) => <li key={neighborhood}>{neighborhood}</li>)}</ul>
+            </details>
+            {localPanels.map((panel) => (
+              <details key={panel.title}>
+                <summary>{panel.title}<span aria-hidden="true">+</span></summary>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{panel.items.map((item) => <li key={item}>{item}</li>)}</ul>
               </details>
             ))}
+            <details>
+              <summary>Office or building-project cleaning<span aria-hidden="true">+</span></summary>
+              <p>Offices, small commercial spaces, and construction or renovation final cleans in {area.name} are scoped from a walkthrough or photo review before any proposal. Scope and capacity are confirmed first.</p>
+              <div className="site-links">
+                <Link href="/services/commercial-cleaning" className="home-text-link">Office &amp; commercial cleaning <span aria-hidden="true">↗</span></Link>
+                <Link href="/services/post-construction-cleaning" className="home-text-link">Post-construction cleaning <span aria-hidden="true">↗</span></Link>
+              </div>
+            </details>
+            <details>
+              <summary>Nearby service areas<span aria-hidden="true">+</span></summary>
+              <div className="site-links">{area.nearbyAreas.map((nearby) => <Link key={nearby} href={`/cleaning-services-${serviceAreaSlug(nearby)}`} className="home-text-link">House cleaning in {nearby}</Link>)}</div>
+            </details>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-cream-2 py-14 lg:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-white shadow-elev sm:px-12 lg:py-16">
-            <span className="eyebrow text-accent-light">Request availability</span>
-            <h2 className="mt-4 text-3xl text-white lg:text-5xl">
-              Ready to get your {area.name} home cleaned?
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-white/75">
-              Tell us about the home and preferred date. We will confirm the price, what is included, and the appointment options before you book.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/book-now" className="btn btn-accent">Request your {area.name} quote</Link>
-              <a href="tel:+15597852822" className="btn btn-ghost-dark">Call (559) 785-2822</a>
-            </div>
-          </div>
+      <section className="site-section site-split">
+        <div className="site-copy"><h2>Questions about cleaning in {area.name}.</h2></div>
+        <div className="site-disclosures">
+          {areaFaqs.map((faq) => (
+            <details key={faq.question}>
+              <summary>{faq.question}<span aria-hidden="true">+</span></summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
         </div>
       </section>
 
-      {/* Nearby areas */}
-      <section className="bg-cream py-14 lg:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="eyebrow eyebrow-dot">Nearby service areas</span>
-            <h2 className="mt-4 text-2xl text-ink lg:text-3xl">Explore nearby approved routes</h2>
-          </div>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            {area.nearbyAreas.map((nearby) => (
-              <Link
-                key={nearby}
-                href={`/cleaning-services-${serviceAreaSlug(nearby)}`}
-                className="group inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink-soft transition-colors hover:border-primary hover:text-primary"
-              >
-                House cleaning in {nearby}
-                <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Schema */}
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: siteUrl },
-          { name: "Service Areas", url: `${siteUrl}/service-areas` },
-          { name: `${area.name} Cleaning Services`, url: `${siteUrl}/cleaning-services-${area.slug}` },
-        ]}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            name: `House Cleaning Service in ${area.name}, CA`,
-            description: area.description,
-            provider: { "@id": "https://newstarcleaning.com/#localbusiness" },
-            areaServed: { "@type": "City", name: area.name, addressRegion: "CA" },
-            hasOfferCatalog: {
-              "@type": "OfferCatalog",
-              name: "Cleaning Services",
-              itemListElement: [
-                { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning" } },
-                { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning" } },
-                { "@type": "Offer", itemOffered: { "@type": "Service", name: "Move-In/Move-Out Cleaning" } },
-              ],
-            },
-          }),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: areaFaqs.map((faq) => ({
-              "@type": "Question",
-              name: faq.question,
-              acceptedAnswer: { "@type": "Answer", text: faq.answer },
-            })),
-          }),
-        }}
-      />
-    </>
+      <BreadcrumbSchema items={[
+        { name: "Home", url: siteUrl },
+        { name: "Service Areas", url: `${siteUrl}/service-areas` },
+        { name: `${area.name} Cleaning Services`, url: `${siteUrl}/cleaning-services-${area.slug}` },
+      ]} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "Service",
+        name: `House Cleaning Service in ${area.name}, CA`, description: area.description,
+        provider: { "@id": "https://newstarcleaning.com/#localbusiness" },
+        areaServed: { "@type": "City", name: area.name, addressRegion: "CA" },
+        hasOfferCatalog: { "@type": "OfferCatalog", name: "Cleaning Services", itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Move-In/Move-Out Cleaning" } },
+        ] },
+      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "FAQPage",
+        mainEntity: areaFaqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })),
+      }) }} />
+    </div>
   );
 }

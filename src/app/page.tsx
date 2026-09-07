@@ -1,419 +1,60 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
-import RealWorkGallery from "@/components/RealWorkGallery";
+import GoogleRating from "@/components/GoogleRating";
 import HomeBookingLink from "@/components/HomeBookingLink";
-import BookingPortalLink from "@/components/BookingPortalLink";
-import { cooktopGratesPair, ovenBuildupPair, realWorkPhotos } from "@/lib/realWorkPhotos";
-import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
-
-const services = [
-  {
-    number: "01",
-    title: "Standard house cleaning",
-    href: "/services/standard-cleaning",
-    lead:
-      "Weekly, bi-weekly, or monthly house cleaning for homes that are already maintained and ready for a reliable routine.",
-    fit: "Best for ongoing home care",
-  },
-  {
-    number: "02",
-    title: "Deep cleaning",
-    href: "/services/deep-cleaning",
-    lead: "A detailed reset for first visits, seasonal cleaning, baseboards, fixtures, reachable buildup, and floor edges.",
-    fit: "Best for first visits and resets",
-  },
-  {
-    number: "03",
-    title: "Move-in / move-out cleaning",
-    href: "/services/move-out-cleaning",
-    lead: "Detailed cleaning for empty homes, including accessible room surfaces, appliances, empty cabinets, bathrooms, and floors.",
-    fit: "Best for empty-home transitions",
-  },
-];
-
-const steps = [
-  {
-    title: "Tell us about the home",
-    text: "Share the city, service, approximate size, condition, and preferred timing.",
-  },
-  {
-    title: "Receive a clear quote",
-    text: "We confirm the price, what's included, and any optional details before you book.",
-  },
-  {
-    title: "Choose an appointment",
-    text: "Review the available times and move forward only when the details work for you.",
-  },
-];
-
-const areas = [
-  { name: "Fresno", slug: "fresno", type: "City service area" },
-  { name: "Clovis", slug: "clovis", type: "City service area" },
-  { name: "Madera", slug: "madera", type: "Availability confirmed" },
-  { name: "Tower District", slug: "tower-district", type: "Fresno neighborhood" },
-  { name: "Fig Garden", slug: "fig-garden", type: "Fresno neighborhood" },
-  { name: "Woodward Park", slug: "woodward-park", type: "Fresno neighborhood" },
-];
+import HomeServices from "@/components/HomeServices";
+import HomeQuoteLink from "@/components/HomeQuoteLink";
+import { bathroomResultPhotos } from "@/lib/realWorkPhotos";
+import { business } from "@/lib/business";
 
 const faqs = [
-  {
-    q: "Which cleaning service should I request?",
-    a: "Choose standard recurring cleaning for an already maintained home, deep cleaning for a detailed reset, or move-in/move-out cleaning for an empty home. If you are unsure, send the home details and we will recommend the right starting point.",
-  },
-  {
-    q: "Are the oven, refrigerator, cabinets, and windows included?",
-    a: "Move-in/move-out cleaning includes empty cabinet, drawer, and closet interiors. Cabinet interiors are optional for standard and deep cleaning. Inside the oven and refrigerator, interior window glass, and reachable window tracks are optional additions for all three services. An empty, accessible microwave is included. Exterior windows, screens, and ladder work are not included.",
-  },
-  {
-    q: "Do cleaners bring supplies and equipment?",
-    a: "Yes. Cleaners bring the supplies and equipment needed for the confirmed cleaning. Tell us about delicate surfaces, product sensitivities, or access requirements before the appointment.",
-  },
-  {
-    q: "Do you handle laundry, dishes, organizing, or packing?",
-    a: "No. New Star is a cleaning service, not a maid or household helper service. We clean accessible rooms and surfaces. Laundry, dishes, bed making, organizing, packing, unpacking, and personal-item handling are outside the service.",
-  },
-  {
-    q: "How much does house cleaning cost?",
-    a: "Standard cleaning starts at $165, deep cleaning at $235, and move-in/move-out cleaning at $325. Your total depends on the home’s size, condition, visit frequency, and optional work. We confirm the price before booking.",
-  },
-  {
-    q: "Can I call or text instead of using the quote form?",
-    a: "Yes. Call or text (559) 785-2822 if you would rather talk through the home and timing directly.",
-  },
+  { q: "Do you bring supplies?", a: "Yes. We bring supplies and equipment for the confirmed cleaning. Tell us about delicate surfaces or product sensitivities beforehand." },
+  { q: "What should I put away?", a: "Clear loose belongings and dishes so surfaces are accessible. Laundry, dishes, bed making, organizing, packing, and unpacking are not included." },
+  { q: "Are appliances and windows included?", a: "An empty, accessible microwave is included. Oven and refrigerator interiors, interior window glass, and reachable window tracks are optional. Exterior windows, screens, and ladder work are excluded." },
+  { q: "What should I know about an empty-home clean?", a: "Empty cabinet, drawer, and closet interiors are included. Remove belongings before the visit. We do not haul trash, repair damage, or guarantee a deposit return." },
 ];
-
-const trustPoints = [
-  "Locally owned in Fresno",
-  "Fresno, Clovis & Madera routes",
-  "Cleaners bring supplies",
-  "Quote confirmed before booking",
-];
-
-// Opening-slide proof: the five strongest verified same-surface pairs.
-const heroPairs: BeforeAfterItem[] = [
-  {
-    before: { src: "/photos/before1.jpg", alt: "Shower before a New Star deep cleaning" },
-    after: { src: "/photos/after1.jpg", alt: "Shower after a New Star deep cleaning" },
-    label: "Shower buildup removed from accessible tile and basin surfaces.",
-  },
-  {
-    before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star cleaning" },
-    after: { src: "/photos/real-work/paid/tub-surround-after.webp", alt: "The same bathtub and tile surround after a New Star cleaning" },
-    label: "Tub and surround detail from a real appointment.",
-  },
-  {
-    before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
-    after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
-    label: ovenBuildupPair.label,
-  },
-  {
-    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
-    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
-    label: cooktopGratesPair.label,
-  },
-  {
-    before: { src: "/photos/real-work/paid/refrigerator-full-before.webp", alt: "Empty refrigerator interior before a New Star cleaning" },
-    after: { src: "/photos/real-work/paid/refrigerator-full-after.webp", alt: "The same refrigerator interior after a New Star cleaning" },
-    label: "Refrigerator interior from a real move-out appointment.",
-  },
-];
-
-const resultsPairs: BeforeAfterItem[] = [
-  {
-    before: { src: "/photos/before1.jpg", alt: "Shower before a New Star deep cleaning" },
-    after: { src: "/photos/after1.jpg", alt: "Shower after a New Star deep cleaning" },
-    label: "Shower buildup removed from accessible tile and basin surfaces.",
-  },
-  {
-    before: { src: "/photos/before2.jpg", alt: "Bathtub before a New Star cleaning" },
-    after: { src: "/photos/after2.jpg", alt: "Bathtub after a New Star cleaning" },
-    label: "Bathtub surface cleaned during a detailed bathroom visit.",
-  },
-  {
-    before: { src: "/photos/before3.jpg", alt: "Door frame before detailed cleaning" },
-    after: { src: "/photos/after3.jpg", alt: "Door frame after detailed cleaning" },
-    label: "Reachable door-frame buildup removed during detail work.",
-  },
-  {
-    before: { src: "/photos/before4.jpg", alt: "Window blinds before detailed cleaning" },
-    after: { src: "/photos/after4.jpg", alt: "Window blinds after detailed cleaning" },
-    label: "Accessible blind detail from a real New Star appointment.",
-  },
-];
-
-function ArrowIcon() {
-  return (
-    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-    </svg>
-  );
-}
 
 export default function Home() {
-  const directBookingUrl = resolveDirectBookingUrl();
+  const hero = bathroomResultPhotos[0];
   return (
-    <>
-      <section className="bg-primary text-white">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:py-20">
-          <div className="min-w-0">
-            <span className="eyebrow text-accent-light">Serving Fresno, Clovis &amp; Madera</span>
-            <h1 className="mt-5 max-w-3xl text-4xl text-white sm:text-5xl lg:text-[3.6rem]">
-              House cleaning in Fresno, Clovis &amp; Madera—done with care.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-white/78 sm:mt-6 sm:text-lg sm:leading-8">
-              Weekly, bi-weekly, or monthly visits that keep cleaning off your to-do list. Need a fresh start? Choose a deep clean or move-out clean. We bring the supplies and confirm your price before you book.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href="/book-now" className="btn btn-accent">
-                Request a quote <ArrowIcon />
-              </Link>
-              <a href="tel:+15597852822" className="btn btn-ghost-dark">
-                Call or text (559) 785-2822
-              </a>
-            </div>
-            <p className="mt-5 text-sm leading-6 text-white/60">
-              No payment is collected with your quote request.
-              <HomeBookingLink />
-            </p>
-          </div>
+    <div className="home-reference">
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="home-hero-copy">
+          <h1 id="home-title">House cleaning.<span className="home-hero-location">Fresno &amp; Clovis.</span></h1>
+          <div className="home-hero-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Request a quote <span aria-hidden="true">↗</span></Link>}><HomeQuoteLink className="home-button">Request a quote <span aria-hidden="true">↗</span></HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link" data-phone-location="home_hero">Call us</a></div>
+          <div className="home-hero-booking"><HomeBookingLink onDark={false} /></div>
+        </div>
+        <figure className="home-hero-photo"><Image src={hero.src} alt={hero.alt} fill preload sizes="(min-width: 1344px) 740px, (min-width: 1024px) 57vw, 100vw" /><figcaption>A bathroom after a New Star cleaning.</figcaption></figure>
+      </section>
+      <div className="home-wrap"><div id="reviews" className="home-proof-line"><p>Locally owned. Photographs from our work.</p><GoogleRating /></div></div>
 
-          <div className="mx-auto w-full min-w-0 max-w-sm">
-            <div className="mb-3 flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.16em] text-white/65">
-              <span>Real New Star work</span>
-              <span>Same surface, before &amp; after</span>
-            </div>
-            <BeforeAfterCarousel items={heroPairs} />
+      <section id="services" className="home-services home-wrap" aria-labelledby="home-services-title">
+        <div className="home-section-heading"><h2 id="home-services-title">Which cleaning<br />do you need?</h2><Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">↗</span></Link></div>
+        <Suspense fallback={<p>Standard, deep, and move-in / move-out cleaning. <Link href="/services">View services</Link>.</p>}><HomeServices /></Suspense>
+        <div className="home-service-notes"><p>Oven and fridge interiors, interior window glass, and reachable window tracks are optional. Cabinet interiors are optional for standard and deep cleaning.</p><p>Your quote depends on home size, condition, frequency, and optional work. We confirm the total before booking.</p></div>
+      </section>
+
+      <section id="results" className="home-results" aria-labelledby="home-results-title">
+        <div className="home-wrap">
+          <div className="home-results-heading"><div><h2 id="home-results-title">The same shower.<br />Before and after.</h2></div></div>
+          <div className="home-comparison">
+            <figure><figcaption>Before</figcaption><div className="home-comparison-image"><Image src="/photos/before1.jpg" alt="Shower before a New Star deep cleaning" fill sizes="(min-width: 1024px) 468px, (min-width: 640px) 46vw, 44vw" /></div></figure>
+            <figure><figcaption>After</figcaption><div className="home-comparison-image"><Image src="/photos/after1.jpg" alt="The same shower after a New Star deep cleaning" fill sizes="(min-width: 1024px) 468px, (min-width: 640px) 46vw, 44vw" /></div></figure>
           </div>
+          <p className="home-result-caption">One New Star appointment. Results depend on the surface’s condition.</p>
+          <Link href="/services/deep-cleaning" className="home-text-link">See deep-cleaning details <span aria-hidden="true">↗</span></Link>
         </div>
       </section>
 
-      <section className="border-b border-line bg-white" aria-label="Service facts">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-3 py-6 sm:grid-cols-4 sm:gap-x-10">
-            {trustPoints.map((point) => (
-              <li key={point} className="flex items-center gap-2.5 text-sm font-semibold text-ink-soft">
-                <span className="text-accent" aria-hidden="true">✓</span>
-                {point}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section id="services" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
-            <div>
-              <span className="eyebrow eyebrow-dot">Cleaning services</span>
-              <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Choose the right level of cleaning.</h2>
-              <p className="mt-4 text-base leading-7 text-ink-soft sm:text-lg sm:leading-8">
-                Each service page lists the room-by-room work, optional additions, and exclusions in plain English.
-              </p>
-              <Link href="/checklist" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent">
-                Compare the full checklist <ArrowIcon />
-              </Link>
-            </div>
-
-            <div className="divide-y divide-line border-y border-line">
-              {services.map((service) => (
-                <Link key={service.title} href={service.href} className="group grid gap-2 py-6 transition-colors sm:grid-cols-[3rem_1fr_auto] sm:items-start sm:gap-4 sm:py-7 sm:gap-6 hover:text-primary">
-                  <span className="text-sm font-extrabold text-accent">{service.number}</span>
-                  <span>
-                    <span className="block text-xl font-bold text-ink group-hover:text-primary">{service.title}</span>
-                    <span className="mt-2 block max-w-xl text-sm leading-6 text-ink-soft">{service.lead}</span>
-                    <span className="mt-3 block text-xs font-bold uppercase tracking-[0.12em] text-mute">{service.fit}</span>
-                  </span>
-                  <span className="hidden pt-1 text-primary transition-transform group-hover:translate-x-1 sm:block" aria-hidden="true">→</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-line bg-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[0.78fr_1.22fr] md:items-center lg:px-8">
-          <div>
-            <span className="eyebrow eyebrow-dot">Properties and projects</span>
-            <h2 className="mt-3 text-2xl text-ink sm:text-3xl">For your workplace. For your next handoff.</h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Link href="/services/post-construction-cleaning" className="group border-l-2 border-primary pl-5">
-              <span className="font-bold text-ink group-hover:text-primary">Post-construction cleaning</span>
-              <span className="mt-1 block text-sm leading-6 text-ink-soft">Final cleans, renovations, turnover detail, and scoped punch returns.</span>
-            </Link>
-            <Link href="/services/commercial-cleaning" className="group border-l-2 border-primary pl-5">
-              <span className="font-bold text-ink group-hover:text-primary">Office & commercial cleaning</span>
-              <span className="mt-1 block text-sm leading-6 text-ink-soft">Walkthrough-based proposals for offices and small commercial facilities.</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section id="how-it-works" className="border-y border-line bg-cream-2">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <div className="max-w-2xl">
-            <span className="eyebrow eyebrow-dot">How it works</span>
-            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">From home details to a confirmed appointment.</h2>
-          </div>
-          <ol className="mt-12 grid gap-8 md:grid-cols-3">
-            {steps.map((step, index) => (
-              <li key={step.title} className="border-l-2 border-primary pl-6">
-                <span className="text-sm font-extrabold text-accent">0{index + 1}</span>
-                <h3 className="mt-3 text-xl text-ink">{step.title}</h3>
-                <p className="mt-3 text-base leading-7 text-ink-soft">{step.text}</p>
-              </li>
-            ))}
-          </ol>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link href="/book-now" className="btn btn-accent">Request a quote <ArrowIcon /></Link>
-            {directBookingUrl ? (
-              <Suspense fallback={null}>
-                <BookingPortalLink
-                  baseUrl={directBookingUrl}
-                  sourcePage="/"
-                  label="Book online"
-                  showIcon={false}
-                  className="btn btn-outline"
-                />
-              </Suspense>
-            ) : null}
-          </div>
-          {directBookingUrl ? (
-            <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft">
-              Review residential cleaning options, pricing, and available times online before confirming.
-            </p>
-          ) : null}
-        </div>
-      </section>
-
-      <section id="results" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
-            <div>
-              <span className="eyebrow eyebrow-dot">Real results</span>
-              <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Real before-and-after work from New Star appointments.</h2>
-              <p className="mt-5 line-clamp-2 text-base leading-7 text-ink-soft sm:line-clamp-none sm:text-lg sm:leading-8">
-                These are customer-job photos, not stock images. Use the toggle to compare the same surface before and after cleaning.
-              </p>
-              <p className="mt-4 text-sm leading-6 text-mute">
-                Results vary with surface condition, buildup, access, and the cleaning requested.
-              </p>
-            </div>
-            <div className="mx-auto w-full max-w-sm">
-              <BeforeAfterCarousel items={resultsPairs} />
-            </div>
-          </div>
-          <div className="mt-16 border-t border-line pt-14">
-            <RealWorkGallery
-              photos={realWorkPhotos}
-              title="Clean details from real appointments."
-              intro="A wider look at bathrooms and empty-home details completed by New Star cleaners. No stock photography or staged showroom images."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-primary text-white">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16 lg:px-8 lg:py-24">
-          <div>
-            <span className="eyebrow text-accent-light">Why New Star</span>
-            <h2 className="mt-4 text-3xl text-white sm:text-4xl">Local cleaning with clear expectations.</h2>
-            <p className="mt-5 text-lg leading-8 text-white/70">
-              Clear scope, honest hours, no surprises.
-            </p>
-          </div>
-          <div className="grid gap-x-10 gap-y-0 sm:grid-cols-2">
-            {[
-              ["A routine that works for your home", "Choose weekly, bi-weekly, or monthly visits. We review the starting condition and let you know if a deep clean is the right first step."],
-              ["A quote built around the home", "Size, condition, service type, and pets are priced before anything is confirmed."],
-              ["Supplies come with the cleaner", "Cleaners bring the supplies and equipment needed for the confirmed residential cleaning."],
-              ["Support after the appointment", "If something included appears missed, contact us within 24 hours so the concern can be reviewed."],
-            ].map(([title, text]) => (
-              <div key={title} className="border-t border-white/15 py-6">
-                <h3 className="text-lg text-white">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-white/68">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="areas" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
-            <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot">Service areas</span>
-              <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Fresno-based routes, kept intentionally local.</h2>
-              <p className="mt-4 line-clamp-2 text-base leading-7 text-ink-soft sm:line-clamp-none sm:text-lg sm:leading-8">
-                Fresno and Clovis are core routes. Madera appointments depend on route capacity. The neighborhood pages cover approved areas within Fresno.
-              </p>
-            </div>
-            <Link href="/service-areas" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-accent">
-              View all route details <ArrowIcon />
-            </Link>
-          </div>
-          <div className="mt-10 grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-6">
-            {areas.map((area) => (
-              <Link key={area.slug} href={`/cleaning-services-${area.slug}`} className="group border-b border-r border-line px-4 py-6 transition-colors hover:bg-cream-2">
-                <span className="block text-base font-bold text-primary">{area.name}</span>
-                <span className="mt-1 block text-xs leading-5 text-mute">{area.type}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="reviews" className="border-y border-line bg-cream-2">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8 lg:py-16">
-          <div>
-            <span className="eyebrow eyebrow-dot">Customer feedback</span>
-            <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Read recent New Star reviews on Google.</h2>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-ink-soft">
-              See customer comments, uploaded photos, and the current Google Business Profile before deciding.
-            </p>
-          </div>
-          <a href="https://www.google.com/maps?cid=12575787905603463321" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-            Open Google reviews <ArrowIcon />
-          </a>
-        </div>
-      </section>
-
-      <section className="bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <span className="eyebrow eyebrow-dot">FAQ</span>
-          <h2 className="mt-4 text-3xl text-ink sm:text-4xl">Before you request a quote.</h2>
-          <div className="mt-10 divide-y divide-line border-y border-line">
-            {faqs.map((item) => (
-              <details key={item.q} className="group py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-bold text-ink [&::-webkit-details-marker]:hidden">
-                  <span>{item.q}</span>
-                  <svg className="h-5 w-5 shrink-0 text-ink-soft transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <p className="mt-3 max-w-2xl leading-7 text-ink-soft">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((item) => ({
-              "@type": "Question",
-              name: item.q,
-              acceptedAnswer: { "@type": "Answer", text: item.a },
-            })),
-          }),
-        }}
-      />
-    </>
+      <div className="home-wrap">
+        <section id="areas" className="home-local" aria-labelledby="home-local-title">
+          <h2 id="home-local-title">Where we clean.</h2>
+          <div><p>Madera appointments depend on route availability.</p><div className="home-local-links"><Link href="/cleaning-services-fresno" className="home-text-link">Fresno</Link><Link href="/cleaning-services-clovis" className="home-text-link">Clovis</Link><Link href="/cleaning-services-madera" className="home-text-link">Madera</Link><Link href="/service-areas" className="home-text-link">All service areas ↗</Link></div><p className="home-local-business">Need <Link href="/services/commercial-cleaning">office cleaning</Link> or <Link href="/services/post-construction-cleaning">post-construction cleaning</Link>?</p></div>
+        </section>
+        <section className="home-faq" aria-labelledby="home-faq-title"><h2 id="home-faq-title">Before the visit.</h2><div><div className="home-faq-list">{faqs.map((item) => <details key={item.q}><summary>{item.q}<span aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div><Link href="/checklist" className="home-text-link">Full service checklists <span aria-hidden="true">↗</span></Link></div></section>
+      </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((item) => ({ "@type": "Question", name: item.q, acceptedAnswer: { "@type": "Answer", text: item.a } })) }) }} />
+    </div>
   );
 }

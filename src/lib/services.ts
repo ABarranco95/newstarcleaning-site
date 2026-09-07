@@ -311,7 +311,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "Why does deep cleaning cost more than standard cleaning?",
         answer:
-          "Time. Baseboards, fixtures, buildup, edges, and detail work take hours a standard visit does not have. Doing it right takes time, so we quote the hours the reset actually needs instead of promising a low price and skimming the detail work.",
+          "Deep cleaning includes more work on buildup, baseboards, fixtures, and floor edges. That takes longer than a standard visit. Your quote accounts for the home’s size, condition, and requested work.",
       },
     ],
     localNotes:

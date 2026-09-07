@@ -29,8 +29,8 @@ const home = read("src/app/page.tsx");
 const googleAds = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
 const blogPosts = read("src/lib/blogPosts.ts");
 const terms = read("src/app/terms/page.tsx");
-const header = read("src/components/Header.tsx");
-const footer = read("src/components/Footer.tsx");
+const header = read("src/components/Header.tsx") + read("src/components/HomeHeader.tsx");
+const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const nextConfig = read("next.config.ts");
 const deepPage = read("src/app/services/deep-cleaning/page.tsx");
 const moveOutPage = read("src/app/services/move-out-cleaning/page.tsx");
@@ -63,8 +63,8 @@ assert(
     checklist.includes("clientPrepChecklist") &&
     checklist.includes("FAQPage") &&
     checklist.includes("BreadcrumbSchema") &&
-    checklist.includes("Cleaning service, not household task service") &&
-    checklist.includes("What we don&apos;t do"),
+    checklist.includes("Laundry, dishes, bed making, organizing, packing, moving furniture, and restoration") &&
+    checklist.includes("<summary>Not included</summary>"),
   "checklist page renders scope, prep, exclusions, breadcrumbs, and FAQ schema",
 );
 
@@ -84,7 +84,7 @@ assert(
 );
 
 assert(
-  servicesHub.includes("Laundry, dishes, organizing, bed making") &&
+  ["Laundry", "dishes", "organizing", "bed making", "not included"].every(term => servicesHub.includes(term)) &&
     servicesHub.includes("/checklist"),
   "services hub explains add-on boundaries and links checklist",
 );
@@ -156,7 +156,7 @@ assert(
 );
 
 assert(
-  header.includes('href: "/checklist"') && footer.includes('href="/checklist"'),
+  header.includes('href="/checklist"') && footer.includes('"/checklist"'),
   "header and footer link the service checklist",
 );
 

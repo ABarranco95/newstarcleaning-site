@@ -47,7 +47,9 @@ const commercialPage = readFileSync("src/components/CommercialServicePage.tsx", 
 assert(!commercialPage.includes("&utm_source="), "internal navigation must not replace acquisition attribution");
 const paidPage = readFileSync("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "utf8");
 assert(paidPage.includes('const isProjectRequest = intentKey === "postConstruction"'));
-assert(paidPage.includes("const residentialBookingUrl = isProjectRequest ? null : directBookingUrl"));
+assert(paidPage.includes('const isCommercialRequest = intentKey === "commercial"'));
+assert(paidPage.includes("const isBusinessRequest = isProjectRequest || isCommercialRequest"));
+assert(paidPage.includes("const residentialBookingUrl = isBusinessRequest ? null : directBookingUrl"));
 assert(!paidPage.includes("baseUrl={directBookingUrl}"), "paid body exits must use the intent-gated booking URL");
 assert(paidPage.includes("directBookingUrl={residentialBookingUrl}"), "paid success state must use the same booking gate");
 console.log("Site readiness regression checks passed: receipts, consent, size bands, service defaults, commercial schedule separation, internal attribution and construction booking gates.");

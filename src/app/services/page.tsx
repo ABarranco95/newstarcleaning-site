@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
-import QuotePathPanel from "@/components/QuotePathPanel";
+import { Suspense } from "react";
+import SiteHero from "@/components/SiteHero";
+import HomeServices from "@/components/HomeServices";
+import HomeQuoteLink from "@/components/HomeQuoteLink";
+import GoogleRating from "@/components/GoogleRating";
+import { homeResultPhotos } from "@/lib/realWorkPhotos";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services } from "@/lib/services";
 
@@ -26,42 +31,19 @@ const serviceLinks = {
   "move-out-cleaning": "/services/move-out-cleaning",
 } as const;
 
-const comparisonRows = [
-  {
-    label: "Best fit",
-    values: [
-      "Keeping an already-clean home consistently maintained",
-      "Resetting a home that needs detail work or a first-time clean",
-      "Empty homes, rental turnovers, sellers, and buyers",
-    ],
-  },
-  {
-    label: "Timing",
-    values: ["Weekly, bi-weekly, or monthly", "One-time or before starting recurring service", "One-time, usually tied to keys, lease, or closing date"],
-  },
-  {
-    label: "Detail level",
-    values: [
-      "Visible surfaces, floors, bathrooms, kitchen, and dusting",
-      "Baseboards, reachable fans, vents, trim, fixtures, and light buildup",
-      "Inside oven, refrigerator, microwave, empty cabinets, closets, baseboards, and full empty-home detail",
-    ],
-  },
-];
-
 const projectServices = [
   {
     name: "Post-construction cleaning",
     href: "/services/post-construction-cleaning",
     description:
-      "Scoped final cleaning, turnover detail, and punch-return support for new homes, renovations, tenant improvements, and project handoffs.",
+      "Final cleaning after a build or renovation. We quote the work and any return visits separately.",
     fit: "Builders, remodelers, owners, and project teams",
   },
   {
     name: "Office & commercial cleaning",
     href: "/services/commercial-cleaning",
     description:
-      "Walkthrough-based cleaning proposals for offices, professional suites, property teams, and small commercial facilities.",
+      "Cleaning for offices and small commercial spaces, with a written task list and schedule.",
     fit: "Offices, property managers, and commercial facilities",
   },
 ];
@@ -77,186 +59,23 @@ const primaryAreas = serviceAreas.filter((area) =>
 
 export default function ServicesPage() {
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-primary text-white">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl"
-          aria-hidden="true"
-        />
-        <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-14 sm:px-6 lg:px-8 lg:pt-14 lg:pb-20">
-          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white">Home</Link>
-            <span className="px-1.5">/</span>
-            <span className="font-semibold text-white">Services</span>
-          </nav>
-          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-            <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot text-accent-light">Fresno house cleaning services</span>
-              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">
-                House cleaning for Fresno-area homes
-              </h1>
-              <p className="mt-5 text-lg leading-8 text-white/75">
-                Compare recurring, deep, and move-in/move-out cleaning, including the room-by-room work, optional additions, and exclusions for each service.
-              </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <a href="#compare" className="btn btn-accent">Compare services</a>
-                <Link href="/service-areas" className="btn btn-ghost-dark">See service areas</Link>
-                <Link href="/checklist" className="btn btn-ghost-dark">Service checklist</Link>
-              </div>
-            </div>
-            <QuotePathPanel
-              title="Choose first, quote second"
-              body="Compare the services here, then use the quote page when you are ready for pricing. We keep the form short and confirm details by text or call."
-              source="organic_services_hub"
-            />
-          </div>
-        </div>
+    <div className="site-reference">
+      <SiteHero title="Cleaning for your home." description="Regular visits, a deeper clean, or an empty home before a move. Fresno and Clovis, with Madera dates subject to route availability." photo={homeResultPhotos[1]} breadcrumbs={[{label: "Home", href: "/"}]}>
+        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Request a quote ↗</Link>}><HomeQuoteLink className="home-button">Request a quote ↗</HomeQuoteLink></Suspense><a href="#compare" className="home-text-link">Compare services</a></div>
+        <div className="site-proof-row"><GoogleRating /></div>
+      </SiteHero>
+      <section id="compare" className="site-section site-rule">
+        <div className="home-section-heading"><h2>Which cleaning do you need?</h2><Link href="/checklist" className="home-text-link">Full checklists ↗</Link></div>
+        <Suspense fallback={<p>Standard, deep, and move-in / move-out cleaning.</p>}><HomeServices /></Suspense>
+        <div className="home-service-notes"><p>Oven and fridge interiors, interior window glass, and reachable window tracks are optional. Cabinet interiors are optional for standard and deep cleaning.</p><p>Price depends on size, condition, frequency, and requested work. Laundry, dishes, bed making, organizing, and packing are not included.</p></div>
       </section>
-
-      <section id="compare" className="ns-section bg-cream scroll-mt-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <span className="eyebrow eyebrow-dot">Choose the right clean</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Compare the three cleaning services</h2>
-            <p className="mt-5 leading-relaxed text-ink-soft">
-              The right service depends on how lived-in the home is, whether it is empty, and how
-              much detail work is needed. These are the core services we quote most often for
-              Fresno and Clovis households.
-            </p>
-            <p className="mt-4 leading-relaxed text-ink-soft">
-              For standard and deep cleaning, the inside of the oven and refrigerator, cabinet interiors, and interior window glass are optional. The inside of an empty microwave is included when accessible. Move-in/move-out cleaning includes empty cabinet, drawer, and closet interiors; inside the oven and refrigerator are optional add-ons. Laundry, dishes, organizing, bed making, packing, and personal household tasks are not part of any cleaning service.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {services.map((service) => (
-              <Link
-                key={service.slug}
-                href={serviceLinks[service.slug]}
-                className="group rounded-[1.5rem] border border-line bg-white p-6 shadow-soft transition-all hover:-translate-y-1 hover:border-primary/25 hover:shadow-elev"
-              >
-                <span className="eyebrow eyebrow-dot">{service.shortName}</span>
-                <h3 className="mt-4 text-2xl text-ink group-hover:text-primary">{service.name}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{service.tagline}</p>
-                <ul className="mt-5 space-y-2">
-                  {service.bestFor.slice(0, 3).map((item) => (
-                    <li key={item} className="flex gap-2 text-sm leading-relaxed text-ink-soft">
-                      <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <span className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-accent group-hover:text-accent-hover">
-                  View details
-                  <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </span>
-              </Link>
-            ))}
-          </div>
-
-          <div className="mt-12 overflow-hidden rounded-2xl border border-line bg-white shadow-soft">
-            <div className="grid bg-primary px-5 py-4 text-sm font-bold text-white md:grid-cols-4">
-              <div>Question</div>
-              {services.map((service) => (
-                <div key={service.slug} className="hidden md:block">{service.shortName}</div>
-              ))}
-            </div>
-            {comparisonRows.map((row) => (
-              <div key={row.label} className="grid gap-3 border-t border-line px-5 py-5 md:grid-cols-4">
-                <div className="font-bold text-ink">{row.label}</div>
-                {row.values.map((value, index) => (
-                  <div key={value} className="text-sm leading-relaxed text-ink-soft">
-                    <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-mute md:hidden">
-                      {services[index].shortName}
-                    </span>
-                    {value}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="ns-section bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
-            <div>
-              <span className="eyebrow eyebrow-dot">Projects and workplaces</span>
-              <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Commercial and post-construction cleaning</h2>
-              <p className="mt-5 leading-relaxed text-ink-soft">
-                These services begin with the property, deadline, access, and written scope. We confirm route and crew capacity before proposing a start date.
-              </p>
-            </div>
-            <div className="divide-y divide-line border-y border-line">
-              {projectServices.map((service) => (
-                <Link key={service.href} href={service.href} className="group block py-7">
-                  <span className="text-xs font-bold uppercase tracking-[0.14em] text-accent">{service.fit}</span>
-                  <h3 className="mt-2 text-2xl text-ink group-hover:text-primary">{service.name}</h3>
-                  <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-soft">{service.description}</p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary">Review service scope &rarr;</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="ns-section bg-cream-2">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <span className="eyebrow eyebrow-dot">Where we clean</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Popular service areas for house cleaning</h2>
-            <p className="mt-5 leading-relaxed text-ink-soft">
-              We route cleaners from our Fresno base across Fresno, Clovis, Madera, and nearby
-              Fresno neighborhoods. Start with your area page to see local notes and route timing.
-            </p>
-          </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {primaryAreas.map((area) => (
-              <Link
-                key={area.slug}
-                href={`/cleaning-services-${area.slug}`}
-                className="rounded-2xl border border-line bg-white p-5 shadow-soft transition-colors hover:border-primary"
-              >
-                <h3 className="text-xl text-ink">{area.name}, CA</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{area.localProof}</p>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-8">
-            <Link href="/service-areas" className="btn btn-outline !min-h-12 !px-5 !text-sm">
-              View service areas
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: siteUrl },
-          { name: "Services", url: `${siteUrl}/services` },
-        ]}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: "New Star Cleaning services",
-            itemListElement: serviceSchemaItems.map((service, index) => ({
-              "@type": "ListItem",
-              position: index + 1,
-              name: service.name,
-              url: `${siteUrl}${service.href}`,
-            })),
-          }),
-        }}
-      />
-    </>
+      <section className="site-muted"><div className="site-section site-split"><div><h2>Workplaces &amp; projects.</h2><p className="site-intro">A walkthrough or photo review, followed by a written proposal.</p></div><div className="site-disclosures">{projectServices.map((service) => <article className="py-5 border-b border-line" key={service.href}><h3><Link href={service.href}>{service.name} ↗</Link></h3><p className="site-intro">{service.description}</p></article>)}</div></div></section>
+      <section className="site-section site-split"><h2>Near you.</h2><div><p className="site-intro">Fresno and Clovis are our core areas. Madera appointments depend on your address, date, and route capacity.</p><div className="site-links">{primaryAreas.map((area) => <Link key={area.slug} href={`/cleaning-services-${area.slug}`}>{area.name}</Link>)}<Link href="/service-areas">All service areas ↗</Link></div></div></section>
+      <BreadcrumbSchema items={[{ name: "Home", url: siteUrl }, { name: "Services", url: `${siteUrl}/services` }]} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "ItemList", name: "New Star Cleaning services",
+        itemListElement: serviceSchemaItems.map((service, index) => ({ "@type": "ListItem", position: index + 1, name: service.name, url: `${siteUrl}${service.href}` })),
+      }) }} />
+    </div>
   );
 }

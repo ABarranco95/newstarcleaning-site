@@ -104,7 +104,7 @@ export const serviceAreas: ServiceArea[] = [
     localContent:
       "Madera appointments require more travel from our Fresno base, so the address and requested date matter when we build the route. We confirm that timing before a customer commits.",
     localProof:
-      "Madera is an approved service area with more limited route capacity than Fresno or Clovis. Availability is confirmed case by case.",
+      "We have fewer appointment options in Madera than in Fresno or Clovis. Send your address and preferred date so we can check.",
     homeProfiles: [
       "Apartments, townhomes, and single-family homes within Madera",
       "Homes needing a one-time detailed reset",
