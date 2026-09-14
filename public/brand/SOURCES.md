@@ -17,3 +17,5 @@ Rules that apply here: do not recolor or flatten the star; reverse master on
 navy; standalone faceted symbol floor is 48px (micro/favicon assets below
 that); wordmark is outlined Plus Jakarta Sans. The legacy `star-*.png` files
 remain only until every reference is migrated; do not use them in new work.
+
+| nsc-lockup-horizontal-reverse-640/1280.png | 03-PNG | emailable reverse lockup for Apex |
