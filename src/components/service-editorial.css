@@ -1,0 +1,124 @@
+/* Internal editorial surfaces: service detail/area/combo, services index, about.
+   Scoped under .service-editorial; cool white + slate + navy tokens only. No
+   gradients, no shadow soup, no beige/teal. Thin rules and Jakarta already come
+   from the site shell. */
+
+@layer components {
+  .service-editorial { color: var(--color-ink); }
+  .service-editorial .se-section { max-width: 1280px; margin-inline: auto; padding: 44px 20px; }
+  .service-editorial .se-rule { border-top: 1px solid var(--color-line); }
+  .service-editorial .se-muted { background: var(--color-cream-2); }
+  .service-editorial .se-kicker { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--color-mute); }
+  .service-editorial .se-lead { max-width: 640px; font-size: 16px; line-height: 1.7; color: var(--color-ink-soft); }
+  .service-editorial .se-note { font-size: 13px; line-height: 1.7; color: var(--color-ink-soft); }
+
+  /* Intent fit band: shared semantic shape, per-intent content. */
+  .service-editorial .se-fit { display: grid; gap: 28px; align-items: start; }
+  .service-editorial .se-fit-copy { max-width: 560px; min-width: 0; }
+  .service-editorial .se-fit-copy h2 { max-width: 520px; }
+  .service-editorial .se-fit-copy p { margin-top: 14px; }
+
+  /* Recurring cadence rows (standard). */
+  .service-editorial .se-cadence { border-top: 1px solid var(--color-line); margin-top: 24px; }
+  .service-editorial .se-cadence-row { display: grid; grid-template-columns: 112px 1fr; gap: 16px; padding-block: 14px; border-bottom: 1px solid var(--color-line); }
+  .service-editorial .se-cadence-term { font-size: 13px; font-weight: 600; color: var(--color-primary); }
+  .service-editorial .se-cadence-note { font-size: 13px; line-height: 1.65; color: var(--color-ink-soft); }
+
+  /* Move-out included-vs-add-on handoff rows. */
+  .service-editorial .se-handoff { border-top: 1px solid var(--color-line); margin-top: 24px; }
+  .service-editorial .se-handoff-row { display: grid; grid-template-columns: 96px 1fr; gap: 16px; padding-block: 14px; border-bottom: 1px solid var(--color-line); }
+  .service-editorial .se-handoff .se-tag { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .service-editorial .se-tag-included { color: var(--color-primary); }
+  .service-editorial .se-tag-addon { color: var(--color-mute); }
+
+  /* Proof composition: asymmetric editorial grid, not a card row. */
+  .service-editorial .se-proof { display: grid; gap: 14px; min-width: 0; }
+  .service-editorial .se-proof figure { margin: 0; min-width: 0; }
+  .service-editorial .se-proof .se-proof-feature { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .service-editorial .se-proof .se-proof-feature img { object-fit: cover; }
+  .service-editorial .se-proof-side { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .service-editorial .se-proof-side .se-proof-cell { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .service-editorial .se-proof-side .se-proof-cell img { object-fit: cover; }
+  .service-editorial .se-proof figcaption { margin-top: 8px; font-size: 11px; line-height: 1.5; color: var(--color-mute); }
+  .service-editorial .se-quote-photo { margin: 24px 0 0; }
+  .service-editorial .se-quote-photo > div { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .service-editorial .se-quote-photo img { object-fit: cover; }
+  .service-editorial .se-quote-photo figcaption { margin-top: 8px; font-size: 11px; line-height: 1.5; color: var(--color-mute); }
+  .service-editorial .se-proof .se-tag { position: absolute; top: 10px; left: 10px; padding: 3px 8px; background: #fff; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+  /* Verified before/after pair, always visible (deep + move). */
+  .service-editorial .se-pair { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+  .service-editorial .se-pair figure { margin: 0; position: relative; aspect-ratio: 3 / 4; overflow: hidden; }
+  .service-editorial .se-proof-reveal .se-pair figure { aspect-ratio: 4 / 3; }
+  .service-editorial .se-pair img { object-fit: cover; }
+  .service-editorial .se-pair .se-pair-tag { position: absolute; top: 10px; left: 10px; padding: 3px 8px; background: #fff; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-ink-soft); }
+  .service-editorial .se-pair-note { grid-column: 1 / -1; font-size: 12px; line-height: 1.6; color: var(--color-mute); }
+
+  /* Open-by-default room scope grid (kitchen / bathrooms / living). */
+  .service-editorial .se-scope-grid { display: grid; gap: 28px; margin-top: 24px; }
+  .service-editorial .se-room { border-top: 2px solid var(--color-primary); padding-top: 16px; min-width: 0; }
+  .service-editorial .se-room h3 { font-size: 1.05rem; }
+  .service-editorial .se-room ul { margin: 12px 0 0; padding: 0; list-style: none; }
+  .service-editorial .se-room li { position: relative; padding-left: 16px; font-size: 13px; line-height: 1.65; color: var(--color-ink-soft); }
+  .service-editorial .se-room li + li { margin-top: 7px; }
+  .service-editorial .se-room li::before { content: ""; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border: 1px solid var(--color-primary); }
+
+  /* Two-room result strip on area/combo pages. */
+  .service-editorial .se-results { display: grid; gap: 14px; }
+  .service-editorial .se-results figure { margin: 0; position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .service-editorial .se-results img { object-fit: cover; }
+  .service-editorial .se-results figcaption { position: absolute; inset: auto 0 0; margin: 0; padding: 10px 12px; background: #fff; font-size: 11px; color: var(--color-mute); }
+
+  /* Visible local lists on area pages. */
+  .service-editorial .se-local { display: grid; gap: 24px; }
+  .service-editorial .se-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .service-editorial .se-chip { padding: 6px 12px; border: 1px solid var(--color-line); background: #fff; font-size: 12.5px; color: var(--color-ink-soft); }
+  .service-editorial .se-local-block { border-top: 1px solid var(--color-line); padding-top: 16px; }
+  .service-editorial .se-local-block h3 { font-size: 1rem; }
+  .service-editorial .se-local-block ul { margin: 10px 0 0; padding-left: 18px; list-style: disc; font-size: 13px; line-height: 1.7; color: var(--color-ink-soft); }
+  .service-editorial .se-local-block li + li { margin-top: 6px; }
+
+  /* Services index choice guide. */
+  .service-editorial .se-guide { display: grid; gap: 14px; }
+  .service-editorial .se-guide-card { display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--color-line); background: #fff; }
+  .service-editorial .se-guide-photo { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+  .service-editorial .se-guide-photo img { object-fit: cover; }
+  .service-editorial .se-guide-body { padding: 18px 18px 20px; min-width: 0; }
+  .service-editorial .se-guide-body h3 { font-size: 1.05rem; }
+  .service-editorial .se-guide-body p { margin-top: 8px; font-size: 13px; line-height: 1.65; color: var(--color-ink-soft); }
+  .service-editorial .se-guide-body .se-guide-links { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .service-editorial .se-guide-body .se-guide-links a { font-size: 13px; color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
+
+  /* About page. */
+  .service-editorial .se-about-facts { border-top: 2px solid var(--color-primary); }
+  .service-editorial .se-about-facts dl { display: grid; margin: 0; }
+  .service-editorial .se-about-facts div { display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding-block: 13px; border-bottom: 1px solid var(--color-line); }
+  .service-editorial .se-about-facts dt { font-size: 12.5px; font-weight: 600; color: var(--color-mute); }
+  .service-editorial .se-about-facts dd { margin: 0; font-size: 14px; color: var(--color-ink); }
+  .service-editorial .se-steps { counter-reset: se-step; border-top: 1px solid var(--color-line); }
+  .service-editorial .se-step { position: relative; padding: 18px 0 18px 44px; border-bottom: 1px solid var(--color-line); }
+  .service-editorial .se-step::before { counter-increment: se-step; content: counter(se-step, decimal-leading-zero); position: absolute; left: 0; top: 20px; font-size: 12px; font-weight: 700; color: var(--color-primary); }
+  .service-editorial .se-step h3 { font-size: 1rem; }
+  .service-editorial .se-step p { margin-top: 8px; font-size: 13.5px; line-height: 1.7; color: var(--color-ink-soft); }
+  .service-editorial .se-about-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .service-editorial .se-about-photos figure { margin: 0; position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .service-editorial .se-about-photos img { object-fit: cover; }
+  .service-editorial .se-about-photos figcaption { position: absolute; inset: auto 0 0; margin: 0; padding: 10px 12px; background: #fff; font-size: 11px; color: var(--color-mute); }
+
+  @media (min-width: 640px) {
+    .service-editorial .se-section { padding-inline: 32px; }
+    .service-editorial .se-proof-side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .service-editorial .se-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .service-editorial .se-guide { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .service-editorial .se-section { padding-block: 64px; }
+    .service-editorial .se-fit { grid-template-columns: .85fr 1.15fr; gap: 56px; }
+    .service-editorial .se-proof { grid-template-columns: 1.5fr 1fr; align-items: start; }
+    .service-editorial .se-proof-side { grid-template-columns: 1fr; }
+    .service-editorial .se-scope-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+    .service-editorial .se-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .service-editorial .se-local { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+    .service-editorial .se-about-photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+}

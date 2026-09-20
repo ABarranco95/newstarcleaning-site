@@ -19,7 +19,8 @@
     "verify:trust-proof": "node scripts/verify-trust-proof.mjs",
     "verify:photo-led": "node scripts/verify-photo-led.mjs",
     "verify:home-reference": "node scripts/verify-home-reference.mjs",
-    "verify:sitewide-reference": "node scripts/verify-sitewide-reference.mjs"
+    "verify:sitewide-reference": "node scripts/verify-sitewide-reference.mjs",
+    "verify:booking-handoff": "node scripts/verify-booking-handoff.mjs"
   },
   "dependencies": {
     "next": "^16.3.4",

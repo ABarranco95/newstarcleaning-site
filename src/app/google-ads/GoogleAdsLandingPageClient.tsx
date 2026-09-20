@@ -9,6 +9,13 @@ import GoogleRating from "@/components/GoogleRating";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
+import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
+
+const PAID_HERO_PHOTOS = {
+  deep: bathroomResultPhotos.find((photo) => photo.src.endsWith("/glass-shower-freestanding-tub-new-star.webp")),
+  move: emptyHomeResultPhotos.find((photo) => photo.src.endsWith("/dining-kitchen-turnover-new-star.webp")),
+  house: homeResultPhotos.find((photo) => photo.src.endsWith("/kitchen-island-clean-new-star.webp")),
+};
 
 type PaidIntent = "house" | "move" | "deep" | "recurring" | "postConstruction" | "commercial";
 
@@ -127,7 +134,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
     h1: (city) => `Professional house cleaning for ${city} homes.`,
-    subhead: "Built for one-time and first-time cleans. Tell us about the home and you’ll get your price and the next open days.",
+    subhead: "We’ll take care of the kitchen, bathrooms, dusting, and floors. Tell us about your home and when you’d like us to come.",
     serviceDefault: "Not sure yet",
     formTitle: "Request a cleaning quote",
     priceContext: {
@@ -150,7 +157,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   move: {
     eyebrow: "Move-in / move-out cleaning",
     h1: (city) => `Move-out cleaning for ${city} homes.`,
-    subhead: "Ready for the final walkthrough. Share the size, condition, deadline, and any oven, fridge, or window add-ons. We’ll confirm the complete scope and price before booking.",
+    subhead: "Moving out? We clean the empty home, including inside the cabinets and closets. Tell us your move date.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out pricing",
     priceContext: {
@@ -173,7 +180,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   deep: {
     eyebrow: "Detailed deep cleaning",
     h1: (city) => `Deep cleaning for ${city} homes.`,
-    subhead: "A maintained home and a home with heavier buildup need different amounts of time. Tell us the condition and priorities so we can price the right amount of work.",
+    subhead: "For the buildup and detail work a regular clean doesn’t cover. Tell us which rooms need the most attention.",
     serviceDefault: "Deep cleaning",
     formTitle: "Request deep-cleaning pricing",
     priceContext: {
@@ -196,7 +203,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   commercial: {
     eyebrow: "Office & commercial cleaning",
     h1: (city) => `Commercial cleaning proposals for ${city} workplaces.`,
-    subhead: "Tell us about your facility, required areas, access, and preferred frequency. We arrange a walkthrough or photo review, then confirm scope and availability in a written proposal.",
+    subhead: "Tell us about your workplace and when cleaning would fit around your team. We’ll review the space before we quote.",
     serviceDefault: "Office / commercial cleaning",
     formTitle: "Request a walkthrough",
     proofOrder: [],
@@ -214,10 +221,10 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   postConstruction: {
     eyebrow: "Post-construction cleaning",
     h1: (city) => `Post-construction cleaning for ${city} projects.`,
-    subhead: "Construction dust gets into everything. Tell us the square footage, what stage the site is at, and the handoff date. We scope the final clean and confirm the price before a crew is scheduled.",
+    subhead: "Once the trades are finished, we handle the dust and detail work. Tell us about the site and when it needs to be ready.",
     serviceDefault: "Post-construction cleaning",
-    formTitle: "Request a final-clean price",
-    proofOrder: ["vent", "oven", "shower", "tub", "refrigeratorDetail", "refrigerator"],
+    formTitle: "Request a final-clean proposal",
+    proofOrder: [],
     faqs: [
       {
         question: "Is debris hauling included?",
@@ -232,14 +239,14 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   recurring: {
     eyebrow: "Weekly · biweekly · monthly",
     h1: (city) => `Reliable recurring house cleaning for ${city} homes.`,
-    subhead: "Share the size and preferred frequency. We’ll confirm whether the first visit needs extra reset time and quote the ongoing service clearly.",
+    subhead: "We’ll keep up with the kitchen, bathrooms, dusting, and floors. Choose weekly, every other week, or monthly cleaning.",
     serviceDefault: "Standard recurring cleaning",
     formTitle: "Request recurring pricing",
     proofOrder: ["shower", "tub", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
         question: "Do I need a Deep clean first?",
-        answer: "Not always. If the home needs a reset before regular maintenance makes sense, we’ll explain the first-visit scope and price before booking.",
+        answer: "Not always. If the home needs extra attention before regular cleaning, we’ll explain the first-visit scope and price before booking.",
       },
       {
         question: "Can I choose biweekly instead of weekly?",
@@ -287,7 +294,7 @@ function PaidBrand() {
         alt="New Star Cleaning"
         width={640}
         height={150}
-        className="h-auto w-36 sm:w-44"
+        className="paid-wordmark"
         priority
       />
     </div>
@@ -315,6 +322,12 @@ function PriceContext({ context }: { context: NonNullable<PaidIntentConfig["pric
 
 function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
   const pairs = order.map((key) => ({ key, ...PROOF_PAIRS[key] }));
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const scrollGallery = (direction: number) => {
+    const gallery = galleryRef.current;
+    if (!gallery) return;
+    gallery.scrollBy({ left: direction * gallery.clientWidth * 0.86, behavior: "auto" });
+  };
 
   return (
     <section className="border-b border-line bg-white" aria-labelledby="paid-proof-title">
@@ -329,7 +342,21 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
           <p className="max-w-sm text-sm leading-6 text-ink-soft">Photographed from New Star jobs. No stock photography.</p>
         </div>
 
-        <div className="mt-7 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10 md:overflow-visible md:pb-0">
+        <div
+          id="paid-proof-gallery"
+          ref={galleryRef}
+          role="region"
+          aria-label="Six New Star before-and-after cleaning results"
+          aria-describedby="paid-proof-guidance paid-proof-caption"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+              event.preventDefault();
+              scrollGallery(event.key === "ArrowRight" ? 1 : -1);
+            }
+          }}
+          className="paid-proof-gallery mt-7 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10 md:overflow-visible md:pb-0"
+        >
           {pairs.map((pair) => (
             <article key={pair.key} className="min-w-[84%] snap-center sm:min-w-[62%] md:min-w-0">
               <div className="grid grid-cols-2 gap-2">
@@ -355,7 +382,14 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
             </article>
           ))}
         </div>
-        <p className="mt-2 text-xs font-semibold text-ink-soft md:hidden">Swipe to see all six results →</p>
+        <div className="paid-proof-controls md:hidden">
+          <p id="paid-proof-guidance" className="text-xs text-ink-soft">Swipe to see all six results, or use the arrow keys.</p>
+          <div className="flex gap-2">
+            <button type="button" aria-label="Previous cleaning result" aria-controls="paid-proof-gallery" onClick={() => scrollGallery(-1)}>←</button>
+            <button type="button" aria-label="Next cleaning result" aria-controls="paid-proof-gallery" onClick={() => scrollGallery(1)}>→</button>
+          </div>
+        </div>
+        <p id="paid-proof-caption" className="mt-4 max-w-3xl text-xs leading-5 text-ink-soft">Cleaning doesn’t remove every stain or sign of wear. Oven and fridge interiors are optional extras.</p>
       </div>
     </section>
   );
@@ -389,7 +423,7 @@ function ReviewStrip() {
 
 function ProcessStrip({ commercial = false }: { commercial?: boolean }) {
   const steps = commercial ? [
-    ["1", "Share facility details"],
+    ["1", "Share the property details"],
     ["2", "Walkthrough & scope review"],
     ["3", "Review your written proposal"],
   ] : [
@@ -451,21 +485,34 @@ function StickyMobileCTA({ onQuoteClick, commercial = false }: { onQuoteClick: (
     const form = document.getElementById("booking-form");
     if (!form) return;
 
-    const updateVisibility = () => setVisible(form.getBoundingClientRect().bottom <= 0);
+    const viewport = window.visualViewport;
+    const updateVisibility = () => {
+      const editing = document.activeElement?.matches("input, textarea, select, [contenteditable='true']");
+      const keyboardOpen = viewport ? window.innerHeight - viewport.height > 150 : false;
+      setVisible(form.getBoundingClientRect().bottom <= 0 && !editing && !keyboardOpen);
+    };
     updateVisibility();
     window.addEventListener("scroll", updateVisibility, { passive: true });
     window.addEventListener("resize", updateVisibility);
+    viewport?.addEventListener("resize", updateVisibility);
+    viewport?.addEventListener("scroll", updateVisibility);
+    document.addEventListener("focusin", updateVisibility);
+    document.addEventListener("focusout", updateVisibility);
 
     return () => {
       window.removeEventListener("scroll", updateVisibility);
       window.removeEventListener("resize", updateVisibility);
+      viewport?.removeEventListener("resize", updateVisibility);
+      viewport?.removeEventListener("scroll", updateVisibility);
+      document.removeEventListener("focusin", updateVisibility);
+      document.removeEventListener("focusout", updateVisibility);
     };
   }, []);
 
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white/95 p-4 shadow-[0_-12px_30px_rgba(14,22,38,0.12)] backdrop-blur md:hidden">
+    <div className="paid-sticky-cta fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
         <a href={"tel:+1" + "559" + "785" + "2822"} className="home-text-link flex-1 justify-center">
           Call
@@ -495,6 +542,9 @@ export default function GoogleAdsLandingPageClient({
   const isCommercialRequest = intentKey === "commercial";
   const isBusinessRequest = isProjectRequest || isCommercialRequest;
   const residentialBookingUrl = isBusinessRequest ? null : directBookingUrl;
+  const requestedFrequency = searchParams.get("frequency")?.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
+  const bookingFrequency = intentKey === "recurring" && (requestedFrequency === "weekly" || requestedFrequency === "biweekly" || requestedFrequency === "monthly") ? requestedFrequency : undefined;
+  const heroPhoto = isBusinessRequest ? null : intentKey === "deep" ? PAID_HERO_PHOTOS.deep : intentKey === "move" ? PAID_HERO_PHOTOS.move : PAID_HERO_PHOTOS.house;
 
   useEffect(() => {
     captureFirstPaidTouch({
@@ -526,7 +576,7 @@ export default function GoogleAdsLandingPageClient({
   };
 
   return (
-    <div className="site-reference bg-white pb-24 text-ink md:pb-0">
+    <div className="site-reference paid-reference bg-white pb-24 text-ink md:pb-0">
       <header className="bg-primary text-white">
         <div className="home-wrap flex h-16 items-center justify-between gap-4">
           <PaidBrand />
@@ -543,8 +593,9 @@ export default function GoogleAdsLandingPageClient({
 
       <section className="border-b border-line bg-white" aria-labelledby="paid-title">
         <div className="home-wrap py-5 sm:py-8 lg:py-10">
-          <div className="grid min-w-0 gap-5 sm:gap-7 lg:grid-cols-[0.94fr_1.06fr] lg:gap-x-12 lg:gap-y-7">
-            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+          <div className="paid-hero-grid">
+            <div className="paid-hero-story">
+            <div className="paid-hero-copy min-w-0">
               <p className="text-xs text-ink-soft">{intent.eyebrow}</p>
               <h1 id="paid-title" className="mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]">
                 {intent.h1(city.label)}
@@ -553,11 +604,26 @@ export default function GoogleAdsLandingPageClient({
                 {intent.subhead}
               </p>
               <div className="mt-3">
-                <TrustLine commercial={isCommercialRequest} />
+                <TrustLine commercial={isBusinessRequest} />
               </div>
             </div>
 
-            <div id="booking-form" className="site-form-panel min-w-0 scroll-mt-4 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            {!isBusinessRequest ? (
+              <div className="paid-hero-media">
+                {heroPhoto ? (
+                  <figure className="paid-job-photo">
+                    <div className="paid-job-photo-frame">
+                      <Image src={heroPhoto.src} alt={heroPhoto.alt} fill sizes="(min-width: 1024px) 44vw, 100vw" className="object-cover" />
+                    </div>
+                    <figcaption>New Star work · {heroPhoto.caption}</figcaption>
+                  </figure>
+                ) : null}
+                {intent.priceContext ? <PriceContext context={intent.priceContext} /> : null}
+              </div>
+            ) : null}
+            </div>
+
+            <div id="booking-form" className="paid-hero-form site-form-panel min-w-0 scroll-mt-4">
               {isCommercialRequest ? (
                 <CommercialQuoteForm
                   source="google-ads"
@@ -579,14 +645,14 @@ export default function GoogleAdsLandingPageClient({
               )}
               {residentialBookingUrl ? (
                 <p className="mt-1 text-center text-xs text-ink-soft">
-                  Prefer to book it yourself?{" "}
                   <BookingPortalLink
                     baseUrl={residentialBookingUrl}
                     sourcePage="/google-ads"
                     ctaLocation="paid_under_form"
                     service={intent.serviceDefault}
                     city={city.formValue || undefined}
-                    label="Pick a date online"
+                    frequency={bookingFrequency}
+                    label="Book online with New Star"
                     showIcon={false}
                     className="home-text-link"
                   />
@@ -594,42 +660,25 @@ export default function GoogleAdsLandingPageClient({
               ) : null}
             </div>
 
-            <div className="space-y-5 lg:col-start-1 lg:row-start-2">
-              {intent.priceContext ? <PriceContext context={intent.priceContext} /> : null}
-              {!isBusinessRequest ? (
-                <figure className="hidden border-t border-line pt-5 lg:flex lg:items-center lg:gap-5">
-                  <Image
-                    src={`/illustrations/${intentKey === "move" ? "cleaning-empty-home" : intentKey === "deep" ? "cleaning-deep" : "cleaning-regular"}.svg`}
-                    alt=""
-                    width={180}
-                    height={130}
-                    className="w-36 shrink-0"
-                  />
-                  <figcaption className="max-w-52 text-sm leading-6 text-ink-soft">
-                    {intentKey === "move" ? "An empty home, ready for its next chapter." : intentKey === "deep" ? "More attention for edges, fixtures, and buildup." : "Kitchens, bathrooms, dusting, and floors."}
-                  </figcaption>
-                </figure>
-              ) : null}
-            </div>
           </div>
         </div>
       </section>
 
       {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
       <ReviewStrip />
-      <ProcessStrip commercial={isCommercialRequest} />
+      <ProcessStrip commercial={isBusinessRequest} />
 
       <section className="bg-white">
         <div className="site-section grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
           <div>
-            <h2 className="text-primary">{isCommercialRequest ? "Before we propose the work." : "Before you book."}</h2>
+            <h2 className="text-primary">{isBusinessRequest ? "Before we propose the work." : "Before you book."}</h2>
             <div className="mt-6">
               <FAQAccordion faqs={intent.faqs} />
             </div>
           </div>
 
           <div className="border-t border-line pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
-            <h2 className="text-primary">{isCommercialRequest ? "Let’s scope your facility." : isProjectRequest ? "Let’s scope your project." : "A clean home starts here."}</h2>
+            <h2 className="text-primary">{isCommercialRequest ? "Let’s scope your facility." : isProjectRequest ? "Let’s scope your project." : "Tell us about your home."}</h2>
             <p className="mt-4 max-w-md text-sm leading-6 text-ink-soft">
               {isCommercialRequest ? "Share your facility details and preferred service window. We’ll confirm scope, access, and capacity before sending a written proposal." : isProjectRequest ? "Send the site details and handoff date. We’ll confirm scope, access, and capacity before proposing the work." : "Share the basics. We’ll confirm your price and available dates before you book."}
             </p>
@@ -644,25 +693,24 @@ export default function GoogleAdsLandingPageClient({
             </div>
             {residentialBookingUrl ? (
               <p className="mt-2 text-xs text-ink-soft">
-                Or skip the callback and{" "}
                 <BookingPortalLink
                   baseUrl={residentialBookingUrl}
                   sourcePage="/google-ads"
                   ctaLocation="paid_closing"
                   service={intent.serviceDefault}
                   city={city.formValue || undefined}
-                  label="book online"
+                  frequency={bookingFrequency}
+                  label="Book online with New Star"
                   showIcon={false}
                   className="home-text-link"
                 />
-                .
               </p>
             ) : null}
           </div>
         </div>
       </section>
 
-      <StickyMobileCTA commercial={isCommercialRequest} onQuoteClick={() => trackQuoteCta("sticky_mobile")} />
+      <StickyMobileCTA commercial={isBusinessRequest} onQuoteClick={() => trackQuoteCta("sticky_mobile")} />
     </div>
   );
 }

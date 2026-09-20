@@ -1,0 +1,14 @@
+.env*
+.git
+.hermes
+.opencode
+logs
+*.log
+.tmp
+evidence
+docs
+AGENTS.md
+CLAUDE.md
+README.md
+opencode.json
+*.tsbuildinfo

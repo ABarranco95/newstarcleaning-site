@@ -20,13 +20,13 @@ export default function SchemaMarkup() {
       name: "Deep Cleaning",
       description: "Detailed one-time deep cleaning for Fresno-area homes.",
       url: `${business.siteUrl}/services/deep-cleaning`,
-      image: `${business.siteUrl}/photos/real-work/pairs/under-sink-cabinet-after.webp`,
+      image: `${business.siteUrl}/photos/real-work/paid/tub-surround-after.webp`,
     },
     {
       name: "Move-In/Move-Out Cleaning",
       description: "Detailed cleaning for empty homes during move-ins, move-outs, and property turnovers.",
       url: `${business.siteUrl}/services/move-out-cleaning`,
-      image: `${business.siteUrl}/photos/real-work/pairs/cooktop-grates-after.webp`,
+      image: `${business.siteUrl}/photos/real-work/paid/oven-interior-after.webp`,
     },
     {
       name: "Post-Construction Cleaning",
@@ -71,9 +71,9 @@ export default function SchemaMarkup() {
         url: business.siteUrl,
         image: [
           `${business.siteUrl}/og-image.png`,
-          `${business.siteUrl}/photos/real-work/pairs/cooktop-grates-after.webp`,
-          `${business.siteUrl}/photos/real-work/pairs/laundry-sink-after.webp`,
-          `${business.siteUrl}/photos/real-work/pairs/under-sink-cabinet-after.webp`,
+          `${business.siteUrl}/photos/real-work/paid/tub-surround-after.webp`,
+          `${business.siteUrl}/photos/real-work/paid/refrigerator-full-after.webp`,
+          `${business.siteUrl}/photos/real-work/paid/vent-detail-after.webp`,
           `${business.siteUrl}/photos/real-work/kitchen-turnover-new-star.webp`,
         ],
         logo: `${business.siteUrl}/logo.png`,

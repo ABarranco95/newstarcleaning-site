@@ -4,6 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const page = readFileSync(path.join(root, "src/app/google-ads/GoogleAdsLandingPageClient.tsx"), "utf8");
 const marker = readFileSync(path.join(root, "src/app/google-ads/page.tsx"), "utf8");
+const css = readFileSync(path.join(root, "src/app/google-ads/paid-reference.css"), "utf8");
 const form = readFileSync(path.join(root, "src/components/QuickQuoteForm.tsx"), "utf8");
 const failures = [];
 const passes = [];
@@ -19,7 +20,11 @@ const intentConfig = page.slice(page.indexOf("const INTENT_CONFIG"), page.indexO
 const directSectionCount = (render.match(/<section\b/g) || []).length;
 const questionCount = (intentConfig.match(/question:/g) || []).length;
 
-assert(marker.includes('data-paid-layout-version="proof-led-v4-accurate"'), "paid page exposes the condition-accurate proof-led v4 marker");
+assert(marker.includes('data-paid-layout-version="photo-led-v5-continuity"') && marker.includes('import "./paid-reference.css"'), "paid page exposes photo-led continuity marker and loads paid-only CSS");
+assert(css.includes(".paid-hero-story { display: contents;") && css.includes(".paid-hero-form { order: 2;") && css.includes(".paid-hero-media { order: 3;") && css.includes(".paid-hero-story { display: grid;") && !page.includes("lg:row-span-2"), "coherent desktop story column replaces stretched rows; mobile form precedes new photography");
+assert(css.includes("width: 156px") && css.includes("width: 190px") && page.includes("/brand/nsc-lockup-horizontal-reverse.svg"), "paid header uses approved homepage logo asset and responsive widths");
+assert(page.includes("window.visualViewport") && page.includes("!editing && !keyboardOpen") && css.includes("env(safe-area-inset-bottom"), "sticky CTA respects active inputs, visual viewport keyboard and safe area");
+assert(page.includes('aria-label="Six New Star before-and-after cleaning results"') && page.includes('tabIndex={0}') && css.includes(".paid-proof-gallery:focus-visible"), "proof rail is named, keyboard-focusable and visibly focused");
 assert(page.includes("BeforeAfterGallery") && page.includes("ProcessStrip"), "paid page uses proof and process components");
 assert(page.includes("snap-mandatory") && page.includes("Swipe to see all six results"), "mobile proof uses a compact six-result swipe gallery");
 assert(page.includes("getBoundingClientRect().bottom <= 0") && page.includes('addEventListener("scroll"'), "mobile sticky CTA stays hidden while the quote form is visible");

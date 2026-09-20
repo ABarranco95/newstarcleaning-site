@@ -6,7 +6,7 @@ import SiteHero from "@/components/SiteHero";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import { Suspense } from "react";
 import { serviceAreas } from "@/lib/serviceAreas";
-import { homeResultPhotos } from "@/lib/realWorkPhotos";
+import { emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -27,7 +27,7 @@ const fresnoNeighborhoods = serviceAreas.filter((area) => ["tower-district", "fi
 export default function ServiceAreasPage() {
   return (
     <div className="site-reference">
-      <SiteHero title="Close to home." eyebrow="House cleaning around Fresno" description="Fresno and Clovis are our core routes. Madera appointments depend on your address and available dates." photo={homeResultPhotos[3]} breadcrumbs={[{label: "Home", href: "/"}]}>
+      <SiteHero title="Close to home." eyebrow="House cleaning around Fresno" description="Fresno and Clovis are our core routes. Madera appointments depend on your address and available dates." photo={emptyHomeResultPhotos[4]} breadcrumbs={[{label: "Home", href: "/"}]}>
         <div className="site-actions"><a href="#cities" className="home-button">Find your area ↗</a><Suspense fallback={<Link href="/book-now" className="home-text-link">Request a quote</Link>}><HomeQuoteLink className="home-text-link">Request a quote</HomeQuoteLink></Suspense></div><div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>
       <section id="cities" className="site-section site-rule"><h2>Cities we serve.</h2><div className="site-directory">{cityRoutes.map((area) => <article key={area.slug}><span className="site-eyebrow">{area.county}</span><h3><Link href={`/cleaning-services-${area.slug}`}>{area.name}, CA ↗</Link></h3><p>{area.localProof}</p>{area.slug === "madera" && <p>Availability depends on route capacity, the exact address, and your requested date.</p>}</article>)}</div></section>

@@ -199,7 +199,7 @@ function SubmitButton({
         : commercial
           ? "Request a walkthrough"
           : paidSearch
-            ? "Get my price"
+            ? "Request my quote"
             : compact
               ? "Get my quote"
               : "Get pricing & availability"}
@@ -231,6 +231,7 @@ export default function QuickQuoteForm({
   const [submittedCommercial, setSubmittedCommercial] = useState(false);
   const [submittedService, setSubmittedService] = useState("");
   const [submittedCity, setSubmittedCity] = useState("");
+  const [submittedFrequency, setSubmittedFrequency] = useState("");
   const [error, setError] = useState("");
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
@@ -417,6 +418,7 @@ export default function QuickQuoteForm({
       setSubmittedCommercial(isCommercialRequest);
       setSubmittedService(formData.service);
       setSubmittedCity(formData.city);
+      setSubmittedFrequency(isRecurringRequest ? formData.frequency : "");
       setIsSuccess(true);
       setShowPaidDetails(false);
       submissionIdRef.current = "";
@@ -684,13 +686,13 @@ export default function QuickQuoteForm({
         <h2 className="font-display text-2xl text-ink">Quote request received.</h2>
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">
           {paidSearch
-            ? "Angel or the team will call or text you with your price and the next open days."
+            ? "We’ll follow up with your quote and available dates."
             : `We'll follow up with pricing, availability, and the next step for your ${submittedCommercial ? "property or project" : "home"}.`}
         </p>
         {paidSearch && directBookingUrl && !submittedCommercial ? (
           <>
             <p className="mt-4 text-sm leading-relaxed text-ink-soft">
-              Don&apos;t want to wait for the call? Pick your date online now. You&apos;ll see the price before you confirm anything.
+              Ready to book? You can also book online with New Star. Review the price before you confirm.
             </p>
             <Suspense fallback={null}>
               <BookingPortalLink
@@ -699,7 +701,8 @@ export default function QuickQuoteForm({
                 ctaLocation="paid_success_card"
                 service={submittedService}
                 city={submittedCity || undefined}
-                label="Pick my date online"
+                frequency={submittedFrequency || undefined}
+                label="Book online with New Star"
                 className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-6 py-3 text-sm font-bold text-white transition hover:bg-accent-hover"
               />
             </Suspense>
@@ -723,11 +726,12 @@ export default function QuickQuoteForm({
   return (
     <div
       id="quote"
+      data-paid-search={paidSearch || undefined}
       className={`border bg-white ${paidSearch ? "rounded-[1.5rem] border-slate-200 p-5 sm:p-6 lg:p-7" : "rounded-3xl border-line p-6 shadow-elev sm:p-7 lg:p-8"}`}
     >
       <div className={paidSearch ? "mb-4" : "mb-6"}>
-        <span className="eyebrow eyebrow-dot">{paidSearch ? "Pricing & availability" : "Fast local quote"}</span>
-        <h2 className={`mt-3 font-display leading-tight text-ink lg:text-[1.6rem] ${paidSearch ? "text-xl sm:text-2xl" : "text-2xl"}`}>
+        {!paidSearch ? <span className="eyebrow eyebrow-dot">Fast local quote</span> : null}
+        <h2 className={`font-display leading-tight text-ink lg:text-[1.6rem] ${paidSearch ? "text-xl sm:text-2xl" : "mt-3 text-2xl"}`}>
           {title}
         </h2>
         {subtitle ? <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p> : null}

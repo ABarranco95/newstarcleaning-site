@@ -8,6 +8,8 @@ import { Suspense } from "react";
 import GoogleRating from "@/components/GoogleRating";
 import { business } from "@/lib/business";
 import { servicePresentation } from "@/lib/servicePresentation";
+import ServiceProof from "@/components/ServiceProof";
+import "@/components/service-editorial.css";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services, getFullIncludedList, type ServiceDefinition } from "@/lib/services";
 
@@ -108,6 +110,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
         <p className="site-price">From <strong>{presentation.startingPrice}</strong> · Final price confirmed before booking.</p>
         <div className="site-actions"><Suspense fallback={<Link href={quoteHref} className="home-button">Request a quote ↗</Link>}><HomeQuoteLink className="home-button">Request a quote ↗</HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link">Call us</a></div><div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>
+      <section className="site-section site-rule"><div className="home-section-heading"><h2>Our {service.shortName.toLowerCase()} work.</h2><Link href="/our-work" className="home-text-link">More of our work ↗</Link></div><div className="service-editorial"><ServiceProof service={service} /></div></section>
       <section id="whats-included" className="site-section site-split site-rule"><div><h2>What’s included.</h2><p className="site-intro">{presentation.boundary}</p><p className="site-note">Your quote depends on size, condition, and requested work. Laundry, dishes, bed making, organizing, packing, and personal household tasks are not included.</p><div className="site-scope-visual"><Image src={`/illustrations/cleaning-${drawing}.svg`} alt="" width={360} height={260} /></div></div><div className="site-disclosures">
         {getFullIncludedList(service.slug).map((group) => <details key={group.title}><summary>{group.title}</summary><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></details>)}
         <details><summary>Available add-ons</summary><dl>{service.availableAddOns.map((item) => <div key={item.title}><dt>{item.title}</dt><dd>{item.description}</dd></div>)}</dl></details>

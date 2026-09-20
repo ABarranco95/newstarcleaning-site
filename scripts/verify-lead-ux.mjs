@@ -153,7 +153,7 @@ assert(
   quickQuoteForm.includes("showPaidDetails") &&
     quickQuoteForm.includes("Add home details (optional)") &&
     quickQuoteForm.includes("home like right now") &&
-    quickQuoteForm.includes("Get my price") &&
+    quickQuoteForm.includes("Request my quote") &&
     quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
     quickQuoteForm.includes("landingCity?: string;") &&

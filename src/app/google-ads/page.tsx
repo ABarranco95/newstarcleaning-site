@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import GoogleAdsLandingPageClient from "./GoogleAdsLandingPageClient";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+import "./paid-reference.css";
 
 const directBookingUrl = resolveDirectBookingUrl();
 
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function GoogleAdsLandingPage() {
   return (
-    <div data-paid-layout-version="proof-led-v4-accurate">
+    <div data-paid-layout-version="photo-led-v5-continuity">
       <Suspense fallback={null}>
         <GoogleAdsLandingPageClient directBookingUrl={directBookingUrl} />
       </Suspense>

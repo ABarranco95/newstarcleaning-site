@@ -1,0 +1,23 @@
+@layer components {
+  .paid-reference .paid-wordmark { width: 156px; height: auto; }
+  .paid-hero-grid { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+  .paid-hero-story { display: contents; }
+  .paid-hero-copy { order: 1; }
+  .paid-hero-form { order: 2; }
+  .paid-hero-media { order: 3; display: grid; gap: 20px; min-width: 0; }
+  .paid-job-photo-frame { position: relative; aspect-ratio: 16 / 11; overflow: hidden; background: #f8fafc; }
+  .paid-job-photo-frame img { object-position: 50% 65%; }
+  .paid-job-photo figcaption { padding-block: 10px; color: var(--color-ink-soft); font-size: 12px; line-height: 1.5; }
+  .paid-proof-gallery:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 6px; }
+  .paid-proof-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; }
+  .paid-proof-controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--color-line); color: var(--color-primary); background: #fff; cursor: pointer; }
+  .paid-proof-controls button:hover { border-color: var(--color-primary); }
+  .paid-proof-controls button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+  .paid-sticky-cta { padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); }
+  @media (min-width: 1024px) {
+    .paid-reference .paid-wordmark { width: 190px; }
+    .paid-hero-grid { display: grid; grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr); align-items: start; gap: 48px; }
+    .paid-hero-story { display: grid; gap: 24px; min-width: 0; }
+    .paid-job-photo-frame { aspect-ratio: 16 / 10; }
+  }
+}

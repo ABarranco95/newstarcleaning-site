@@ -4,6 +4,7 @@
 // metadata (EXIF/GPS/etc. — sharp omits metadata unless withMetadata() is
 // called), resizes to a web-appropriate width, and emits WebP files into
 // public/photos/real-work. Run with:  node scripts/prepare-photos.mjs
+// Pass an output filename to prepare only that entry, leaving others intact.
 //
 // Every entry records the source filename and its SHA-1 at intake time so the
 // published derivative can always be traced to the exact original.
@@ -21,6 +22,12 @@ const MAX_WIDTH = 1600;
 const WEBP_QUALITY = 80;
 
 const PHOTOS = [
+  {
+    source: "b4aftr/731210964_998604746234963_5974672088763636174_n.jpg",
+    sha1: "b66f53504427d6cdae30a5f8097d560dc1301357",
+    out: "kitchen-surfaces-new-star.webp",
+    crop: { left: 0, top: 320, width: 1080, height: 1080 },
+  },
   {
     source: "b4aftr/749036329_1012329288195842_7247785626001234424_n.jpg",
     sha1: "2c6cbc758d9e7123256491fb4aab189f4adad5eb",
@@ -152,7 +159,10 @@ const PHOTOS = [
 
 async function run() {
   let failures = 0;
-  for (const photo of PHOTOS) {
+  const outputName = process.argv[2];
+  const selected = outputName ? PHOTOS.filter((photo) => photo.out === outputName) : PHOTOS;
+  if (selected.length === 0) throw new Error(`Unknown output filename: ${outputName}`);
+  for (const photo of selected) {
     const sourcePath = path.join(SOURCE_ROOT, photo.source);
     if (!existsSync(sourcePath)) {
       console.error(`MISSING SOURCE: ${sourcePath}`);
@@ -169,8 +179,9 @@ async function run() {
     }
     const outPath = path.join(OUT_ROOT, photo.out);
     mkdirSync(path.dirname(outPath), { recursive: true });
-    await sharp(sourcePath)
-      .rotate() // bake in EXIF orientation before metadata is stripped
+    const image = sharp(sourcePath).rotate();
+    if (photo.crop) image.extract(photo.crop);
+    await image
       .resize({ width: MAX_WIDTH, withoutEnlargement: true })
       .webp({ quality: WEBP_QUALITY })
       .toFile(outPath);

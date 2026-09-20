@@ -6,13 +6,14 @@ import BookingPortalLink from "@/components/BookingPortalLink";
 import SiteHero from "@/components/SiteHero";
 import GoogleRating from "@/components/GoogleRating";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
-import BeforeAfterCarousel, { type BeforeAfterItem } from "@/components/BeforeAfterCarousel";
+import ServiceProof from "@/components/ServiceProof";
 import type { ServiceDefinition } from "@/lib/services";
 import { clientPrepChecklist, getFullIncludedList } from "@/lib/services";
 import { business, businessAreaServed } from "@/lib/business";
-import { ovenBuildupPair, vanityDetailPhoto, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
 import { servicePresentation } from "@/lib/servicePresentation";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+
+import "./service-editorial.css";
 
 const siteUrl = "https://newstarcleaning.com";
 const illustrations = {
@@ -20,20 +21,45 @@ const illustrations = {
   "deep-cleaning": "cleaning-deep",
   "move-out-cleaning": "cleaning-empty-home",
 };
-const deepDetailPairs: BeforeAfterItem[] = [{
-  before: { src: "/photos/real-work/paid/tub-surround-before.webp", alt: "Bathtub and tile surround before a New Star deep cleaning" },
-  after: { src: "/photos/real-work/paid/tub-surround-after.webp", alt: "The same bathtub and tile surround after a New Star deep cleaning" },
-  label: "Tub and surround detail from a real deep-cleaning appointment.",
-}];
-const moveOutDetailPairs: BeforeAfterItem[] = [{
-  before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
-  after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
-  label: ovenBuildupPair.label,
-}];
 
 function quoteFormService(service: ServiceDefinition) {
   return service.slug === "standard-cleaning" ? "Standard recurring cleaning" : service.shortName;
 }
+
+const cadenceRows = [
+  {
+    term: "Weekly",
+    note: "More frequent help for busy households, pets, and heavily used kitchens and bathrooms.",
+  },
+  {
+    term: "Bi-weekly",
+    note: "A regular visit every other week, with light upkeep between appointments.",
+  },
+  {
+    term: "Monthly",
+    note: "Works for quieter homes or lighter use between visits. We tell you honestly if a home needs more than a monthly visit.",
+  },
+];
+
+const deepTargets = [
+  "More time for buildup on showers, tubs, and reachable tile",
+  "Baseboards, door frames, switch plates, and vent covers wiped",
+  "Ceiling fan blades and light fixtures detailed within normal reach",
+  "Extra attention to floor edges and corners",
+];
+
+const handoffRows = [
+  {
+    term: "Included",
+    tagClass: "se-tag-included",
+    note: "Empty cabinet, drawer, and closet interiors — wiped, not upcharged. Plus the full deep-cleaning scope across the empty home.",
+  },
+  {
+    term: "Add-on",
+    tagClass: "se-tag-addon",
+    note: "Inside the oven, inside the refrigerator, interior window glass, and reachable tracks. Requested and priced before the visit.",
+  },
+];
 
 export default function ServiceDetailPage({ service, h1, intro }: {
   service: ServiceDefinition;
@@ -43,9 +69,9 @@ export default function ServiceDetailPage({ service, h1, intro }: {
   const fullIncluded = getFullIncludedList(service.slug);
   const presentation = servicePresentation[service.slug];
   const isMoveOut = service.slug === "move-out-cleaning";
-  const detailPairs = service.slug === "deep-cleaning" ? deepDetailPairs : isMoveOut ? moveOutDetailPairs : [];
+  const isStandard = service.slug === "standard-cleaning";
+  const isDeep = service.slug === "deep-cleaning";
   const directBookingUrl = resolveDirectBookingUrl();
-  const supportingPhoto = service.slug === "deep-cleaning" ? vanityDetailPhoto : isMoveOut ? emptyHomeResultPhotos[6] : null;
 
   return (
     <div className="site-reference">
@@ -71,12 +97,60 @@ export default function ServiceDetailPage({ service, h1, intro }: {
         </div>
       </div>
 
-      <section className="site-section site-split">
-        <div className="site-copy">
+      <div className="service-editorial">
+        <section className="se-section se-rule">
+          <div className="se-fit">
+            <div className="se-fit-copy">
+              <p className="se-kicker">Is this the right clean for your home?</p>
+              <h2>{isStandard ? "For homes we keep clean." : isDeep ? "When it needs more than a touch-up." : "For the day the home changes hands."}</h2>
+              <p className="se-lead">{presentation.lead}</p>
+              {isStandard && (
+                <>
+                  <div className="se-cadence">
+                    {cadenceRows.map((row) => (
+                      <div key={row.term} className="se-cadence-row">
+                        <span className="se-cadence-term">{row.term}</span>
+                        <span className="se-cadence-note">{row.note}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="se-note">If a first visit needs a deeper reset, we say so before you commit to a schedule.</p>
+                </>
+              )}
+              {isDeep && (
+                <ul className="mt-6 list-disc space-y-2 pl-5 text-sm leading-7 text-ink-soft">
+                  {deepTargets.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+              )}
+              {isMoveOut && (
+                <>
+                  <div className="se-handoff">
+                    {handoffRows.map((row) => (
+                      <div key={row.term} className="se-handoff-row">
+                        <span className={`se-tag ${row.tagClass}`}>{row.term}</span>
+                        <span className="se-cadence-note">{row.note}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="se-note">All interiors must be emptied before the visit. We do not haul items, pack, or move furniture.</p>
+                </>
+              )}
+            </div>
+            <ServiceProof service={service} quotePhotoSrc={presentation.proofPhotos[1]?.src} />
+          </div>
+        </section>
+      </div>
+
+      <section className="site-section site-split site-rule">
+        <div className="site-copy service-editorial">
           <h2>Price your {service.shortName.toLowerCase()}.</h2>
           <p className="site-intro">{intro ?? service.tagline}</p>
           <p className="site-note">{presentation.boundary}</p>
-          <p className="site-note">Your total depends on home size, condition, frequency, and optional work. Add-ons must be requested before the appointment. We confirm price, scope, and availability before you book.</p>
+          <p className="site-note">Your total depends on home size, condition, frequency, and optional work. We confirm price, scope, and availability before you book.</p>
+          {presentation.proofPhotos[1] && <figure className="se-quote-photo">
+            <div><Image src={presentation.proofPhotos[1].src} alt={presentation.proofPhotos[1].alt} fill sizes="(min-width: 1024px) 520px, (min-width: 640px) 45vw, 90vw" /></div>
+            <figcaption>{presentation.proofPhotos[1].caption} · New Star work</figcaption>
+          </figure>}
         </div>
         <div className="min-w-0">
           <QuickQuoteForm
@@ -102,60 +176,58 @@ export default function ServiceDetailPage({ service, h1, intro }: {
       </section>
 
       <section id="whats-included" className="site-muted scroll-mt-24">
-        <div className="site-section site-split">
+        <div className="site-section">
           <div className="site-copy">
             <h2>{service.name}: room by room.</h2>
             <p className="site-intro">{service.description}</p>
-            <div className="site-scope-media"><div className="site-scope-visual"><Image src={`/illustrations/${illustrations[service.slug]}.svg`} alt="" width={360} height={260} /></div>{supportingPhoto ? <figure className="site-support-photo"><Image src={supportingPhoto.src} alt={supportingPhoto.alt} width={360} height={480} sizes="(min-width: 1024px) 220px, 50vw" /><figcaption>{supportingPhoto.caption} · New Star work</figcaption></figure> : null}</div>
-            <p className="site-note">{service.slug === "standard-cleaning" ? "Open any room for its complete checklist." : "The full checklist includes the work carried over from the other cleaning levels."}</p>
             <p className="site-note"><strong>Cleaning service, not household task service.</strong> Laundry, dishes, organizing, bed making, packing, and personal item handling are outside our service scope.</p>
             <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">↗</span></Link>
           </div>
-          <div className="site-disclosures">
-            {fullIncluded.map((group) => (
-              <details key={group.title}>
-                <summary>{group.title}<span aria-hidden="true">+</span></summary>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">
-                  {group.items.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-              </details>
-            ))}
-            <details>
-              <summary>Available add-ons<span aria-hidden="true">+</span></summary>
-              <p>Optional detail items are priced separately and need enough time on the schedule. They are not included unless your quote says so.</p>
-              <dl className="mt-4 space-y-4 text-sm leading-6">
-                {service.availableAddOns.map((addOn) => (
-                  <div key={addOn.title}><dt className="font-semibold">{addOn.title}</dt><dd className="text-ink-soft">{addOn.description}</dd></div>
-                ))}
-              </dl>
-            </details>
-            <details>
-              <summary>Not included<span aria-hidden="true">+</span></summary>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.notIncluded.map((item) => <li key={item}>{item}</li>)}</ul>
-            </details>
-            <details>
-              <summary>Is this the right cleaning for my home?<span aria-hidden="true">+</span></summary>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.bestFor.map((item) => <li key={item}>{item}</li>)}</ul>
-            </details>
-            <details>
-              <summary>Before your appointment<span aria-hidden="true">+</span></summary>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.scopeNotes.map((note) => <li key={note}>{note}</li>)}</ul>
-              <h3 className="mt-5 text-base font-semibold">Prepare your home</h3>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{clientPrepChecklist.map((item) => <li key={item}>{item}</li>)}</ul>
-              {service.processSteps && service.processSteps.length > 0 && (
-                <ol className="mt-5 space-y-4 text-sm leading-6">
-                  {service.processSteps.map((step) => <li key={step.title}><h3 className="font-semibold">{step.title}</h3><p>{step.description}</p></li>)}
-                </ol>
-              )}
-            </details>
-            {detailPairs.length > 0 && (
+          <div className="service-editorial">
+            <div className="se-scope-grid">
+              {fullIncluded.map((group) => (
+                <div key={group.title} className="se-room">
+                  <h3>{group.title}</h3>
+                  <ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="site-split mt-10">
+            <div className="site-copy">
+              <h2>Add-ons, limits, and prep.</h2>
+              <div className="site-scope-visual"><Image src={`/illustrations/${illustrations[service.slug]}.svg`} alt="" width={360} height={260} /></div>
+              <p className="site-note">Optional detail items are priced separately and need enough time on the schedule. They are not included unless your quote says so.</p>
+            </div>
+            <div className="site-disclosures">
               <details>
-                <summary>{isMoveOut ? "See optional inside-oven detail" : "See a real tub before and after"}<span aria-hidden="true">+</span></summary>
-                <p>{isMoveOut ? "Inside-oven cleaning is priced separately, not included in the base move-out service. Request it before the visit." : "Tub and surround detail from a real deep-cleaning appointment."}</p>
-                <div className="mx-auto mt-4 w-full max-w-sm"><BeforeAfterCarousel items={detailPairs} /></div>
-                <p>Results vary with surface condition, buildup, and access. Aged surfaces can retain wear and staining.</p>
+                <summary>Available add-ons<span aria-hidden="true">+</span></summary>
+                <dl className="mt-4 space-y-4 text-sm leading-6">
+                  {service.availableAddOns.map((addOn) => (
+                    <div key={addOn.title}><dt className="font-semibold">{addOn.title}</dt><dd className="text-ink-soft">{addOn.description}</dd></div>
+                  ))}
+                </dl>
               </details>
-            )}
+              <details>
+                <summary>Not included<span aria-hidden="true">+</span></summary>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.notIncluded.map((item) => <li key={item}>{item}</li>)}</ul>
+              </details>
+              <details>
+                <summary>Is this the right cleaning for my home?<span aria-hidden="true">+</span></summary>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.bestFor.map((item) => <li key={item}>{item}</li>)}</ul>
+              </details>
+              <details>
+                <summary>Before your appointment<span aria-hidden="true">+</span></summary>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.scopeNotes.map((note) => <li key={note}>{note}</li>)}</ul>
+                <h3 className="mt-5 text-base font-semibold">Prepare your home</h3>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{clientPrepChecklist.map((item) => <li key={item}>{item}</li>)}</ul>
+                {service.processSteps && service.processSteps.length > 0 && (
+                  <ol className="mt-5 space-y-4 text-sm leading-6">
+                    {service.processSteps.map((step) => <li key={step.title}><h3 className="font-semibold">{step.title}</h3><p>{step.description}</p></li>)}
+                  </ol>
+                )}
+              </details>
+            </div>
           </div>
         </div>
       </section>

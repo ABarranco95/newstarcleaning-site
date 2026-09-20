@@ -96,6 +96,10 @@ for (const removedBloat of ["PricingGuide", "SectionCard", "scopeBullets", "addo
 // No browser, build, lead submission, or external API is used by this matrix.
 const require = createRequire(import.meta.url);
 const jsx = require("react/jsx-runtime");
+const photosModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/realWorkPhotos.ts"), "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+}).outputText, { exports: photosModule.exports, module: photosModule });
 let params = new URLSearchParams();
 const boundary = (name) => (props) => jsx.jsx("test-boundary", { ...props, "data-boundary": name });
 const compiled = ts.transpileModule(`${paidPage}\nexports.routingTest = { detectIntent, INTENT_CONFIG };`, {
@@ -119,11 +123,12 @@ vm.runInNewContext(compiled.outputText, {
     if (name.startsWith("@/components/")) return boundary(name.split("/").at(-1));
     if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => {} };
     if (name === "@/lib/conversionTracking") return { trackFunnelEvent: () => {} };
+    if (name === "@/lib/realWorkPhotos") return photosModule.exports;
     throw new Error(`Unexpected paid dependency: ${name}`);
   },
 });
 const { detectIntent, INTENT_CONFIG } = runtimeModule.exports.routingTest;
-const render = (service, frequency = "") => {
+const render = (service, frequency = "", directBookingUrl = "https://booking.example.test/") => {
   params = new URLSearchParams({ service: service || "", frequency, city: "clovis", gclid: "regression-only" });
   const nodes = [];
   const text = [];
@@ -135,7 +140,7 @@ const render = (service, frequency = "") => {
     nodes.push(node);
     visit(node.props?.children);
   }
-  visit(runtimeModule.exports.default({ directBookingUrl: "https://booking.example.test/" }));
+  visit(runtimeModule.exports.default({ directBookingUrl }));
   return { nodes, text: text.join(" "), forms: nodes.filter((node) => /QuoteForm$/.test(node.props?.["data-boundary"] || "")) };
 };
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
@@ -156,9 +161,30 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
   const form = result.forms[0];
   assert(detectIntent(service, frequency) === expected && form?.props["data-boundary"] === "QuickQuoteForm" && form.props.source === "google-ads" && form.props.paidSearch === true && form.props.extended === true && form.props.defaultService === INTENT_CONFIG[expected].serviceDefault && form.props.landingCity === "Clovis" && form.props.directBookingUrl === "https://booking.example.test/", `${service || "missing"} / ${frequency}: preserves residential intent and paid form props`);
   assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").length === 2 && result.nodes.filter((node) => /\/photos\/real-work\/paid\//.test(node.props?.src || "")).length === 12, `${service || "missing"} / ${frequency}: preserves both booking exits and all six proof pairs`);
+  const photoName = expected === "deep" ? "glass-shower-freestanding-tub-new-star.webp" : expected === "move" ? "dining-kitchen-turnover-new-star.webp" : "kitchen-island-clean-new-star.webp";
+  const photo = [...photosModule.exports.bathroomResultPhotos, ...photosModule.exports.emptyHomeResultPhotos, ...photosModule.exports.homeResultPhotos].find((item) => item.src.endsWith(`/${photoName}`));
+  assert(result.nodes.filter((node) => node.props?.src === photo.src && node.props?.alt === photo.alt).length === 1, `${expected}: one genuine intent-matched hero photo with approved alt text`);
+  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.label === "Book online with New Star" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: named New Star booking exits carry only explicit matching frequency`);
+  const gallery = result.nodes.find((node) => node.props?.id === "paid-proof-gallery");
+  assert(gallery?.props.role === "region" && gallery.props.tabIndex === 0 && gallery.props["aria-label"] && typeof gallery.props.onKeyDown === "function" && result.nodes.filter((node) => node.type === "button" && node.props["aria-controls"] === "paid-proof-gallery").length === 2, `${expected}: gallery exposes focus, keyboard handler, label and two controls`);
+  const scrollCalls = [];
+  let prevented = 0;
+  gallery.props.ref.current = { clientWidth: 400, scrollBy: (options) => scrollCalls.push(options.left) };
+  for (const key of ["ArrowRight", "ArrowLeft", "Tab"]) gallery.props.onKeyDown({ key, preventDefault: () => { prevented += 1; } });
+  for (const control of result.nodes.filter((node) => node.type === "button" && node.props["aria-controls"] === "paid-proof-gallery")) control.props.onClick();
+  assert(prevented === 2 && scrollCalls.join(",") === "344,-344,-344,344", `${expected}: arrow keys and both buttons execute scrolling without trapping Tab`);
+  assert(result.text.includes("Cleaning doesn’t remove every stain or sign of wear") && result.text.includes("Oven and fridge interiors are optional extras"), `${expected}: visible photo caption preserves stain/wear limits and optional appliance scope`);
+  assert(!render(service, frequency, null).nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink"), `${expected}: missing booking configuration removes both exits`);
 }
 const project = render("post-construction-cleaning", "weekly");
 assert(detectIntent("post-construction-cleaning", "weekly") === "postConstruction" && project.forms[0]?.props["data-boundary"] === "QuickQuoteForm" && project.forms[0].props.defaultService === "Post-construction cleaning" && project.forms[0].props.directBookingUrl === null && !project.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "")), "post-construction retains its existing conditional form and no residential booking/proof");
+assert(project.text.includes("Review your written proposal") && project.text.includes("Request a proposal") && project.text.includes("Before we propose the work.") && !/\$\d|You choose the date|Get my quote|Before you book|Price before booking/.test(project.text), "post-construction process, trust, FAQ and sticky stay proposal-only");
+assert(INTENT_CONFIG.postConstruction.proofOrder.length === 0 && !INTENT_CONFIG.postConstruction.priceContext, "post-construction has no residential photo mapping or price anchor");
+for (const frequency of ["", "weekly", "biweekly", "monthly", "bi-weekly", "recurring", "WEEKLY", "  Bi-Weekly  ", " MONTHLY ", "unknown"]) {
+  const bookingLinks = render("recurring-cleaning", frequency).nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink");
+  const normalized = frequency.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
+  assert(bookingLinks.length === 2 && bookingLinks.every((node) => node.props.frequency === (["weekly", "biweekly", "monthly"].includes(normalized) ? normalized : undefined)), `recurring booking frequency ${frequency || "missing"}: explicit aliases become canonical, never forced`);
+}
 for (const intent of Object.keys(INTENT_CONFIG)) assert(INTENT_CONFIG[intent].faqs.length === 2, `${intent}: exactly two scoped FAQs`);
 assert(paidPage.includes("captureFirstPaidTouch({") && paidPage.includes("if (!hasTrackedLandingView.current)") && paidPage.includes('trackFunnelEvent("paid_landing_view"') && paidPage.includes('trackFunnelEvent("quote_cta_click"'), "first-touch and once-only paid attribution guards remain intact");
 

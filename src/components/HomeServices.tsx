@@ -7,9 +7,9 @@ import { useState } from "react";
 import { homeQuoteParams } from "@/lib/homeQuoteContext";
 
 const choices = [
-  { slug: "standard-cleaning", label: "Standard cleaning", price: "$165", fit: "For a home that’s already maintained.", detail: "Kitchens, bathrooms, dusting, and floors. Weekly, bi-weekly, or monthly.", illustration: "cleaning-regular", note: "Everyday surfaces & floors", action: "Get a standard quote" },
-  { slug: "deep-cleaning", label: "Deep cleaning", price: "$235", fit: "For buildup that needs more attention.", detail: "The standard work, with more time for baseboards, fixtures, and reachable detail areas.", illustration: "cleaning-deep", note: "Fixtures, edges & buildup", action: "Get a deep-clean quote" },
-  { slug: "move-out-cleaning", label: "Move-in / move-out", price: "$325", fit: "For an empty home.", detail: "Deep-cleaning work plus empty cabinet, drawer, and closet interiors.", illustration: "cleaning-empty-home", note: "Empty cabinets, drawers & closets", action: "Get an empty-home quote" },
+  { slug: "standard-cleaning", label: "Standard cleaning", price: "$165", fit: "For a home that’s already maintained.", detail: "Kitchens, bathrooms, dusting, and floors. Weekly, bi-weekly, or monthly.", illustration: "cleaning-regular", note: "Everyday surfaces & floors", action: "Get a standard quote", includes: ["Kitchen counters, sink, and stovetop", "Bathrooms, mirrors, and fixtures", "Dusting and floors in every room", "Trash emptied from accessible bins"] },
+  { slug: "deep-cleaning", label: "Deep cleaning", price: "$235", fit: "For buildup that needs more attention.", detail: "The standard work, with more time for baseboards, fixtures, and reachable detail areas.", illustration: "cleaning-deep", note: "Fixtures, edges & buildup", action: "Get a deep-clean quote", includes: ["Everything in a standard visit", "Baseboards, trim, and door frames", "Ceiling fans, vents, and fixtures", "Floor edges, corners, and reachable grout"] },
+  { slug: "move-out-cleaning", label: "Move-in / move-out", price: "$325", fit: "For an empty home.", detail: "Deep-cleaning work plus empty cabinet, drawer, and closet interiors.", illustration: "cleaning-empty-home", note: "Empty cabinets, drawers & closets", action: "Get an empty-home quote", includes: ["The full deep-cleaning scope", "Empty cabinet, drawer, and closet interiors", "Kitchens and bathrooms readied for walkthrough", "Oven, fridge, and interior windows optional"] },
 ] as const;
 
 export default function HomeServices({ defaultCity }: { defaultCity?: string }) {
@@ -51,6 +51,9 @@ export default function HomeServices({ defaultCity }: { defaultCity?: string }) 
         <div className="home-scope-copy">
           <h3>{selected.fit}</h3>
           <p>{selected.detail}</p>
+          <ul className="home-scope-includes">
+            {selected.includes.map((item) => <li key={item}>{item}</li>)}
+          </ul>
           <Link href={`/book-now?${query.toString()}`} className="home-button" data-home-service-quote>{selected.action}<span aria-hidden="true">↗</span></Link>
           <Link href={`/services/${selected.slug}?${query.toString()}#whats-included`} className="home-text-link">What’s included <span aria-hidden="true">→</span></Link>
         </div>

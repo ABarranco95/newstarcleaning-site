@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense } from "react";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import BookingPortalLink from "@/components/BookingPortalLink";
@@ -7,9 +8,11 @@ import SiteHero from "@/components/SiteHero";
 import HomeServices from "@/components/HomeServices";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import type { ServiceArea } from "@/lib/serviceAreas";
-import { homeResultPhotos } from "@/lib/realWorkPhotos";
+import { homeResultPhotos, bathroomResultPhotos, emptyHomeResultPhotos, kitchenSurfacesPhoto, type RealWorkPhoto } from "@/lib/realWorkPhotos";
 import { business } from "@/lib/business";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+
+import "./service-editorial.css";
 
 const siteUrl = "https://newstarcleaning.com";
 
@@ -17,12 +20,19 @@ function serviceAreaSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+// Honest, varied hero photo per area — real New Star work, no city/job claims.
+const areaHeroPhotos: Record<string, RealWorkPhoto> = {
+  fresno: homeResultPhotos[1],
+  clovis: kitchenSurfacesPhoto,
+  madera: bathroomResultPhotos[1],
+  "tower-district": bathroomResultPhotos[2],
+  "fig-garden": homeResultPhotos[0],
+  "woodward-park": emptyHomeResultPhotos[4],
+};
+
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const directBookingUrl = resolveDirectBookingUrl();
-  const localPanels = [
-    { title: `Homes we clean in ${area.name}`, items: area.homeProfiles },
-    { title: "Common local requests", items: area.commonJobs },
-  ];
+  const heroPhoto = areaHeroPhotos[area.slug] ?? homeResultPhotos[1];
   const areaFaqs = [
     {
       question: `Do you provide house cleaning in ${area.name}, CA?`,
@@ -45,7 +55,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         title={`House cleaning in ${area.name}, CA.`}
         description={area.description}
         eyebrow={`${area.county} · ${area.areaType}`}
-        photo={homeResultPhotos[1]}
+        photo={heroPhoto}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}
       >
         <div className="site-actions">
@@ -103,42 +113,55 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         </div>
       </section>
 
-      <section className="site-muted">
-        <div className="site-section site-split">
-          <div className="site-copy">
-            <h2>Cleaning for {area.name} homes.</h2>
-            <p className="site-intro">{area.localContent}</p>
-            <p className="site-note">{area.localProof}</p>
-            <p className="site-note">New Star Cleaning LLC · Fresno-based house cleaning.</p>
-            <div className="site-links">
-              <a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a>
-              <Link href="https://www.google.com/maps?cid=12575787905603463321" target="_blank" rel="noopener noreferrer" className="home-text-link">Google profile <span aria-hidden="true">↗</span></Link>
-            </div>
+      <section className="site-section site-rule">
+        <div className="home-section-heading">
+          <h2>Cleaning for {area.name} homes.</h2>
+          <Link href="/our-work" className="home-text-link">More of our work <span aria-hidden="true">↗</span></Link>
+        </div>
+        <div className="service-editorial">
+          <p className="se-lead">{area.localContent}</p>
+          <div className="site-links">
+            <a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a>
+            <a href="https://www.google.com/maps?cid=12575787905603463321" target="_blank" rel="noopener noreferrer" className="home-text-link">Google profile <span aria-hidden="true">↗</span></a>
           </div>
-          <div className="site-disclosures">
-            <details>
-              <summary>{area.name} neighborhoods we serve<span aria-hidden="true">+</span></summary>
-              <p>We serve these neighborhoods when the address fits the route. If your exact area is not shown, send the address and we will confirm coverage before quoting.</p>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{area.neighborhoods.map((neighborhood) => <li key={neighborhood}>{neighborhood}</li>)}</ul>
-            </details>
-            {localPanels.map((panel) => (
-              <details key={panel.title}>
-                <summary>{panel.title}<span aria-hidden="true">+</span></summary>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{panel.items.map((item) => <li key={item}>{item}</li>)}</ul>
-              </details>
-            ))}
-            <details>
-              <summary>Office or building-project cleaning<span aria-hidden="true">+</span></summary>
-              <p>Offices, small commercial spaces, and construction or renovation final cleans in {area.name} are scoped from a walkthrough or photo review before any proposal. Scope and capacity are confirmed first.</p>
+          <div className="se-results mt-6">
+            <figure>
+              <Image src={homeResultPhotos[0].src} alt={homeResultPhotos[0].alt} fill sizes="(min-width: 1024px) 600px, 90vw" />
+              <figcaption>{homeResultPhotos[0].caption} · New Star work</figcaption>
+            </figure>
+            <figure>
+              <Image src={bathroomResultPhotos[0].src} alt={bathroomResultPhotos[0].alt} fill sizes="(min-width: 1024px) 600px, 90vw" />
+              <figcaption>{bathroomResultPhotos[0].caption} · New Star work</figcaption>
+            </figure>
+          </div>
+          <div className="se-local mt-9">
+            <div className="se-local-block">
+              <h3>{area.name} neighborhoods we serve</h3>
+              <div className="se-chips">
+                {area.neighborhoods.map((neighborhood) => <span key={neighborhood} className="se-chip">{neighborhood}</span>)}
+              </div>
+              <p className="se-note">When the address fits the route. If your exact area is not shown, send the address and we will confirm coverage before quoting.</p>
+            </div>
+            <div className="se-local-block">
+              <h3>Homes we clean in {area.name}</h3>
+              <ul>{area.homeProfiles.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <div className="se-local-block">
+              <h3>Common local requests</h3>
+              <ul>{area.commonJobs.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <div className="se-local-block">
+              <h3>Office or building-project cleaning</h3>
+              <p className="se-note">Offices, small commercial spaces, and construction or renovation final cleans in {area.name} are scoped from a walkthrough or photo review before any proposal.</p>
               <div className="site-links">
                 <Link href="/services/commercial-cleaning" className="home-text-link">Office &amp; commercial cleaning <span aria-hidden="true">↗</span></Link>
                 <Link href="/services/post-construction-cleaning" className="home-text-link">Post-construction cleaning <span aria-hidden="true">↗</span></Link>
               </div>
-            </details>
-            <details>
-              <summary>Nearby service areas<span aria-hidden="true">+</span></summary>
-              <div className="site-links">{area.nearbyAreas.map((nearby) => <Link key={nearby} href={`/cleaning-services-${serviceAreaSlug(nearby)}`} className="home-text-link">House cleaning in {nearby}</Link>)}</div>
-            </details>
+            </div>
+          </div>
+          <div className="se-local-block">
+            <h3>Nearby service areas</h3>
+            <div className="site-links">{area.nearbyAreas.map((nearby) => <Link key={nearby} href={`/cleaning-services-${serviceAreaSlug(nearby)}`} className="home-text-link">House cleaning in {nearby}</Link>)}</div>
           </div>
         </div>
       </section>
