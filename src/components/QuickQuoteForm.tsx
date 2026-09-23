@@ -280,9 +280,7 @@ export default function QuickQuoteForm({
   // One ID per submission attempt-session: reused on retry so Apex can
   // replay-dedupe, regenerated only after an accepted submission.
   const submissionIdRef = useRef("");
-  // Organic forms walk through three short steps; the paid page keeps its
-  // single tested card with optional details behind a disclosure.
-  const stepped = !paidSearch;
+  // Every quote form (organic and paid) walks through three short steps.
 
   useEffect(() => {
     setFormData((current) => ({
@@ -402,7 +400,7 @@ export default function QuickQuoteForm({
     // Stepped forms validate one visible step at a time (the form itself is
     // noValidate so hidden later steps cannot block Continue).
     const formElement = event.currentTarget;
-    if (stepped && formElement) {
+    if (formElement) {
       const invalid = firstInvalidControl(formElement.querySelector(`[data-quote-step="${step}"]`));
       if (invalid) {
         invalid.reportValidity();
@@ -623,7 +621,7 @@ export default function QuickQuoteForm({
 
   const renderTimelineField = () => (
     <div>
-      <FieldLabel htmlFor="quote-timeline" required>{stepped ? "When do you need it?" : "Timeline"}</FieldLabel>
+      <FieldLabel htmlFor="quote-timeline" required>When do you need it?</FieldLabel>
       <select
         id="quote-timeline"
         name="timeline"
@@ -998,22 +996,69 @@ export default function QuickQuoteForm({
     </div>
   ) : null);
 
+  const stepLabels = [paidServicePrefilled ? "Where and when" : stepNames[0], stepNames[1], stepNames[2]];
+
   const renderStepTitle = (index: number) => (
     <p ref={step === index ? stepTitleRef : undefined} tabIndex={-1} className="qf-step-title">
-      Step {index} of {STEP_COUNT} · <b>{stepNames[index - 1]}</b>
+      Step {index} of {STEP_COUNT} · <b>{stepLabels[index - 1]}</b>
     </p>
+  );
+
+  const renderRequiredFrequency = () => (
+    <div>
+      <FieldLabel htmlFor="quote-frequency" required>How often would you like cleaning?</FieldLabel>
+      <select id="quote-frequency" name="frequency" required value={formData.frequency} onChange={(event) => updateField("frequency", event.target.value)} className={fieldClass}>
+        <option value="">Choose a frequency…</option>
+        <option value="weekly">Weekly</option>
+        <option value="bi-weekly">Biweekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+    </div>
+  );
+
+  // Paid pages keep low-value extras behind one quiet disclosure. Business
+  // requests have none, so they never see an empty toggle.
+  const renderPaidDisclosure = () => (
+    <div className="qf-disclosure">
+      <button
+        type="button"
+        onClick={() => {
+          if (!showPaidDetails) {
+            trackFunnelEvent("quote_details_open", {
+              source,
+              service: formData.service,
+              city: formData.city,
+              page: window.location.pathname,
+            });
+          }
+          setShowPaidDetails((current) => !current);
+        }}
+        className="qf-disclosure-toggle"
+        aria-expanded={showPaidDetails}
+      >
+        <span>{showPaidDetails ? "Hide home details" : isMoveOutRequest ? "Add move-out scope (oven, fridge, add-ons)" : "Add home details (optional)"}</span>
+        <span aria-hidden="true">{showPaidDetails ? "−" : "+"}</span>
+      </button>
+      {showPaidDetails ? (
+        <div className="qf-stack mt-4">
+          {renderExtendedDetails(true)}
+          {renderCustomerNotes()}
+        </div>
+      ) : null}
+    </div>
   );
 
   const renderSteps = () => (
     <>
       <div className="qf-progress" aria-hidden="true">
-        {stepNames.map((name, index) => <span key={name} data-done={index < step} />)}
+        {stepLabels.map((name, index) => <span key={name} data-done={index < step} />)}
       </div>
 
       <div data-quote-step="1" hidden={step !== 1}>
         {renderStepTitle(1)}
         <div className="qf-stack">
-          {renderServiceTiles()}
+          {!paidSearch ? renderServiceTiles() : !paidServicePrefilled ? renderServiceField() : null}
+          {paidSearch && paidServicePrefilled ? <input type="hidden" name="service" value={formData.service} readOnly /> : null}
           {renderCityField()}
           {renderTimelineField()}
           {renderRequestedDate()}
@@ -1029,10 +1074,12 @@ export default function QuickQuoteForm({
           {renderSqftField()}
           {!isCommercialRequest ? renderBedBathFields() : null}
           {!isCommercialRequest ? renderConditionField() : null}
-          {renderSteppedFrequency()}
+          {paidSearch ? (isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null) : renderSteppedFrequency()}
           {isMoveOutRequest ? renderMoveOutEmpty() : null}
-          {isMoveOutRequest ? renderMoveOutAddons() : null}
-          {isCommercialRequest ? renderCommercialFields() : renderCustomerNotes()}
+          {!paidSearch && isMoveOutRequest ? renderMoveOutAddons() : null}
+          {isCommercialRequest ? renderCommercialFields() : null}
+          {!isCommercialRequest && !showPaidOptionalDetails ? renderCustomerNotes() : null}
+          {showPaidOptionalDetails && !isCommercialRequest ? renderPaidDisclosure() : null}
         </div>
         <div className="qf-actions">
           <button type="button" className="qf-back" onClick={() => goToStep(1)}>Back</button>
@@ -1044,7 +1091,7 @@ export default function QuickQuoteForm({
         {renderStepTitle(3)}
         <div className="qf-stack">
           {renderNameAndPhone()}
-          {renderEmailField()}
+          {!paidSearch ? renderEmailField() : null}
           {renderContactPreference()}
           {renderOrganicExtras()}
           {renderSmsConsent()}
@@ -1061,101 +1108,6 @@ export default function QuickQuoteForm({
         </div>
       </div>
       {renderFinePrint()}
-    </>
-  );
-
-  const renderPaidBody = () => (
-    <>
-      <div className="qf-stack">
-        {renderNameAndPhone()}
-
-        {paidSearch ? renderCityField() : null}
-
-        {paidSearch
-          ? (!paidServicePrefilled ? renderServiceField() : null)
-          : null}
-        {paidSearch && paidServicePrefilled ? <input type="hidden" name="service" value={formData.service} readOnly /> : null}
-
-        <div className="qf-row qf-row-2">
-          {renderTimelineField()}
-          {renderSqftField()}
-        </div>
-
-        {renderRequestedDate()}
-
-        {!isCommercialRequest ? renderBedBathFields() : null}
-        {!isCommercialRequest ? renderConditionField() : null}
-        {isMoveOutRequest ? renderMoveOutEmpty() : null}
-
-        {isCommercialRequest ? renderCommercialFields() : null}
-
-        {renderContactPreference()}
-
-        {isRecurringRequest && !showPaidDetails ? (
-          <div>
-            <FieldLabel htmlFor="quote-frequency" required>How often would you like cleaning?</FieldLabel>
-            <select id="quote-frequency" name="frequency" required value={formData.frequency} onChange={(event) => updateField("frequency", event.target.value)} className={fieldClass}>
-              <option value="">Choose a frequency…</option>
-              <option value="weekly">Weekly</option>
-              <option value="bi-weekly">Biweekly</option>
-              <option value="monthly">Monthly</option>
-            </select>
-          </div>
-        ) : null}
-
-        {!isCommercialRequest && !showPaidOptionalDetails ? renderCustomerNotes() : null}
-
-        {renderSmsConsent()}
-        {renderError()}
-      </div>
-
-      <div className="qf-actions">
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          compact={compact}
-          commercial={isCommercialRequest}
-          paidSearch={paidSearch}
-        />
-      </div>
-      {renderFinePrint()}
-
-      {showPaidOptionalDetails ? (
-        <div className="qf-disclosure">
-          <button
-            type="button"
-            onClick={() => {
-              if (!showPaidDetails) {
-                trackFunnelEvent("quote_details_open", {
-                  source,
-                  service: formData.service,
-                  city: formData.city,
-                  page: window.location.pathname,
-                });
-              }
-              setShowPaidDetails((current) => !current);
-            }}
-            className="qf-disclosure-toggle"
-            aria-expanded={showPaidDetails}
-          >
-            <span>{showPaidDetails ? "Hide home details" : isMoveOutRequest ? "Add move-out scope (oven, fridge, add-ons)" : "Add home details (optional)"}</span>
-            <span aria-hidden="true">{showPaidDetails ? "−" : "+"}</span>
-          </button>
-          {showPaidDetails ? (
-            <div className="qf-stack mt-4">
-              {renderExtendedDetails(true)}
-              {!isCommercialRequest ? renderCustomerNotes() : null}
-              <div className="qf-actions">
-                <SubmitButton
-                  isSubmitting={isSubmitting}
-                  compact={compact}
-                  commercial={isCommercialRequest}
-                  paidSearch={paidSearch}
-                />
-              </div>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
     </>
   );
 
@@ -1203,7 +1155,7 @@ export default function QuickQuoteForm({
       id="quote"
       ref={containerRef}
       data-paid-search={paidSearch || undefined}
-      data-quote-layout={stepped ? "stepped" : "single"}
+      data-quote-layout="stepped"
       className="qf"
     >
       <div className="qf-head">
@@ -1213,7 +1165,7 @@ export default function QuickQuoteForm({
 
       <form
         onSubmit={handleSubmit}
-        noValidate={stepped}
+        noValidate
         data-clarity-mask="true"
         onFocusCapture={trackFormStart}
         onInvalidCapture={(event) => {
@@ -1244,7 +1196,7 @@ export default function QuickQuoteForm({
           />
         </div>
 
-        {stepped ? renderSteps() : renderPaidBody()}
+        {renderSteps()}
       </form>
     </div>
   );

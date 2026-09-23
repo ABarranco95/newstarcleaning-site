@@ -73,7 +73,7 @@ assert(
 );
 
 assert(
-  quickQuoteForm.includes("noValidate={stepped}") &&
+  quickQuoteForm.includes("noValidate") &&
     quickQuoteForm.includes('data-quote-step="3"') &&
     quickQuoteForm.includes("reportValidity()") &&
     quickQuoteForm.includes("firstInvalidControl(formElement.querySelector"),
@@ -167,7 +167,8 @@ assert(
     quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
     quickQuoteForm.includes("landingCity?: string;") &&
-    quickQuoteForm.includes("{paidSearch ? renderCityField() : null}") &&
+    // 2026-09-22: paid forms are stepped too; city renders unconditionally in step 1.
+    /data-quote-step="1"[\s\S]{0,900}\{renderCityField\(\)\}/.test(quickQuoteForm) &&
     !quickQuoteForm.includes('<input type="hidden" name="city"') &&
     quickQuoteForm.includes("paidServicePrefilled") &&
     quickQuoteForm.includes("isPaidHouseRequest"),

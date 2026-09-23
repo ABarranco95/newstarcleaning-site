@@ -393,7 +393,9 @@ await emailForm.submit();
 assert.equal(emailForm.submissions[0].body.email, "fixture@example.invalid");
 assert.equal(emailForm.submissions[0].body.smsConsent.status, "denied");
 const commercial = mountForm({ paidSearch: true, extended: true, defaultService: "Post-construction cleaning" });
-commercial.openDetails();
+// Business requests have no optional home-details disclosure (it used to open
+// onto nothing); their required scope textarea lives in the main flow.
+assert(!commercial.nodes().some((node) => node.type === "button" && node.props["aria-expanded"] === false), "business requests get no empty home-details disclosure");
 assert.equal(commercial.field("message").props.required, true);
 commercial.field("contactPreference");
 const move = mountForm({ compact: true, defaultService: "Move-in / move-out cleaning" });

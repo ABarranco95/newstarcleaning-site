@@ -4,6 +4,9 @@ import Image from "next/image";
 import SiteHero from "@/components/SiteHero";
 import GoogleRating from "@/components/GoogleRating";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
+import TrustStrip from "@/components/TrustStrip";
+import ReviewCards from "@/components/ReviewCards";
+import Icon from "@/components/Icon";
 import { Suspense } from "react";
 import { homeResultPhotos, bathroomResultPhotos, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
 import { business } from "@/lib/business";
@@ -32,6 +35,12 @@ const facts: { term: string; detail: string }[] = [
   { term: "Phone", detail: "(559) 785-2822" },
 ];
 
+const heroPoints = [
+  "Owned and run by Angel Barranco",
+  "Cleaning homes in the Fresno area since 2020",
+  "Price confirmed before anything is booked",
+];
+
 const steps = [
   {
     title: "Tell us about the home",
@@ -47,21 +56,29 @@ const steps = [
   },
   {
     title: "Afterwards",
-    note: "If something in the agreed scope was missed, contact us promptly and we'll review it. For repeat visits, ask about what the schedule allows.",
+    note: "If something in the agreed scope was missed, tell us within 24 hours and we'll make it right. For repeat visits, ask about what the schedule allows.",
   },
 ];
 
 export default function AboutPage() {
   return (
     <div className="site-reference">
-      <SiteHero title="Locally owned. Fresno based." description="We clean homes in Fresno and Clovis, from regular visits to deep cleans and move-outs. Madera appointments depend on the route and date." photo={homeResultPhotos[0]} breadcrumbs={[{label:"Home",href:"/"}]}>
-        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Request a quote ↗</Link>}><HomeQuoteLink className="home-button">Request a quote ↗</HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a></div><div className="site-proof-row"><GoogleRating /></div>
+      <SiteHero tone="dark" eyebrow="About New Star" title="Locally owned. Fresno based." description="We clean homes in Fresno and Clovis, from regular visits to deep cleans and move-outs. Madera appointments depend on the route and date." photo={homeResultPhotos[0]} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <ul className="site-hero-points">
+          {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
+        </ul>
+        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link" data-phone-location="about_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
+        <div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>
-      <section className="site-section site-split site-rule">
+
+      <TrustStrip />
+
+      <section className="site-section site-split">
         <div>
-          <h2>The company.</h2>
+          <p className="ns-kicker">The company</p>
+          <h2 className="mt-3">Who you’re hiring.</h2>
           <p className="site-intro">New Star Cleaning is a locally owned residential cleaning company run from Fresno, serving Fresno and Clovis as core routes, with Madera appointments confirmed by address and date. Homes are our core work — recurring visits, deep cleans, and empty-home move-outs.</p>
-          <div className="service-editorial">
+          <div className="service-editorial mt-6">
             <dl className="se-about-facts">
               {facts.map((fact) => (
                 <div key={fact.term}><dt>{fact.term}</dt><dd>{fact.detail}</dd></div>
@@ -70,8 +87,9 @@ export default function AboutPage() {
           </div>
         </div>
         <div>
-          <h2>Working with us.</h2>
-          <div className="service-editorial">
+          <p className="ns-kicker">How it works</p>
+          <h2 className="mt-3">Working with us.</h2>
+          <div className="service-editorial mt-6">
             <div className="se-steps">
               {steps.map((step) => (
                 <div key={step.title} className="se-step">
@@ -83,9 +101,17 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <section className="site-section site-rule">
-        <div className="home-section-heading"><h2>Work from our routes.</h2><Link href="/our-work" className="home-text-link">See more of our work ↗</Link></div>
-        <div className="service-editorial">
+
+      <section className="site-muted" aria-labelledby="about-reviews-title">
+        <div className="ns-section">
+          <div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="about-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div>
+          <ReviewCards topic="home" />
+        </div>
+      </section>
+
+      <section className="site-section">
+        <div className="home-section-heading"><div><p className="ns-kicker">Our work</p><h2 className="mt-3">Work from our routes.</h2></div><Link href="/our-work" className="home-text-link">See more of our work <span aria-hidden="true">→</span></Link></div>
+        <div className="service-editorial mt-8">
           <div className="se-about-photos">
             <figure>
               <Image src={homeResultPhotos[1].src} alt={homeResultPhotos[1].alt} fill sizes="(min-width: 1024px) 400px, 45vw" />
@@ -102,7 +128,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <section className="site-section site-split site-rule"><h2>Homes are our core work.</h2><div><p className="site-intro">We also clean offices, small commercial spaces, and completed construction projects by proposal.</p><div className="site-links"><Link href="/services/commercial-cleaning">Office &amp; commercial ↗</Link><Link href="/services/post-construction-cleaning">Post-construction ↗</Link><Link href="/service-areas">Local service areas ↗</Link><Link href="/contact">Contact us ↗</Link></div></div></section>
+
+      <section className="site-section site-split site-rule"><h2>Homes are our core work.</h2><div><p className="site-intro">We also clean offices, small commercial spaces, and completed construction projects by proposal.</p><div className="site-links"><Link href="/services/commercial-cleaning">Office &amp; commercial</Link><Link href="/services/post-construction-cleaning">Post-construction</Link><Link href="/service-areas">Local service areas</Link><Link href="/contact">Contact us</Link></div></div></section>
     </div>
   );
 }

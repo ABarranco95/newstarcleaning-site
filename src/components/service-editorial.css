@@ -122,3 +122,27 @@
     .service-editorial .se-about-photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 }
+
+@layer components {
+  /* 2026-09-22 type + card pass: readable sizes, service cards with a gold quote action. */
+  .service-editorial .se-kicker { font-size: 12px; }
+  .service-editorial .se-note, .service-editorial .se-cadence-note, .service-editorial .se-cadence-term { font-size: 14.5px; }
+  .service-editorial .se-room li, .service-editorial .se-local-block ul { font-size: 15px; }
+  .service-editorial .se-chip { border-radius: 999px; font-size: 13.5px; }
+  .service-editorial .se-about-facts dt { font-size: 13.5px; }
+  .service-editorial .se-about-facts dd { font-size: 15.5px; }
+  .service-editorial .se-step::before { font-size: 13px; }
+  .service-editorial .se-step p { font-size: 15px; }
+  .service-editorial .se-about-photos figure { border-radius: 12px; }
+  .service-editorial .se-guide { gap: 16px; }
+  .service-editorial .se-guide-card { overflow: hidden; border-radius: 16px; }
+  .service-editorial .se-guide-body { display: flex; flex-direction: column; padding: 22px 22px 24px; }
+  .service-editorial .se-guide-price { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--color-mute); }
+  .service-editorial .se-guide-price strong { margin-left: 4px; font-size: 20px; letter-spacing: -.01em; text-transform: none; color: var(--color-primary); }
+  .service-editorial .se-guide-body h3 { margin-top: 2px; font-size: 1.3rem; font-weight: 800; }
+  .service-editorial .se-guide-body p { font-size: 15px; line-height: 1.6; }
+  .service-editorial .se-guide-body .se-guide-links { align-items: center; gap: 10px 20px; margin-top: auto; padding-top: 18px; }
+  .service-editorial .se-guide-body .se-guide-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 700; }
+  .service-editorial .se-guide-body .se-guide-links a[data-service-guide-action="quote"] { order: -1; padding: 10px 18px; border-radius: 10px; background: var(--color-gold); color: var(--color-primary-dark); text-decoration: none; }
+  .service-editorial .se-guide-body .se-guide-links a[data-service-guide-action="quote"]:hover { background: var(--color-gold-hover); }
+}

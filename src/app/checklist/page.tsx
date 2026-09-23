@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import HomeServices from "@/components/HomeServices";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
+import SiteHero from "@/components/SiteHero";
+import GoogleRating from "@/components/GoogleRating";
+import TrustStrip from "@/components/TrustStrip";
 import { Suspense } from "react";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import {
@@ -98,7 +101,11 @@ const comparisonRows = [
 export default function ChecklistPage() {
   return (
     <div className="site-reference">
-      <header className="site-document"><nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav><p className="home-kicker">Service checklist</p><h1>Included. Optional. Not part of the job.</h1><p className="site-intro">Compare the three services, then open the room-by-room list. We confirm the work and price before your appointment.</p><div className="site-actions"><a href="#services" className="home-button">See the full checklists ↓</a><Suspense fallback={<Link href="/book-now" className="home-text-link">Request a quote</Link>}><HomeQuoteLink className="home-text-link">Request a quote</HomeQuoteLink></Suspense></div></header>
+      <SiteHero tone="dark" eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="Compare the three services, then open the room-by-room list. We confirm the work and price before your appointment." breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><a href="#services" className="home-button">See the full checklists <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a free quote</Link>}><HomeQuoteLink className="home-text-link">Get a free quote</HomeQuoteLink></Suspense></div>
+        <div className="site-proof-row"><GoogleRating /></div>
+      </SiteHero>
+      <TrustStrip />
       <section className="site-section" aria-label="Compare cleaning services"><Suspense fallback={<div className="site-section"><Link href="/services" className="home-text-link">Compare cleaning services ↗</Link></div>}><HomeServices /></Suspense></section>
       <section id="services" className="site-section site-rule"><div className="site-split"><h2>The full scope.</h2><p className="site-intro">Oven and refrigerator interiors, interior window glass, and tracks are optional. Empty cabinet, drawer, and closet interiors are included in move-out cleaning.</p></div><div className="site-disclosures">
         <details><summary>Compare all three services</summary><div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Service comparison table"><table className="site-comparison"><caption>Included in the base cleaning scope</caption><thead><tr><th scope="col">Work</th><th scope="col">Standard</th><th scope="col">Deep</th><th scope="col">Move-out</th></tr></thead><tbody>{comparisonRows.map(row => <tr key={row.label}><th scope="row">{row.label}</th><td>{row.standard ? "Included" : "—"}</td><td>{row.deep ? "Included" : "—"}</td><td>{row.moveOut ? "Included" : "—"}</td></tr>)}</tbody></table></div></details>

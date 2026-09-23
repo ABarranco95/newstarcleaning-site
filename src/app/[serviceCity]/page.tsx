@@ -106,7 +106,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
   const drawing = service.slug === "standard-cleaning" ? "regular" : service.slug === "deep-cleaning" ? "deep" : "empty-home";
   return (
     <div className="site-reference">
-      <SiteHero title={`${service.shortName} in ${cityName}, CA`} description={presentation.summary} photo={presentation.photo} breadcrumbs={[{label: "Home", href: "/"}, {label: service.shortName, href: `/services/${service.slug}?city=${encodeURIComponent(cityName)}`}]}>
+      <SiteHero title={`${service.shortName} in ${cityName}, CA`} description={presentation.summary} photo={presentation.photo} tone="dark" breadcrumbs={[{label: "Home", href: "/"}, {label: service.shortName, href: `/services/${service.slug}?city=${encodeURIComponent(cityName)}`}]}>
         <p className="site-price">From <strong>{presentation.startingPrice}</strong> · Final price confirmed before booking.</p>
         <div className="site-actions"><Suspense fallback={<Link href={quoteHref} className="home-button">Request a quote ↗</Link>}><HomeQuoteLink className="home-button">Request a quote ↗</HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link">Call us</a></div><div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>

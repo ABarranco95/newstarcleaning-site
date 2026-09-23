@@ -10,7 +10,7 @@ type TrustItem = { icon: IconName; title: string; body: string; href?: string };
 const items: TrustItem[] = [
   { icon: "shield", title: `${googleRating.score} on Google`, body: `${googleRating.reviewCount} reviews from local customers`, href: googleRating.sourceUrl },
   { icon: "clipboard", title: "A written checklist", body: "You see exactly what gets cleaned", href: "/checklist" },
-  { icon: "check", title: "Missed something?", body: "Tell us within 24 hours. We make it right", href: "/terms" },
+  { icon: "check", title: "We make it right", body: "Tell us within 24 hours", href: "/terms" },
   { icon: "home", title: "Locally owned", body: "Fresno based. We bring the supplies" },
 ];
 

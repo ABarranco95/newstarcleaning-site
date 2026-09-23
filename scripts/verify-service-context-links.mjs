@@ -118,7 +118,7 @@ function verifyGuide(groups, search, scenario) {
         if (key === "service" || key === "nsc_service") continue;
         equal(url.searchParams.getAll(key), preserved.getAll(key), `${scenario}: preserve ${key}`);
       }
-      check(entry.content.includes(linkIndex === 1 ? "Quote" : "details"), `${scenario}: descriptive action label`);
+      check((linkIndex === 1 ? /quote/i : /details/i).test(entry.content), `${scenario}: descriptive action label`);
     }
   }
 }

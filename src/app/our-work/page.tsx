@@ -4,6 +4,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import GoogleRating from "@/components/GoogleRating";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
+import SiteHero from "@/components/SiteHero";
+import ReviewCards from "@/components/ReviewCards";
+import Icon from "@/components/Icon";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, ovenBuildupPair, refrigeratorFullPair, tubSurroundPair, vanityDetailPhoto, ventDetailPair } from "@/lib/realWorkPhotos";
 import { business } from "@/lib/business";
 import "./our-work.css";
@@ -68,18 +71,12 @@ function PhotoCard({ src, alt, label, note, sizes }: { src: string; alt: string;
 export default function OurWorkPage() {
   return (
     <div className="home-reference work-page">
-      <header className="home-wrap work-hero">
-        <nav className="work-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav>
-        <p className="home-kicker">Our work</p>
-        <h1>A closer look at our work.</h1>
-        <p className="work-hero-intro">
-          Kitchens, bathrooms, living areas, and empty homes we’ve cleaned. Browse the rooms below, or jump to the before-and-after comparisons for a closer look at the detail work.
-        </p>
-        <div className="work-hero-proof"><GoogleRating /></div>
+      <SiteHero tone="dark" eyebrow="Our work" title="Real photos from our cleaning jobs." description="Kitchens, bathrooms, living areas, and empty homes we’ve cleaned. Browse the rooms below, or jump to the before-and-after comparisons for a closer look at the detail work." breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-proof-row"><GoogleRating /></div>
         <nav className="work-category-nav" aria-label="Gallery categories">
           {categories.map((category) => <a key={category.id} href={`#${category.id}`}>{category.label}</a>)}
         </nav>
-      </header>
+      </SiteHero>
 
       <section id="kitchens-living" className="home-wrap work-section" aria-labelledby="work-kitchens-title">
         <div className="work-section-heading"><h2 id="work-kitchens-title">Kitchens &amp; living areas</h2><p>Kitchens, furnished rooms, and floor details from our cleaning work.</p></div>
@@ -134,16 +131,23 @@ export default function OurWorkPage() {
         </div>
       </section>
 
+      <section className="work-reviews" aria-labelledby="work-reviews-title">
+        <div className="home-wrap">
+          <div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="work-reviews-title" className="ns-h2">What customers say on Google.</h2></div><GoogleRating prominent /></div>
+          <ReviewCards topic="home" />
+        </div>
+      </section>
+
       <section className="home-wrap work-cta">
         <h2>Your home could be next.</h2>
         <p>Standard cleaning from $165, deep cleaning from $235, move-out from $325. Your exact price depends on size, condition, frequency, and optional add-ons — we confirm the total before anything is booked.</p>
         <div className="work-cta-actions">
-          <Suspense fallback={<Link href="/book-now" className="home-button">Request a quote <span aria-hidden="true">↗</span></Link>}><HomeQuoteLink className="home-button">Request a quote <span aria-hidden="true">↗</span></HomeQuoteLink></Suspense>
-          <a href={business.phoneHref} className="home-hero-phone" data-phone-location="our_work_cta"><span aria-hidden="true">◔</span> {business.phoneDisplay}</a>
+          <Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
+          <a href={business.phoneHref} className="home-text-link" data-phone-location="our_work_cta"><Icon name="phone" /> {business.phoneDisplay}</a>
         </div>
         <div className="work-cta-links">
-          <Link href="/checklist" className="home-text-link">See what’s included <span aria-hidden="true">↗</span></Link>
-          <Link href="/service-areas" className="home-text-link">Check your area <span aria-hidden="true">↗</span></Link>
+          <Link href="/checklist" className="home-text-link">See what’s included <span aria-hidden="true">→</span></Link>
+          <Link href="/service-areas" className="home-text-link">Check your area <span aria-hidden="true">→</span></Link>
         </div>
       </section>
     </div>

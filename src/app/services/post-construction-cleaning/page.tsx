@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHero from "@/components/SiteHero";
+import GoogleRating from "@/components/GoogleRating";
+import Icon from "@/components/Icon";
 import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import { business, businessAreaServed } from "@/lib/business";
@@ -94,6 +96,12 @@ const boundaries = [
   "The site needs working utilities, safe access, cured surfaces, and major dusty trades substantially complete before final cleaning.",
 ];
 
+const heroPoints = [
+  "Walkthrough or photo review before we quote",
+  "Scope, deadline, and price in writing",
+  "Start with one home, unit, or phase of the project",
+];
+
 const quoteService = "Post-construction cleaning";
 const source = "organic_post_construction_service";
 const pagePath = "/services/post-construction-cleaning";
@@ -107,11 +115,16 @@ export default function PostConstructionCleaningPage() {
         title="Post-construction cleaning in Fresno, CA"
         description="The build is nearly finished. Get the space ready for handoff with final interior cleaning for new homes, remodels, and tenant improvements. Scope and deadline confirmed before scheduling."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
+        tone="dark"
       >
+        <ul className="site-hero-points">
+          {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
+        </ul>
         <div className="site-actions">
-          <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">↗</span></a>
+          <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">→</span></a>
           <a href={business.phoneHref} className="home-text-link">Call {business.phoneDisplay}</a>
         </div>
+        <div className="site-proof-row"><GoogleRating /></div>
         <p className="site-note">Fresno &amp; Clovis. Madera appointments depend on route availability.</p>
       </SiteHero>
 

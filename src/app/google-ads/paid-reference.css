@@ -25,3 +25,23 @@
     .site-form-points.paid-hero-points { display: grid; margin-top: 18px; }
   }
 }
+
+/* Dark paid hero (2026-09-22). Unlayered on purpose: it must recolor the
+   Tailwind utilities used in the hero copy (utilities outrank the components
+   layer). Scoped to the story column so the white quote card keeps its colors. */
+.paid-hero-dark { background: var(--color-primary-dark); color: #fff; }
+.paid-hero-dark .paid-hero-story .text-primary { color: #fff; }
+.paid-hero-dark .paid-hero-story .text-ink-soft { color: #ffffffcc; }
+.paid-hero-dark .paid-hero-story .border-line { border-color: #ffffff2e; }
+.paid-hero-dark .paid-hero-story .ns-rating { color: #fff; }
+.paid-hero-dark .paid-hero-story .ns-rating-count { color: #ffffffe0; text-decoration-color: #ffffff66; }
+.paid-hero-dark .paid-hero-story .site-form-points li { color: #fff; }
+.paid-hero-dark .paid-hero-story .site-form-points .ns-icon { background: var(--color-gold); color: var(--color-primary-dark); }
+.paid-hero-dark .paid-job-photo-frame { border-radius: 14px; }
+.paid-hero-dark .paid-job-photo figcaption { color: #ffffffb3; }
+.paid-hero-dark .paid-hero-form > p { color: #ffffffcc; }
+.paid-hero-dark .paid-hero-form > p .home-text-link { color: #fff; text-decoration-color: #ffffff80; }
+@media (min-width: 1024px) {
+  /* Keep the quote card in view while the visitor reads the left column. */
+  .paid-hero-dark .paid-hero-form { position: sticky; top: 24px; align-self: start; }
+}

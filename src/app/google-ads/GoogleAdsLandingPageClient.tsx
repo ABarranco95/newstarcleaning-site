@@ -608,7 +608,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </header>
 
-      <section className="border-b border-line bg-white" aria-labelledby="paid-title">
+      <section className="paid-hero-dark" aria-labelledby="paid-title">
         <div className="home-wrap py-5 sm:py-8 lg:py-10">
           <div className="paid-hero-grid">
             <div className="paid-hero-story">
