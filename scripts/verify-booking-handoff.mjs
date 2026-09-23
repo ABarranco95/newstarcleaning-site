@@ -55,8 +55,54 @@ for (const [service, city, frequency] of [
   check(events.length === before + 2 && events.at(-2).event === "booking_cta_click" && events.at(-1).event === "booking_handoff_started", "one click emits diagnostic click/start events only, never booking completion");
   check(clicked.searchParams.get("nsc_service") === (service || null) && clicked.searchParams.get("gclid") === "current-test", "click-time stamping preserves known context and attribution");
 }
+const portalModule = { exports: {} };
+const bookingEnv = { NEXT_PUBLIC_DIRECT_BOOKING_URL: "" };
+vm.runInNewContext(ts.transpileModule(readFileSync("src/lib/bookingPortal.ts", "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+}).outputText, { module: portalModule, exports: portalModule.exports, URL, process: { env: bookingEnv } });
+for (const [configured, expected] of [
+  ["https://apex-crm-abarranco95-s-team.vercel.app/book?utm_source=site#schedule", "https://book.newstarcleaning.com/book?utm_source=site#schedule"],
+  ["https://apex-crm-abarranco95-s-team.vercel.app/book/", "https://book.newstarcleaning.com/book/"],
+  ["https://book.newstarcleaning.com/book", "https://book.newstarcleaning.com/book"],
+  ["https://booking.example.test/book?source=custom", "https://booking.example.test/book?source=custom"],
+  ["https://apex-crm-abarranco95-s-team.vercel.app/custom", "https://apex-crm-abarranco95-s-team.vercel.app/custom"],
+  ["", null], ["http://booking.example.test/book", null],
+  ["https://fixture-user:fixture-pass@booking.example.test/book", null],
+  ["https://newstarcleaning.bookingkoala.com/book", null],
+]) {
+  bookingEnv.NEXT_PUBLIC_DIRECT_BOOKING_URL = configured;
+  check(portalModule.exports.resolveDirectBookingUrl() === expected, "known Apex wizard uses verified branded host; other configuration and safety guards remain intact");
+}
+
 const form = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
-check(form.includes('setSubmittedFrequency(isRecurringRequest ? formData.frequency : "")') && form.includes("frequency={submittedFrequency || undefined}"), "accepted recurring quote preserves selected frequency in the booking handoff");
+const organicPage = ts.createSourceFile("book-now/page.tsx", readFileSync("src/app/book-now/page.tsx", "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+const organicForms = [];
+function collectOrganicForms(node) {
+  if ((ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) && node.tagName.getText(organicPage) === "QuickQuoteForm") organicForms.push(node);
+  ts.forEachChild(node, collectOrganicForms);
+}
+collectOrganicForms(organicPage);
+check(organicForms.length > 0 && organicForms.every(node => node.attributes.properties.some(attr =>
+  ts.isJsxAttribute(attr) && attr.name.getText(organicPage) === "directBookingUrl" && attr.initializer &&
+  ts.isJsxExpression(attr.initializer) && attr.initializer.expression?.getText(organicPage) === "directBookingUrl"
+)), "organic quote-page callers must supply the resolved booking URL so accepted submissions expose private carryover");
+// Success-card carryover now uses a frozen, accepted in-memory snapshot, not
+// the ordinary link's URL-context props. Execute the actual snapshot contract
+// rather than pinning the retired submittedFrequency hook/source string.
+const prefillModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync("src/lib/bookingPrefill.ts", "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+}).outputText, { module: prefillModule, exports: prefillModule.exports, URL });
+for (const frequency of ["weekly", "bi-weekly", "monthly"]) {
+  const submitted = { service: "Standard recurring cleaning", frequency, city: "Clovis", sqft: "1500-1999" };
+  const snapshot = prefillModule.exports.acceptedPrefillSnapshot(submitted, true, true);
+  check(snapshot.frequency === frequency && Object.isFrozen(snapshot), "accepted recurring frequency survives in the frozen private snapshot");
+  submitted.frequency = "changed-after-submit";
+  check(snapshot.frequency === frequency, "later form edits cannot change accepted recurring frequency");
+  check(prefillModule.exports.acceptedPrefillSnapshot(submitted, false, true) === null, "unaccepted request cannot yield a carryover snapshot");
+}
+check(form.includes("acceptedPrefillSnapshot(formData, true, customerCityRef.current)") && form.includes("setAcceptedSnapshot(apexAccepted ? submittedSnapshot : null)"), "success snapshot comes from the submitted customer closure and is acceptance-gated");
+check(form.includes("<BookingPrefillLink baseUrl={directBookingUrl} snapshot={acceptedSnapshot}") && form.includes("onRelease={() => setAcceptedSnapshot(null)}"), "success card passes frequency privately and releases the snapshot after transfer");
 check(form.includes('"Request my quote"') && !form.includes('"Get my price"'), "paid lead submit describes a quote request, not instant pricing");
 check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
 console.log(`Booking continuity: ${checks}/${checks} checks passed (inert module tests; no network or live booking).`);

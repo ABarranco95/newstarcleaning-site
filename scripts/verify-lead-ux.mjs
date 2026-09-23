@@ -63,11 +63,21 @@ assert(
 
 assert(
   !home.includes("ContactForm") &&
-    !home.includes("QuickQuoteForm") &&
+    home.includes("<QuickQuoteForm") &&
+    home.includes('source="organic_home_hero"') &&
+    home.includes("compact") &&
     home.includes("<HomeQuoteLink") &&
     home.includes('href="/book-now"') &&
     home.includes("Request a quote"),
-  "homepage uses quote-first CTA instead of embedded form",
+  "homepage embeds the stepped quote form in the hero and keeps quote-first links",
+);
+
+assert(
+  quickQuoteForm.includes("noValidate={stepped}") &&
+    quickQuoteForm.includes('data-quote-step="3"') &&
+    quickQuoteForm.includes("reportValidity()") &&
+    quickQuoteForm.includes("firstInvalidControl(formElement.querySelector"),
+  "organic quote form validates each visible step and rechecks earlier steps before sending",
 );
 
 // Service and area templates embed the compact prefilled form directly:

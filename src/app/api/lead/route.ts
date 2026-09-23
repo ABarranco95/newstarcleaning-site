@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAcceptedLeadReceipt } from "@/lib/leadReceipt";
+import { specificDeadlineError } from "@/lib/assistedIntakeValidation";
 
 // Proxy leads to Apex CRM: keeps secrets server-side and gives the website a
 // stable submit URL even if the CRM host changes later.
@@ -74,6 +75,11 @@ export async function POST(req: NextRequest) {
         { error: "Please enter a valid email address." },
         { status: 400 }
       );
+    }
+
+    const deadlineError = specificDeadlineError(body);
+    if (deadlineError) {
+      return NextResponse.json({ error: deadlineError }, { status: 400 });
     }
 
     const apexRes = await fetch(APEX_LEAD_URL, {

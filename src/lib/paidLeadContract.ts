@@ -83,7 +83,7 @@ export function buildPaidLeadForward(body: Record<string, unknown>): PaidLeadFor
     // A timeline token ("this-week") is urgency, not an appointment request.
     // Only a real date field may become requestedDate.
     timeline: optionalText(body.timeline),
-    requestedDate: optionalText(body.date) || optionalText(body.requestedDate),
+    requestedDate: optionalText(body.requestedDate) || optionalText(body.date),
     frequency: optionalText(body.frequency),
     condition: optionalText(body.condition),
     contactPreference: optionalText(body.contactPreference),

@@ -20,4 +20,8 @@
     .paid-hero-story { display: grid; gap: 24px; min-width: 0; }
     .paid-job-photo-frame { aspect-ratio: 16 / 10; }
   }
+  .site-form-points.paid-hero-points { display: none; }
+  @media (min-width: 640px) {
+    .site-form-points.paid-hero-points { display: grid; margin-top: 18px; }
+  }
 }

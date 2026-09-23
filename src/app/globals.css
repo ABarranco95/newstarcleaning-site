@@ -18,9 +18,17 @@
   --color-accent-hover: #0e2a4d;
   --color-accent-light: #afc2d9;
 
+  /* Star gold: the faceted-star / uniform accent (same value Apex uses as
+     its primary). Reserved for the one primary action on a screen and the
+     review stars, so the conversion path is never navy-on-navy. */
+  --color-gold: #ebaf3c;
+  --color-gold-hover: #f2c35f;
+  --color-gold-deep: #8a5f11;
+
   /* Retain the established token names; digital surfaces stay cool white. */
   --color-cream: #ffffff;
   --color-cream-2: #f8fafc;
+  --color-surface: #f2f5f9;
 
   /* Ink + neutrals. */
   --color-ink: #0f1b2d;

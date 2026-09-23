@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { normalizeOptionalString, submitLeadToApex } from "@/lib/apexCrm";
 import { buildPaidLeadForward, normalizePaidLeadSubmission } from "@/lib/paidLeadContract";
+import { specificDeadlineError } from "@/lib/assistedIntakeValidation";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,6 +14,11 @@ export async function POST(req: NextRequest) {
 
     if (!name || !phone || !city) {
       return NextResponse.json({ error: "Name, phone, and city or ZIP are required" }, { status: 400 });
+    }
+
+    const deadlineError = specificDeadlineError(body);
+    if (deadlineError) {
+      return NextResponse.json({ error: deadlineError }, { status: 400 });
     }
 
     return submitLeadToApex(buildPaidLeadForward(body), req.headers);

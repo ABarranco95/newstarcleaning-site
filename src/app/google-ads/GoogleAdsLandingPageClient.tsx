@@ -7,6 +7,9 @@ import QuickQuoteForm from "@/components/QuickQuoteForm";
 import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import GoogleRating from "@/components/GoogleRating";
 import BookingPortalLink from "@/components/BookingPortalLink";
+import TrustStrip from "@/components/TrustStrip";
+import ReviewCards from "@/components/ReviewCards";
+import Icon from "@/components/Icon";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
@@ -396,25 +399,39 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
 }
 
 
-// Verbatim Google reviews only — never invent quotes (voice rules). Populate
-// from the GBP export; the strip renders nothing while this list is empty.
-const REVIEW_QUOTES: Array<{ quote: string; name: string; city: string }> = [];
+const REVIEW_TOPIC: Record<PaidIntent, "home" | "standard" | "deep" | "move"> = {
+  house: "home",
+  move: "move",
+  deep: "deep",
+  recurring: "standard",
+  postConstruction: "home",
+  commercial: "home",
+};
 
-function ReviewStrip() {
-  if (REVIEW_QUOTES.length === 0) return null;
+const HOME_POINTS = [
+  "Price confirmed before anything is booked",
+  "We bring the supplies and equipment",
+  "Missed something? Tell us within 24 hours and we’ll make it right",
+];
+
+const BUSINESS_POINTS = [
+  "Walkthrough or photo review before we quote",
+  "Written scope and price before work starts",
+  "Locally owned and based in Fresno",
+];
+
+// Verbatim Google reviews (src/lib/googleReviews.ts), led by the ones about
+// the service this ad promised.
+function ReviewStrip({ intent }: { intent: PaidIntent }) {
   return (
-    <section className="border-b border-line bg-white" aria-labelledby="paid-reviews-title">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <h2 id="paid-reviews-title" className="font-display text-3xl leading-tight text-primary">
-          Customer feedback
-        </h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {REVIEW_QUOTES.map((r) => (
-            <blockquote key={r.name} className="rounded-2xl border border-line bg-white p-5">
-              <p className="text-sm leading-6 text-ink-soft">&ldquo;{r.quote}&rdquo;</p>
-              <footer className="mt-3 text-xs font-bold text-primary">{r.name} — {r.city}</footer>
-            </blockquote>
-          ))}
+    <section className="border-b border-line bg-surface" aria-labelledby="paid-reviews-title">
+      <div className="site-section">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <h2 id="paid-reviews-title" className="text-primary">What customers say on Google.</h2>
+          <GoogleRating prominent />
+        </div>
+        <div className="mt-8">
+          <ReviewCards topic={REVIEW_TOPIC[intent]} />
         </div>
       </div>
     </section>
@@ -584,9 +601,9 @@ export default function GoogleAdsLandingPageClient({
             href={"tel:+1" + "559" + "785" + "2822"}
             className="home-header-quote"
           >
+            <Icon name="phone" />
             <span className="sm:hidden">Call us</span>
             <span className="hidden sm:inline">Call (559) 785-2822</span>
-            <span aria-hidden="true">↗</span>
           </a>
         </div>
       </header>
@@ -603,6 +620,11 @@ export default function GoogleAdsLandingPageClient({
               <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
                 {intent.subhead}
               </p>
+              <ul className="site-form-points paid-hero-points">
+                {(isBusinessRequest ? BUSINESS_POINTS : HOME_POINTS).map((point) => (
+                  <li key={point}><Icon name="check" />{point}</li>
+                ))}
+              </ul>
               <div className="mt-3">
                 <TrustLine commercial={isBusinessRequest} />
               </div>
@@ -664,8 +686,9 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
+      {!isBusinessRequest ? <TrustStrip links={false} /> : null}
+      <ReviewStrip intent={intentKey} />
       {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
-      <ReviewStrip />
       <ProcessStrip commercial={isBusinessRequest} />
 
       <section className="bg-white">

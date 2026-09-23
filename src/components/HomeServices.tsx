@@ -7,9 +7,9 @@ import { useState } from "react";
 import { homeQuoteParams } from "@/lib/homeQuoteContext";
 
 const choices = [
-  { slug: "standard-cleaning", label: "Standard cleaning", price: "$165", fit: "For a home that’s already maintained.", detail: "Kitchens, bathrooms, dusting, and floors. Weekly, bi-weekly, or monthly.", illustration: "cleaning-regular", note: "Everyday surfaces & floors", action: "Get a standard quote", includes: ["Kitchen counters, sink, and stovetop", "Bathrooms, mirrors, and fixtures", "Dusting and floors in every room", "Trash emptied from accessible bins"] },
-  { slug: "deep-cleaning", label: "Deep cleaning", price: "$235", fit: "For buildup that needs more attention.", detail: "The standard work, with more time for baseboards, fixtures, and reachable detail areas.", illustration: "cleaning-deep", note: "Fixtures, edges & buildup", action: "Get a deep-clean quote", includes: ["Everything in a standard visit", "Baseboards, trim, and door frames", "Ceiling fans, vents, and fixtures", "Floor edges, corners, and reachable grout"] },
-  { slug: "move-out-cleaning", label: "Move-in / move-out", price: "$325", fit: "For an empty home.", detail: "Deep-cleaning work plus empty cabinet, drawer, and closet interiors.", illustration: "cleaning-empty-home", note: "Empty cabinets, drawers & closets", action: "Get an empty-home quote", includes: ["The full deep-cleaning scope", "Empty cabinet, drawer, and closet interiors", "Kitchens and bathrooms readied for walkthrough", "Oven, fridge, and interior windows optional"] },
+  { slug: "standard-cleaning", label: "Standard cleaning", price: "$165", fit: "For a home that’s already maintained.", detail: "Kitchens, bathrooms, dusting, and floors. Weekly, bi-weekly, or monthly.", photo: "/photos/real-work/kitchen-island-clean-new-star.webp", photoAlt: "Kitchen island and counters after a New Star cleaning", action: "Get a standard quote", includes: ["Kitchen counters, sink, and stovetop", "Bathrooms, mirrors, and fixtures", "Dusting and floors in every room", "Trash emptied from accessible bins"] },
+  { slug: "deep-cleaning", label: "Deep cleaning", price: "$235", fit: "For buildup that needs more attention.", detail: "The standard work, with more time for baseboards, fixtures, and reachable detail areas.", photo: "/photos/real-work/primary-bathroom-clean-new-star.webp", photoAlt: "Primary bathroom vanity and floor after a New Star cleaning", action: "Get a deep-clean quote", includes: ["Everything in a standard visit", "Baseboards, trim, and door frames", "Ceiling fans, vents, and fixtures", "Floor edges, corners, and reachable grout"] },
+  { slug: "move-out-cleaning", label: "Move-in / move-out", price: "$325", fit: "For an empty home.", detail: "Deep-cleaning work plus empty cabinet, drawer, and closet interiors.", photo: "/photos/real-work/kitchen-turnover-new-star.webp", photoAlt: "Empty kitchen cabinets and tile floor after a New Star cleaning", action: "Get an empty-home quote", includes: ["The full deep-cleaning scope", "Empty cabinet, drawer, and closet interiors", "Kitchens and bathrooms readied for walkthrough", "Oven, fridge, and interior windows optional"] },
 ] as const;
 
 export default function HomeServices({ defaultCity }: { defaultCity?: string }) {
@@ -27,7 +27,7 @@ export default function HomeServices({ defaultCity }: { defaultCity?: string }) 
     <div className="home-service-study">
       <fieldset className="home-service-options">
         <legend className="sr-only">Choose a cleaning service to see its scope</legend>
-        {choices.map((choice, index) => (
+        {choices.map((choice) => (
           <label key={choice.slug} className="home-service-option">
             <input type="radio" name="home-service" value={choice.slug} checked={selected.slug === choice.slug} onChange={() => {
               setSelection(choice.slug);
@@ -37,24 +37,22 @@ export default function HomeServices({ defaultCity }: { defaultCity?: string }) 
               if (defaultCity) { next.set("city", defaultCity); next.delete("nsc_city"); }
               window.history.replaceState(null, "", `?${next.toString()}${window.location.hash}`);
             }} aria-controls="home-service-scope" />
-            <span className="home-service-number" aria-hidden="true">0{index + 1}</span>
-            <span className="home-service-name"><strong>{choice.label}</strong><span>From {choice.price}</span></span>
-            <span className="home-service-indicator" aria-hidden="true">↗</span>
+            <span className="home-service-name"><strong>{choice.label}</strong><span>{choice.fit}</span></span>
+            <span className="home-service-price"><small>From</small>{choice.price}</span>
           </label>
         ))}
       </fieldset>
       <div id="home-service-scope" className="home-service-scope" aria-live="polite" aria-atomic="true" data-selected-service={selected.slug}>
-        <figure className="home-scope-drawing">
-          <Image src={`/illustrations/${selected.illustration}.svg`} alt={`Illustration of ${selected.note.toLowerCase()}`} width={360} height={260} />
-          <figcaption><span aria-hidden="true" className="home-surface-key" />{selected.note}</figcaption>
+        <figure className="home-scope-photo">
+          <Image src={selected.photo} alt={selected.photoAlt} fill sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw" />
         </figure>
         <div className="home-scope-copy">
-          <h3>{selected.fit}</h3>
+          <h3>{selected.label} <span>from {selected.price}</span></h3>
           <p>{selected.detail}</p>
           <ul className="home-scope-includes">
             {selected.includes.map((item) => <li key={item}>{item}</li>)}
           </ul>
-          <Link href={`/book-now?${query.toString()}`} className="home-button" data-home-service-quote>{selected.action}<span aria-hidden="true">↗</span></Link>
+          <Link href={`/book-now?${query.toString()}`} className="home-button" data-home-service-quote>{selected.action}<span aria-hidden="true">→</span></Link>
           <Link href={`/services/${selected.slug}?${query.toString()}#whats-included`} className="home-text-link">What’s included <span aria-hidden="true">→</span></Link>
         </div>
       </div>

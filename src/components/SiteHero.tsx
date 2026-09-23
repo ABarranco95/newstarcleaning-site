@@ -8,14 +8,24 @@ interface SiteHeroProps {
   description?: string;
   eyebrow?: string;
   photo?: RealWorkPhoto;
-  illustration?: string;
   breadcrumbs?: { label: string; href: string }[];
   children?: ReactNode;
+  /** Optional right-column content (a quote form) that replaces the photo. */
+  aside?: ReactNode;
 }
 
-export default function SiteHero({ title, description, eyebrow, photo, illustration, breadcrumbs, children }: SiteHeroProps) {
+// Shared interior hero. With `aside` (a quote form) the job photo becomes a
+// full-bleed backdrop behind a navy scrim so the form sits above the fold;
+// without it the page keeps the photo-beside-copy layout.
+export default function SiteHero({ title, description, eyebrow, photo, breadcrumbs, children, aside }: SiteHeroProps) {
+  const sizes = aside ? "100vw" : "(min-width: 1344px) 740px, (min-width: 1024px) 57vw, (min-width: 640px) 90vw, 100vw";
   return (
-    <section className={`site-hero${photo || illustration ? " site-hero-visual" : ""}`}>
+    <section className={`site-hero${photo ? " site-hero-visual" : ""}${aside ? " site-hero-convert" : ""}`}>
+      {aside && photo ? (
+        <div className="site-hero-backdrop" data-work-photo="hero">
+          <Image src={photo.src} alt="" fill preload sizes={sizes} />
+        </div>
+      ) : null}
       <div className="site-hero-copy">
         {breadcrumbs && <nav className="site-breadcrumbs" aria-label="Breadcrumb">{breadcrumbs.map((crumb) => <Link href={crumb.href} key={crumb.href}>{crumb.label}</Link>)}</nav>}
         {eyebrow && <p className="site-eyebrow">{eyebrow}</p>}
@@ -23,7 +33,11 @@ export default function SiteHero({ title, description, eyebrow, photo, illustrat
         {description && <p className="site-hero-description">{description}</p>}
         {children}
       </div>
-      {photo ? <figure className="site-hero-photo" data-work-photo="hero"><Image src={photo.src} alt={photo.alt} fill preload sizes="(min-width: 1344px) 740px, (min-width: 1024px) 57vw, (min-width: 640px) 90vw, 100vw" /><figcaption>{photo.caption} · New Star work</figcaption></figure> : illustration ? <div className="site-hero-illustration"><Image src={illustration} alt="" width={360} height={260} /></div> : null}
+      {aside ? (
+        <div className="site-hero-aside">{aside}</div>
+      ) : photo ? (
+        <figure className="site-hero-photo" data-work-photo="hero"><Image src={photo.src} alt={photo.alt} fill preload sizes={sizes} /><figcaption>{photo.caption} · New Star work</figcaption></figure>
+      ) : null}
     </section>
   );
 }

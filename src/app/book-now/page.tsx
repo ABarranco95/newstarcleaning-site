@@ -3,10 +3,14 @@ import Link from "next/link";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import GoogleRating from "@/components/GoogleRating";
+import Icon from "@/components/Icon";
+import { StarRow } from "@/components/Icon";
 import { business } from "@/lib/business";
+import { googleReviews } from "@/lib/googleReviews";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 const directBookingUrl = resolveDirectBookingUrl();
+const featuredReview = googleReviews.find((review) => review.id === "joseph-b") ?? googleReviews[0];
 
 const bookNowFaqs = [
   {
@@ -44,8 +48,26 @@ export default function BookNow() {
   return (
     <div className="site-reference">
       <section className="site-form-layout">
-        <div className="site-form-heading"><nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav><h1>Request a cleaning quote.</h1><p>Tell us about your home. We’ll confirm the price and available times. No payment or booking with this form.</p><div className="site-links"><a href={business.phoneHref}>Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} /></div><div className="site-proof-row"><GoogleRating /></div></div>
-        <div id="quote-form" className="site-form-panel"><QuickQuoteForm title="Your home & contact details" subtitle="Required fields are marked with an asterisk." source="organic_quote_page" compact /></div>
+        <div className="site-form-heading">
+          <nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav>
+          <GoogleRating />
+          <h1 className="mt-2">Get your cleaning price.</h1>
+          <p>Tell us about your home. We’ll text or call with your price and available times. No payment, and nothing is booked with this form.</p>
+        </div>
+        <div id="quote-form" className="site-form-panel"><QuickQuoteForm title="Your cleaning quote" subtitle="Three quick steps. Optional fields are marked." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div>
+        <div className="site-form-aside">
+          <ul className="site-form-points">
+            <li><Icon name="check" />Price confirmed before anything is booked</li>
+            <li><Icon name="check" />Standard from $165 · deep from $235 · move-out from $325</li>
+            <li><Icon name="check" />Missed something? Tell us within 24 hours and we’ll make it right</li>
+          </ul>
+          <div className="site-links"><a href={business.phoneHref} data-phone-location="book_now_hero">Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} /></div>
+          <figure className="site-form-review">
+            <StarRow />
+            <blockquote><p>&ldquo;{featuredReview.excerpt.join(" … ")}&rdquo;</p></blockquote>
+            <figcaption>{featuredReview.author} · {featuredReview.label} · Google review</figcaption>
+          </figure>
+        </div>
       </section>
       <section className="site-section site-split site-rule"><div><h2>Before you send.</h2><p className="site-intro">Fresno, Clovis, and close-in neighborhoods. Madera appointments depend on route availability.</p></div><div className="site-disclosures">{bookNowFaqs.map((faq) => <details key={faq.q}><summary>{faq.q}</summary><p>{faq.a}</p></details>)}</div></section>
       <script

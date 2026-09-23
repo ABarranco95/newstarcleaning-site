@@ -4,6 +4,7 @@ export type FunnelEventName =
   | "paid_landing_view"
   | "quote_cta_click"
   | "quote_form_start"
+  | "quote_step_complete"
   | "quote_details_open"
   | "quote_submit_attempt"
   | "quote_validation_error"

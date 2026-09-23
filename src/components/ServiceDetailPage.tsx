@@ -7,6 +7,9 @@ import SiteHero from "@/components/SiteHero";
 import GoogleRating from "@/components/GoogleRating";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import ServiceProof from "@/components/ServiceProof";
+import TrustStrip from "@/components/TrustStrip";
+import ReviewCards from "@/components/ReviewCards";
+import Icon from "@/components/Icon";
 import type { ServiceDefinition } from "@/lib/services";
 import { clientPrepChecklist, getFullIncludedList } from "@/lib/services";
 import { business, businessAreaServed } from "@/lib/business";
@@ -21,6 +24,18 @@ const illustrations = {
   "deep-cleaning": "cleaning-deep",
   "move-out-cleaning": "cleaning-empty-home",
 };
+
+const heroPoints = {
+  "standard-cleaning": ["Kitchens, bathrooms, dusting, and floors every visit", "Weekly, biweekly, or monthly", "Price confirmed before anything is booked"],
+  "deep-cleaning": ["Extra time for baseboards, fixtures, and buildup", "Supplies and equipment brought in", "Price confirmed before anything is booked"],
+  "move-out-cleaning": ["Empty cabinet, drawer, and closet interiors included", "Oven and fridge interiors available as add-ons", "Price confirmed before anything is booked"],
+};
+
+const reviewTopics = {
+  "standard-cleaning": "standard",
+  "deep-cleaning": "deep",
+  "move-out-cleaning": "move",
+} as const;
 
 function quoteFormService(service: ServiceDefinition) {
   return service.slug === "standard-cleaning" ? "Standard recurring cleaning" : service.shortName;
@@ -81,24 +96,44 @@ export default function ServiceDetailPage({ service, h1, intro }: {
         eyebrow={service.shortName}
         photo={presentation.photo}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
+        aside={
+          <>
+            <QuickQuoteForm
+              title={`Price your ${service.shortName.toLowerCase()}`}
+              subtitle="Three quick steps. We confirm the price and included work before anything is booked."
+              source={`organic_${service.slug}_service`}
+              defaultService={quoteFormService(service)}
+              compact
+            />
+            {directBookingUrl ? (
+              <Suspense fallback={null}>
+                <BookingPortalLink
+                  baseUrl={directBookingUrl}
+                  service={quoteFormService(service)}
+                  sourcePage={`/services/${service.slug}`}
+                  label="Ready to self-schedule? Book online"
+                  showIcon={false}
+                  className="home-text-link"
+                />
+              </Suspense>
+            ) : null}
+          </>
+        }
       >
         <p className="site-price">From <strong>{presentation.startingPrice}</strong></p>
-        <div className="site-actions">
-          <a href="#quote" className="home-button">Request a quote <span aria-hidden="true">↗</span></a>
-          <a href={business.phoneHref} className="home-text-link">Call us</a>
+        <ul className="site-hero-points">
+          {heroPoints[service.slug].map((point) => <li key={point}><Icon name="check" />{point}</li>)}
+        </ul>
+        <div className="site-hero-meta">
+          <GoogleRating onDark />
+          <a href={business.phoneHref} className="site-hero-phone" data-phone-location="service_hero"><Icon name="phone" /> {business.phoneDisplay}</a>
         </div>
-        <a href="#whats-included" className="home-text-link">What&apos;s included <span aria-hidden="true">→</span></a>
       </SiteHero>
 
-      <div className="home-wrap">
-        <div className="home-proof-line site-proof-row">
-          <p className="site-note">Locally owned. Photographs from our work.</p>
-          <GoogleRating />
-        </div>
-      </div>
+      <TrustStrip />
 
       <div className="service-editorial">
-        <section className="se-section se-rule">
+        <section className="se-section">
           <div className="se-fit">
             <div className="se-fit-copy">
               <p className="se-kicker">Is this the right clean for your home?</p>
@@ -118,7 +153,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
                 </>
               )}
               {isDeep && (
-                <ul className="mt-6 list-disc space-y-2 pl-5 text-sm leading-7 text-ink-soft">
+                <ul className="home-scope-includes mt-6">
                   {deepTargets.map((item) => <li key={item}>{item}</li>)}
                 </ul>
               )}
@@ -136,52 +171,31 @@ export default function ServiceDetailPage({ service, h1, intro }: {
                 </>
               )}
             </div>
-            <ServiceProof service={service} quotePhotoSrc={presentation.proofPhotos[1]?.src} />
+            <ServiceProof service={service} />
           </div>
         </section>
       </div>
 
-      <section className="site-section site-split site-rule">
-        <div className="site-copy service-editorial">
-          <h2>Price your {service.shortName.toLowerCase()}.</h2>
-          <p className="site-intro">{intro ?? service.tagline}</p>
-          <p className="site-note">{presentation.boundary}</p>
-          <p className="site-note">Your total depends on home size, condition, frequency, and optional work. We confirm price, scope, and availability before you book.</p>
-          {presentation.proofPhotos[1] && <figure className="se-quote-photo">
-            <div><Image src={presentation.proofPhotos[1].src} alt={presentation.proofPhotos[1].alt} fill sizes="(min-width: 1024px) 520px, (min-width: 640px) 45vw, 90vw" /></div>
-            <figcaption>{presentation.proofPhotos[1].caption} · New Star work</figcaption>
-          </figure>}
-        </div>
-        <div className="min-w-0">
-          <QuickQuoteForm
-            title={`Price ${service.shortName.toLowerCase()}`}
-            subtitle="Share the basics. We confirm the price and included work before anything is booked."
-            source={`organic_${service.slug}_service`}
-            defaultService={quoteFormService(service)}
-            compact
-          />
-          {directBookingUrl ? (
-            <Suspense fallback={null}>
-              <BookingPortalLink
-                baseUrl={directBookingUrl}
-                service={quoteFormService(service)}
-                sourcePage={`/services/${service.slug}`}
-                label="Ready to self-schedule? Book online"
-                showIcon={false}
-                className="home-text-link"
-              />
-            </Suspense>
-          ) : null}
+      <section className="site-muted" aria-labelledby="service-reviews-title">
+        <div className="ns-section">
+          <div className="ns-section-head">
+            <div>
+              <p className="ns-kicker">Reviews</p>
+              <h2 id="service-reviews-title" className="ns-h2">What customers say.</h2>
+            </div>
+            <GoogleRating prominent />
+          </div>
+          <ReviewCards topic={reviewTopics[service.slug]} />
         </div>
       </section>
 
-      <section id="whats-included" className="site-muted scroll-mt-24">
+      <section id="whats-included" className="scroll-mt-24">
         <div className="site-section">
           <div className="site-copy">
             <h2>{service.name}: room by room.</h2>
             <p className="site-intro">{service.description}</p>
             <p className="site-note"><strong>Cleaning service, not household task service.</strong> Laundry, dishes, organizing, bed making, packing, and personal item handling are outside our service scope.</p>
-            <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">↗</span></Link>
+            <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">→</span></Link>
           </div>
           <div className="service-editorial">
             <div className="se-scope-grid">
@@ -197,7 +211,8 @@ export default function ServiceDetailPage({ service, h1, intro }: {
             <div className="site-copy">
               <h2>Add-ons, limits, and prep.</h2>
               <div className="site-scope-visual"><Image src={`/illustrations/${illustrations[service.slug]}.svg`} alt="" width={360} height={260} /></div>
-              <p className="site-note">Optional detail items are priced separately and need enough time on the schedule. They are not included unless your quote says so.</p>
+              <p className="site-note">{presentation.boundary}</p>
+              <p className="site-note">Your total depends on home size, condition, frequency, and optional work. We confirm price, scope, and availability before you book.</p>
             </div>
             <div className="site-disclosures">
               <details>
@@ -232,10 +247,11 @@ export default function ServiceDetailPage({ service, h1, intro }: {
         </div>
       </section>
 
-      <section className="site-section site-split">
+      <section className="site-section site-split site-rule">
         <div className="site-copy">
           <h2>Good to know before you book.</h2>
           {service.localNotes && <p className="site-intro">{service.localNotes}</p>}
+          <p className="site-note">{intro ?? service.tagline}</p>
           <div className="site-links">
             <Link href="/cleaning-services-fresno" className="home-text-link">Fresno</Link>
             <Link href="/cleaning-services-clovis" className="home-text-link">Clovis</Link>

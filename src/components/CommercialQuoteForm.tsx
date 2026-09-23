@@ -76,8 +76,7 @@ const sqftLabels: Record<string, string> = {
   "20000+": "20,000+",
 };
 
-const fieldClass =
-  "w-full rounded-xl border border-line bg-white px-4 py-3 text-ink placeholder:text-mute/70 outline-none transition focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10";
+const fieldClass = "qf-input";
 
 function normalizeServiceParam(value: string | null): string {
   if (!value) return "";
@@ -121,7 +120,7 @@ function FieldLabel({
   required?: boolean;
 }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-xs font-bold tracking-[0.03em] text-ink-soft">
+    <label htmlFor={htmlFor} className="qf-label">
       {children} {required ? <span className="text-accent">*</span> : null}
     </label>
   );
@@ -310,7 +309,7 @@ export default function CommercialQuoteForm({
 
   if (isSuccess) {
     return (
-      <div className="rounded-3xl border border-line bg-white p-8 text-center shadow-elev">
+      <div className="qf qf-success">
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-accent">
           <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -333,10 +332,10 @@ export default function CommercialQuoteForm({
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-white p-5 sm:p-7 lg:p-8">
-      <div className="mb-6">
-        <h2 className="font-display text-xl leading-tight text-ink lg:text-2xl">{title}</h2>
-        {subtitle ? <p className="mt-2 text-sm leading-relaxed text-ink-soft">{subtitle}</p> : null}
+    <div className="qf">
+      <div className="qf-head mb-5">
+        <h2>{title}</h2>
+        {subtitle ? <p>{subtitle}</p> : null}
       </div>
 
       <form
@@ -619,12 +618,12 @@ export default function CommercialQuoteForm({
           </div>
         </div>
 
-        <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-ink-soft">
+        <label className="qf-consent">
           <input type="checkbox" name="smsOptIn" checked={smsOptIn && formData.contactPreference !== "call" && formData.contactPreference !== "email"} disabled={formData.contactPreference === "call" || formData.contactPreference === "email"} onChange={(event) => setSmsOptIn(event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-primary" />
           <span>{QUOTE_SMS_DISCLOSURE}</span>
         </label>
         {error && (
-          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <div role="alert" className="qf-error">
             {error}
           </div>
         )}
@@ -632,7 +631,7 @@ export default function CommercialQuoteForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="btn btn-accent w-full !text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+          className="qf-submit w-full"
         >
           {isSubmitting ? "Sending…" : "Request a walkthrough"}
           {!isSubmitting && (
@@ -642,7 +641,7 @@ export default function CommercialQuoteForm({
           )}
         </button>
 
-        <p className="text-center text-xs leading-relaxed text-ink-soft">
+        <p className="qf-fine">
           We will use your contact preference. Without text permission, we can call or email.
           &nbsp;·&nbsp;
           <Link href="/privacy" className="font-semibold text-primary underline underline-offset-2 hover:text-accent">Privacy Policy</Link>

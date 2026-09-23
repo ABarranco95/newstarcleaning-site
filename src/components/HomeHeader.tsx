@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useEffect, useRef, useState } from "react";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
+import Icon from "@/components/Icon";
 import { business } from "@/lib/business";
 
 type NavLink = { label: string; href: string };
@@ -119,8 +120,8 @@ export default function HomeHeader() {
           ))}
         </nav>
         <div className="home-header-actions">
-          <a href={business.phoneHref} className="home-header-phone" data-phone-location="header_desktop"><span aria-hidden="true">◔</span> {business.phoneDisplay}</a>
-          <Suspense fallback={<Link href={quoteHref} className="home-header-quote"><span className="home-quote-full">Request a quote</span><span className="home-quote-short">Quote</span><span aria-hidden="true">↗</span></Link>}><HomeQuoteLink className="home-header-quote"><span className="home-quote-full">Request a quote</span><span className="home-quote-short">Quote</span><span aria-hidden="true">↗</span></HomeQuoteLink></Suspense>
+          <a href={business.phoneHref} className="home-header-phone" data-phone-location="header_desktop" aria-label={`Call ${business.phoneDisplay}`}><Icon name="phone" /><span className="home-header-phone-number">{business.phoneDisplay}</span></a>
+          <Suspense fallback={<Link href={quoteHref} className="home-header-quote"><span className="home-quote-full">Get a free quote</span><span className="home-quote-short">Free quote</span></Link>}><HomeQuoteLink className="home-header-quote"><span className="home-quote-full">Get a free quote</span><span className="home-quote-short">Free quote</span></HomeQuoteLink></Suspense>
           <button type="button" ref={menu} className="home-menu-button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="home-mobile-menu" onClick={() => setOpen(!open)}>
             <span className="home-menu-label">{open ? "Close" : "Menu"}</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">{open ? <path d="m5 5 14 14M5 19 19 5" /> : <path d="M3 8h18M3 16h18" />}</svg>
@@ -142,7 +143,7 @@ export default function HomeHeader() {
         <div className="home-mobile-contact">
           <a href={business.phoneHref} data-phone-location="header_mobile">Call {business.phoneDisplay}</a>
           <a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_menu">Text us</a>
-          <Suspense fallback={null}><HomeQuoteLink className="home-mobile-quote">Request a quote <span aria-hidden="true">↗</span></HomeQuoteLink></Suspense>
+          <Suspense fallback={null}><HomeQuoteLink className="home-mobile-quote">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
         </div>
       </nav> : null}
     </header>

@@ -1,5 +1,8 @@
+import { StarRow } from "@/components/Icon";
 import { googleRating } from "@/lib/googleRating";
 
+// Verified Google rating + review count, linked to the live profile. The
+// dated line appears on the prominent variant; compact badges stay short.
 export default function GoogleRating({
   onDark = false,
   prominent = false,
@@ -7,23 +10,24 @@ export default function GoogleRating({
   onDark?: boolean;
   prominent?: boolean;
 }) {
+  const label = `Rated ${googleRating.score} out of ${googleRating.scale} from ${googleRating.reviewCount} Google reviews (opens Google in a new tab)`;
   return (
     <a
       href={googleRating.sourceUrl}
       target="_blank"
       rel="noopener noreferrer"
       data-review-proof
-      className={`inline-flex max-w-full items-center gap-3 py-2 ${onDark ? "text-white" : "text-primary"}`}
+      aria-label={label}
+      className={`ns-rating${onDark ? " ns-rating-dark" : ""}${prominent ? " ns-rating-lg" : ""}`}
     >
-      <span className={`font-bold tracking-tight ${prominent ? "text-5xl" : "text-2xl"}`}>
-        {googleRating.score}<span className="text-sm font-medium">/{googleRating.scale}</span>
-      </span>
-      <span className="min-w-0 border-l border-current/25 pl-3">
-        <span className="block text-sm font-semibold underline decoration-current/40 underline-offset-4">Rated on Google <span aria-hidden="true">↗</span></span>
-        <span className={`mt-1 block text-xs ${onDark ? "text-white/70" : "text-ink-soft"}`}>
-          As of <time dateTime={googleRating.checkedOn}>{googleRating.checkedLabel}</time>
+      <StarRow />
+      <span className="ns-rating-score">{googleRating.score}</span>
+      <span className="ns-rating-count">{googleRating.reviewCount} Google reviews</span>
+      {prominent ? (
+        <span className="ns-rating-date">
+          Google rating as of <time dateTime={googleRating.checkedOn}>{googleRating.checkedLabel}</time>
         </span>
-      </span>
+      ) : null}
     </a>
   );
 }

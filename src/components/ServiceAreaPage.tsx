@@ -7,6 +7,9 @@ import GoogleRating from "@/components/GoogleRating";
 import SiteHero from "@/components/SiteHero";
 import HomeServices from "@/components/HomeServices";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import TrustStrip from "@/components/TrustStrip";
+import ReviewCards from "@/components/ReviewCards";
+import Icon from "@/components/Icon";
 import type { ServiceArea } from "@/lib/serviceAreas";
 import { homeResultPhotos, bathroomResultPhotos, emptyHomeResultPhotos, kitchenSurfacesPhoto, type RealWorkPhoto } from "@/lib/realWorkPhotos";
 import { business } from "@/lib/business";
@@ -29,6 +32,12 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
   "fig-garden": homeResultPhotos[0],
   "woodward-park": emptyHomeResultPhotos[4],
 };
+
+const heroPoints = [
+  "Standard from $165 · deep from $235 · move-out from $325",
+  "Price confirmed before anything is booked",
+  "Supplies and equipment brought in",
+];
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const directBookingUrl = resolveDirectBookingUrl();
@@ -57,69 +66,74 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         eyebrow={`${area.county} · ${area.areaType}`}
         photo={heroPhoto}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}
+        aside={
+          <>
+            <QuickQuoteForm
+              title={`Get your ${area.name} price`}
+              subtitle="Three quick steps. We confirm availability and the price before anything is booked."
+              source={`organic_${area.slug}_service_area`}
+              defaultCity={area.name}
+              landingCity={area.name}
+              compact
+            />
+            {directBookingUrl ? (
+              <Suspense fallback={null}>
+                <BookingPortalLink
+                  baseUrl={directBookingUrl}
+                  city={area.name}
+                  sourcePage={`/cleaning-services-${area.slug}`}
+                  label="Ready to self-schedule? Book online"
+                  showIcon={false}
+                  className="home-text-link"
+                />
+              </Suspense>
+            ) : null}
+          </>
+        }
       >
-        <div className="site-actions">
-          <a href="#quote" className="home-button">Get a {area.name} quote <span aria-hidden="true">↗</span></a>
-          <a href={business.phoneHref} className="home-text-link">Call us</a>
+        <ul className="site-hero-points">
+          {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
+        </ul>
+        <div className="site-hero-meta">
+          <GoogleRating onDark />
+          <a href={business.phoneHref} className="site-hero-phone" data-phone-location="area_hero"><Icon name="phone" /> {business.phoneDisplay}</a>
         </div>
       </SiteHero>
 
-      <div className="home-wrap">
-        <div className="home-proof-line site-proof-row">
-          <p className="site-note">Fresno-based. Photographs from New Star appointments.</p>
-          <GoogleRating />
-        </div>
-      </div>
+      <TrustStrip />
 
-      <section className="site-section site-split">
-        <div className="site-copy">
-          <h2>Check availability in {area.name}.</h2>
-          <p className="site-intro">{area.bookingNote}</p>
-          <p className="site-note">Tell us about your home, the service you need, and your preferred date. Your quote reflects the size, condition, visit frequency, and optional work.</p>
-        </div>
-        <div className="min-w-0">
-          <QuickQuoteForm
-            title={`Request your ${area.name} quote`}
-            subtitle="Share the basics. We confirm availability and the price before anything is booked."
-            source={`organic_${area.slug}_service_area`}
-            defaultCity={area.name}
-            landingCity={area.name}
-            compact
-          />
-          {directBookingUrl ? (
-            <Suspense fallback={null}>
-              <BookingPortalLink
-                baseUrl={directBookingUrl}
-                city={area.name}
-                sourcePage={`/cleaning-services-${area.slug}`}
-                label="Ready to self-schedule? Book online"
-                showIcon={false}
-                className="home-text-link"
-              />
-            </Suspense>
-          ) : null}
-        </div>
-      </section>
-
-      <section className="site-section site-rule">
+      <section className="site-section">
         <div className="home-section-heading">
-          <h2>Which cleaning<br />do you need?</h2>
-          <Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">↗</span></Link>
+          <div>
+            <p className="ns-kicker">Services</p>
+            <h2 className="ns-h2">Which cleaning do you need?</h2>
+          </div>
+          <Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">→</span></Link>
         </div>
-        <Suspense fallback={null}><HomeServices defaultCity={area.name} /></Suspense>
-        <div className="home-service-notes">
-          <p>Oven and fridge interiors, interior window glass, and reachable window tracks are optional add-ons. Cabinet interiors are optional for standard and deep cleaning.</p>
-          <p>Move-in / move-out includes empty cabinet, drawer, and closet interiors. Deposit returns are not guaranteed. Cleaners bring supplies and equipment; final scope and price are confirmed before booking.</p>
+        <div className="mt-8"><Suspense fallback={null}><HomeServices defaultCity={area.name} /></Suspense></div>
+        <p className="home-service-notes">Oven and fridge interiors, interior window glass, and cabinet interiors on standard or deep cleans are optional add-ons. Move-in / move-out includes empty cabinet, drawer, and closet interiors.</p>
+      </section>
+
+      <section className="site-muted" aria-labelledby="area-reviews-title">
+        <div className="ns-section">
+          <div className="ns-section-head">
+            <div>
+              <p className="ns-kicker">Reviews</p>
+              <h2 id="area-reviews-title" className="ns-h2">What customers say.</h2>
+            </div>
+            <GoogleRating prominent />
+          </div>
+          <ReviewCards topic="home" />
         </div>
       </section>
 
-      <section className="site-section site-rule">
+      <section className="site-section">
         <div className="home-section-heading">
           <h2>Cleaning for {area.name} homes.</h2>
-          <Link href="/our-work" className="home-text-link">More of our work <span aria-hidden="true">↗</span></Link>
+          <Link href="/our-work" className="home-text-link">More of our work <span aria-hidden="true">→</span></Link>
         </div>
         <div className="service-editorial">
-          <p className="se-lead">{area.localContent}</p>
+          <p className="se-lead mt-4">{area.localContent}</p>
           <div className="site-links">
             <a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a>
             <a href="https://www.google.com/maps?cid=12575787905603463321" target="_blank" rel="noopener noreferrer" className="home-text-link">Google profile <span aria-hidden="true">↗</span></a>
@@ -166,7 +180,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         </div>
       </section>
 
-      <section className="site-section site-split">
+      <section className="site-section site-split site-rule">
         <div className="site-copy"><h2>Questions about cleaning in {area.name}.</h2></div>
         <div className="site-disclosures">
           {areaFaqs.map((faq) => (
