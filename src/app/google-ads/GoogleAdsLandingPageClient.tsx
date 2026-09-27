@@ -142,14 +142,14 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     formTitle: "Request a cleaning quote",
     priceContext: {
       label: "3 bed / 2 bath · about 1,600 sq ft",
-      value: "Standard $225 · Deep about $360 when maintained, often $475+ with heavier buildup",
-      note: "Representative example. Final price depends on the home’s condition and requested work.",
+      value: "Standard $224 · Deep $396 · more with heavy buildup",
+      note: "Example for a home in normal condition. We confirm the condition, requested work, and total before booking.",
     },
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
         question: "How should I read the example prices?",
-        answer: "For a typical 3-bedroom, 2-bath home around 1,600 square feet, Standard is about $225. A $360 Deep assumes a maintained home; heavier or more detail-intensive Deep cleaning often starts around $475. We confirm the actual condition, scope, and total before booking.",
+        answer: "For a 3-bedroom, 2-bath home around 1,600 square feet in normal condition, Standard is $224 and Deep is $396. Buildup adds time: the same Deep clean runs about $440 in a dusty home and about $567 with heavy buildup. We confirm the condition, scope, and total before booking.",
       },
       {
         question: "Should I request Standard or Deep?",
@@ -164,9 +164,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Request move-out pricing",
     priceContext: {
-      label: "Move-out cleaning · empty home",
-      value: "From $325 · empty cabinet & closet interiors included",
-      note: "Starting price. Your home's size, condition, and add-ons determine the confirmed total.",
+      label: "3 bed / 2 bath · about 1,600 sq ft · empty home",
+      value: "$461 · empty cabinet & closet interiors included",
+      note: "Smaller homes start at $325. Size, condition, and add-ons like the oven or fridge set the confirmed total.",
     },
     proofOrder: ["refrigerator", "refrigeratorDetail", "oven", "tub", "shower", "vent"],
     faqs: [
@@ -188,7 +188,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     formTitle: "Request deep-cleaning pricing",
     priceContext: {
       label: "3 bed / 2 bath · about 1,600 sq ft",
-      value: "About $360 when maintained · often $475+ with heavier buildup",
+      value: "$396 in normal condition · about $567 with heavy buildup",
       note: "We confirm the home’s condition, requested work, and total before booking.",
     },
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],

@@ -30,18 +30,21 @@ assert(
 );
 assert(
   paidPage.includes("3 bed / 2 bath · about 1,600 sq ft") &&
-    paidPage.includes("Standard $225 · Deep about $360 when maintained, often $475+ with heavier buildup"),
-  "generic house hero distinguishes maintained and detail-intensive Deep pricing",
+    paidPage.includes("Standard $224 · Deep $396 · more with heavy buildup"),
+  "generic house hero shows the engine's normal-condition Standard and Deep examples",
 );
-for (const expectedPrice of ["$225", "$360", "$475+"]) {
+for (const expectedPrice of ["$224", "$396", "$440", "$567"]) {
   assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
 }
 assert(
-  paidPage.includes("Final price depends on the home’s condition and requested work") &&
-    paidPage.includes("A $360 Deep assumes a maintained home") &&
-    paidPage.includes("often starts around $475"),
+  paidPage.includes("Example for a home in normal condition") &&
+    paidPage.includes("Standard is $224 and Deep is $396") &&
+    paidPage.includes("about $567 with heavy buildup"),
   "generic house price context states the condition assumption and heavier-clean range",
 );
+for (const retiredPrice of ["$225", "$360", "$475"]) {
+  assert(!paidPage.includes(retiredPrice), `paid page drops retired example price ${retiredPrice}`);
+}
 for (const rejectedPrice of ["$165", "$195", "$300"]) {
   assert(!houseBlock.includes(rejectedPrice), `generic house price lane omits floor-price anchor: ${rejectedPrice}`);
 }
@@ -60,16 +63,17 @@ assert(
 );
 assert(paidPage.includes('serviceDefault: "Deep cleaning"'), "deep intent form state matches its scope");
 assert(
-  paidPage.includes("About $360 when maintained · often $475+ with heavier buildup"),
-  "deep intent exposes condition-accurate representative pricing",
+  paidPage.includes("$396 in normal condition · about $567 with heavy buildup"),
+  "deep intent exposes the engine's condition-accurate example pricing",
 );
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");
 assert(
   paidPage.includes("empty cabinet, drawer, and closet interiors") &&
     paidPage.includes("Inside the oven and refrigerator") &&
-    paidPage.includes("From $325 · empty cabinet & closet interiors included") &&
+    paidPage.includes("$461 · empty cabinet & closet interiors included") &&
+    paidPage.includes("Smaller homes start at $325") &&
     !paidPage.includes("appliance & cabinet interiors are add-ons"),
-  "move intent agrees with the current floor and included empty-cabinet scope",
+  "move intent leads with the typical-home example, keeps the $325 floor, and includes empty-cabinet scope",
 );
 assert(
   paidPage.includes('serviceDefault: "Post-construction cleaning"') &&
