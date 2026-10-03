@@ -35,6 +35,8 @@ type ProofPairKey = "shower" | "tub" | "oven" | "refrigerator" | "refrigeratorDe
 
 type ProofPair = {
   title: string;
+  /** Interior-appliance work is an optional add-on; tag it at its caption. */
+  optionalAddOn?: boolean;
   before: { src: string; alt: string };
   after: { src: string; alt: string };
 };
@@ -49,6 +51,11 @@ type PaidIntentConfig = {
     label: string;
     value: string;
     note: string;
+  };
+  /** Included scope and optional add-ons, from the service scope contracts. */
+  scope?: {
+    included: string;
+    addOns: string;
   };
   proofOrder: ProofPairKey[];
   faqs: Array<{ question: string; answer: string }>;
@@ -89,6 +96,7 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
   },
   oven: {
     title: "Oven interior",
+    optionalAddOn: true,
     before: {
       src: "/photos/real-work/paid/oven-interior-before.webp",
       alt: "Oven interior with visible grease and buildup before cleaning",
@@ -100,6 +108,7 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
   },
   refrigerator: {
     title: "Full refrigerator interior",
+    optionalAddOn: true,
     before: {
       src: "/photos/real-work/paid/refrigerator-full-before.webp",
       alt: "Empty refrigerator interior with visible residue before cleaning",
@@ -111,6 +120,7 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
   },
   refrigeratorDetail: {
     title: "Refrigerator interior detail",
+    optionalAddOn: true,
     before: {
       src: "/photos/real-work/paid/refrigerator-detail-before.webp",
       alt: "Refrigerator interior surface with visible debris before cleaning",
@@ -149,7 +159,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     faqs: [
       {
         question: "How should I read the example prices?",
-        answer: "For a 3-bedroom, 2-bath home around 1,600 square feet in normal condition, Standard is $224 and Deep is $396. Buildup adds time: the same Deep clean runs about $440 in a dusty home and about $567 with heavy buildup. We confirm the condition, scope, and total before booking.",
+        answer: "For a 3-bedroom, 2-bath home around 1,600 square feet in normal condition, Standard is $224 and Deep is $396, before pet fees or add-ons. Dust and heavier buildup add time and cost. We confirm the condition, scope, and total before booking.",
       },
       {
         question: "Should I request Standard or Deep?",
@@ -159,16 +169,20 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: (city) => `Move-out cleaning for ${city} homes.`,
-    subhead: "Moving out? We clean the empty home, including inside the cabinets and closets. Tell us your move date.",
+    h1: (city) => `Move-in and move-out cleaning for ${city} homes.`,
+    subhead: "We clean the empty home, including inside cabinets, drawers and closets. Tell us when it needs to be ready.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Request move-out pricing",
+    formTitle: "Request move-in / move-out pricing",
     priceContext: {
       label: "3 bed / 2 bath · about 1,600 sq ft · empty home",
       value: "$461 · empty cabinet & closet interiors included",
-      note: "Smaller homes start at $325. Size, condition, and add-ons like the oven or fridge set the confirmed total.",
+      note: "Example for an empty home in normal condition, before pet fees or add-ons. Smaller homes start at $325. Heavy buildup and extras like the oven or fridge cost more.",
     },
-    proofOrder: ["refrigerator", "refrigeratorDetail", "oven", "tub", "shower", "vent"],
+    scope: {
+      included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
+      addOns: "Inside the oven and refrigerator, interior window glass, and reachable window tracks.",
+    },
+    proofOrder: ["tub", "shower", "vent", "refrigerator", "refrigeratorDetail", "oven"],
     faqs: [
       {
         question: "Are oven, fridge, cabinets, or windows included?",
@@ -188,8 +202,12 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     formTitle: "Request deep-cleaning pricing",
     priceContext: {
       label: "3 bed / 2 bath · about 1,600 sq ft",
-      value: "$396 in normal condition · about $567 with heavy buildup",
-      note: "We confirm the home’s condition, requested work, and total before booking.",
+      value: "$396 in normal condition · more with heavy buildup",
+      note: "Example before pet fees or add-ons. We confirm the home’s condition, requested work, and total before booking.",
+    },
+    scope: {
+      included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
+      addOns: "Inside the oven and fridge, cabinet interiors, and interior windows.",
     },
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
@@ -323,6 +341,21 @@ function PriceContext({ context }: { context: NonNullable<PaidIntentConfig["pric
   );
 }
 
+function ScopeNote({ scope }: { scope: NonNullable<PaidIntentConfig["scope"]> }) {
+  return (
+    <dl className="mt-3 grid gap-2 text-sm leading-6">
+      <div>
+        <dt className="inline font-medium text-primary">Included: </dt>
+        <dd className="inline text-ink-soft">{scope.included}</dd>
+      </div>
+      <div>
+        <dt className="inline font-medium text-primary">Optional add-ons: </dt>
+        <dd className="inline text-ink-soft">{scope.addOns}</dd>
+      </div>
+    </dl>
+  );
+}
+
 function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
   const pairs = order.map((key) => ({ key, ...PROOF_PAIRS[key] }));
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -381,7 +414,12 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
                   );
                 })}
               </div>
-              <h3 className="pt-3 text-sm font-medium text-primary">{pair.title}</h3>
+              <h3 className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-3 text-sm font-medium text-primary">
+                {pair.title}
+                {pair.optionalAddOn ? (
+                  <span className="border border-line px-1.5 py-0.5 text-xs font-normal text-ink-soft">Optional add-on</span>
+                ) : null}
+              </h3>
             </article>
           ))}
         </div>
@@ -620,6 +658,12 @@ export default function GoogleAdsLandingPageClient({
               <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
                 {intent.subhead}
               </p>
+              {intent.priceContext ? (
+                <div className="mt-4">
+                  <PriceContext context={intent.priceContext} />
+                </div>
+              ) : null}
+              {intent.scope ? <ScopeNote scope={intent.scope} /> : null}
               <ul className="site-form-points paid-hero-points">
                 {(isBusinessRequest ? BUSINESS_POINTS : HOME_POINTS).map((point) => (
                   <li key={point}><Icon name="check" />{point}</li>
@@ -640,7 +684,6 @@ export default function GoogleAdsLandingPageClient({
                     <figcaption>New Star work · {heroPhoto.caption}</figcaption>
                   </figure>
                 ) : null}
-                {intent.priceContext ? <PriceContext context={intent.priceContext} /> : null}
               </div>
             ) : null}
             </div>

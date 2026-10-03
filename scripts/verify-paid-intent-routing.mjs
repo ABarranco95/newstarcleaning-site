@@ -33,14 +33,15 @@ assert(
     paidPage.includes("Standard $224 · Deep $396 · more with heavy buildup"),
   "generic house hero shows the engine's normal-condition Standard and Deep examples",
 );
-for (const expectedPrice of ["$224", "$396", "$440", "$567"]) {
+for (const expectedPrice of ["$224", "$396"]) {
   assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
 }
 assert(
   paidPage.includes("Example for a home in normal condition") &&
     paidPage.includes("Standard is $224 and Deep is $396") &&
-    paidPage.includes("about $567 with heavy buildup"),
-  "generic house price context states the condition assumption and heavier-clean range",
+    paidPage.includes("Dust and heavier buildup add time and cost") &&
+    paidPage.includes("before pet fees or add-ons"),
+  "generic house price context states normal-condition assumptions and heavier-clean costs without unverified totals",
 );
 for (const retiredPrice of ["$225", "$360", "$475"]) {
   assert(!paidPage.includes(retiredPrice), `paid page drops retired example price ${retiredPrice}`);
@@ -63,8 +64,9 @@ assert(
 );
 assert(paidPage.includes('serviceDefault: "Deep cleaning"'), "deep intent form state matches its scope");
 assert(
-  paidPage.includes("$396 in normal condition · about $567 with heavy buildup"),
-  "deep intent exposes the engine's condition-accurate example pricing",
+  paidPage.includes("$396 in normal condition · more with heavy buildup") &&
+    !/\$(?:440|567)\b/.test(paidPage),
+  "deep intent exposes the verified normal-condition example without stale buildup amounts",
 );
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");
 assert(
