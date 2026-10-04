@@ -92,7 +92,7 @@ assert(home.includes("<ReviewCards") && home.includes("<TrustStrip") && home.inc
 assert(!home.includes("line-clamp") && !home.includes("RealWorkGallery"), "reduce text and gallery repetition rather than hiding it");
 const homeServices = read("src/components/HomeServices.tsx");
 assert(home.includes("<HomeServices"), "homepage renders its service choices");
-for (const floor of ["$165", "$235", "$325"]) assert(homeServices.includes(floor));
+assert(!homeServices.includes("{choice.price}") && !homeServices.includes("{selected.price}"), "home services render no prices");
 const paid = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
 assert(paid.includes("<GoogleRating") && paid.includes("<ReviewCards") && !paid.includes("5.0★ Google rating"));
 assert(!paid.includes("usually the same day") && !paid.includes("rushing a free re-clean"));

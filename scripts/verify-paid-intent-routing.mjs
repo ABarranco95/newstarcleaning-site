@@ -24,34 +24,12 @@ assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring 
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(
-  paidPage.includes("Professional house cleaning for") &&
+  paidPage.includes("House cleaning in ${city}, one-time or recurring.") &&
     !paidPage.includes("without the guesswork"),
-  "generic house headline uses direct professional local-service language",
+  "generic house headline covers one-time and recurring shoppers",
 );
-assert(
-  paidPage.includes("3 bed / 2 bath · about 1,600 sq ft") &&
-    paidPage.includes("Standard $224 · Deep $396 · more with heavy buildup"),
-  "generic house hero shows the engine's normal-condition Standard and Deep examples",
-);
-for (const expectedPrice of ["$224", "$396"]) {
-  assert(paidPage.includes(expectedPrice), `generic house pricing guide includes ${expectedPrice}`);
-}
-assert(
-  paidPage.includes("Example for a home in normal condition") &&
-    paidPage.includes("Standard is $224 and Deep is $396") &&
-    paidPage.includes("Dust and heavier buildup add time and cost") &&
-    paidPage.includes("before pet fees or add-ons"),
-  "generic house price context states normal-condition assumptions and heavier-clean costs without unverified totals",
-);
-for (const retiredPrice of ["$225", "$360", "$475"]) {
-  assert(!paidPage.includes(retiredPrice), `paid page drops retired example price ${retiredPrice}`);
-}
-for (const rejectedPrice of ["$165", "$195", "$300"]) {
-  assert(!houseBlock.includes(rejectedPrice), `generic house price lane omits floor-price anchor: ${rejectedPrice}`);
-}
-for (const rejectedFrequencyPhrase of ["weekly", "every other week", "every-other-week", "monthly"]) {
-  assert(!houseBlock.toLowerCase().includes(rejectedFrequencyPhrase), `generic house price lane avoids recurring-rate framing: ${rejectedFrequencyPhrase}`);
-}
+// Angel 2026-10-04: no prices on paid pages; the price comes in the quote.
+assert(!/\$\d/.test(paidPage) && !paidPage.includes("priceContext"), "paid page shows no dollar amounts or price anchors");
 for (const rejectedPhrase of ["normal-condition", "1/1", "without the guesswork"]) {
   assert(!houseBlock.toLowerCase().includes(rejectedPhrase), `generic house copy rejects operator jargon: ${rejectedPhrase}`);
 }
@@ -63,19 +41,12 @@ assert(
   "missing or unknown city uses the factual Fresno-area label instead of silently claiming Fresno",
 );
 assert(paidPage.includes('serviceDefault: "Deep cleaning"'), "deep intent form state matches its scope");
-assert(
-  paidPage.includes("$396 in normal condition · more with heavy buildup") &&
-    !/\$(?:440|567)\b/.test(paidPage),
-  "deep intent exposes the verified normal-condition example without stale buildup amounts",
-);
 assert(paidPage.includes('serviceDefault: "Move-in / move-out cleaning"'), "move intent form state matches its scope");
 assert(
   paidPage.includes("empty cabinet, drawer, and closet interiors") &&
     paidPage.includes("Inside the oven and refrigerator") &&
-    paidPage.includes("$461 · empty cabinet & closet interiors included") &&
-    paidPage.includes("Smaller homes start at $325") &&
     !paidPage.includes("appliance & cabinet interiors are add-ons"),
-  "move intent leads with the typical-home example, keeps the $325 floor, and includes empty-cabinet scope",
+  "move intent includes empty-cabinet scope",
 );
 assert(
   paidPage.includes('serviceDefault: "Post-construction cleaning"') &&
@@ -161,7 +132,7 @@ for (const alias of commercialAliases) {
     assert(result.text.includes("Commercial cleaning proposals for Clovis workplaces.") && result.text.includes("Review your written proposal") && !/\$\d|clean home|homes\.|You choose the date|Get my quote|Before you book|Pick a date|book online|floors\./i.test(result.text), `${label}: proposal-only headline, process, closing and sticky copy`);
   }
 }
-assert(INTENT_CONFIG.commercial.proofOrder.length === 0 && !INTENT_CONFIG.commercial.priceContext, "commercial config carries no residential photo mapping or price anchor");
+assert(INTENT_CONFIG.commercial.proofOrder.length === 0 && !("priceContext" in INTENT_CONFIG.commercial), "commercial config carries no residential photo mapping or price anchor");
 for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "", "house"], ["standard-cleaning", "", "house"], ["standard-cleaning", "weekly", "recurring"], ["recurring-cleaning", "", "recurring"], ["deep-cleaning", "monthly", "deep"], ["move-out-cleaning", "weekly", "move"]]) {
   const result = render(service, frequency);
   const form = result.forms[0];
@@ -185,7 +156,7 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
 const project = render("post-construction-cleaning", "weekly");
 assert(detectIntent("post-construction-cleaning", "weekly") === "postConstruction" && project.forms[0]?.props["data-boundary"] === "QuickQuoteForm" && project.forms[0].props.defaultService === "Post-construction cleaning" && project.forms[0].props.directBookingUrl === null && !project.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "")), "post-construction retains its existing conditional form and no residential booking/proof");
 assert(project.text.includes("Review your written proposal") && project.text.includes("Request a proposal") && project.text.includes("Before we propose the work.") && !/\$\d|You choose the date|Get my quote|Before you book|Price before booking/.test(project.text), "post-construction process, trust, FAQ and sticky stay proposal-only");
-assert(INTENT_CONFIG.postConstruction.proofOrder.length === 0 && !INTENT_CONFIG.postConstruction.priceContext, "post-construction has no residential photo mapping or price anchor");
+assert(INTENT_CONFIG.postConstruction.proofOrder.length === 0 && !("priceContext" in INTENT_CONFIG.postConstruction), "post-construction has no residential photo mapping or price anchor");
 for (const frequency of ["", "weekly", "biweekly", "monthly", "bi-weekly", "recurring", "WEEKLY", "  Bi-Weekly  ", " MONTHLY ", "unknown"]) {
   const bookingLinks = render("recurring-cleaning", frequency).nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink");
   const normalized = frequency.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");

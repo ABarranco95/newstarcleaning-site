@@ -140,7 +140,7 @@ export default function OurWorkPage() {
 
       <section className="home-wrap work-cta">
         <h2>Your home could be next.</h2>
-        <p>Standard cleaning from $165, deep cleaning from $235, move-out from $325. Your exact price depends on size, condition, frequency, and optional add-ons — we confirm the total before anything is booked.</p>
+        <p>Your price depends on the size of the home, its condition, how often we come, and any add-ons. Tell us about your home and we’ll send your price before anything is booked.</p>
         <div className="work-cta-actions">
           <Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           <a href={business.phoneHref} className="home-text-link" data-phone-location="our_work_cta"><Icon name="phone" /> {business.phoneDisplay}</a>

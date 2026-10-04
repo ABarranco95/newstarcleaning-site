@@ -32,7 +32,7 @@ for (const item of cases) {
   const html = renderToStaticMarkup(createElement(Services));
   assert(html.includes(`data-selected-service="${item.selected}"`));
   assert.equal((html.match(/type="radio"/g) || []).length, 3);
-  for (const floor of ["$165", "$235", "$325"]) assert(html.includes(floor));
+  assert(!/\$\d/.test(html), "home service picker shows no prices");
   assert(html.includes('aria-controls="home-service-scope"') && html.includes('aria-live="polite"'));
   const links = [...html.matchAll(/<a[^>]*href="([^"]+)"/g)].map((m) => new URL(m[1].replaceAll("&amp;", "&"), "https://newstarcleaning.com"));
   assert.equal(links.length, 2);

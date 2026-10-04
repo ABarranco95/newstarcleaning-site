@@ -47,11 +47,6 @@ type PaidIntentConfig = {
   subhead: string;
   serviceDefault: string;
   formTitle: string;
-  priceContext?: {
-    label: string;
-    value: string;
-    note: string;
-  };
   /** Included scope and optional add-ons, from the service scope contracts. */
   scope?: {
     included: string;
@@ -146,24 +141,19 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
-    h1: (city) => `Professional house cleaning for ${city} homes.`,
-    subhead: "We’ll take care of the kitchen, bathrooms, dusting, and floors. Tell us about your home and when you’d like us to come.",
+    h1: (city) => `House cleaning in ${city}, one-time or recurring.`,
+    subhead: "Kitchen, bathrooms, dusting and floors, weekly, every other week, monthly or just once. Tell us about your home and we’ll send your price.",
     serviceDefault: "Not sure yet",
-    formTitle: "Request a cleaning quote",
-    priceContext: {
-      label: "3 bed / 2 bath · about 1,600 sq ft",
-      value: "Standard $224 · Deep $396 · more with heavy buildup",
-      note: "Example for a home in normal condition. We confirm the condition, requested work, and total before booking.",
-    },
+    formTitle: "Get your cleaning quote",
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
-        question: "How should I read the example prices?",
-        answer: "For a 3-bedroom, 2-bath home around 1,600 square feet in normal condition, Standard is $224 and Deep is $396, before pet fees or add-ons. Dust and heavier buildup add time and cost. We confirm the condition, scope, and total before booking.",
+        question: "One-time or recurring?",
+        answer: "Either. Book a single clean, or set up weekly, every-other-week or monthly visits. Tell us what you have in mind and we’ll send your price before anything is booked.",
       },
       {
-        question: "Should I request Standard or Deep?",
-        answer: "Standard fits regular kitchen, bathroom, dusting, and floor cleaning. If there is buildup or the home needs more detailed work, tell us so we can quote enough time instead of forcing the job into a lighter service.",
+        question: "Standard or deep clean?",
+        answer: "Standard covers the kitchen, bathrooms, dusting and floors. If there’s buildup or it’s been a while, tell us and we’ll quote enough time for a deep clean. Your price depends on size, condition and how often we come, and we confirm it before booking.",
       },
     ],
   },
@@ -172,12 +162,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Move-in and move-out cleaning for ${city} homes.`,
     subhead: "We clean the empty home, including inside cabinets, drawers and closets. Tell us when it needs to be ready.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Request move-in / move-out pricing",
-    priceContext: {
-      label: "3 bed / 2 bath · about 1,600 sq ft · empty home",
-      value: "$461 · empty cabinet & closet interiors included",
-      note: "Example for an empty home in normal condition, before pet fees or add-ons. Smaller homes start at $325. Heavy buildup and extras like the oven or fridge cost more.",
-    },
+    formTitle: "Get your move-in / move-out quote",
     scope: {
       included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
       addOns: "Inside the oven and refrigerator, interior window glass, and reachable window tracks.",
@@ -199,12 +184,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Deep cleaning for ${city} homes.`,
     subhead: "For the buildup and detail work a regular clean doesn’t cover. Tell us which rooms need the most attention.",
     serviceDefault: "Deep cleaning",
-    formTitle: "Request deep-cleaning pricing",
-    priceContext: {
-      label: "3 bed / 2 bath · about 1,600 sq ft",
-      value: "$396 in normal condition · more with heavy buildup",
-      note: "Example before pet fees or add-ons. We confirm the home’s condition, requested work, and total before booking.",
-    },
+    formTitle: "Get your deep-cleaning quote",
     scope: {
       included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
       addOns: "Inside the oven and fridge, cabinet interiors, and interior windows.",
@@ -327,16 +307,6 @@ function TrustLine({ commercial = false }: { commercial?: boolean }) {
     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-ink-soft">
       <GoogleRating />
       <span className="text-xs">{commercial ? "Locally owned · Written proposal before scheduling" : "Locally owned · Price before booking"}</span>
-    </div>
-  );
-}
-
-function PriceContext({ context }: { context: NonNullable<PaidIntentConfig["priceContext"]> }) {
-  return (
-    <div className="border-t border-line pt-4">
-      <span className="block text-xs text-ink-soft">{context.label}</span>
-      <strong className="mt-2 block text-base font-semibold leading-6 text-primary">{context.value}</strong>
-      <span className="mt-2 block text-xs leading-5 text-ink-soft">{context.note}</span>
     </div>
   );
 }
@@ -658,11 +628,6 @@ export default function GoogleAdsLandingPageClient({
               <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
                 {intent.subhead}
               </p>
-              {intent.priceContext ? (
-                <div className="mt-4">
-                  <PriceContext context={intent.priceContext} />
-                </div>
-              ) : null}
               {intent.scope ? <ScopeNote scope={intent.scope} /> : null}
               <ul className="site-form-points paid-hero-points">
                 {(isBusinessRequest ? BUSINESS_POINTS : HOME_POINTS).map((point) => (

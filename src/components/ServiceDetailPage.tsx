@@ -120,7 +120,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           </>
         }
       >
-        <p className="site-price">From <strong>{presentation.startingPrice}</strong></p>
+        <p className="site-price">Price confirmed before anything is booked.</p>
         <ul className="site-hero-points">
           {heroPoints[service.slug].map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>

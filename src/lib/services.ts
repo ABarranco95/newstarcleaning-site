@@ -170,7 +170,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "How is recurring cleaning priced?",
         answer:
-          "Standard cleaning starts at $165. Your quote reflects the home’s size, condition, visit frequency, and any optional work. Choose weekly, bi-weekly, or monthly visits; if the home needs an initial deep clean, we explain that before you commit.",
+          "Your quote reflects the home’s size, condition, visit frequency, and any optional work. Choose weekly, bi-weekly, or monthly visits; if the home needs an initial deep clean, we explain that before you commit.",
       },
     ],
     localNotes:
@@ -441,7 +441,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "How much does move-out cleaning cost?",
         answer:
-          "Move-out cleaning starts at $325. The final quote depends on home size, condition, and optional work such as oven, refrigerator, or window cleaning. Empty cabinet, drawer, and closet interiors are included. We confirm the total before booking.",
+          "It depends on home size, condition, and optional work such as oven, refrigerator, or window cleaning. Empty cabinet, drawer, and closet interiors are included. We confirm the total before booking.",
       },
       {
         question: "Does move-out cleaning include inside the oven, fridge, and cabinets?",

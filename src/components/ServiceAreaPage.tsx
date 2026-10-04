@@ -34,7 +34,7 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
 };
 
 const heroPoints = [
-  "Standard from $165 · deep from $235 · move-out from $325",
+  "One-time or recurring cleaning",
   "Price confirmed before anything is booked",
   "Supplies and equipment brought in",
 ];

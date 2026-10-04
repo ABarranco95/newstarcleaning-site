@@ -58,7 +58,7 @@ export default function BookNow() {
         <div className="site-form-aside">
           <ul className="site-form-points">
             <li><Icon name="check" />Price confirmed before anything is booked</li>
-            <li><Icon name="check" />Standard from $165 · deep from $235 · move-out from $325</li>
+            <li><Icon name="check" />One-time or recurring: weekly, every other week or monthly</li>
             <li><Icon name="check" />Missed something? Tell us within 24 hours and we’ll make it right</li>
           </ul>
           <div className="site-links"><a href={business.phoneHref} data-phone-location="book_now_hero">Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} /></div>

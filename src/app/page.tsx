@@ -17,7 +17,7 @@ import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 const directBookingUrl = resolveDirectBookingUrl();
 
 const faqs = [
-  { q: "How much does house cleaning cost?", a: "Standard cleaning starts at $165, deep cleaning at $235, and move-in / move-out cleaning at $325. Your price depends on the home’s size, condition, how often we come, and any add-ons. We confirm the total before anything is booked." },
+  { q: "How much does house cleaning cost?", a: "Your price depends on the home’s size, condition, how often we come, and any add-ons. We confirm the total before anything is booked." },
   { q: "Do you bring supplies?", a: "Yes. We bring supplies and equipment for the confirmed cleaning. Tell us about delicate surfaces or product sensitivities beforehand." },
   { q: "What if something gets missed?", a: "Tell us within 24 hours of the cleaning. We review it with you and make it right, which can include a return visit for anything in the agreed scope." },
   { q: "What should I put away?", a: "Clear loose belongings and dishes so surfaces are accessible. Laundry, dishes, bed making, organizing, packing, and unpacking are not included." },

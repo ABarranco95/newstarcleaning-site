@@ -7,9 +7,9 @@ import { useState } from "react";
 import { homeQuoteParams } from "@/lib/homeQuoteContext";
 
 const choices = [
-  { slug: "standard-cleaning", label: "Standard cleaning", price: "$165", fit: "For a home that’s already maintained.", detail: "Kitchens, bathrooms, dusting, and floors. Weekly, bi-weekly, or monthly.", photo: "/photos/real-work/kitchen-island-clean-new-star.webp", photoAlt: "Kitchen island and counters after a New Star cleaning", action: "Get a standard quote", includes: ["Kitchen counters, sink, and stovetop", "Bathrooms, mirrors, and fixtures", "Dusting and floors in every room", "Trash emptied from accessible bins"] },
-  { slug: "deep-cleaning", label: "Deep cleaning", price: "$235", fit: "For buildup that needs more attention.", detail: "The standard work, with more time for baseboards, fixtures, and reachable detail areas.", photo: "/photos/real-work/primary-bathroom-clean-new-star.webp", photoAlt: "Primary bathroom vanity and floor after a New Star cleaning", action: "Get a deep-clean quote", includes: ["Everything in a standard visit", "Baseboards, trim, and door frames", "Ceiling fans, vents, and fixtures", "Floor edges, corners, and reachable grout"] },
-  { slug: "move-out-cleaning", label: "Move-in / move-out", price: "$325", fit: "For an empty home.", detail: "Deep-cleaning work plus empty cabinet, drawer, and closet interiors.", photo: "/photos/real-work/kitchen-turnover-new-star.webp", photoAlt: "Empty kitchen cabinets and tile floor after a New Star cleaning", action: "Get an empty-home quote", includes: ["The full deep-cleaning scope", "Empty cabinet, drawer, and closet interiors", "Kitchens and bathrooms readied for walkthrough", "Oven, fridge, and interior windows optional"] },
+  { slug: "standard-cleaning", label: "Standard cleaning", fit: "For a home that’s already maintained.", detail: "Kitchens, bathrooms, dusting, and floors. Weekly, bi-weekly, or monthly.", photo: "/photos/real-work/kitchen-island-clean-new-star.webp", photoAlt: "Kitchen island and counters after a New Star cleaning", action: "Get a standard quote", includes: ["Kitchen counters, sink, and stovetop", "Bathrooms, mirrors, and fixtures", "Dusting and floors in every room", "Trash emptied from accessible bins"] },
+  { slug: "deep-cleaning", label: "Deep cleaning", fit: "For buildup that needs more attention.", detail: "The standard work, with more time for baseboards, fixtures, and reachable detail areas.", photo: "/photos/real-work/primary-bathroom-clean-new-star.webp", photoAlt: "Primary bathroom vanity and floor after a New Star cleaning", action: "Get a deep-clean quote", includes: ["Everything in a standard visit", "Baseboards, trim, and door frames", "Ceiling fans, vents, and fixtures", "Floor edges, corners, and reachable grout"] },
+  { slug: "move-out-cleaning", label: "Move-in / move-out", fit: "For an empty home.", detail: "Deep-cleaning work plus empty cabinet, drawer, and closet interiors.", photo: "/photos/real-work/kitchen-turnover-new-star.webp", photoAlt: "Empty kitchen cabinets and tile floor after a New Star cleaning", action: "Get an empty-home quote", includes: ["The full deep-cleaning scope", "Empty cabinet, drawer, and closet interiors", "Kitchens and bathrooms readied for walkthrough", "Oven, fridge, and interior windows optional"] },
 ] as const;
 
 export default function HomeServices({ defaultCity }: { defaultCity?: string }) {
@@ -38,7 +38,6 @@ export default function HomeServices({ defaultCity }: { defaultCity?: string }) 
               window.history.replaceState(null, "", `?${next.toString()}${window.location.hash}`);
             }} aria-controls="home-service-scope" />
             <span className="home-service-name"><strong>{choice.label}</strong><span>{choice.fit}</span></span>
-            <span className="home-service-price"><small>From</small>{choice.price}</span>
           </label>
         ))}
       </fieldset>
@@ -47,7 +46,7 @@ export default function HomeServices({ defaultCity }: { defaultCity?: string }) 
           <Image src={selected.photo} alt={selected.photoAlt} fill sizes="(min-width: 1024px) 420px, (min-width: 640px) 45vw, 92vw" />
         </figure>
         <div className="home-scope-copy">
-          <h3>{selected.label} <span>from {selected.price}</span></h3>
+          <h3>{selected.label}</h3>
           <p>{selected.detail}</p>
           <ul className="home-scope-includes">
             {selected.includes.map((item) => <li key={item}>{item}</li>)}

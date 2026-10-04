@@ -42,7 +42,6 @@ const guides = [
     slug: "standard-cleaning",
     short: "Standard",
     name: "Standard cleaning",
-    price: "$165",
     photo: homeResultPhotos[1],
     fit: "An already-maintained home on a weekly, bi-weekly, or monthly schedule. Kitchens, bathrooms, dusting, floors.",
     pick: "Pick standard when the home is picked up and you want it kept consistently clean. Heavy buildup means starting with a deep clean.",
@@ -51,7 +50,6 @@ const guides = [
     slug: "deep-cleaning",
     short: "Deep",
     name: "Deep cleaning",
-    price: "$235",
     photo: bathroomResultPhotos[1],
     fit: "The standard work plus real time on buildup, baseboards, fixtures, and reachable detail areas.",
     pick: "Pick deep for a first visit, a seasonal reset, or visible buildup. Oven, fridge, cabinet interiors, and interior windows stay optional add-ons.",
@@ -60,7 +58,6 @@ const guides = [
     slug: "move-out-cleaning",
     short: "Move-out",
     name: "Move-in / move-out",
-    price: "$325",
     photo: emptyHomeResultPhotos[1],
     fit: "The empty-home service: deep-cleaning work plus empty cabinet, drawer, and closet interiors included.",
     pick: "Pick move-out when the home is empty or nearly empty. Inside oven and fridge, interior glass, and tracks are optional add-ons; deposit outcomes are never guaranteed.",
@@ -98,7 +95,7 @@ const primaryAreas = serviceAreas.filter((area) =>
 );
 
 const heroPoints = [
-  "Standard from $165 · deep from $235 · move-out from $325",
+  "One-time or recurring cleaning",
   "Price confirmed before anything is booked",
   "Supplies and equipment brought in",
 ];
@@ -127,7 +124,6 @@ export default function ServicesPage() {
               <article key={guide.slug} className="se-guide-card">
                 <div className="se-guide-photo"><Image src={guide.photo.src} alt={guide.photo.alt} fill sizes="(min-width: 1024px) 400px, (min-width: 640px) 33vw, 90vw" /></div>
                 <div className="se-guide-body">
-                  <p className="se-guide-price">From <strong>{guide.price}</strong></p>
                   <h3>{guide.name}</h3>
                   <p>{guide.fit}</p>
                   <p>{guide.pick}</p>

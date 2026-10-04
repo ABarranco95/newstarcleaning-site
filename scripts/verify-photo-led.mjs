@@ -24,10 +24,8 @@ const { servicePresentation } = load("src/lib/servicePresentation.ts", { "@/lib/
 const { services, getFullIncludedList } = load("src/lib/services.ts");
 const { default: WorkPhoto } = load("src/components/WorkPhoto.tsx");
 assert.deepEqual(Object.keys(servicePresentation).sort(), [...services].map((s) => s.slug).sort());
-const floors = { "standard-cleaning": "$165", "deep-cleaning": "$235", "move-out-cleaning": "$325" };
 for (const service of services) {
   const presentation = servicePresentation[service.slug];
-  assert.equal(presentation.startingPrice, floors[service.slug]);
   assert(presentation.photo.src.startsWith("/photos/real-work/") && existsSync(`public${presentation.photo.src}`));
   assert(presentation.boundary.includes("optional add-ons"));
   assert(getFullIncludedList(service.slug).some((group) => group.title.toLowerCase().includes("kitchen")));

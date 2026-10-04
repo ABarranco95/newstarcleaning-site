@@ -107,7 +107,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
   return (
     <div className="site-reference">
       <SiteHero title={`${service.shortName} in ${cityName}, CA`} description={presentation.summary} photo={presentation.photo} tone="dark" breadcrumbs={[{label: "Home", href: "/"}, {label: service.shortName, href: `/services/${service.slug}?city=${encodeURIComponent(cityName)}`}]}>
-        <p className="site-price">From <strong>{presentation.startingPrice}</strong> · Final price confirmed before booking.</p>
+        <p className="site-price">Price confirmed before anything is booked.</p>
         <div className="site-actions"><Suspense fallback={<Link href={quoteHref} className="home-button">Request a quote ↗</Link>}><HomeQuoteLink className="home-button">Request a quote ↗</HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link">Call us</a></div><div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>
       <section className="site-section site-rule"><div className="home-section-heading"><h2>Our {service.shortName.toLowerCase()} work.</h2><Link href="/our-work" className="home-text-link">More of our work ↗</Link></div><div className="service-editorial"><ServiceProof service={service} /></div></section>

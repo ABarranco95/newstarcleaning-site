@@ -73,9 +73,9 @@ const services = [
 // Organic step 1 choices. Values are the exact service strings Apex receives;
 // prices are the published starting floors.
 const residentialChoices = [
-  { value: "Standard recurring cleaning", label: "Standard cleaning", note: "Weekly, biweekly, or monthly · from $165" },
-  { value: "Deep cleaning", label: "Deep cleaning", note: "Buildup, baseboards, fixtures · from $235" },
-  { value: "Move-in / move-out cleaning", label: "Move-in / move-out", note: "Empty home, inside cabinets · from $325" },
+  { value: "Standard recurring cleaning", label: "Standard cleaning", note: "One-time, weekly, biweekly, or monthly" },
+  { value: "Deep cleaning", label: "Deep cleaning", note: "Buildup, baseboards, fixtures" },
+  { value: "Move-in / move-out cleaning", label: "Move-in / move-out", note: "Empty home, inside cabinets" },
   { value: "Not sure yet", label: "Not sure yet", note: "Tell us about the home and we’ll recommend one" },
 ] as const;
 
