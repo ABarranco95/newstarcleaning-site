@@ -379,11 +379,6 @@ export default function QuickQuoteForm({
     }));
   };
 
-  const goToStep = (target: number) => {
-    stepMoved.current = true;
-    setStep(Math.min(Math.max(target, 1), STEP_COUNT));
-  };
-
   const isMoveOutRequest = formData.service.toLowerCase().includes("move");
   const isRecurringRequest = formData.service.toLowerCase().includes("recurring");
   const isPaidHouseRequest = paidSearch && formData.service === "Not sure yet";
@@ -394,6 +389,16 @@ export default function QuickQuoteForm({
   const paidServicePrefilled = paidSearch && Boolean(formData.service.trim());
   const showPaidOptionalDetails = extended && paidSearch;
   const showInlineExtendedDetails = extended && !paidSearch;
+  // Paid residential visitors get two short screens: the home, then where to
+  // reach them. Timing, size and condition are optional; Angel or Stella
+  // collects anything missing over text or call.
+  const quickPaid = paidSearch && !isCommercialRequest;
+  const stepCount = quickPaid ? 2 : STEP_COUNT;
+
+  const goToStep = (target: number) => {
+    stepMoved.current = true;
+    setStep(Math.min(Math.max(target, 1), stepCount));
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -406,7 +411,7 @@ export default function QuickQuoteForm({
         invalid.reportValidity();
         return;
       }
-      if (step < STEP_COUNT) {
+      if (step < stepCount) {
         trackFunnelEvent("quote_step_complete", {
           source,
           service: formData.service,
@@ -417,7 +422,7 @@ export default function QuickQuoteForm({
         goToStep(step + 1);
         return;
       }
-      for (let index = 1; index < STEP_COUNT; index += 1) {
+      for (let index = 1; index < stepCount; index += 1) {
         const earlier = firstInvalidControl(formElement.querySelector(`[data-quote-step="${index}"]`));
         if (earlier) {
           goToStep(index);
@@ -619,13 +624,13 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderTimelineField = () => (
+  const renderTimelineField = (optional = false) => (
     <div>
-      <FieldLabel htmlFor="quote-timeline" required>When do you need it?</FieldLabel>
+      <FieldLabel htmlFor="quote-timeline" optional={optional}>When do you need it?</FieldLabel>
       <select
         id="quote-timeline"
         name="timeline"
-        required
+        required={!optional}
         value={formData.timeline}
         onChange={(event) => updateField("timeline", event.target.value)}
         className={fieldClass}
@@ -639,13 +644,13 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderSqftField = () => (
+  const renderSqftField = (optional = false) => (
     <div>
-      <FieldLabel htmlFor="quote-sqft" required>Approx. sq ft</FieldLabel>
+      <FieldLabel htmlFor="quote-sqft" optional={optional}>Approx. sq ft</FieldLabel>
       <select
         id="quote-sqft"
         name="sqft"
-        required
+        required={!optional}
         value={formData.sqft}
         onChange={(event) => updateField("sqft", event.target.value)}
         className={fieldClass}
@@ -727,15 +732,15 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderConditionField = () => (
+  const renderConditionField = (optional = false) => (
     <div>
-      <FieldLabel htmlFor="quote-condition" required>
+      <FieldLabel htmlFor="quote-condition" optional={optional}>
         What&apos;s the home like right now?
       </FieldLabel>
       <select
         id="quote-condition"
         name="condition"
-        required
+        required={!optional}
         value={formData.condition}
         onChange={(event) => updateField("condition", event.target.value)}
         className={fieldClass}
@@ -746,6 +751,59 @@ export default function QuickQuoteForm({
         <option value="heavy-buildup-pet-hair-neglected">Heavy buildup or a lot of pet hair</option>
       </select>
     </div>
+  );
+
+  const renderChoiceChips = (
+    field: "bedrooms" | "bathrooms" | "contactPreference",
+    legend: string,
+    options: ReadonlyArray<{ value: string; label: string }>,
+    required: boolean,
+    columns: 3 | 4 | 6,
+  ) => (
+    <fieldset className="qf-step">
+      <legend className="qf-label">
+        {legend}
+        {!required ? <span className="qf-optional">Optional</span> : null}
+      </legend>
+      <div className={`qf-chips ${columns === 6 ? "[--qf-cols:6]" : columns === 4 ? "[--qf-cols:4]" : "[--qf-cols:3]"}`}>
+        {options.map((option) => {
+          const id = `quote-${field}-${option.value.replace(/[^a-z0-9]+/gi, "-")}`;
+          return (
+            <label key={option.value} htmlFor={id} className="qf-chip">
+              <input
+                id={id}
+                type="radio"
+                name={field}
+                value={option.value}
+                required={required}
+                checked={formData[field] === option.value}
+                onChange={() => updateField(field, option.value)}
+              />
+              <span>{option.label}</span>
+            </label>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+
+  const renderBedBathChips = () => (
+    <>
+      {renderChoiceChips("bedrooms", "Bedrooms", ["1", "2", "3", "4", "5", "6+"].map((value) => ({ value, label: value })), true, 6)}
+      {renderChoiceChips("bathrooms", "Bathrooms", ["1", "1.5", "2", "2.5", "3", "3.5", "4+"].map((value) => ({ value, label: value })), true, 4)}
+    </>
+  );
+
+  const renderContactChips = () => renderChoiceChips(
+    "contactPreference",
+    "Text or call?",
+    [
+      { value: "text", label: "Text me" },
+      { value: "call", label: "Call me" },
+      { value: "either", label: "Either" },
+    ],
+    false,
+    3,
   );
 
   const renderMoveOutEmpty = () => (
@@ -996,11 +1054,13 @@ export default function QuickQuoteForm({
     </div>
   ) : null);
 
-  const stepLabels = [paidServicePrefilled ? "Where and when" : stepNames[0], stepNames[1], stepNames[2]];
+  const stepLabels = quickPaid
+    ? ["Your home", "Where to reach you"]
+    : [paidServicePrefilled ? "Where and when" : stepNames[0], stepNames[1], stepNames[2]];
 
   const renderStepTitle = (index: number) => (
     <p ref={step === index ? stepTitleRef : undefined} tabIndex={-1} className="qf-step-title">
-      Step {index} of {STEP_COUNT} · <b>{stepLabels[index - 1]}</b>
+      Step {index} of {stepCount} · <b>{stepLabels[index - 1]}</b>
     </p>
   );
 
@@ -1041,6 +1101,11 @@ export default function QuickQuoteForm({
       </button>
       {showPaidDetails ? (
         <div className="qf-stack mt-4">
+          {quickPaid ? renderTimelineField(true) : null}
+          {quickPaid ? renderRequestedDate() : null}
+          {quickPaid ? renderSqftField(true) : null}
+          {quickPaid ? renderConditionField(true) : null}
+          {quickPaid && isMoveOutRequest ? renderMoveOutEmpty() : null}
           {renderExtendedDetails(true)}
           {renderCustomerNotes()}
         </div>
@@ -1048,7 +1113,47 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderSteps = () => (
+  const renderSteps = () => (quickPaid ? (
+    <>
+      <div className="qf-progress" data-steps="2" aria-hidden="true">
+        {stepLabels.map((name, index) => <span key={name} data-done={index < step} />)}
+      </div>
+
+      <div data-quote-step="1" hidden={step !== 1}>
+        {renderStepTitle(1)}
+        <div className="qf-stack">
+          {renderCityField()}
+          {!paidServicePrefilled ? renderServiceField() : <input type="hidden" name="service" value={formData.service} readOnly />}
+          {renderBedBathChips()}
+          {isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null}
+          {renderPaidDisclosure()}
+        </div>
+        <div className="qf-actions">
+          <button type="submit" className="qf-submit">Continue <ArrowIcon /></button>
+        </div>
+      </div>
+
+      <div data-quote-step="2" hidden={step !== 2}>
+        {renderStepTitle(2)}
+        <div className="qf-stack">
+          {renderNameAndPhone()}
+          {renderContactChips()}
+          {renderSmsConsent()}
+          {renderError()}
+        </div>
+        <div className="qf-actions">
+          <button type="button" className="qf-back" onClick={() => goToStep(1)}>Back</button>
+          <SubmitButton
+            isSubmitting={isSubmitting}
+            compact={compact}
+            commercial={false}
+            paidSearch
+          />
+        </div>
+      </div>
+      {renderFinePrint()}
+    </>
+  ) : (
     <>
       <div className="qf-progress" aria-hidden="true">
         {stepLabels.map((name, index) => <span key={name} data-done={index < step} />)}
@@ -1109,7 +1214,7 @@ export default function QuickQuoteForm({
       </div>
       {renderFinePrint()}
     </>
-  );
+  ));
 
   if (isSuccess) {
     return (

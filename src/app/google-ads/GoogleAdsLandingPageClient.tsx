@@ -313,7 +313,7 @@ function TrustLine({ commercial = false }: { commercial?: boolean }) {
 
 function ScopeNote({ scope }: { scope: NonNullable<PaidIntentConfig["scope"]> }) {
   return (
-    <dl className="mt-3 grid gap-2 text-sm leading-6">
+    <dl className="mt-3 hidden gap-2 text-sm leading-6 sm:grid">
       <div>
         <dt className="inline font-medium text-primary">Included: </dt>
         <dd className="inline text-ink-soft">{scope.included}</dd>

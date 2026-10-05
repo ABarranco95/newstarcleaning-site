@@ -7,7 +7,7 @@ import "./paid-reference.css";
 const directBookingUrl = resolveDirectBookingUrl();
 
 export const metadata: Metadata = {
-  title: "House Cleaning Pricing Request",
+  title: "Cleaning Quote Request",
   description:
     "Request pricing for move-out, deep, or recurring house cleaning in Fresno, Clovis, and Madera.",
   robots: {
