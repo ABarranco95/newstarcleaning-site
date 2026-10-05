@@ -87,6 +87,7 @@ export function buildPaidLeadForward(body: Record<string, unknown>): PaidLeadFor
     frequency: optionalText(body.frequency),
     condition: optionalText(body.condition),
     contactPreference: optionalText(body.contactPreference),
+    offer: optionalText(body.offer),
     preferredTime: optionalText(body.preferredTime),
     moveOutAddons,
     moveOutScopeConfirmed: body.moveOutScopeConfirmed === true,

@@ -138,6 +138,15 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
   },
 };
 
+// First-deep-clean incentive. Move-out already includes the inside of the oven
+// (SOP 02 / pricing engine serviceDefaultOn), so this only runs on Deep.
+// Off until NEXT_PUBLIC_PAID_OVEN_OFFER=on is set at build time.
+const PAID_OVEN_OFFER_ON = process.env.NEXT_PUBLIC_PAID_OVEN_OFFER === "on";
+const DEEP_OVEN_OFFER = {
+  code: "free_inside_oven_first_deep",
+  line: "Inside of the oven included free with your first deep clean.",
+};
+
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
@@ -671,6 +680,7 @@ export default function GoogleAdsLandingPageClient({
                   directBookingUrl={residentialBookingUrl}
                   extended
                   paidSearch
+                  offer={intentKey === "deep" && PAID_OVEN_OFFER_ON ? DEEP_OVEN_OFFER : null}
                 />
               )}
               {residentialBookingUrl ? (

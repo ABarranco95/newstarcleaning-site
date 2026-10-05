@@ -21,6 +21,8 @@ type QuickQuoteFormProps = {
   compact?: boolean;
   extended?: boolean;
   paidSearch?: boolean;
+  /** Paid-page incentive shown above the form and tagged on the lead. */
+  offer?: { code: string; line: string } | null;
 };
 
 type FormState = {
@@ -259,6 +261,7 @@ export default function QuickQuoteForm({
   compact = false,
   extended = false,
   paidSearch = false,
+  offer = null,
   directBookingUrl = null,
 }: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService, paidSearch));
@@ -464,6 +467,7 @@ export default function QuickQuoteForm({
           ...tracking,
           ...attribution,
           homeSize: formData.sqft,
+          ...(offer ? { offer: offer.code } : {}),
           source,
           sourceForm: source,
           submissionId: submissionIdRef.current,
@@ -1266,6 +1270,7 @@ export default function QuickQuoteForm({
       <div className="qf-head">
         <h2>{title}</h2>
         {subtitle ? <p>{subtitle}</p> : null}
+        {offer ? <p className="qf-offer">{offer.line}</p> : null}
       </div>
 
       <form
