@@ -434,6 +434,17 @@ export default function QuickQuoteForm({
         }
       }
     }
+    // The paid residential form submits from its first visible screen. A
+    // valid screen is step 1 complete even though there is no Continue click.
+    if (quickPaid) {
+      trackFunnelEvent("quote_step_complete", {
+        source,
+        service: formData.service,
+        city: formData.city,
+        page: window.location.pathname,
+        ctaLocation: "step_1",
+      });
+    }
     // Freeze the submitted customer values, not edits made during the request.
     const submittedSnapshot = acceptedPrefillSnapshot(formData, true, customerCityRef.current);
     trackFunnelEvent("quote_submit_attempt", {

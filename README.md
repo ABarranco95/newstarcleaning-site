@@ -58,6 +58,8 @@ The safe readiness endpoint returns booleans only. When GTM is configured, form 
 
 Paid click IDs and first-touch fields are stored in allowlisted browser storage for no more than 90 days, then forwarded to Apex only when a quote is submitted.
 
+Paid quote-form drop-off beacons require `NEXT_PUBLIC_APEX_CRM_BASE_URL` set to the public Apex origin at site build time. The site sends allowlisted anonymous events directly to `POST /api/public/funnel-events`; it never sends free-text city/ZIP or customer details. If the URL is missing or a beacon fails, the quote form still works. Apex must have the `paid_funnel_events` migration applied with operator approval before enabling this variable. Operators can read the last 30 UTC days at authenticated `GET /api/funnel-events` on Apex.
+
 ```text
 https://newstarcleaning.com/api/ad-readiness
 ```
