@@ -1,20 +1,20 @@
-import Link from "next/link";
 import Icon, { type IconName } from "@/components/Icon";
-import { googleRating } from "@/lib/googleRating";
+import { googleRating, homesServedLine } from "@/lib/googleRating";
 
-type TrustItem = { icon: IconName; title: string; body: string; href?: string };
+type TrustItem = { icon: IconName; title: string; body: string };
 
-// Every line here is a verified business fact: rating/count from the dated
-// Google read, the published room-by-room checklist, the Service Concerns
-// section of /terms, and local ownership/supplies from business data.
+// Verified facts only: Google rating (dated read), homes served since 2020
+// (Angel), flat pricing and the 24-hour return (/terms), supplies and the
+// room-by-room checklist (/checklist). No outbound links (Angel, 2026-10-06).
 const items: TrustItem[] = [
-  { icon: "shield", title: `${googleRating.score} on Google`, body: `${googleRating.reviewCount} reviews from local customers`, href: googleRating.sourceUrl },
-  { icon: "clipboard", title: "A written checklist", body: "You see exactly what gets cleaned", href: "/checklist" },
-  { icon: "check", title: "We make it right", body: "Tell us within 24 hours", href: "/terms" },
-  { icon: "home", title: "Locally owned", body: "Fresno based. We bring the supplies" },
+  { icon: "shield", title: `${googleRating.score} on Google`, body: `${homesServedLine} in Fresno, Clovis and Madera.` },
+  { icon: "clipboard", title: "One flat price, set before we book", body: "Based on your home and the clean you pick, not the hours we spend there." },
+  { icon: "check", title: "Missed a spot? We come back", body: "Tell us within 24 hours and we fix it at no charge." },
+  { icon: "home", title: "Nothing for you to prep", body: "We bring the supplies and work from a room-by-room checklist." },
 ];
 
-export default function TrustStrip({ className = "", links = true }: { className?: string; links?: boolean }) {
+// `links` is accepted for existing callers; the strip no longer links out.
+export default function TrustStrip({ className = "" }: { className?: string; links?: boolean }) {
   return (
     <section aria-label="Why homeowners choose New Star" className={`ns-trust ${className}`.trim()}>
       <ul className="ns-trust-list">
@@ -23,15 +23,7 @@ export default function TrustStrip({ className = "", links = true }: { className
             <span className="ns-trust-icon"><Icon name={item.icon} /></span>
             <span>
               <strong>{item.title}</strong>
-              <span>
-                {item.href && links ? (
-                  item.href.startsWith("http") ? (
-                    <a href={item.href} target="_blank" rel="noopener noreferrer">{item.body}</a>
-                  ) : (
-                    <Link href={item.href}>{item.body}</Link>
-                  )
-                ) : item.body}
-              </span>
+              <span>{item.body}</span>
             </span>
           </li>
         ))}

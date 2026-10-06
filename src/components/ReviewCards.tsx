@@ -1,15 +1,13 @@
 import { StarRow } from "@/components/Icon";
-import { googleRating } from "@/lib/googleRating";
 import { reviewsFor, type GoogleReview, type ReviewTopic } from "@/lib/googleReviews";
 
-// Verbatim Google review excerpts. Omitted text is marked with an ellipsis and
-// the full review is one click away on the live profile. Pass `reviews` for a
+// Verbatim Google review excerpts. Omitted text is marked with an ellipsis.
+// No link out to the profile (Angel, 2026-10-06). Pass `reviews` for a
 // fixed set, or a `topic` to lead with reviews about that service.
-export default function ReviewCards({ reviews, topic = "home", count = 3, showMoreLink = true }: {
+export default function ReviewCards({ reviews, topic = "home", count = 3 }: {
   reviews?: GoogleReview[];
   topic?: ReviewTopic;
   count?: number;
-  showMoreLink?: boolean;
 }) {
   const list = reviews ?? reviewsFor(topic, count);
   return (
@@ -35,11 +33,6 @@ export default function ReviewCards({ reviews, topic = "home", count = 3, showMo
           </figure>
         ))}
       </div>
-      {showMoreLink ? (
-        <a href={googleRating.sourceUrl} target="_blank" rel="noopener noreferrer" className="ns-reviews-more">
-          Read all {googleRating.reviewCount} reviews on Google <span aria-hidden="true">↗</span>
-        </a>
-      ) : null}
     </div>
   );
 }

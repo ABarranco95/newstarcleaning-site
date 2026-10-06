@@ -20,6 +20,9 @@
   .ns-rating-dark:hover .ns-rating-count { color: #fff; }
   .ns-rating-dark .ns-rating-date { color: #ffffffa6; }
   .ns-rating-lg .ns-stars svg { width: 22px; height: 22px; }
+  .ns-rating-g { width: 20px; height: 20px; flex-shrink: 0; }
+  .ns-rating-dark .ns-rating-g { background: #fff; border-radius: 999px; padding: 2px; width: 22px; height: 22px; }
+  .ns-rating-lg .ns-rating-g { width: 24px; height: 24px; }
   .ns-rating-lg .ns-rating-score { font-size: 22px; }
   .ns-rating-lg .ns-rating-count { font-size: 15px; }
 

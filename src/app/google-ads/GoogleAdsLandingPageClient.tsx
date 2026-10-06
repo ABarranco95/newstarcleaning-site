@@ -151,7 +151,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
     h1: (city) => `House cleaning in ${city}, one-time or recurring.`,
-    subhead: "Kitchen, bathrooms, dusting and floors, weekly, every other week, monthly or just once. Tell us about your home and we’ll send your price.",
+    subhead: "Kitchen, bathrooms, dusting and floors done room by room, once or on a schedule. Tell us about your home and you get one flat price before anything is booked.",
     serviceDefault: "Not sure yet",
     formTitle: "Get your cleaning quote",
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
@@ -169,7 +169,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   move: {
     eyebrow: "Move-in / move-out cleaning",
     h1: (city) => `Move-in and move-out cleaning for ${city} homes.`,
-    subhead: "We clean the empty home, including inside cabinets, drawers and closets. Tell us when it needs to be ready.",
+    subhead: "The empty home cleaned top to bottom, inside cabinets, drawers and closets included, so it’s ready for the walkthrough. Tell us your move date.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Get your move-in / move-out quote",
     scope: {
@@ -191,7 +191,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   deep: {
     eyebrow: "Detailed deep cleaning",
     h1: (city) => `Deep cleaning for ${city} homes.`,
-    subhead: "For the buildup and detail work a regular clean doesn’t cover. Tell us which rooms need the most attention.",
+    subhead: "Baseboards, fixtures, built-up grime and the detail work a regular clean skips. Tell us which rooms bother you most and we plan the time around them.",
     serviceDefault: "Deep cleaning",
     formTitle: "Get your deep-cleaning quote",
     scope: {
@@ -315,7 +315,7 @@ function TrustLine({ commercial = false }: { commercial?: boolean }) {
   return (
     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-ink-soft">
       <GoogleRating />
-      <span className="text-xs">{commercial ? "Locally owned · Written proposal before scheduling" : "Locally owned · Price before booking"}</span>
+      <span className="text-xs">{commercial ? "Locally owned · Written proposal before scheduling" : "Hundreds of local homes cleaned since 2020"}</span>
     </div>
   );
 }
@@ -426,8 +426,8 @@ const REVIEW_TOPIC: Record<PaidIntent, "home" | "standard" | "deep" | "move"> = 
 };
 
 const HOME_POINTS = [
-  "Price confirmed before anything is booked",
-  "We bring the supplies and equipment",
+  "One flat price for your home, confirmed before you book",
+  "We bring every supply and tool, nothing for you to buy or prep",
   "Missed something? Tell us within 24 hours and we’ll come back and fix it at no charge",
 ];
 

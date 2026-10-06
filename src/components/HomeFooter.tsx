@@ -14,7 +14,7 @@ const groups = [
   { label: "Home cleaning", links: [["Standard cleaning", "/services/standard-cleaning"], ["Deep cleaning", "/services/deep-cleaning"], ["Move-in / move-out", "/services/move-out-cleaning"], ["All services", "/services"], ["Service checklist", "/checklist"], ["Our work", "/our-work"]] },
   { label: "Businesses", links: [["Commercial cleaning", "/services/commercial-cleaning"], ["Post-construction", "/services/post-construction-cleaning"], ["Request a walkthrough", "/commercial-quote"]] },
   { label: "Local areas", links: [["Fresno", "/cleaning-services-fresno"], ["Clovis", "/cleaning-services-clovis"], ["Madera", "/cleaning-services-madera"], ["Tower District", "/cleaning-services-tower-district"], ["Fig Garden", "/cleaning-services-fig-garden"], ["Woodward Park", "/cleaning-services-woodward-park"], ["All service areas", "/service-areas"]] },
-  { label: "New Star", links: [["About", "/about"], ["Contact", "/contact"], ["Cleaning tips", "/blog"], ["Reviews on Google", business.googleMapsUrl]] },
+  { label: "New Star", links: [["About", "/about"], ["Contact", "/contact"], ["Cleaning tips", "/blog"]] },
 ] as const;
 
 export default function HomeFooter() {

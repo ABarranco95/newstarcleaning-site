@@ -136,7 +136,6 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           <p className="se-lead mt-4">{area.localContent}</p>
           <div className="site-links">
             <a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a>
-            <a href="https://www.google.com/maps?cid=12575787905603463321" target="_blank" rel="noopener noreferrer" className="home-text-link">Google profile <span aria-hidden="true">↗</span></a>
           </div>
           <div className="se-results mt-6">
             <figure>
