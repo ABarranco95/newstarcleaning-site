@@ -56,7 +56,7 @@ const steps = [
   },
   {
     title: "Afterwards",
-    note: "If something in the agreed scope was missed, tell us within 24 hours and we'll make it right. For repeat visits, ask about what the schedule allows.",
+    note: "If something in the agreed scope was missed, tell us within 24 hours and we'll come back and fix it at no charge.",
   },
 ];
 

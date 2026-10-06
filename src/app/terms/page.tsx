@@ -133,11 +133,10 @@ export default function TermsOfService() {
               5. Service Concerns
             </h2>
             <p className="text-ink-soft leading-relaxed">
-              If you believe something included in the agreed cleaning scope was
-              missed, contact us within 24 hours of the completed service. We will
-              review the concern and determine an appropriate make-it-right response,
-              which may include a return visit when reasonable. Requests for work
-              outside the confirmed scope are not included.
+              If something included in the agreed cleaning scope was missed,
+              contact us within 24 hours of the completed service and we will
+              come back and fix it at no charge. Requests for work outside the
+              confirmed scope are not included.
             </p>
           </section>
 

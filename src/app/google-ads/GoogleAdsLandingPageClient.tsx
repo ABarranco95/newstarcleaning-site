@@ -428,7 +428,7 @@ const REVIEW_TOPIC: Record<PaidIntent, "home" | "standard" | "deep" | "move"> = 
 const HOME_POINTS = [
   "Price confirmed before anything is booked",
   "We bring the supplies and equipment",
-  "Missed something? Tell us within 24 hours and we’ll make it right",
+  "Missed something? Tell us within 24 hours and we’ll come back and fix it at no charge",
 ];
 
 const BUSINESS_POINTS = [

@@ -19,7 +19,7 @@ const directBookingUrl = resolveDirectBookingUrl();
 const faqs = [
   { q: "How much does house cleaning cost?", a: "Your price depends on the home’s size, condition, how often we come, and any add-ons. We confirm the total before anything is booked." },
   { q: "Do you bring supplies?", a: "Yes. We bring supplies and equipment for the confirmed cleaning. Tell us about delicate surfaces or product sensitivities beforehand." },
-  { q: "What if something gets missed?", a: "Tell us within 24 hours of the cleaning. We review it with you and make it right, which can include a return visit for anything in the agreed scope." },
+  { q: "What if something gets missed?", a: "Tell us within 24 hours of the cleaning and we'll come back and fix anything in the agreed scope at no charge." },
   { q: "What should I put away?", a: "Clear loose belongings and dishes so surfaces are accessible. Laundry, dishes, bed making, organizing, packing, and unpacking are not included." },
   { q: "Are appliances and windows included?", a: "An empty, accessible microwave is included. Oven and refrigerator interiors, interior window glass, and reachable window tracks are optional. Exterior windows, screens, and ladder work are excluded." },
   { q: "What should I know about an empty-home clean?", a: "Empty cabinet, drawer, and closet interiors are included. Remove belongings before the visit. We do not haul trash, repair damage, or guarantee a deposit return." },
