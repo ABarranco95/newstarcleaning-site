@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     const phone = text(body.phone);
     const email = text(body.email);
 
-    if (text(body.company)) {
+    if (text(body.quoteWebsiteUrl)) {
       return NextResponse.json({ success: true, filtered: true });
     }
 

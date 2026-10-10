@@ -142,6 +142,8 @@ function baseForwardedHeaders(sourceHeaders?: Headers) {
   const userAgent = sourceHeaders?.get("user-agent");
 
   if (forwardedFor) headers["x-forwarded-for"] = forwardedFor;
+  const clientIp = forwardedFor?.split(",")[0].trim();
+  if (clientIp) headers["x-nsc-client-ip"] = clientIp;
   if (realIp) headers["x-real-ip"] = realIp;
   if (userAgent) headers["x-source-user-agent"] = userAgent;
 

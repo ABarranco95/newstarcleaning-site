@@ -9,6 +9,7 @@ export type FunnelEventName =
   | "quote_submit_attempt"
   | "quote_validation_error"
   | "lead_submit_accepted"
+  | "lead_submit_failed"
   | "booking_cta_click"
   | "booking_handoff_started"
   | "website_phone_click"
@@ -63,9 +64,14 @@ const paidServices = new Set([
 ]);
 const paidCities = new Set(["Fresno", "Clovis", "Madera", "Woodward Park", "Fig Garden", "Tower District", "Fresno-area"]);
 const paidIntents = new Set(["house", "move", "deep", "recurring", "postConstruction", "commercial"]);
+const paidFields = new Set([
+  "city", "bedrooms", "bathrooms", "name", "phone", "contactPreference", "smsOptIn",
+  "requestedDate", "server_validation", "rate_limited", "server_error", "network", "unknown",
+]);
 const paidFunnelEvents = new Set<FunnelEventName>([
   "paid_landing_view", "quote_cta_click", "quote_form_start", "quote_step_complete",
   "quote_details_open", "quote_submit_attempt", "quote_validation_error", "lead_submit_accepted",
+  "lead_submit_failed",
 ]);
 
 function paidSessionId(): string {
@@ -89,6 +95,9 @@ function sendPaidFunnelEvent(name: FunnelEventName, payload: FunnelEventPayload)
       city: payload.city && paidCities.has(payload.city) ? payload.city : undefined,
       intent: payload.intent && paidIntents.has(payload.intent) ? payload.intent : undefined,
       step: name === "quote_step_complete" && payload.ctaLocation === "step_1" ? 1 : undefined,
+      field: name === "quote_validation_error" || name === "lead_submit_failed"
+        ? payload.validationField && paidFields.has(payload.validationField) ? payload.validationField : "unknown"
+        : undefined,
       sessionId: paidSessionId(),
       occurredAt: new Date().toISOString(),
     });

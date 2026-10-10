@@ -47,7 +47,7 @@ type FormState = {
   moveOutAddons: string[];
   moveOutScopeConfirmed: boolean;
   organization: string;
-  company: string;
+  quoteWebsiteUrl: string;
 };
 
 type TextFormField = Exclude<keyof FormState, "moveOutAddons" | "moveOutScopeConfirmed">;
@@ -204,7 +204,7 @@ function initialForm(defaultCity?: string, defaultService?: string, paidSearch =
     moveOutAddons: [],
     moveOutScopeConfirmed: false,
     organization: "",
-    company: "",
+    quoteWebsiteUrl: "",
   };
 }
 
@@ -277,6 +277,7 @@ export default function QuickQuoteForm({
   const [acceptedSnapshot, setAcceptedSnapshot] = useState<BookingPrefillPayload | null>(null);
   const customerCityRef = useRef(false);
   const [error, setError] = useState("");
+  const [needsPaidFallback, setNeedsPaidFallback] = useState(false);
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
   const [step, setStep] = useState(1);
@@ -284,8 +285,8 @@ export default function QuickQuoteForm({
   const containerRef = useRef<HTMLDivElement>(null);
   const stepTitleRef = useRef<HTMLParagraphElement>(null);
   const stepMoved = useRef(false);
-  // One ID per submission attempt-session: reused on retry so Apex can
-  // replay-dedupe, regenerated only after an accepted submission.
+  // Keep the same identity on a deliberate resubmit. No automatic retry:
+  // the legacy /api/incoming destination does not dedupe by submissionId.
   const submissionIdRef = useRef("");
   // Every quote form (organic and paid) walks through three short steps.
 
@@ -460,6 +461,22 @@ export default function QuickQuoteForm({
     });
     setIsSubmitting(true);
     setError("");
+    setNeedsPaidFallback(false);
+    let deliveryFailed = false;
+    const trackPaidSubmitFailure = (validationField: string) => {
+      if (!paidSearch) return;
+      try {
+        trackFunnelEvent("lead_submit_failed", {
+          source,
+          service: formData.service,
+          city: formData.city,
+          page: window.location.pathname,
+          validationField,
+        });
+      } catch {
+        // Even a failing analytics tag must not change submit recovery.
+      }
+    };
 
     try {
       const deadlineError = specificDeadlineError(formData);
@@ -474,6 +491,7 @@ export default function QuickQuoteForm({
       });
       const endpoint = paidSearch ? "/api/google-ads-lead" : "/api/lead";
       if (!submissionIdRef.current) submissionIdRef.current = createSubmissionId();
+      deliveryFailed = true;
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -492,6 +510,9 @@ export default function QuickQuoteForm({
           smsConsent: buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source),
           consentText: QUOTE_SMS_DISCLOSURE,
         }),
+      }).catch((fetchError: unknown) => {
+        trackPaidSubmitFailure("network");
+        throw fetchError;
       });
 
       const data = (await response
@@ -499,6 +520,12 @@ export default function QuickQuoteForm({
         .catch(() => ({}))) as LeadResponse;
 
       if (!response.ok) {
+        trackPaidSubmitFailure(
+          response.status === 429 ? "rate_limited"
+            : response.status === 400 ? "server_validation"
+              : response.status >= 500 ? "server_error" : "unknown"
+        );
+        deliveryFailed = response.status === 429 || response.status >= 500;
         if (response.status === 400) {
           trackFunnelEvent("quote_validation_error", {
             source,
@@ -521,7 +548,7 @@ export default function QuickQuoteForm({
       const apexAccepted = data.filtered !== true && data.metadata?.apex?.success === true;
 
       if (paidSearch && !apexAccepted) {
-        throw new Error("We couldn't send your request — call or text us and we'll price it over the phone.");
+        throw new Error("We couldn't confirm receipt of your request.");
       }
       if (!paidSearch && data.filtered !== true && !apexAccepted) {
         throw new Error("We couldn't confirm your request. Please retry or call us.");
@@ -549,8 +576,11 @@ export default function QuickQuoteForm({
       customerCityRef.current = false;
       setSmsOptIn(false);
     } catch (submitError) {
+      setNeedsPaidFallback(paidSearch && deliveryFailed);
       setError(
-        submitError instanceof Error
+        paidSearch && deliveryFailed
+          ? "We couldn't send your request. Your details are still here, so you can try again, or call or text us for your price."
+          : submitError instanceof Error
           ? submitError.message
           : "Something went wrong. Please call us directly and we will help right away."
       );
@@ -985,11 +1015,19 @@ export default function QuickQuoteForm({
 
   const renderError = () => (error ? (
     <div role="alert" className="qf-error">
-      {error}
-      {" "}
-      <a href={BUSINESS.phoneHref}>
-        Call {BUSINESS.phoneDisplay}
-      </a>
+      <p>{error}</p>
+      {needsPaidFallback ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a href={"tel:+1" + "559" + "785" + "2822"} className="qf-error-action min-h-11" data-phone-location="paid_quote_error">
+            Call {BUSINESS.phoneDisplay}
+          </a>
+          <a href={"sms:+1" + "559" + "785" + "2822"} className="qf-error-action min-h-11">
+            Text us
+          </a>
+        </div>
+      ) : (
+        <a href={BUSINESS.phoneHref}>Call {BUSINESS.phoneDisplay}</a>
+      )}
     </div>
   ) : null);
 
@@ -997,7 +1035,9 @@ export default function QuickQuoteForm({
     <p className="qf-fine">
       <LockIcon />
       <span>
-        No payment, and nothing is booked until you confirm.{" "}
+        {paidSearch
+          ? "We'll text or call you with your price. No payment, nothing booked until you confirm."
+          : "No payment, and nothing is booked until you confirm."}{" "}
         <Link href="/privacy" target="_blank" rel="noopener">Privacy</Link>
       </span>
     </p>
@@ -1147,6 +1187,7 @@ export default function QuickQuoteForm({
           {renderPaidDisclosure()}
           {renderError()}
         </div>
+        {renderFinePrint()}
         <div className="qf-actions">
           <SubmitButton
             isSubmitting={isSubmitting}
@@ -1158,7 +1199,6 @@ export default function QuickQuoteForm({
         {submitAlternative}
         <p className="qf-help">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p>
       </div>
-      {renderFinePrint()}
       {decisionProof}
     </>
   ) : (
@@ -1210,6 +1250,7 @@ export default function QuickQuoteForm({
           {renderSmsConsent()}
           {renderError()}
         </div>
+        {paidSearch ? renderFinePrint() : null}
         <div className="qf-actions">
           <button type="button" className="qf-back" onClick={() => goToStep(2)}>Back</button>
           <SubmitButton
@@ -1220,7 +1261,7 @@ export default function QuickQuoteForm({
           />
         </div>
       </div>
-      {renderFinePrint()}
+      {!paidSearch ? renderFinePrint() : null}
     </>
   ));
 
@@ -1299,14 +1340,14 @@ export default function QuickQuoteForm({
         className={paidSearch ? compactPaid ? "mt-3" : "mt-4" : ""}
       >
         <div className="hidden" aria-hidden="true">
-          <label htmlFor="quote-company">Company</label>
+          <label htmlFor="quote-website-url">Leave this blank</label>
           <input
-            id="quote-company"
-            name="company"
+            id="quote-website-url"
+            name="quoteWebsiteUrl"
             tabIndex={-1}
             autoComplete="off"
-            value={formData.company}
-            onChange={(event) => updateField("company", event.target.value)}
+            value={formData.quoteWebsiteUrl}
+            onChange={(event) => updateField("quoteWebsiteUrl", event.target.value)}
           />
         </div>
 

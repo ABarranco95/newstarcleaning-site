@@ -18,7 +18,7 @@ function includes(path, expected, message) {
 includes("src/app/api/lead/route.ts", "APEX_LEAD_INTAKE_SECRET", "organic lead proxy must use Apex shared-secret env");
 includes("src/app/api/lead/route.ts", "headers.Authorization", "organic lead proxy must send bearer authorization when configured");
 includes("src/app/api/lead/route.ts", "websiteApiVersion", "organic lead proxy must stamp payload version");
-includes("src/app/api/lead/route.ts", "text(body.company)", "organic lead proxy must include a honeypot guard");
+includes("src/app/api/lead/route.ts", "text(body.quoteWebsiteUrl)", "organic lead proxy must include the renamed honeypot guard");
 includes("src/lib/apexCrm.ts", "APEX_LEAD_URL", "shared Apex helper must use public lead URL");
 includes("src/lib/apexCrm.ts", "headers.Authorization", "shared Apex helper must send bearer authorization when configured");
 assert(!read("src/lib/apexCrm.ts").includes("GHL"), "retired GHL lead routing must not remain executable");
@@ -27,7 +27,7 @@ includes("src/components/QuickQuoteForm.tsx", "bookingIntent", "quote form must 
 includes("src/components/QuickQuoteForm.tsx", "contactPreference", "quote form must capture contact preference");
 includes("src/components/QuickQuoteForm.tsx", "smsConsent", "quote form must preserve SMS consent context");
 includes("src/components/QuickQuoteForm.tsx", "homeSize: formData.sqft", "quote form must forward home-size signal to Apex");
-includes("src/components/QuickQuoteForm.tsx", "quote-company", "quote form must include honeypot field");
+includes("src/components/QuickQuoteForm.tsx", "quote-website-url", "quote form must include the renamed honeypot field");
 includes("src/components/ContactForm.tsx", "QuickQuoteForm", "legacy contact form component must delegate to the shared quote form");
 includes("src/components/QuickQuoteForm.tsx", "gclid", "shared quote form must capture gclid for paid traffic");
 includes("src/components/QuickQuoteForm.tsx", "gbraid", "shared quote form must capture gbraid for paid traffic");

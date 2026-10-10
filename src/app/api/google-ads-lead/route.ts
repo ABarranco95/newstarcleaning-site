@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as Record<string, unknown>;
     const { name, phone, city } = normalizePaidLeadSubmission(body);
 
-    if (normalizeOptionalString(body.company)) {
+    if (normalizeOptionalString(body.quoteWebsiteUrl)) {
       return NextResponse.json({ success: true, filtered: true });
     }
 

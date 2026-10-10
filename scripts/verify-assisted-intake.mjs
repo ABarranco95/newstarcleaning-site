@@ -5,7 +5,7 @@ import { strict as assert } from "node:assert";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import ts from "typescript";
 
 const site = process.cwd();
@@ -37,7 +37,7 @@ function loadTs(root, relative, { globals = {}, modules = {}, cache = new Map(),
     fetch: unexpected("network"),
     require(name) {
       if (Object.hasOwn(modules, name)) return modules[name];
-      if (name === "node:crypto") return { randomUUID };
+      if (name === "node:crypto") return { createHash, randomUUID };
       if (name.startsWith("@/lib/")) {
         const relativeLib = root === apex ? `${name.slice(2)}.ts` : `src/${name.slice(2)}.ts`;
         return loadTs(root, relativeLib, { globals, modules, cache });
@@ -81,12 +81,14 @@ const workspace = loadTs(apex, "lib/lead-workspace.ts", {
 });
 
 const forwarded = [];
+const forwardedHeaders = [];
 let upstream = { status: 201, body: { success: true, contactId: "synthetic-contact" } };
 const serverGlobals = {
   fetch: async (url, init) => {
     assert.equal(url, "https://intake.example.invalid/api/public/lead");
     assert.equal(init.redirect, "error");
     forwarded.push(JSON.parse(init.body));
+    forwardedHeaders.push(new Headers(init.headers));
     return { status: upstream.status, ok: upstream.status >= 200 && upstream.status < 300, json: async () => upstream.body };
   },
 };
@@ -95,7 +97,10 @@ const serverModules = {
 };
 const organic = loadTs(site, "src/app/api/lead/route.ts", { globals: serverGlobals, modules: serverModules });
 const paid = loadTs(site, "src/app/api/google-ads-lead/route.ts", { globals: serverGlobals, modules: serverModules });
-const request = (body) => ({ json: async () => body, headers: new Headers() });
+const request = (body) => ({ json: async () => body, headers: new Headers({
+  "x-forwarded-for": "198.51.100.4, 198.51.100.5",
+  "x-nsc-client-ip": "203.0.113.99",
+}) });
 const sentinel = {
   name: "Intake Fixture", phone: "559-555-0142", email: "fixture@example.invalid", city: "Fresno 93711",
   service: "Move-in / move-out cleaning", timeline: "specific-deadline", requestedDate: "2026-09-20",
@@ -156,6 +161,7 @@ for (const route of [organic, paid]) {
     const response = await route.POST(request({ ...sentinel, contactPreference }));
     assert.equal(response.status, 201);
     assert.equal(response.body.metadata.apex.success, true);
+    if (route === paid) assert.equal(forwardedHeaders.at(-1).get("x-nsc-client-ip"), "198.51.100.4", "paid proxy forwards the first visitor XFF, not a supplied custom header");
     await assertProjection(forwarded.at(-1));
   }
   for (const requestedDate of invalidDates) {
@@ -172,7 +178,8 @@ for (const route of [organic, paid]) {
     [{ requestedDate: "2026-02-30", date: "2026-09-20" }, 400],
     [{ phone: "12" }, 400],
     [{ email: "invalid" }, 400],
-    [{ company: "bot" }, 200],
+    [{ quoteWebsiteUrl: "bot" }, 200],
+    [{ company: "autofilled organization" }, 201],
   ]) {
     const before = forwarded.length;
     const response = await route.POST(request({ ...sentinel, ...overrides }));
@@ -234,7 +241,7 @@ function mountForm(props = {}) {
       },
       document: { referrer: "https://www.google.com/" },
       crypto: { randomUUID },
-      fetch: async (url, init) => { submissions.push({ url, body: JSON.parse(init.body) }); return { ...reply, json: async () => reply.body }; },
+      fetch: async (url, init) => { submissions.push({ url, body: JSON.parse(init.body) }); if (reply.networkError) throw new Error("synthetic network failure"); return { ...reply, json: async () => reply.body }; },
     },
     modules: {
       react: hooks,
@@ -274,8 +281,17 @@ function mountForm(props = {}) {
     walk(tree); return output;
   }
   const fields = (name) => nodes().filter((node) => ["input", "select", "textarea"].includes(node.type) && node.props.name === name);
-  function field(name) { const matches = fields(name); assert.equal(matches.length, 1, `exactly one ${name}`); return matches[0]; }
-  function change(name, value) { field(name).props.onChange({ target: { value, checked: value } }); render(); }
+  function field(name) {
+    const matches = fields(name);
+    assert(matches.length > 0, `${name} exists`);
+    if (matches.length > 1) assert(matches.every((node) => node.props.type === "radio"), `multiple ${name} controls must form a radio group`);
+    return matches.find((node) => node.props.checked) || matches[0];
+  }
+  function change(name, value) {
+    const matches = fields(name);
+    const control = matches.find((node) => node.props.type === "radio" && node.props.value === value) || field(name);
+    control.props.onChange({ target: { value, checked: value } }); render();
+  }
   function openDetails() {
     const button = nodes().find((node) => node.type === "button" && node.props["aria-expanded"] === false);
     assert(button, "paid optional details button exists"); button.props.onClick(); render();
@@ -289,6 +305,9 @@ for (const props of [
   { paidSearch: true, extended: true }, { paidSearch: true, compact: true, extended: true }, { paidSearch: true },
 ]) {
   const form = mountForm({ ...props, defaultService: "Deep cleaning", defaultCity: "Fresno" });
+  // Paid residential now keeps timing/size/condition in its disclosure and
+  // renders bed/bath/contact radio groups unless compact selects are used.
+  if (props.paidSearch) form.openDetails();
   form.change("name", "Intake Fixture");
   form.change("phone", "559-555-0142");
   form.change("city", "Fresno 93711");
@@ -296,9 +315,9 @@ for (const props of [
   form.change("bedrooms", "3");
   form.change("bathrooms", "2.5");
   form.change("condition", "some-buildup-needs-detail");
-  assert.equal(form.field("contactPreference").type, "select");
+  assert.equal(form.field("contactPreference").type, props.paidSearch ? "input" : "select");
   assert.equal(form.fields("requestedDate").length, 0);
-  if (props.paidSearch && props.extended) form.openDetails();
+
   assert.equal(form.field("message").type, "textarea");
   form.change("message", sentinel.message);
   form.change("contactPreference", "text");
@@ -408,5 +427,33 @@ assert(moveText.includes("empty cabinet, drawer, and closet interiors"));
 for (const form of [move, commercial, emailForm]) {
   const ids = form.nodes().map((node) => node.props.id).filter(Boolean);
   assert.equal(new Set(ids).size, ids.length, "no duplicate field IDs within a form");
+}
+const failedPaid = mountForm({ paidSearch: true, compact: true, extended: true, defaultService: "Deep cleaning" });
+failedPaid.change("name", "Intake Fixture");
+failedPaid.change("phone", "559-555-0142");
+failedPaid.change("city", "Fresno 93711");
+failedPaid.change("bedrooms", "3");
+failedPaid.change("bathrooms", "2.5");
+failedPaid.change("contactPreference", "either");
+failedPaid.change("smsOptIn", true);
+failedPaid.openDetails();
+failedPaid.change("message", sentinel.message);
+for (const reply of [
+  { ok: false, status: 429, body: {} },
+  { ok: false, status: 503, body: {} },
+  { networkError: true },
+]) {
+  failedPaid.setReply(reply);
+  const before = failedPaid.submissions.length;
+  await failedPaid.submit();
+  assert.equal(failedPaid.submissions.length, before + 1, "no unsafe automatic retry to legacy intake");
+  for (const [name, value] of [["name", "Intake Fixture"], ["phone", "559-555-0142"], ["city", "Fresno 93711"], ["bedrooms", "3"], ["bathrooms", "2.5"], ["message", sentinel.message]]) {
+    assert.equal(failedPaid.field(name).props.value, value, `${name} survives failure`);
+  }
+  assert.equal(failedPaid.field("smsOptIn").props.checked, true);
+  assert.equal(failedPaid.field("contactPreference").props.value, "either");
+  assert(failedPaid.nodes().some(node => node.type === "p" && node.props.children === "We couldn't send your request. Your details are still here, so you can try again, or call or text us for your price."));
+  for (const href of ["tel:+15597852822", "sms:+15597852822"]) assert(failedPaid.nodes().some(node => node.type === "a" && node.props.href === href && node.props.className.includes("min-h-11")));
+  assert.equal(failedPaid.conversions.length, 0);
 }
 console.log("Assisted intake verifier passed: actual form handlers, organic/paid routes, Pacific deadline validation, canonical Apex normalization + persistence/projection with in-memory DB adapter, consent/attribution/retry/conversion fences. No network or live writes.");

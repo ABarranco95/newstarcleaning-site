@@ -316,9 +316,9 @@ function PaidBrand() {
   );
 }
 
-function TrustLine({ commercial = false }: { commercial?: boolean }) {
+function TrustLine({ commercial = false, onDark = false }: { commercial?: boolean; onDark?: boolean }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-ink-soft">
+    <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${onDark ? "text-white/85" : "text-ink-soft"}`}>
       <GoogleRating />
       <span className="text-xs">{commercial ? "Locally owned · Written proposal before scheduling" : "Hundreds of local homes cleaned since 2020"}</span>
     </div>
@@ -587,6 +587,7 @@ export default function GoogleAdsLandingPageClient({
   const isProjectRequest = intentKey === "postConstruction";
   const isCommercialRequest = intentKey === "commercial";
   const isBusinessRequest = isProjectRequest || isCommercialRequest;
+  const compactResidentialHero = intentKey === "deep" || intentKey === "move" || intentKey === "house";
   const residentialBookingUrl = isBusinessRequest ? null : directBookingUrl;
   const requestedFrequency = searchParams.get("frequency")?.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
   const bookingFrequency = intentKey === "recurring" && (requestedFrequency === "weekly" || requestedFrequency === "biweekly" || requestedFrequency === "monthly") ? requestedFrequency : undefined;
@@ -637,7 +638,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </header>
 
-      <section className="paid-hero-dark" aria-labelledby="paid-title">
+      <section className="paid-hero-dark" data-compact-hero={compactResidentialHero || undefined} aria-labelledby="paid-title">
         <div className="home-wrap py-5 sm:py-8 lg:py-10">
           <div className="paid-hero-grid">
             <div className="paid-hero-story">
@@ -646,7 +647,7 @@ export default function GoogleAdsLandingPageClient({
               <h1 id="paid-title" className="mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]">
                 {intent.h1(city.label)}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
+              <p className={compactResidentialHero ? "mt-3 hidden max-w-xl text-sm leading-6 text-ink-soft sm:block sm:text-base" : "mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base"}>
                 {intent.subhead}
               </p>
               {intent.scope ? <ScopeNote scope={intent.scope} /> : null}
@@ -655,7 +656,7 @@ export default function GoogleAdsLandingPageClient({
                   <li key={point}><Icon name="check" />{point}</li>
                 ))}
               </ul>
-              <div className="mt-3">
+              <div className={compactResidentialHero ? "mt-3 hidden sm:block" : "mt-3"}>
                 <TrustLine commercial={isBusinessRequest} />
               </div>
             </div>
@@ -731,6 +732,12 @@ export default function GoogleAdsLandingPageClient({
                 </p>
               ) : null}
             </div>
+
+            {compactResidentialHero ? (
+              <div className="paid-mobile-trust sm:hidden">
+                <TrustLine onDark />
+              </div>
+            ) : null}
 
           </div>
         </div>
