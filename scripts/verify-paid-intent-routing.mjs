@@ -28,8 +28,8 @@ assert(
     !paidPage.includes("without the guesswork"),
   "generic house headline covers one-time and recurring shoppers",
 );
-// Angel 2026-10-04: no prices on paid pages; the price comes in the quote.
-assert(!/\$\d/.test(paidPage) && !paidPage.includes("priceContext"), "paid page shows no dollar amounts or price anchors");
+// Approved L1 price anchors replace the earlier no-price policy. Check the
+// exact scoped copy on the rendered form, not merely the presence of a price.
 for (const rejectedPhrase of ["normal-condition", "1/1", "without the guesswork"]) {
   assert(!houseBlock.toLowerCase().includes(rejectedPhrase), `generic house copy rejects operator jargon: ${rejectedPhrase}`);
 }
@@ -77,6 +77,10 @@ const photosModule = { exports: {} };
 vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/realWorkPhotos.ts"), "utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
 }).outputText, { exports: photosModule.exports, module: photosModule });
+const reviewsModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/googleReviews.ts"), "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+}).outputText, { exports: reviewsModule.exports, module: reviewsModule });
 let params = new URLSearchParams();
 const boundary = (name) => (props) => jsx.jsx("test-boundary", { ...props, "data-boundary": name });
 const compiled = ts.transpileModule(`${paidPage}\nexports.routingTest = { detectIntent, INTENT_CONFIG };`, {
@@ -88,6 +92,7 @@ const runtimeModule = { exports: {} };
 vm.runInNewContext(compiled.outputText, {
   exports: runtimeModule.exports,
   module: runtimeModule,
+  process: { env: {} },
   require: (name) => {
     if (name === "react/jsx-runtime") return jsx;
     if (name === "react") return {
@@ -101,6 +106,7 @@ vm.runInNewContext(compiled.outputText, {
     if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => {} };
     if (name === "@/lib/conversionTracking") return { trackFunnelEvent: () => {} };
     if (name === "@/lib/realWorkPhotos") return photosModule.exports;
+    if (name === "@/lib/googleReviews") return reviewsModule.exports;
     throw new Error(`Unexpected paid dependency: ${name}`);
   },
 });
@@ -121,6 +127,27 @@ const render = (service, frequency = "", directBookingUrl = "https://booking.exa
   return { nodes, text: text.join(" "), forms: nodes.filter((node) => /QuoteForm$/.test(node.props?.["data-boundary"] || "")) };
 };
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
+const expectedPriceLines = {
+  deep: "Deep cleaning starts at $235. Your price depends on home size, buildup and extras. We confirm the total before you book.",
+  move: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
+  house: "House cleaning starts at $165. Your price depends on home size and condition. We confirm the total before you book.",
+};
+const expectedDecisionReviews = { deep: "daniel", move: "daviana-j", house: "merle-f" };
+for (const intent of Object.keys(INTENT_CONFIG)) {
+  assert(INTENT_CONFIG[intent].priceLine === expectedPriceLines[intent], `${intent}: only approved service-specific starting-price copy`);
+}
+for (const [intent, priceLine] of Object.entries(expectedPriceLines)) {
+  const form = render(intent).forms[0];
+  assert(form.props.subtitle === priceLine && form.props.compact === true, `${intent}: approved price replaces the subtitle on the compact one-step form`);
+  const call = form.props.submitAlternative;
+  assert(call?.type === "a" && call.props.href === "tel:+1" + "559" + "785" + "2822" && call.props["data-phone-location"] === "paid_quote_submit" && !call.props.onClick, `${intent}: secondary call uses the customer number and existing delegated tel tracker without a duplicate click handler`);
+  const proof = form.props.decisionProof;
+  const reviewId = expectedDecisionReviews[intent];
+  const existingReview = reviewsModule.exports.reviewsFor(intent === "house" ? "home" : intent).find((review) => review.id === reviewId);
+  assert(proof?.type === "figure" && proof.props["data-review-id"] === reviewId && existingReview?.excerpt.every((part) => existingReview.text.includes(part)), `${intent}: decision proof comes from a verbatim review already on this variant`);
+  const remaining = render(intent).nodes.find((node) => node.props?.["data-boundary"] === "ReviewCards")?.props.reviews;
+  assert(remaining?.length === 2 && remaining.every((review) => review.id !== reviewId), `${intent}: the moved review is not duplicated in the lower review strip`);
+}
 for (const alias of commercialAliases) {
   for (const frequency of ["", "recurring", "weekly", "biweekly", "bi-weekly", "monthly"]) {
     const result = render(alias, frequency);

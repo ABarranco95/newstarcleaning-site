@@ -12,6 +12,7 @@ import ReviewCards from "@/components/ReviewCards";
 import Icon from "@/components/Icon";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
+import { reviewsFor } from "@/lib/googleReviews";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
 
 const PAID_HERO_PHOTOS = {
@@ -47,6 +48,7 @@ type PaidIntentConfig = {
   subhead: string;
   serviceDefault: string;
   formTitle: string;
+  priceLine?: string;
   /** Included scope and optional add-ons, from the service scope contracts. */
   scope?: {
     included: string;
@@ -154,6 +156,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "Kitchen, bathrooms, dusting and floors done room by room, once or on a schedule. Tell us about your home and you get one flat price before anything is booked.",
     serviceDefault: "Not sure yet",
     formTitle: "Get your cleaning quote",
+    priceLine: "House cleaning starts at $165. Your price depends on home size and condition. We confirm the total before you book.",
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
@@ -172,6 +175,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "The empty home cleaned top to bottom, inside cabinets, drawers and closets included, so it’s ready for the walkthrough. Tell us your move date.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Get your move-in / move-out quote",
+    priceLine: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
     scope: {
       included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
       addOns: "Inside the oven and refrigerator, interior window glass, and reachable window tracks.",
@@ -194,6 +198,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "Baseboards, fixtures, built-up grime and the detail work a regular clean skips. Tell us which rooms bother you most and we plan the time around them.",
     serviceDefault: "Deep cleaning",
     formTitle: "Get your deep-cleaning quote",
+    priceLine: "Deep cleaning starts at $235. Your price depends on home size, buildup and extras. We confirm the total before you book.",
     scope: {
       included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
       addOns: "Inside the oven and fridge, cabinet interiors, and interior windows.",
@@ -425,6 +430,12 @@ const REVIEW_TOPIC: Record<PaidIntent, "home" | "standard" | "deep" | "move"> = 
   commercial: "home",
 };
 
+const DECISION_REVIEW_ID: Partial<Record<PaidIntent, string>> = {
+  deep: "daniel",
+  move: "daviana-j",
+  house: "merle-f",
+};
+
 const HOME_POINTS = [
   "One flat price for your home, confirmed before you book",
   "We bring every supply and tool, nothing for you to buy or prep",
@@ -439,7 +450,7 @@ const BUSINESS_POINTS = [
 
 // Verbatim Google reviews (src/lib/googleReviews.ts), led by the ones about
 // the service this ad promised.
-function ReviewStrip({ intent }: { intent: PaidIntent }) {
+function ReviewStrip({ intent, excludeReviewId }: { intent: PaidIntent; excludeReviewId?: string }) {
   return (
     <section className="border-b border-line bg-surface" aria-labelledby="paid-reviews-title">
       <div className="site-section">
@@ -448,7 +459,7 @@ function ReviewStrip({ intent }: { intent: PaidIntent }) {
           <GoogleRating prominent />
         </div>
         <div className="mt-8">
-          <ReviewCards topic={REVIEW_TOPIC[intent]} />
+          <ReviewCards reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} />
         </div>
       </div>
     </section>
@@ -572,6 +583,7 @@ export default function GoogleAdsLandingPageClient({
     [searchParams]
   );
   const intent = INTENT_CONFIG[intentKey];
+  const decisionReview = reviewsFor(REVIEW_TOPIC[intentKey]).find((review) => review.id === DECISION_REVIEW_ID[intentKey]);
   const isProjectRequest = intentKey === "postConstruction";
   const isCommercialRequest = intentKey === "commercial";
   const isBusinessRequest = isProjectRequest || isCommercialRequest;
@@ -674,12 +686,32 @@ export default function GoogleAdsLandingPageClient({
                 <QuickQuoteForm
                   source="google-ads"
                   title={intent.formTitle}
-                  subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : "We’ll follow up with your price and available dates."}
+                  subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : intent.priceLine || "We’ll follow up with your price and available dates."}
                   landingCity={city.formValue || city.label}
                   defaultService={intent.serviceDefault}
                   directBookingUrl={residentialBookingUrl}
                   extended
                   paidSearch
+                  compact={Boolean(intent.priceLine)}
+                  submitAlternative={intent.priceLine ? (
+                    <a
+                      href={"tel:+1" + "559" + "785" + "2822"}
+                      data-phone-location="paid_quote_submit"
+                      className="mt-1 flex min-h-11 items-center justify-center text-center text-sm text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    >
+                      Prefer to talk? Call (559) 785-2822
+                    </a>
+                  ) : null}
+                  decisionProof={decisionReview ? (
+                    <figure className="mt-3 border-t border-line pt-3" data-review-id={decisionReview.id}>
+                      <blockquote className="text-sm leading-5 text-ink">
+                        <p>&ldquo;{decisionReview.excerpt.join(" … ")}&rdquo;</p>
+                      </blockquote>
+                      <figcaption className="mt-2 text-xs leading-5 text-ink-soft">
+                        Google review · {decisionReview.author} · {decisionReview.label}
+                      </figcaption>
+                    </figure>
+                  ) : null}
                   offer={intentKey === "deep" && PAID_OVEN_OFFER_ON ? DEEP_OVEN_OFFER : null}
                 />
               )}
@@ -705,7 +737,7 @@ export default function GoogleAdsLandingPageClient({
       </section>
 
       {!isBusinessRequest ? <TrustStrip links={false} /> : null}
-      <ReviewStrip intent={intentKey} />
+      <ReviewStrip intent={intentKey} excludeReviewId={decisionReview?.id} />
       {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
       <ProcessStrip commercial={isBusinessRequest} />
 

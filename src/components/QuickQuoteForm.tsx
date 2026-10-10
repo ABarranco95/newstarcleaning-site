@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
 import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
@@ -21,6 +21,8 @@ type QuickQuoteFormProps = {
   compact?: boolean;
   extended?: boolean;
   paidSearch?: boolean;
+  submitAlternative?: ReactNode;
+  decisionProof?: ReactNode;
   /** Paid-page incentive shown above the form and tagged on the lead. */
   offer?: { code: string; line: string } | null;
 };
@@ -261,6 +263,8 @@ export default function QuickQuoteForm({
   compact = false,
   extended = false,
   paidSearch = false,
+  submitAlternative,
+  decisionProof,
   offer = null,
   directBookingUrl = null,
 }: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
@@ -396,6 +400,7 @@ export default function QuickQuoteForm({
   // to reach them. Timing, size and condition are optional; Angel or Stella
   // collects anything missing over text or call.
   const quickPaid = paidSearch && !isCommercialRequest;
+  const compactPaid = quickPaid && compact;
   const stepCount = quickPaid ? 1 : STEP_COUNT;
 
   const goToStep = (target: number) => {
@@ -707,7 +712,7 @@ export default function QuickQuoteForm({
   ) : null);
 
   const renderBedBathFields = () => (
-    <div className="qf-row qf-row-2">
+    <div className={compactPaid ? "qf-row grid-cols-2" : "qf-row qf-row-2"}>
       <div>
         <FieldLabel htmlFor="quote-bedrooms" required>
           Bedrooms
@@ -1134,7 +1139,7 @@ export default function QuickQuoteForm({
         <div className="qf-stack">
           {renderCityField()}
           {!paidServicePrefilled ? renderServiceField() : <input type="hidden" name="service" value={formData.service} readOnly />}
-          {renderBedBathChips()}
+          {compactPaid ? renderBedBathFields() : renderBedBathChips()}
           {isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null}
           {renderNameAndPhone()}
           {renderContactChips()}
@@ -1150,9 +1155,11 @@ export default function QuickQuoteForm({
             paidSearch
           />
         </div>
+        {submitAlternative}
         <p className="qf-help">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p>
       </div>
       {renderFinePrint()}
+      {decisionProof}
     </>
   ) : (
     <>
@@ -1262,7 +1269,7 @@ export default function QuickQuoteForm({
       ref={containerRef}
       data-paid-search={paidSearch || undefined}
       data-quote-layout="stepped"
-      className="qf"
+      className={compactPaid ? "qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3" : "qf"}
     >
       <div className="qf-head">
         <h2>{title}</h2>
@@ -1289,7 +1296,7 @@ export default function QuickQuoteForm({
             validationField: field || "unknown",
           });
         }}
-        className={paidSearch ? "mt-4" : ""}
+        className={paidSearch ? compactPaid ? "mt-3" : "mt-4" : ""}
       >
         <div className="hidden" aria-hidden="true">
           <label htmlFor="quote-company">Company</label>
