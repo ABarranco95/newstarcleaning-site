@@ -980,7 +980,7 @@ export default function QuickQuoteForm({
           name="phone"
           type="tel"
           required
-          pattern={stickyPaid ? "[0-9\\(\\)+\\-\\s.]{10,}" : "[0-9()+\\-\\s.]{10,}"}
+          pattern={"[0-9\\(\\)+\\-\\s.]{10,}"}
           title="Enter a 10-digit phone number"
           value={formData.phone}
           onChange={(event) => updateField("phone", event.target.value)}
