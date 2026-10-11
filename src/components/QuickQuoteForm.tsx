@@ -24,7 +24,7 @@ type QuickQuoteFormProps = {
   submitAlternative?: ReactNode;
   decisionProof?: ReactNode;
   /** Paid recurring incentive; the office applies it when quoting. */
-  recurringOffer?: { line: string; conditions: string; messageNote: string } | null;
+  recurringOffer?: { line: string; conditions: string; messageNote: string; cta?: string } | null;
   /** Paid-page incentive shown above the form and tagged on the lead. */
   offer?: { code: string; line: string } | null;
 };
@@ -233,17 +233,21 @@ function SubmitButton({
   compact,
   commercial,
   paidSearch,
+  label,
 }: {
   isSubmitting: boolean;
   compact: boolean;
   commercial: boolean;
   paidSearch: boolean;
+  label?: string;
 }) {
   return (
     <button type="submit" disabled={isSubmitting} className="qf-submit">
       {isSubmitting
         ? "Sending…"
-        : commercial
+        : label
+          ? label
+          : commercial
           ? "Request a walkthrough"
           : paidSearch
             ? "Request my quote"
@@ -1043,7 +1047,7 @@ export default function QuickQuoteForm({
       <LockIcon />
       <span>
         {paidSearch
-          ? "We'll text or call you with your price. No payment, nothing booked until you confirm."
+          ? `${paidRecurringOffer ? "Takes under a minute. " : ""}We'll text or call you with your price. No payment, nothing booked until you confirm.`
           : "No payment, and nothing is booked until you confirm."}{" "}
         <Link href="/privacy" target="_blank" rel="noopener">Privacy</Link>
       </span>
@@ -1201,6 +1205,7 @@ export default function QuickQuoteForm({
             compact={compact}
             commercial={false}
             paidSearch
+            label={paidRecurringOffer?.cta}
           />
         </div>
         {submitAlternative}
