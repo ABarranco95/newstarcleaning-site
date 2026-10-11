@@ -249,6 +249,25 @@ export default function PrivacyPolicy() {
               control cookie preferences through your browser settings. Disabling
               cookies may affect the functionality of our website.
             </p>
+            <p className="text-ink-soft leading-relaxed mt-3">
+              We use Microsoft Clarity and Microsoft Advertising to see how
+              visitors use our website, including clicks, scrolling and page
+              behavior, through behavioral metrics, heatmaps and session
+              replay. Text you type into forms is masked and not recorded by
+              Clarity. Website usage data is collected using first and
+              third-party cookies and other tracking technologies. For more
+              information about how Microsoft collects and uses your data,
+              visit the{" "}
+              <a
+                href="https://www.microsoft.com/privacy/privacystatement"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Microsoft Privacy Statement
+              </a>
+              .
+            </p>
           </section>
 
           <section>
