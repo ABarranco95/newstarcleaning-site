@@ -128,9 +128,9 @@ const render = (service, frequency = "", directBookingUrl = "https://booking.exa
 };
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
 const expectedPriceLines = {
-  deep: "Deep cleaning starts at $235. Your price depends on home size, buildup and extras. We confirm the total before you book.",
+  deep: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
   move: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
-  house: "House cleaning starts at $165. Your price depends on home size and condition. We confirm the total before you book.",
+  house: "House cleaning from $165, depending on size and condition. Total confirmed before you book.",
 };
 const expectedDecisionReviews = { deep: "daniel", move: "daviana-j", house: "merle-f" };
 for (const intent of Object.keys(INTENT_CONFIG)) {

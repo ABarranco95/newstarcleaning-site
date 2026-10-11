@@ -163,8 +163,8 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `House cleaning in ${city}, one-time or recurring.`,
     subhead: "Kitchen, bathrooms, dusting and floors done room by room, once or on a schedule. Tell us about your home and you get one flat price before anything is booked.",
     serviceDefault: "Not sure yet",
-    formTitle: "Get your cleaning quote",
-    priceLine: "House cleaning starts at $165. Your price depends on home size and condition. We confirm the total before you book.",
+    formTitle: "Get your price and next open date",
+    priceLine: "House cleaning from $165, depending on size and condition. Total confirmed before you book.",
     recurringOffer: {
       line: "Weekly saves 15% on every visit. Every other week saves 10%.",
       conditions: "Starting with a deep clean? Take $50 off it too. Ends Oct 24, first clean $350+.",
@@ -186,7 +186,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Move-in and move-out cleaning for ${city} homes.`,
     subhead: "The empty home cleaned top to bottom, inside cabinets, drawers and closets included, so it’s ready for the walkthrough. Tell us your move date.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Get your move-in / move-out quote",
+    formTitle: "Get your price and next open date",
     priceLine: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
     scope: {
       included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
@@ -209,11 +209,11 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Deep cleaning for ${city} homes.`,
     subhead: "Baseboards, fixtures, built-up grime and the detail work a regular clean skips. Tell us which rooms bother you most and we plan the time around them.",
     serviceDefault: "Deep cleaning",
-    formTitle: "Get your deep-cleaning quote",
-    priceLine: "Deep cleaning starts at $235. Your price depends on home size, buildup and extras. We confirm the total before you book.",
+    formTitle: "Get your price and next open date",
+    priceLine: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
     recurringOffer: {
       line: "$50 off your deep clean when you start weekly or every-other-week cleaning.",
-      conditions: "Ends Oct 24. Your $50 is held for 72 hours once we send your price. First clean $350 or more.",
+      conditions: "Ends Oct 24 · First clean $350+ · Your $50 holds 72 hours after we send your price.",
       cta: "Get my price + $50 off",
     },
     scope: {
@@ -640,7 +640,7 @@ export default function GoogleAdsLandingPageClient({
   };
 
   return (
-    <div className="site-reference paid-reference bg-white pb-24 text-ink md:pb-0">
+    <div className={compactResidentialHero ? "site-reference paid-reference bg-white pb-[calc(72px+env(safe-area-inset-bottom,0px))] text-ink md:pb-0" : "site-reference paid-reference bg-white pb-24 text-ink md:pb-0"}>
       <header className="bg-primary text-white">
         <div className="home-wrap flex h-16 items-center justify-between gap-4">
           <PaidBrand />
@@ -656,12 +656,12 @@ export default function GoogleAdsLandingPageClient({
       </header>
 
       <section className="paid-hero-dark" data-compact-hero={compactResidentialHero || undefined} aria-labelledby="paid-title">
-        <div className="home-wrap py-5 sm:py-8 lg:py-10">
-          <div className="paid-hero-grid">
+        <div className={compactResidentialHero ? "home-wrap py-3 md:py-8 lg:py-10" : "home-wrap py-5 sm:py-8 lg:py-10"}>
+          <div className={compactResidentialHero ? "paid-hero-grid max-md:gap-2" : "paid-hero-grid"}>
             <div className="paid-hero-story">
             <div className="paid-hero-copy min-w-0">
-              <p className="text-xs text-ink-soft">{intent.eyebrow}</p>
-              <h1 id="paid-title" className="mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]">
+              <p className={compactResidentialHero ? "hidden text-xs text-ink-soft md:block" : "text-xs text-ink-soft"}>{intent.eyebrow}</p>
+              <h1 id="paid-title" className={compactResidentialHero ? "max-w-2xl break-words text-2xl leading-[1.09] text-primary md:mt-2 md:text-5xl lg:text-[3.25rem]" : "mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]"}>
                 {intent.h1(city.label)}
               </h1>
               <p className={compactResidentialHero ? "mt-3 hidden max-w-xl text-sm leading-6 text-ink-soft sm:block sm:text-base" : "mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base"}>
@@ -711,6 +711,9 @@ export default function GoogleAdsLandingPageClient({
                   extended
                   paidSearch
                   compact={Boolean(intent.priceLine)}
+                  stickyPaidCta={compactResidentialHero}
+                  onStickyPaidClick={() => trackQuoteCta("sticky_paid")}
+                  submitLabel={compactResidentialHero ? "Get my price + open dates" : undefined}
                   recurringOffer={intent.recurringOffer ? { ...intent.recurringOffer, messageNote: RECURRING_OFFER_MESSAGE } : null}
                   submitAlternative={intent.priceLine ? (
                     <a
@@ -808,7 +811,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
-      <StickyMobileCTA commercial={isBusinessRequest} onQuoteClick={() => trackQuoteCta("sticky_mobile")} />
+      {!compactResidentialHero ? <StickyMobileCTA commercial={isBusinessRequest} onQuoteClick={() => trackQuoteCta("sticky_mobile")} /> : null}
     </div>
   );
 }

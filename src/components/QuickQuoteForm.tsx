@@ -8,6 +8,7 @@ import { createSubmissionId } from "@/lib/submissionId";
 import { buildQuoteSmsConsent, QUOTE_SMS_DISCLOSURE } from "@/lib/quoteSmsConsent";
 import { serviceAreaToday, specificDeadlineError } from "@/lib/assistedIntakeValidation";
 import BookingPrefillLink from "@/components/BookingPrefillLink";
+import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
 import { acceptedPrefillSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
 import { business as BUSINESS } from "@/lib/business";
 
@@ -23,6 +24,9 @@ type QuickQuoteFormProps = {
   paidSearch?: boolean;
   submitAlternative?: ReactNode;
   decisionProof?: ReactNode;
+  submitLabel?: string;
+  stickyPaidCta?: boolean;
+  onStickyPaidClick?: () => void;
   /** Paid recurring incentive; the office applies it when quoting. */
   recurringOffer?: { line: string; conditions: string; messageNote: string; cta?: string } | null;
   /** Paid-page incentive shown above the form and tagged on the lead. */
@@ -271,6 +275,9 @@ export default function QuickQuoteForm({
   paidSearch = false,
   submitAlternative,
   decisionProof,
+  submitLabel,
+  stickyPaidCta = false,
+  onStickyPaidClick,
   recurringOffer = null,
   offer = null,
   directBookingUrl = null,
@@ -290,6 +297,7 @@ export default function QuickQuoteForm({
   const [step, setStep] = useState(1);
   const hasTrackedFormStart = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const stepTitleRef = useRef<HTMLParagraphElement>(null);
   const stepMoved = useRef(false);
   // Keep the same identity on a deliberate resubmit. No automatic retry:
@@ -410,7 +418,23 @@ export default function QuickQuoteForm({
   const quickPaid = paidSearch && !isCommercialRequest;
   const compactPaid = quickPaid && compact;
   const paidRecurringOffer = paidSearch ? recurringOffer : null;
+  const stickyPaid = compactPaid && stickyPaidCta;
+  const paidSubmitLabel = paidRecurringOffer?.cta || submitLabel;
   const stepCount = quickPaid ? 1 : STEP_COUNT;
+
+  const handleStickySubmit = () => {
+    const form = formRef.current;
+    if (!form || isSubmitting) return;
+    onStickyPaidClick?.();
+    const invalid = firstInvalidControl(form.querySelector('[data-quote-step="1"]'));
+    if (invalid) {
+      invalid.scrollIntoView({ block: "center" });
+      invalid.focus({ preventScroll: true });
+      invalid.reportValidity();
+      return;
+    }
+    form.requestSubmit();
+  };
 
   const goToStep = (target: number) => {
     stepMoved.current = true;
@@ -956,13 +980,13 @@ export default function QuickQuoteForm({
           name="phone"
           type="tel"
           required
-          pattern="[0-9()+\-\s.]{10,}"
+          pattern={stickyPaid ? "[0-9\\(\\)+\\-\\s.]{10,}" : "[0-9()+\\-\\s.]{10,}"}
           title="Enter a 10-digit phone number"
           value={formData.phone}
           onChange={(event) => updateField("phone", event.target.value)}
           autoComplete="tel"
           inputMode="tel"
-          placeholder={paidSearch ? "559-000-0000" : "(559) 000-0000"}
+          placeholder={stickyPaid ? "559-555-0123" : paidSearch ? "559-000-0000" : "(559) 000-0000"}
           className={fieldClass}
         />
       </div>
@@ -1047,7 +1071,9 @@ export default function QuickQuoteForm({
       <LockIcon />
       <span>
         {paidSearch
-          ? `${paidRecurringOffer ? "Takes under a minute. " : ""}We'll text or call you with your price. No payment, nothing booked until you confirm.`
+          ? stickyPaid
+            ? "Takes under a minute. We text or call with your price and next open dates. No payment, nothing booked until you say yes."
+            : `${paidRecurringOffer ? "Takes under a minute. " : ""}We'll text or call you with your price. No payment, nothing booked until you confirm.`
           : "No payment, and nothing is booked until you confirm."}{" "}
         <Link href="/privacy" target="_blank" rel="noopener">Privacy</Link>
       </span>
@@ -1205,7 +1231,7 @@ export default function QuickQuoteForm({
             compact={compact}
             commercial={false}
             paidSearch
-            label={paidRecurringOffer?.cta}
+            label={paidSubmitLabel}
           />
         </div>
         {submitAlternative}
@@ -1322,13 +1348,13 @@ export default function QuickQuoteForm({
       ref={containerRef}
       data-paid-search={paidSearch || undefined}
       data-quote-layout="stepped"
-      className={compactPaid ? "qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3" : "qf"}
+      className={compactPaid ? `qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3 ${stickyPaid ? "max-md:pt-3 max-md:[&_.qf-head_h2]:text-xl max-md:[&_.qf-head_h2]:leading-tight max-md:[&_.qf-head_p]:mt-1" : ""}` : "qf"}
     >
       <div className="qf-head">
         <h2>{title}</h2>
         {subtitle ? <p>{subtitle}</p> : null}
         {paidRecurringOffer ? (
-          <div className="mt-2 text-sm leading-5 text-primary" data-recurring-offer>
+          <div className={stickyPaid ? "mt-1 text-sm leading-5 text-primary md:mt-2" : "mt-2 text-sm leading-5 text-primary"} data-recurring-offer>
             <strong className="block font-semibold">{paidRecurringOffer.line}</strong>
             <small className="mt-1 block text-xs leading-4 text-ink-soft">{paidRecurringOffer.conditions}</small>
           </div>
@@ -1337,6 +1363,7 @@ export default function QuickQuoteForm({
       </div>
 
       <form
+        ref={formRef}
         onSubmit={handleSubmit}
         noValidate
         data-clarity-mask="true"
@@ -1355,7 +1382,7 @@ export default function QuickQuoteForm({
             validationField: field || "unknown",
           });
         }}
-        className={paidSearch ? compactPaid ? "mt-3" : "mt-4" : ""}
+        className={paidSearch ? compactPaid ? stickyPaid ? "mt-2 md:mt-3" : "mt-3" : "mt-4" : ""}
       >
         <div className="hidden" aria-hidden="true">
           <label htmlFor="quote-website-url">Leave this blank</label>
@@ -1371,6 +1398,14 @@ export default function QuickQuoteForm({
 
         {renderSteps()}
       </form>
+      {stickyPaid ? (
+        <PaidQuoteStickyCTA
+          formRef={formRef}
+          isSubmitting={isSubmitting}
+          label={paidSubmitLabel || "Get my price + open dates"}
+          onClick={handleStickySubmit}
+        />
+      ) : null}
     </div>
   );
 }
