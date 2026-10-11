@@ -49,6 +49,10 @@ type PaidIntentConfig = {
   serviceDefault: string;
   formTitle: string;
   priceLine?: string;
+  recurringOffer?: {
+    line: string;
+    conditions: string;
+  };
   /** Included scope and optional add-ons, from the service scope contracts. */
   scope?: {
     included: string;
@@ -149,6 +153,8 @@ const DEEP_OVEN_OFFER = {
   line: "Inside of the oven included free with your first deep clean.",
 };
 
+const RECURRING_OFFER_MESSAGE = "Offer shown: $50 off first clean with weekly/biweekly, first clean $350+, book by Nov 30.";
+
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
@@ -157,6 +163,10 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     serviceDefault: "Not sure yet",
     formTitle: "Get your cleaning quote",
     priceLine: "House cleaning starts at $165. Your price depends on home size and condition. We confirm the total before you book.",
+    recurringOffer: {
+      line: "Weekly saves 15% on every visit. Every other week saves 10%.",
+      conditions: "Starting with a deep clean? Take $50 off it too (first clean $350+, book by Nov 30).",
+    },
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
@@ -199,6 +209,10 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     serviceDefault: "Deep cleaning",
     formTitle: "Get your deep-cleaning quote",
     priceLine: "Deep cleaning starts at $235. Your price depends on home size, buildup and extras. We confirm the total before you book.",
+    recurringOffer: {
+      line: "$50 off your deep clean when you start weekly or every-other-week cleaning.",
+      conditions: "First clean $350 or more. Book by Nov 30. Recurring spots fill by route, so ask which days are open near you.",
+    },
     scope: {
       included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
       addOns: "Inside the oven and fridge, cabinet interiors, and interior windows.",
@@ -694,6 +708,7 @@ export default function GoogleAdsLandingPageClient({
                   extended
                   paidSearch
                   compact={Boolean(intent.priceLine)}
+                  recurringOffer={intent.recurringOffer ? { ...intent.recurringOffer, messageNote: RECURRING_OFFER_MESSAGE } : null}
                   submitAlternative={intent.priceLine ? (
                     <a
                       href={"tel:+1" + "559" + "785" + "2822"}

@@ -23,6 +23,8 @@ type QuickQuoteFormProps = {
   paidSearch?: boolean;
   submitAlternative?: ReactNode;
   decisionProof?: ReactNode;
+  /** Paid recurring incentive; the office applies it when quoting. */
+  recurringOffer?: { line: string; conditions: string; messageNote: string } | null;
   /** Paid-page incentive shown above the form and tagged on the lead. */
   offer?: { code: string; line: string } | null;
 };
@@ -265,6 +267,7 @@ export default function QuickQuoteForm({
   paidSearch = false,
   submitAlternative,
   decisionProof,
+  recurringOffer = null,
   offer = null,
   directBookingUrl = null,
 }: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
@@ -402,6 +405,7 @@ export default function QuickQuoteForm({
   // collects anything missing over text or call.
   const quickPaid = paidSearch && !isCommercialRequest;
   const compactPaid = quickPaid && compact;
+  const paidRecurringOffer = paidSearch ? recurringOffer : null;
   const stepCount = quickPaid ? 1 : STEP_COUNT;
 
   const goToStep = (target: number) => {
@@ -497,6 +501,9 @@ export default function QuickQuoteForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          message: paidRecurringOffer && window.location.pathname === "/google-ads"
+            ? [formData.message, paidRecurringOffer.messageNote].filter(Boolean).join("\n\n")
+            : formData.message,
           requestedDate: formData.timeline === "specific-deadline" ? formData.requestedDate : undefined,
           ...tracking,
           ...attribution,
@@ -922,7 +929,7 @@ export default function QuickQuoteForm({
   );
 
   const renderNameAndPhone = () => (
-    <div className="qf-row qf-row-2">
+    <div className={compactPaid && paidRecurringOffer ? "qf-row grid-cols-2" : "qf-row qf-row-2"}>
       <div>
         <FieldLabel htmlFor="quote-name" required>Name</FieldLabel>
         <input
@@ -1315,6 +1322,12 @@ export default function QuickQuoteForm({
       <div className="qf-head">
         <h2>{title}</h2>
         {subtitle ? <p>{subtitle}</p> : null}
+        {paidRecurringOffer ? (
+          <div className="mt-2 text-sm leading-5 text-primary" data-recurring-offer>
+            <strong className="block font-semibold">{paidRecurringOffer.line}</strong>
+            <small className="mt-1 block text-xs leading-4 text-ink-soft">{paidRecurringOffer.conditions}</small>
+          </div>
+        ) : null}
         {offer ? <p className="qf-offer">{offer.line}</p> : null}
       </div>
 
