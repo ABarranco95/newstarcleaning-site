@@ -20,7 +20,27 @@ export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onCli
     return () => observer.disconnect();
   }, [formRef]);
 
-  if (submitInView || isSubmitting) return null;
+  // While someone is typing, the phone keyboard is up and a fixed bar would
+  // sit on top of the field they're filling, so step aside until they leave.
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    const onIn = (event: FocusEvent) => {
+      const target = event.target as HTMLElement | null;
+      setTyping(Boolean(target?.matches("input:not([type=checkbox]):not([type=radio]), select, textarea")));
+    };
+    const onOut = () => setTyping(false);
+    form.addEventListener("focusin", onIn);
+    form.addEventListener("focusout", onOut);
+    return () => {
+      form.removeEventListener("focusin", onIn);
+      form.removeEventListener("focusout", onOut);
+    };
+  }, [formRef]);
+
+  if (submitInView || isSubmitting || typing) return null;
 
   return (
     <div
