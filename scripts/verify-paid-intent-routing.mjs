@@ -105,6 +105,8 @@ vm.runInNewContext(compiled.outputText, {
     if (name.startsWith("@/components/")) return boundary(name.split("/").at(-1));
     if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => {} };
     if (name === "@/lib/conversionTracking") return { trackFunnelEvent: () => {} };
+    // Like the other tracking boundaries, exercise this effect in the local browser run.
+    if (name === "./usePaidDropOffTracking") return { usePaidDropOffTracking: () => {} };
     if (name === "@/lib/realWorkPhotos") return photosModule.exports;
     if (name === "@/lib/googleReviews") return reviewsModule.exports;
     throw new Error(`Unexpected paid dependency: ${name}`);

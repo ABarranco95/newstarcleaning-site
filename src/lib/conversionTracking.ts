@@ -1,5 +1,7 @@
 "use client";
 
+import { captureFirstPaidTouch, readFirstPaidTouch } from "@/lib/attribution";
+
 export type FunnelEventName =
   | "paid_landing_view"
   | "quote_cta_click"
@@ -13,7 +15,12 @@ export type FunnelEventName =
   | "booking_cta_click"
   | "booking_handoff_started"
   | "website_phone_click"
-  | "website_text_click";
+  | "website_text_click"
+  | "field_focus"
+  | "field_complete"
+  | "section_view"
+  | "sticky_cta_click"
+  | "page_exit";
 
 export type FunnelEventPayload = {
   source?: string;
@@ -26,6 +33,17 @@ export type FunnelEventPayload = {
   validationField?: string;
   phoneLocation?: string;
   handoffId?: string;
+  field?: string;
+  section?: string;
+  lastField?: string;
+  maxScrollPct?: number;
+  secondsOnPage?: number;
+};
+
+type FunnelVisitContext = {
+  paid: boolean;
+  device: "phone" | "desktop";
+  internal: boolean;
 };
 
 type FunnelDataLayerEvent = {
@@ -40,6 +58,14 @@ type FunnelDataLayerEvent = {
   validation_field?: string;
   phone_location?: string;
   handoff_id?: string;
+  field?: string;
+  section?: string;
+  last_field?: string;
+  max_scroll_pct?: number;
+  seconds_on_page?: number;
+  paid: boolean;
+  device: "phone" | "desktop";
+  internal: boolean;
 };
 
 declare global {
@@ -72,18 +98,55 @@ const paidFunnelEvents = new Set<FunnelEventName>([
   "paid_landing_view", "quote_cta_click", "quote_form_start", "quote_step_complete",
   "quote_details_open", "quote_submit_attempt", "quote_validation_error", "lead_submit_accepted",
   "lead_submit_failed",
+  "website_phone_click", "website_text_click", "field_focus", "field_complete",
+  "section_view", "sticky_cta_click", "page_exit",
 ]);
+
+const paidFormFields = new Set([
+  "city", "service", "bedrooms", "bathrooms", "name", "phone", "email",
+  "contactPreference", "smsOptIn", "timeline", "requestedDate", "sqft", "condition",
+  "frequency", "message", "moveOutScopeConfirmed", "moveOutAddons", "organization",
+  "propertyType", "commercialFrequency", "deadline", "scope", "walkthroughPreference",
+]);
+const paidSections = new Set(["hero", "form", "offer", "proof", "reviews", "faq", "footer"]);
+let internalVisit = false;
+let fallbackSessionId: string | undefined;
+
+export function isPaidFormField(field: string): boolean {
+  return paidFormFields.has(field);
+}
+
+function funnelVisitContext(): FunnelVisitContext {
+  const attribution = readFirstPaidTouch() || captureFirstPaidTouch();
+  const medium = attribution?.utm_medium?.trim().toLowerCase();
+  internalVisit ||= new URLSearchParams(window.location.search).get("nsinternal") === "1";
+  try {
+    internalVisit ||= window.localStorage.getItem("ns_internal") === "1";
+    if (internalVisit) window.localStorage.setItem("ns_internal", "1");
+  } catch {
+    // Keep the current visit tagged even when browser storage is blocked.
+  }
+  return {
+    paid: Boolean(attribution?.gclid || attribution?.gbraid || attribution?.wbraid || medium === "cpc" || medium === "paid"),
+    device: window.innerWidth < 768 ? "phone" : "desktop",
+    internal: internalVisit,
+  };
+}
 
 function paidSessionId(): string {
   const key = "nsc_paid_funnel_session";
-  const existing = window.sessionStorage.getItem(key);
-  if (existing && /^[0-9a-f-]{36}$/i.test(existing)) return existing;
-  const id = window.crypto.randomUUID();
-  window.sessionStorage.setItem(key, id);
-  return id;
+  try {
+    const existing = window.sessionStorage.getItem(key);
+    if (existing && /^[0-9a-f-]{36}$/i.test(existing)) return existing;
+    fallbackSessionId ||= window.crypto.randomUUID();
+    window.sessionStorage.setItem(key, fallbackSessionId);
+  } catch {
+    fallbackSessionId ||= window.crypto.randomUUID();
+  }
+  return fallbackSessionId;
 }
 
-function sendPaidFunnelEvent(name: FunnelEventName, payload: FunnelEventPayload) {
+function sendPaidFunnelEvent(name: FunnelEventName, payload: FunnelEventPayload, context: FunnelVisitContext) {
   if (!apexFunnelUrl || payload.source !== "google-ads" || window.location.pathname !== "/google-ads" || !paidFunnelEvents.has(name)) return;
   try {
     // Exact fields only. The city input can contain ZIP/address/free text, so
@@ -97,7 +160,14 @@ function sendPaidFunnelEvent(name: FunnelEventName, payload: FunnelEventPayload)
       step: name === "quote_step_complete" && payload.ctaLocation === "step_1" ? 1 : undefined,
       field: name === "quote_validation_error" || name === "lead_submit_failed"
         ? payload.validationField && paidFields.has(payload.validationField) ? payload.validationField : "unknown"
-        : undefined,
+        : (name === "field_focus" || name === "field_complete") && payload.field && isPaidFormField(payload.field) ? payload.field : undefined,
+      ...context,
+      section: name === "section_view" && payload.section && paidSections.has(payload.section) ? payload.section : undefined,
+      lastField: name === "page_exit" ? payload.lastField && isPaidFormField(payload.lastField) ? payload.lastField : "none" : undefined,
+      maxScrollPct: name === "page_exit" && Number.isFinite(payload.maxScrollPct)
+        ? Math.round(Math.min(100, Math.max(0, payload.maxScrollPct!)) / 10) * 10 : undefined,
+      secondsOnPage: name === "page_exit" && Number.isFinite(payload.secondsOnPage)
+        ? Math.min(600, Math.max(0, Math.floor(payload.secondsOnPage!))) : undefined,
       sessionId: paidSessionId(),
       occurredAt: new Date().toISOString(),
     });
@@ -123,6 +193,7 @@ export const googleAdsConversionReadiness = {
 function funnelEvent(
   name: FunnelEventName,
   payload: FunnelEventPayload,
+  context: FunnelVisitContext,
 ): FunnelDataLayerEvent {
   return {
     event: name,
@@ -138,6 +209,12 @@ function funnelEvent(
     validation_field: payload.validationField || undefined,
     phone_location: payload.phoneLocation || undefined,
     handoff_id: payload.handoffId || undefined,
+    field: payload.field && isPaidFormField(payload.field) ? payload.field : undefined,
+    section: payload.section && paidSections.has(payload.section) ? payload.section : undefined,
+    last_field: payload.lastField === "none" || (payload.lastField && isPaidFormField(payload.lastField)) ? payload.lastField : undefined,
+    max_scroll_pct: payload.maxScrollPct,
+    seconds_on_page: payload.secondsOnPage,
+    ...context,
   };
 }
 
@@ -147,11 +224,12 @@ export function trackFunnelEvent(
 ) {
   if (typeof window === "undefined") return;
 
-  const event = funnelEvent(name, payload);
+  const context = funnelVisitContext();
+  const event = funnelEvent(name, payload, context);
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push(event);
 
-  sendPaidFunnelEvent(name, payload);
+  sendPaidFunnelEvent(name, payload, context);
 
   if (!googleTagManagerConfigured && typeof window.gtag === "function") {
     window.gtag("event", name, event);

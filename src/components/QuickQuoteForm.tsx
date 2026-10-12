@@ -895,6 +895,7 @@ export default function QuickQuoteForm({
     <label className="qf-check">
       <input
         type="checkbox"
+        name="moveOutScopeConfirmed"
         checked={formData.moveOutScopeConfirmed}
         onChange={toggleMoveOutScopeConfirmed}
       />
@@ -913,6 +914,7 @@ export default function QuickQuoteForm({
           <label key={addon} className="qf-check">
             <input
               type="checkbox"
+              name="moveOutAddons"
               checked={formData.moveOutAddons.includes(addon)}
               onChange={() => toggleMoveOutAddon(addon)}
             />

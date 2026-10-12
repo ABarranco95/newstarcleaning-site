@@ -14,6 +14,7 @@ import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 import { reviewsFor } from "@/lib/googleReviews";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
+import { usePaidDropOffTracking } from "./usePaidDropOffTracking";
 
 const PAID_HERO_PHOTOS = {
   deep: bathroomResultPhotos.find((photo) => photo.src.endsWith("/glass-shower-freestanding-tub-new-star.webp")),
@@ -540,7 +541,7 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   );
 }
 
-function StickyMobileCTA({ onQuoteClick, commercial = false }: { onQuoteClick: () => void; commercial?: boolean }) {
+function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false }: { onQuoteClick: () => void; onCallClick: () => void; commercial?: boolean }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -576,7 +577,7 @@ function StickyMobileCTA({ onQuoteClick, commercial = false }: { onQuoteClick: (
   return (
     <div className="paid-sticky-cta fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
-        <a href={"tel:+1" + "559" + "785" + "2822"} className="home-text-link flex-1 justify-center">
+        <a href={"tel:+1" + "559" + "785" + "2822"} onClick={onCallClick} className="home-text-link flex-1 justify-center">
           Call
         </a>
         <a href="#booking-form" onClick={onQuoteClick} className="home-button flex-1">
@@ -628,6 +629,8 @@ export default function GoogleAdsLandingPageClient({
     }
   }, [city.formValue, city.label, intent.serviceDefault, intentKey, searchParams]);
 
+  usePaidDropOffTracking({ service: intent.serviceDefault, city: city.formValue || city.label, intent: intentKey });
+
   const trackQuoteCta = (ctaLocation: string) => {
     trackFunnelEvent("quote_cta_click", {
       source: "google-ads",
@@ -637,6 +640,18 @@ export default function GoogleAdsLandingPageClient({
       intent: intentKey,
       ctaLocation,
     });
+  };
+
+  const trackStickyCta = (ctaLocation: string, quote = true) => {
+    trackFunnelEvent("sticky_cta_click", {
+      source: "google-ads",
+      service: intent.serviceDefault,
+      city: city.formValue || city.label,
+      page: "/google-ads",
+      intent: intentKey,
+      ctaLocation,
+    });
+    if (quote) trackQuoteCta(ctaLocation);
   };
 
   return (
@@ -712,7 +727,7 @@ export default function GoogleAdsLandingPageClient({
                   paidSearch
                   compact={Boolean(intent.priceLine)}
                   stickyPaidCta={compactResidentialHero}
-                  onStickyPaidClick={() => trackQuoteCta("sticky_paid")}
+                  onStickyPaidClick={() => trackStickyCta("sticky_paid")}
                   submitLabel={compactResidentialHero ? "Get my price + open dates" : undefined}
                   recurringOffer={intent.recurringOffer ? { ...intent.recurringOffer, messageNote: RECURRING_OFFER_MESSAGE } : null}
                   submitAlternative={intent.priceLine ? (
@@ -778,7 +793,7 @@ export default function GoogleAdsLandingPageClient({
             </div>
           </div>
 
-          <div className="border-t border-line pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+          <div id="paid-footer" className="border-t border-line pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
             <h2 className="text-primary">{isCommercialRequest ? "Let’s scope your facility." : isProjectRequest ? "Let’s scope your project." : "Tell us about your home."}</h2>
             <p className="mt-4 max-w-md text-sm leading-6 text-ink-soft">
               {isCommercialRequest ? "Share your facility details and preferred service window. We’ll confirm scope, access, and capacity before sending a written proposal." : isProjectRequest ? "Send the site details and handoff date. We’ll confirm scope, access, and capacity before proposing the work." : "Share the basics. We’ll confirm your price and available dates before you book."}
@@ -811,7 +826,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
-      {!compactResidentialHero ? <StickyMobileCTA commercial={isBusinessRequest} onQuoteClick={() => trackQuoteCta("sticky_mobile")} /> : null}
+      {!compactResidentialHero ? <StickyMobileCTA commercial={isBusinessRequest} onQuoteClick={() => trackStickyCta("sticky_mobile")} onCallClick={() => trackStickyCta("sticky_mobile_call", false)} /> : null}
     </div>
   );
 }
