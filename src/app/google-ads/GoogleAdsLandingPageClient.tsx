@@ -55,6 +55,8 @@ type PaidIntentConfig = {
     conditions: string;
     /** Submit label while the offer shows; defaults to the paid label. */
     cta?: string;
+    /** Office note appended to the lead; defaults to the recurring offer note. */
+    messageNote?: string;
   };
   /** Included scope and optional add-ons, from the service scope contracts. */
   scope?: {
@@ -157,6 +159,7 @@ const DEEP_OVEN_OFFER = {
 };
 
 const RECURRING_OFFER_MESSAGE = "Offer shown: $50 off first clean with weekly/biweekly, first clean $350+, ends Oct 24. Honor it for 72 hours after the price is sent.";
+const DEEP_OFFER_MESSAGE = "Offer shown: $50 off first deep clean, one-time or recurring, deep clean $350+, ends Oct 24. Honor it for 72 hours after the price is sent.";
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
@@ -213,9 +216,10 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     formTitle: "Get your price and next open date",
     priceLine: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
     recurringOffer: {
-      line: "$50 off your deep clean when you start weekly or every-other-week cleaning.",
-      conditions: "Ends Oct 24 · First clean $350+ · Your $50 holds 72 hours after we send your price.",
+      line: "$50 off your first deep clean, one-time or recurring.",
+      conditions: "Ends Oct 24 · Deep clean $350+ · Your $50 holds 72 hours after we send your price.",
       cta: "Get my price + $50 off",
+      messageNote: DEEP_OFFER_MESSAGE,
     },
     scope: {
       included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
@@ -729,7 +733,7 @@ export default function GoogleAdsLandingPageClient({
                   stickyPaidCta={compactResidentialHero}
                   onStickyPaidClick={() => trackStickyCta("sticky_paid")}
                   submitLabel={compactResidentialHero ? "Get my price + open dates" : undefined}
-                  recurringOffer={intent.recurringOffer ? { ...intent.recurringOffer, messageNote: RECURRING_OFFER_MESSAGE } : null}
+                  recurringOffer={intent.recurringOffer ? { ...intent.recurringOffer, messageNote: intent.recurringOffer.messageNote ?? RECURRING_OFFER_MESSAGE } : null}
                   submitAlternative={intent.priceLine ? (
                     <a
                       href={"tel:+1" + "559" + "785" + "2822"}
