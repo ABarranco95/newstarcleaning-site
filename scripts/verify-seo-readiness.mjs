@@ -107,16 +107,19 @@ assert(
   "structured NAP uses the reviewed GBP ZIP 93711",
 );
 
+// Approved proof policy: recorded reviews + dated rating, no review links (verify:trust-proof).
 assert(
   serviceAreaPage.includes("{area.localContent}") &&
-    serviceAreaPage.includes("Google profile") &&
+    serviceAreaPage.includes("<GoogleRating") &&
+    serviceAreaPage.includes('<ReviewCards topic="home"') &&
+    !serviceAreaPage.includes("business.googleMapsUrl") &&
     serviceAreaPage.includes("areaFaqs.map") &&
     serviceAreaPage.includes("FAQPage") &&
     serviceAreaPage.includes("BreadcrumbSchema") &&
     serviceAreaPage.includes("homeProfiles") &&
     serviceAreaPage.includes("commonJobs") &&
     serviceAreaPage.includes("bookingNote"),
-  "service-area pages render local proof, local FAQs, breadcrumbs, route notes, and profile link",
+  "service-area pages render recorded review proof without profile links, local FAQs, breadcrumbs, and route notes",
 );
 
 assert(

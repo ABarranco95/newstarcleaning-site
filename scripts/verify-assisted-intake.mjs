@@ -251,6 +251,9 @@ function mountForm(props = {}) {
       // Fail if a case unexpectedly renders it; the cross-app browser verifier
       // owns actual BookingPrefillLink/BookingWizard interaction proof.
       "@/components/BookingPrefillLink": { default: unexpected("booking prefill link") },
+      // Sticky CTA visibility/scrolling needs a real DOM and is covered by
+      // paid UX checks. Keep this intake handler harness inert on that import.
+      "@/components/PaidQuoteStickyCTA": { default: () => null },
       "@/lib/conversionTracking": { trackLeadConversion: (value) => conversions.push(value), trackFunnelEvent: (...args) => events.push(args) },
     },
   }).default;
