@@ -9,8 +9,8 @@ type TrustItem = { icon: IconName; title: string; body: string };
 const items: TrustItem[] = [
   { icon: "shield", title: `${googleRating.score} on Google`, body: `${homesServedLine} in Fresno, Clovis and Madera.` },
   { icon: "clipboard", title: "One flat price, set before we book", body: "Based on your home and the clean you pick, not the hours we spend there." },
-  { icon: "check", title: "Missed a spot? We come back", body: "Tell us within 24 hours and we fix it at no charge." },
-  { icon: "home", title: "Nothing for you to prep", body: "We bring the supplies and work from a room-by-room checklist." },
+  { icon: "check", title: "Missed a spot? We come back", body: "Tell us within 24 hours. We fix missed work included in your cleaning at no charge." },
+  { icon: "home", title: "We bring the supplies", body: "Supplies and equipment are on us. Just clear the surfaces you want cleaned." },
 ];
 
 // `links` is accepted for existing callers; the strip no longer links out.

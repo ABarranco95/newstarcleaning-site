@@ -22,7 +22,7 @@ export const serviceAreas: ServiceArea[] = [
     areaType: "Home base",
     isPrimary: true,
     description:
-      "New Star Cleaning is based in Fresno and provides standard recurring, deep, and move-in/move-out cleaning throughout the city.",
+      "We're based in Fresno. Whether your home needs regular cleaning or more time on buildup, we'll help you choose. We also clean empty homes before or after a move.",
     neighborhoods: [
       "Tower District",
       "Fig Garden",
@@ -35,9 +35,9 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Clovis", "Madera", "Tower District", "Fig Garden", "Woodward Park"],
     localContent:
-      "Fresno homes range from compact apartments and older central-city bungalows to larger north Fresno properties. The right service depends on the home's current condition, square footage, bathrooms, pets, and any detail work requested.",
+      "An older Fresno bungalow with detailed trim needs a different kind of attention than a larger north Fresno home. Tell us about your floors and the rooms you want help with. For a deep clean, we get into the baseboards, door frames and reachable fixtures as well as the kitchen and bathrooms.",
     localProof:
-      "Fresno is our home base and central route area. We confirm the address, requested service, and available appointment options before anything is booked.",
+      "Fresno is home for us. We clean apartments and houses from Tower District to Woodward Park. Tell us your address and we'll check available dates.",
     homeProfiles: [
       "Apartments, condos, duplexes, and single-family homes",
       "Older homes with detailed trim, tile, or hardwood surfaces",
@@ -58,7 +58,7 @@ export const serviceAreas: ServiceArea[] = [
     areaType: "Core route",
     isPrimary: true,
     description:
-      "New Star Cleaning serves Clovis with recurring house cleaning, detailed deep cleaning, and move-in/move-out cleaning for empty homes.",
+      "We clean homes across Clovis, from Old Town to Harlan Ranch and Loma Vista. Regular house cleaning, deep cleans for buildup, or an empty home before a move.",
     neighborhoods: [
       "Old Town Clovis",
       "Harlan Ranch",
@@ -70,9 +70,9 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Fresno", "Woodward Park", "Madera"],
     localContent:
-      "Clovis includes older homes near Old Town, established neighborhoods, and newer developments with larger open floor plans. We price from the actual home details rather than treating every Clovis property as the same job.",
+      "From older homes near Old Town to the open floor plans in newer Clovis neighborhoods, we ask about your home rather than guessing from the ZIP code. Need shower buildup cleaned or more attention on the kitchen? Tell us when you ask for a quote.",
     localProof:
-      "Clovis is part of our core Fresno-area route. Service and timing are confirmed from the address and requested cleaning details.",
+      "Clovis is one of our main service areas. We offer regular visits, deep cleaning and empty-home cleaning. We'll confirm the price and available times with you.",
     homeProfiles: [
       "Older homes and townhomes near Old Town Clovis",
       "Newer homes in Harlan Ranch, Loma Vista, and Heritage Grove",

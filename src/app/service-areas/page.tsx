@@ -31,7 +31,7 @@ const fresnoNeighborhoods = serviceAreas.filter((area) => ["tower-district", "fi
 export default function ServiceAreasPage() {
   return (
     <div className="site-reference">
-      <SiteHero tone="dark" eyebrow="Service area" title="House cleaning across Fresno, Clovis & Madera." description="Fresno and Clovis are our core routes. Madera appointments depend on your address and available dates." photo={emptyHomeResultPhotos[4]} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero tone="dark" eyebrow="Service area" title="House cleaning across Fresno, Clovis & Madera." description="We're based in Fresno and clean homes in Clovis too. In Madera, we have fewer openings. Tell us your address and preferred date and we'll check for you." photo={emptyHomeResultPhotos[4]} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-actions"><a href="#cities" className="home-button">Find your area <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a free quote</Link>}><HomeQuoteLink className="home-text-link">Get a free quote</HomeQuoteLink></Suspense></div>
         <div className="site-hero-meta"><GoogleRating /><a href={business.phoneHref} className="site-hero-phone" data-phone-location="areas_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
       </SiteHero>
@@ -47,7 +47,7 @@ export default function ServiceAreasPage() {
               <p className="site-card-meta">{area.county}</p>
               <h3><Link href={`/cleaning-services-${area.slug}`}>{area.name}, CA <span aria-hidden="true">→</span></Link></h3>
               <p>{area.localProof}</p>
-              {area.slug === "madera" && <p>Availability depends on route capacity, the exact address, and your requested date.</p>}
+
             </article>
           ))}
         </div>
@@ -55,7 +55,7 @@ export default function ServiceAreasPage() {
 
       <section className="site-muted" aria-labelledby="areas-neighborhoods-title">
         <div className="ns-section">
-          <div className="ns-section-head"><div><p className="ns-kicker">Neighborhoods</p><h2 id="areas-neighborhoods-title" className="ns-h2">Fresno neighborhoods.</h2><p className="ns-lead">Home types, access, and scheduling details for your neighborhood.</p></div></div>
+          <div className="ns-section-head"><div><p className="ns-kicker">Neighborhoods</p><h2 id="areas-neighborhoods-title" className="ns-h2">Fresno neighborhoods.</h2><p className="ns-lead">From Tower District to Woodward Park. If you don&apos;t see your neighborhood, ask us.</p></div></div>
           <div className="site-directory site-directory-cards">
             {fresnoNeighborhoods.map((area) => (
               <article key={area.slug}>
@@ -77,7 +77,7 @@ export default function ServiceAreasPage() {
         <div className="site-section site-split">
           <h2>Unsure about your address?</h2>
           <div>
-            <p className="site-intro">Send the address and preferred date. We’ll confirm coverage before booking.</p>
+            <p className="site-intro">Tell us where you are and when you need the cleaning. We&apos;ll let you know if we can get to you before you book.</p>
             <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Check availability</Link>}><HomeQuoteLink className="home-button">Check availability <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><Link href="/services" className="home-text-link">Compare cleaning services</Link></div>
           </div>
         </div>

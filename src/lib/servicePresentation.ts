@@ -34,7 +34,7 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
     photo: homeResultPhotos[2],
     summary: "For an already maintained home. Kitchens, bathrooms, dusting, and floors on a weekly, bi-weekly, or monthly schedule.",
     boundary: "Heavy buildup may need a deep clean first. Oven, fridge, cabinet interiors, and interior windows are optional add-ons.",
-    lead: "If your home is already picked up and you mostly need it kept consistently clean, this is the visit for you. We handle the kitchens, bathrooms, dusting, and floors each time, on the schedule that fits how fast your home gets lived in.",
+    lead: "For a home that needs regular upkeep. We scrub the sinks, clean the bathrooms, wipe the kitchen surfaces and take care of the floors. Even the inside of the microwave is included when it's empty and accessible.",
     proofLayout: "cadence",
     proofPhotos: [
       kitchenSurfacesPhoto,
@@ -47,7 +47,7 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
     photo: cleanBathroomPhoto,
     summary: "The standard cleaning work, with more time for buildup, baseboards, fixtures, and reachable detail areas.",
     boundary: "Oven, fridge, cabinet interiors, and interior windows are optional add-ons.",
-    lead: "When the showers, baseboards, fixtures, and other details need more attention, a deep clean gives us more time to work through the buildup. It can also be a good starting point before regular visits.",
+    lead: "For the buildup you notice every time you walk past it. We clean the kitchen, bathrooms and floors, then spend more time on shower detail, baseboards, door frames and reachable fixtures.",
     proofLayout: "reveal",
     proofPhotos: [
       bathroomResultPhotos[1],
@@ -61,7 +61,7 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
     photo: emptyHomeResultPhotos[1],
     summary: "For an empty home. Deep-cleaning work plus empty cabinet, drawer, and closet interiors.",
     boundary: "Oven and refrigerator interiors, interior window glass, and reachable window tracks are optional add-ons. Deposit returns are not guaranteed.",
-    lead: "Handing a home to the next owner, tenant, or listing? We clean the empty home end to end — and the cabinet, drawer, and closet interiors are part of the base work, not an upcharge.",
+    lead: "Moving out or getting the keys? We clean the empty home's kitchen, bathrooms and floors, down to the baseboards. Empty cabinet, drawer and closet interiors are included, not extra.",
     proofLayout: "handoff",
     proofPhotos: [
       emptyHomeResultPhotos[0],

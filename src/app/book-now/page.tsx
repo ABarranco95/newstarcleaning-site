@@ -19,7 +19,7 @@ const bookNowFaqs = [
   },
   {
     q: "Do I pay anything when I request a quote?",
-    a: "No. The quote form takes no payment and books nothing. You only confirm once the scope, price, and schedule work for you.",
+    a: "No. There's no payment with this form. We'll explain what we'll clean and the price, then you decide whether to book.",
   },
   {
     q: "Can I skip the quote and book directly?",
@@ -54,12 +54,12 @@ export default function BookNow() {
           <h1 className="mt-2">Get your cleaning price.</h1>
           <p>Tell us about your home. We’ll text or call with your price and available times. No payment, and nothing is booked with this form.</p>
         </div>
-        <div id="quote-form" className="site-form-panel"><QuickQuoteForm title="Your cleaning quote" subtitle="Three quick steps. Optional fields are marked." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div>
+        <div id="quote-form" className="site-form-panel"><QuickQuoteForm title="Your cleaning quote" subtitle="Start with the basics. We'll help with anything you're unsure about." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div>
         <div className="site-form-aside">
           <ul className="site-form-points">
             <li><Icon name="check" />Price confirmed before anything is booked</li>
             <li><Icon name="check" />One-time or recurring: weekly, every other week or monthly</li>
-            <li><Icon name="check" />Missed something? Tell us within 24 hours and we’ll make it right</li>
+            <li><Icon name="check" />If we miss something included in your cleaning, tell us within 24 hours. We&apos;ll make it right.</li>
           </ul>
           <div className="site-links"><a href={business.phoneHref} data-phone-location="book_now_hero">Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} /></div>
           <figure className="site-form-review">

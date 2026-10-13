@@ -19,10 +19,10 @@ export const metadata: Metadata = {
 };
 
 const categories = [
+  { id: "before-after", label: "Before & after" },
   { id: "kitchens-living", label: "Kitchens & living areas" },
   { id: "bathrooms", label: "Bathrooms" },
   { id: "empty-homes", label: "Empty homes" },
-  { id: "before-after", label: "Before & after" },
 ];
 
 const kitchenLiving: { src: string; alt: string; label: string; note: string }[] = [
@@ -71,39 +71,19 @@ function PhotoCard({ src, alt, label, note, sizes }: { src: string; alt: string;
 export default function OurWorkPage() {
   return (
     <div className="home-reference work-page">
-      <SiteHero tone="dark" eyebrow="Our work" title="Real photos from our cleaning jobs." description="Kitchens, bathrooms, living areas, and empty homes we’ve cleaned. Browse the rooms below, or jump to the before-and-after comparisons for a closer look at the detail work." breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero tone="dark" eyebrow="Our work" title="Real photos from our cleaning jobs." description="Look at the shower surfaces and the buildup inside the oven. These are real New Star jobs, with the before and after shown together so you can see the work." breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-proof-row"><GoogleRating /></div>
         <nav className="work-category-nav" aria-label="Gallery categories">
           {categories.map((category) => <a key={category.id} href={`#${category.id}`}>{category.label}</a>)}
         </nav>
       </SiteHero>
 
-      <section id="kitchens-living" className="home-wrap work-section" aria-labelledby="work-kitchens-title">
-        <div className="work-section-heading"><h2 id="work-kitchens-title">Kitchens &amp; living areas</h2><p>Kitchens, furnished rooms, and floor details from our cleaning work.</p></div>
-        <div className="work-grid work-grid-kitchen">
-          {kitchenLiving.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
-        </div>
-      </section>
-
-      <section id="bathrooms" className="home-wrap work-section" aria-labelledby="work-bathrooms-title">
-        <div className="work-section-heading"><h2 id="work-bathrooms-title">Bathrooms</h2><p>A closer look at tubs, showers, tile, vanities, mirrors, and fixtures.</p></div>
-        <div className="work-grid">
-          {bathrooms.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
-        </div>
-      </section>
-
-      <section id="empty-homes" className="home-wrap work-section" aria-labelledby="work-empty-title">
-        <div className="work-section-heading"><h2 id="work-empty-title">Empty homes</h2><p>Move-in and move-out cleaning covers the full deep-cleaning scope plus empty cabinet, drawer, and closet interiors. Oven, fridge, and interior windows are optional add-ons.</p></div>
-        <div className="work-grid work-grid-wide">
-          {emptyHomes.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
-        </div>
-      </section>
 
       <section id="before-after" className="work-before-after" aria-labelledby="work-ba-title">
         <div className="home-wrap">
           <div className="work-section-heading work-section-heading-light">
-            <h2 id="work-ba-title">Before &amp; after, frame by frame</h2>
-            <p>Comparisons from our cleaning appointments. Staining and wear can remain after cleaning. Oven interiors are optional add-ons.</p>
+            <h2 id="work-ba-title">Before &amp; after cleaning</h2>
+            <p>The same surfaces from our cleaning appointments. Staining and wear can remain after cleaning. Oven and refrigerator interiors are optional add-ons.</p>
           </div>
           <div className="work-pairs">
             {pairs.map(({ pair, title }) => (
@@ -131,6 +111,27 @@ export default function OurWorkPage() {
         </div>
       </section>
 
+      <section id="kitchens-living" className="home-wrap work-section" aria-labelledby="work-kitchens-title">
+        <div className="work-section-heading"><h2 id="work-kitchens-title">Kitchens &amp; living areas</h2><p>Kitchens, furnished rooms, and floor details from our cleaning work.</p></div>
+        <div className="work-grid work-grid-kitchen">
+          {kitchenLiving.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
+        </div>
+      </section>
+
+      <section id="bathrooms" className="home-wrap work-section" aria-labelledby="work-bathrooms-title">
+        <div className="work-section-heading"><h2 id="work-bathrooms-title">Bathrooms</h2><p>A closer look at tubs, showers, tile, vanities, mirrors, and fixtures.</p></div>
+        <div className="work-grid">
+          {bathrooms.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
+        </div>
+      </section>
+
+      <section id="empty-homes" className="home-wrap work-section" aria-labelledby="work-empty-title">
+        <div className="work-section-heading"><h2 id="work-empty-title">Empty homes</h2><p>Move-in and move-out cleaning covers the full deep-cleaning scope plus empty cabinet, drawer, and closet interiors. Oven, fridge, and interior windows are optional add-ons.</p></div>
+        <div className="work-grid work-grid-wide">
+          {emptyHomes.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
+        </div>
+      </section>
+
       <section className="work-reviews" aria-labelledby="work-reviews-title">
         <div className="home-wrap">
           <div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="work-reviews-title" className="ns-h2">What customers say on Google.</h2></div><GoogleRating prominent /></div>
@@ -139,8 +140,8 @@ export default function OurWorkPage() {
       </section>
 
       <section className="home-wrap work-cta">
-        <h2>Your home could be next.</h2>
-        <p>Your price depends on the size of the home, its condition, how often we come, and any add-ons. Tell us about your home and we’ll send your price before anything is booked.</p>
+        <h2>Have a spot like this at home?</h2>
+        <p>Tell us what needs attention. We&apos;ll explain what we can clean and give you a price before you book.</p>
         <div className="work-cta-actions">
           <Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           <a href={business.phoneHref} className="home-text-link" data-phone-location="our_work_cta"><Icon name="phone" /> {business.phoneDisplay}</a>

@@ -26,33 +26,35 @@ export const metadata: Metadata = {
 };
 
 const facts: { term: string; detail: string }[] = [
-  { term: "Company", detail: `${business.legalName} — locally owned house cleaning` },
+  { term: "Company", detail: business.legalName },
   { term: "Owner", detail: "Angel Barranco" },
   { term: "Based in", detail: "Fresno, California" },
   { term: "Cleaning since", detail: "2020" },
+  { term: "Insurance", detail: "We carry liability insurance" },
   { term: "Core service area", detail: "Fresno and Clovis" },
-  { term: "Also served", detail: "Madera and close-in Fresno neighborhoods, route-dependent" },
+  { term: "Also served", detail: "Madera and close-in Fresno neighborhoods. Ask us about your address and date." },
   { term: "Phone", detail: "(559) 785-2822" },
 ];
 
 const heroPoints = [
   "Owned and run by Angel Barranco",
   "Cleaning homes in the Fresno area since 2020",
+  "We carry liability insurance",
   "Price confirmed before anything is booked",
 ];
 
 const steps = [
   {
     title: "Tell us about the home",
-    note: "Share the rooms, condition, pets, and how you'd like us to get in. Your notes go to the cleaner, so priorities are known before arrival.",
+    note: "Tell us what needs attention and anything we should know about your surfaces or pets. Those details help us plan the cleaning.",
   },
   {
     title: "We confirm the quote",
-    note: "We confirm price, included work, and the date before anything is booked. Cleaners bring supplies and equipment. Appliance interiors and interior windows are optional additions, priced ahead of time.",
+    note: "You'll know what we'll clean and the price before you book. Want the oven or fridge cleaned inside? We'll price that in advance too.",
   },
   {
     title: "The visit",
-    note: "The cleaner works the agreed scope room by room — kitchens, bathrooms, living areas, floors — and does a final pass before leaving.",
+    note: "We bring supplies and equipment and work through the rooms on your cleaning checklist. Tell us about a spot you're concerned about before we start.",
   },
   {
     title: "Afterwards",
@@ -63,7 +65,7 @@ const steps = [
 export default function AboutPage() {
   return (
     <div className="site-reference">
-      <SiteHero tone="dark" eyebrow="About New Star" title="Locally owned. Fresno based." description="We clean homes in Fresno and Clovis, from regular visits to deep cleans and move-outs. Madera appointments depend on the route and date." photo={homeResultPhotos[0]} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero tone="dark" eyebrow="About New Star" title="Locally owned. Fresno based." description="I'm Angel Barranco, the owner of New Star Cleaning. My crews clean homes in Fresno and Clovis. If something we agreed to clean gets missed, I want to hear about it." photo={homeResultPhotos[0]} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <ul className="site-hero-points">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
@@ -75,9 +77,10 @@ export default function AboutPage() {
 
       <section className="site-section site-split">
         <div>
-          <p className="ns-kicker">The company</p>
-          <h2 className="mt-3">Who you’re hiring.</h2>
-          <p className="site-intro">New Star Cleaning is a locally owned residential cleaning company run from Fresno, serving Fresno and Clovis as core routes, with Madera appointments confirmed by address and date. Homes are our core work — recurring visits, deep cleans, and empty-home move-outs.</p>
+          <p className="ns-kicker">From Angel</p>
+          <h2 className="mt-3">You should know who&apos;s cleaning your home.</h2>
+          <p className="site-intro">When you ask for a quote, tell us about the part of the house that&apos;s bothering you. A shower with buildup needs different attention than a kitchen that just needs keeping up. We&apos;ll explain what we can clean and what&apos;s included.</p>
+          <p className="site-intro">If we miss something included in your cleaning, let us know within 24 hours. We&apos;ll come back and fix it at no charge. That&apos;s how we make it right.</p>
           <div className="service-editorial mt-6">
             <dl className="se-about-facts">
               {facts.map((fact) => (
@@ -110,7 +113,7 @@ export default function AboutPage() {
       </section>
 
       <section className="site-section">
-        <div className="home-section-heading"><div><p className="ns-kicker">Our work</p><h2 className="mt-3">Work from our routes.</h2></div><Link href="/our-work" className="home-text-link">See more of our work <span aria-hidden="true">→</span></Link></div>
+        <div className="home-section-heading"><div><p className="ns-kicker">Our work</p><h2 className="mt-3">Homes we&apos;ve cleaned.</h2></div><Link href="/our-work" className="home-text-link">See more of our work <span aria-hidden="true">→</span></Link></div>
         <div className="service-editorial mt-8">
           <div className="se-about-photos">
             <figure>

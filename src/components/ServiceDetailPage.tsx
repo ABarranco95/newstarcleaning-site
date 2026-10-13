@@ -67,7 +67,7 @@ const handoffRows = [
   {
     term: "Included",
     tagClass: "se-tag-included",
-    note: "Empty cabinet, drawer, and closet interiors — wiped, not upcharged. Plus the full deep-cleaning scope across the empty home.",
+    note: "Empty cabinet, drawer, and closet interiors are wiped out. The kitchen, bathrooms, floors and deep-cleaning details are included too.",
   },
   {
     term: "Add-on",
@@ -92,7 +92,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
     <div className="site-reference">
       <SiteHero
         title={h1}
-        description={presentation.summary}
+        description={presentation.lead}
         eyebrow={service.shortName}
         photo={presentation.photo}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
@@ -100,7 +100,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           <>
             <QuickQuoteForm
               title={`Price your ${service.shortName.toLowerCase()}`}
-              subtitle="Three quick steps. We confirm the price and included work before anything is booked."
+              subtitle="Tell us about your home. We'll confirm what we'll clean and the price."
               source={`organic_${service.slug}_service`}
               defaultService={quoteFormService(service)}
               compact
@@ -111,7 +111,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
                   baseUrl={directBookingUrl}
                   service={quoteFormService(service)}
                   sourcePage={`/services/${service.slug}`}
-                  label="Ready to self-schedule? Book online"
+                  label="Ready to book? Book online"
                   showIcon={false}
                   className="home-text-link"
                 />
@@ -120,7 +120,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           </>
         }
       >
-        <p className="site-price">Price confirmed before anything is booked.</p>
+        <p className="site-price">Insured. Supplies and equipment included.</p>
         <ul className="site-hero-points">
           {heroPoints[service.slug].map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
@@ -138,7 +138,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
             <div className="se-fit-copy">
               <p className="se-kicker">Is this the right clean for your home?</p>
               <h2>{isStandard ? "For homes we keep clean." : isDeep ? "When it needs more than a touch-up." : "For the day the home changes hands."}</h2>
-              <p className="se-lead">{presentation.lead}</p>
+              <p className="se-lead">{presentation.summary}</p>
               {isStandard && (
                 <>
                   <div className="se-cadence">
@@ -194,7 +194,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           <div className="site-copy">
             <h2>{service.name}: room by room.</h2>
             <p className="site-intro">{service.description}</p>
-            <p className="site-note"><strong>Cleaning service, not household task service.</strong> Laundry, dishes, organizing, bed making, packing, and personal item handling are outside our service scope.</p>
+            <p className="site-note">Please clear the surfaces you want cleaned. Laundry, dishes, organizing, bed making, packing, and personal item handling aren&apos;t included.</p>
             <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">→</span></Link>
           </div>
           <div className="service-editorial">
@@ -209,10 +209,10 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           </div>
           <div className="site-split mt-10">
             <div className="site-copy">
-              <h2>Add-ons, limits, and prep.</h2>
+              <h2>Need something extra?</h2>
               <div className="site-scope-visual"><Image src={`/illustrations/${illustrations[service.slug]}.svg`} alt="" width={360} height={260} /></div>
               <p className="site-note">{presentation.boundary}</p>
-              <p className="site-note">Your total depends on home size, condition, frequency, and optional work. We confirm price, scope, and availability before you book.</p>
+              <p className="site-note">Tell us what you want added. We&apos;ll include it in your quote so you know the full price before you book.</p>
             </div>
             <div className="site-disclosures">
               <details>

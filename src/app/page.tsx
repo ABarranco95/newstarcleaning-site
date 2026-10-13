@@ -9,7 +9,7 @@ import Icon from "@/components/Icon";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import ReviewCards from "@/components/ReviewCards";
 import TrustStrip from "@/components/TrustStrip";
-import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, ovenBuildupPair, tubSurroundPair } from "@/lib/realWorkPhotos";
+import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, ovenBuildupPair, tubSurroundPair } from "@/lib/realWorkPhotos";
 import { business } from "@/lib/business";
 import { googleReviews } from "@/lib/googleReviews";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
@@ -31,23 +31,17 @@ function resultPhoto(filename: string) {
   return photo;
 }
 
-const workStrip = [
-  kitchenSurfacesPhoto,
-  resultPhoto("bedroom-clean-new-star.webp"),
-  resultPhoto("dining-kitchen-turnover-new-star.webp"),
-  resultPhoto("living-room-clean-new-star.webp"),
-];
 
 const steps = [
-  { icon: "clipboard" as const, title: "Tell us about the home", body: "Size, condition, pets, and anything you want us to focus on. It takes about a minute." },
-  { icon: "tag" as const, title: "Get a clear price", body: "We confirm the service, add-ons, and total before booking. No surprises on the day." },
-  { icon: "check" as const, title: "We clean, you check", body: "We bring the supplies and work the checklist. If something was missed, tell us within 24 hours." },
+  { icon: "clipboard" as const, title: "Tell us what needs attention", body: "Share your home size and what you'd like cleaned. Not sure which service you need? We'll help you choose." },
+  { icon: "tag" as const, title: "Know the price first", body: "We'll explain what's included and price any extras before you book." },
+  { icon: "check" as const, title: "Tell us how we did", body: "If we missed something included in your cleaning, tell us within 24 hours. We'll come back and fix it at no charge." },
 ];
 
 const heroPoints = [
   "Price confirmed before you book",
-  "A written room-by-room checklist",
-  "Supplies and equipment brought in",
+  "Insured, with supplies and equipment included",
+  "Room-by-room cleaning, not a quick wipe-down",
 ];
 
 export default function Home() {
@@ -61,8 +55,8 @@ export default function Home() {
         <div className="hx-inner">
           <div className="hx-copy">
             <div id="reviews" className="hx-rating"><GoogleRating onDark /></div>
-            <h1 id="home-title">House cleaning in Fresno &amp; Clovis <span>you don&apos;t have to double-check.</span></h1>
-            <p className="hx-intro">Standard, deep, and move-out cleaning with a written checklist and a clear price before anything is booked.</p>
+            <h1 id="home-title">House cleaning in Fresno &amp; Clovis. <span>We get into the details.</span></h1>
+            <p className="hx-intro">I&apos;m Angel, the owner. My crews handle regular cleaning, deep cleans and move-outs. Tell us what needs attention in your home.</p>
             <ul className="hx-points">
               {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
             </ul>
@@ -75,7 +69,7 @@ export default function Home() {
           <div className="hx-form">
             <QuickQuoteForm
               title="Get your cleaning price"
-              subtitle="Three quick steps. We text or call back with your price."
+              subtitle="Tell us about your home. We'll text or call with your price."
               source="organic_home_hero"
               directBookingUrl={directBookingUrl}
               compact
@@ -86,39 +80,14 @@ export default function Home() {
 
       <TrustStrip />
 
-      <section className="home-band home-band-muted" aria-labelledby="home-reviews-title">
-        <div className="ns-section">
-          <div className="ns-section-head">
-            <div>
-              <p className="ns-kicker">Reviews</p>
-              <h2 id="home-reviews-title" className="ns-h2">What customers say on Google.</h2>
-            </div>
-            <GoogleRating prominent />
-          </div>
-          <ReviewCards reviews={[googleReviews[1], googleReviews[2], googleReviews[3]]} />
-        </div>
-      </section>
-
-      <section id="services" className="ns-section" aria-labelledby="home-services-title">
-        <div className="ns-section-head">
-          <div>
-            <p className="ns-kicker">Services</p>
-            <h2 id="home-services-title" className="ns-h2">Pick the cleaning that fits.</h2>
-            <p className="ns-lead">Start with a one-time visit or set up a regular schedule. Every price is confirmed before booking.</p>
-          </div>
-          <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">→</span></Link>
-        </div>
-        <Suspense fallback={<p>Standard, deep, and move-in / move-out cleaning. <Link href="/services">View services</Link>.</p>}><HomeServices /></Suspense>
-        <p className="home-service-notes">Oven and fridge interiors, interior window glass, and reachable window tracks are optional add-ons. Cabinet interiors are optional for standard and deep cleaning.</p>
-      </section>
 
       <section id="results" className="home-band home-band-dark ns-on-dark" aria-labelledby="home-results-title">
         <div className="ns-section">
           <div className="ns-section-head">
             <div>
               <p className="ns-kicker">Our work</p>
-              <h2 id="home-results-title" className="ns-h2">Real results from our jobs.</h2>
-              <p className="ns-lead">Every photo here is from a New Star appointment. No stock photos.</p>
+              <h2 id="home-results-title" className="ns-h2">A closer look at our work.</h2>
+              <p className="ns-lead">The same surfaces, before and after our cleaning. Every photo is from a New Star job.</p>
             </div>
             <Link href="/our-work" className="home-text-link home-text-link-light">See more of our work <span aria-hidden="true">→</span></Link>
           </div>
@@ -147,15 +116,36 @@ export default function Home() {
             </figure>
           </div>
 
-          <div className="home-work-strip">
-            {workStrip.map((photo) => (
-              <figure key={photo.src} className="home-work-item">
-                <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 46vw" />
-                <figcaption>{photo.caption}</figcaption>
-              </figure>
-            ))}
+          <div className="mt-8">
+            <Suspense fallback={<Link href="/book-now" className="home-button">Get your cleaning price <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get your cleaning price <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           </div>
         </div>
+      </section>
+
+      <section className="home-band home-band-muted" aria-labelledby="home-reviews-title">
+        <div className="ns-section">
+          <div className="ns-section-head">
+            <div>
+              <p className="ns-kicker">Reviews</p>
+              <h2 id="home-reviews-title" className="ns-h2">What customers say on Google.</h2>
+            </div>
+            <GoogleRating prominent />
+          </div>
+          <ReviewCards reviews={[googleReviews[1], googleReviews[2], googleReviews[3]]} />
+        </div>
+      </section>
+
+      <section id="services" className="ns-section" aria-labelledby="home-services-title">
+        <div className="ns-section-head">
+          <div>
+            <p className="ns-kicker">Services</p>
+            <h2 id="home-services-title" className="ns-h2">Pick the cleaning that fits.</h2>
+            <p className="ns-lead">A regular visit to keep up, a deep clean for buildup, or an empty home ready for a move.</p>
+          </div>
+          <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">→</span></Link>
+        </div>
+        <Suspense fallback={<p>Standard, deep, and move-in / move-out cleaning. <Link href="/services">View services</Link>.</p>}><HomeServices /></Suspense>
+        <p className="home-service-notes">Oven and fridge interiors, interior window glass, and reachable window tracks are optional add-ons. Cabinet interiors are optional for standard and deep cleaning.</p>
       </section>
 
       <section className="ns-section" aria-labelledby="home-process-title">

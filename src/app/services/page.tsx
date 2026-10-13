@@ -43,24 +43,24 @@ const guides = [
     short: "Standard",
     name: "Standard cleaning",
     photo: homeResultPhotos[1],
-    fit: "An already-maintained home on a weekly, bi-weekly, or monthly schedule. Kitchens, bathrooms, dusting, floors.",
-    pick: "Pick standard when the home is picked up and you want it kept consistently clean. Heavy buildup means starting with a deep clean.",
+    fit: "Keep up with the rooms you use every day. We clean the kitchen and bathrooms, dust accessible surfaces, and vacuum or mop the floors.",
+    pick: "For an already-maintained home, once or on a weekly, bi-weekly, or monthly schedule. If there's heavy buildup, start with a deep clean.",
   },
   {
     slug: "deep-cleaning",
     short: "Deep",
     name: "Deep cleaning",
     photo: bathroomResultPhotos[1],
-    fit: "The standard work plus real time on buildup, baseboards, fixtures, and reachable detail areas.",
-    pick: "Pick deep for a first visit, a seasonal reset, or visible buildup. Oven, fridge, cabinet interiors, and interior windows stay optional add-ons.",
+    fit: "The kitchen, bathrooms and floors, with more time for shower buildup, baseboards, door frames and reachable fixtures.",
+    pick: "Choose this when a regular clean won't be enough. Oven, fridge, cabinet interiors, and interior windows stay optional add-ons.",
   },
   {
     slug: "move-out-cleaning",
     short: "Move-out",
     name: "Move-in / move-out",
     photo: emptyHomeResultPhotos[1],
-    fit: "The empty-home service: deep-cleaning work plus empty cabinet, drawer, and closet interiors included.",
-    pick: "Pick move-out when the home is empty or nearly empty. Inside oven and fridge, interior glass, and tracks are optional add-ons; deposit outcomes are never guaranteed.",
+    fit: "An empty home cleaned for the move. Kitchens, bathrooms, floors and deep-cleaning details, including inside empty cabinets, drawers and closets.",
+    pick: "For moving out or moving in. Inside oven and fridge, interior glass, and tracks are optional add-ons. We can't promise a deposit return.",
   },
 ] as const;
 
@@ -103,7 +103,7 @@ const heroPoints = [
 export default function ServicesPage() {
   return (
     <div className="site-reference">
-      <SiteHero tone="dark" eyebrow="Services" title="House cleaning services in Fresno & Clovis." description="Regular visits, a deeper clean, or an empty home before a move. Madera dates depend on route availability." photo={homeResultPhotos[1]} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero tone="dark" eyebrow="Services" title="House cleaning services in Fresno & Clovis." description="Need help keeping up, or is there buildup that needs a closer look? Here's what we clean with each service. If you're not sure which fits, we'll help you choose." photo={homeResultPhotos[1]} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <ul className="site-hero-points">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
@@ -165,7 +165,7 @@ export default function ServicesPage() {
 
       <section className="site-muted" aria-labelledby="services-areas-title">
         <div className="ns-section">
-          <div className="ns-section-head"><div><p className="ns-kicker">Service area</p><h2 id="services-areas-title" className="ns-h2">Near you.</h2><p className="ns-lead">Fresno and Clovis are our core areas. Madera appointments depend on your address, date, and route capacity.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
+          <div className="ns-section-head"><div><p className="ns-kicker">Service area</p><h2 id="services-areas-title" className="ns-h2">Near you.</h2><p className="ns-lead">We&apos;re based in Fresno and clean in Clovis too. For Madera, send your address and preferred date so we can check the schedule.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
           <div className="home-local-cards home-local-cards-row">
             {primaryAreas.map((area) => <Link key={area.slug} href={`/cleaning-services-${area.slug}`} className="home-local-card"><Icon name="pin" /><span><strong>{area.name}</strong><span>{area.county}</span></span></Link>)}
           </div>
