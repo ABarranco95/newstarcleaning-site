@@ -308,6 +308,7 @@ export default function QuickQuoteForm({
   // Keep the same identity on a deliberate resubmit. No automatic retry:
   // the legacy /api/incoming destination does not dedupe by submissionId.
   const submissionIdRef = useRef("");
+  const submitInFlightRef = useRef(false);
   // Organic intake has three steps; the paid flow separates home and contact.
 
   useEffect(() => {
@@ -459,6 +460,9 @@ export default function QuickQuoteForm({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Synchronous guard: Enter/requestSubmit can run again before React paints
+    // the disabled button. Release in finally so a failed request can retry.
+    if (submitInFlightRef.current) return;
     // Stepped forms validate one visible step at a time (the form itself is
     // noValidate so hidden later steps cannot block Continue).
     const formElement = event.currentTarget;
@@ -526,6 +530,7 @@ export default function QuickQuoteForm({
     };
 
     try {
+      submitInFlightRef.current = true;
       const deadlineError = specificDeadlineError(formData);
       if (deadlineError) throw new Error(deadlineError);
 
@@ -640,6 +645,7 @@ export default function QuickQuoteForm({
           : "Something went wrong. Please call us directly and we will help right away."
       );
     } finally {
+      submitInFlightRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -762,7 +768,7 @@ export default function QuickQuoteForm({
       >
         <option value="">Select size…</option>
         {quickPaid ? PAID_HOME_SIZES.map((size) => (
-          <option key={size.value} value={size.value}>{size.label}</option>
+          <option key={size.value} value={size.value}>{size.label} sq ft</option>
         )) : <>
         <option value="under-1000">Under 1,000</option>
         <option value="1000-1499">1,000 – 1,499</option>
@@ -898,7 +904,15 @@ export default function QuickQuoteForm({
 
   // A tap is not needed to submit. The exact answer travels in existing notes
   // where Apex's canonical timeline cannot represent the selected window.
-  const renderPaidMoveTiming = () => renderChoiceChips(
+  const renderPaidMoveTiming = () => stagedPaid ? (
+    <div>
+      <FieldLabel htmlFor="quote-timeline" optional>When do you need it done?</FieldLabel>
+      <select id="quote-timeline" name="timeline" value={formData.timeline} onChange={(event) => updateField("timeline", event.target.value)} className={fieldClass}>
+        <option value="">Choose timing…</option>
+        {paidMoveTimingChoices.map((choice) => <option key={choice.value} value={choice.value}>{choice.label}</option>)}
+      </select>
+    </div>
+  ) : renderChoiceChips(
     "timeline",
     "When do you need it done?",
     paidMoveTimingChoices,
@@ -907,15 +921,25 @@ export default function QuickQuoteForm({
   );
 
   const renderPaidPrice = () => (
-    <div className={stagedPaid ? "paid-flow-price text-sm leading-6" : "min-h-32 text-sm leading-5"} role="status" aria-live="polite" aria-atomic="true" data-paid-price>
+    <div hidden={stagedPaid && paidPrice.status === "hidden" && !(formData.bedrooms && formData.bathrooms)} className={stagedPaid ? "paid-flow-price text-sm leading-6" : "min-h-32 text-sm leading-5"} role="status" aria-live="polite" aria-atomic="true" data-paid-price>
       {stagedPaid && paidPrice.status === "hidden" ? <p className="text-sm text-ink-soft">{formData.bedrooms && formData.bathrooms ? "We’ll confirm your price personally. You can still request a quote." : "Choose bedrooms and bathrooms to see a starting price. Add home size for a range."}</p> : null}
       {paidPrice.status === "loading" ? <p className="text-xs text-ink-soft">Checking price...</p> : null}
       {paidPrice.status === "custom" ? <p className="font-semibold text-primary">This size needs a custom quote. Send the form and we&apos;ll price it.</p> : null}
       {paidPrice.status === "ready" ? (
         <>
-          <p className="font-semibold text-primary">{paidPrice.range ? `Usually ${paidPrice.range}` : `From ${paidPrice.low}`} for a {formData.bedrooms} bed / {formData.bathrooms} bath {isMoveOutRequest ? "move-in / move-out clean" : isPaidHouseRequest || isRecurringRequest ? "Standard house clean" : "deep clean"}.</p>
-          {!paidPrice.range ? <p className="mt-1 text-xs leading-4 text-ink-soft">Pick your home size for your usual range.</p> : null}
-          <p className="mt-1 text-xs leading-4 text-ink-soft">Heavier buildup costs more. Your exact price is confirmed before you book.</p>
+          {stagedPaid ? (
+            <>
+              <p className="paid-flow-range font-semibold text-primary">{paidPrice.range || `From ${paidPrice.low}`}</p>
+              <p className="mt-2 text-ink-soft">{formData.bedrooms} bed · {formData.bathrooms} bath{paidSize ? ` · ${paidSize.label} sq ft` : ""}</p>
+              <p className="mt-2 text-ink-soft">{paidPrice.range ? "Size and buildup affect the final price, confirmed before booking." : "Choose home size for a range; final price confirmed before booking."}</p>
+            </>
+          ) : (
+            <>
+              <p className="font-semibold text-primary">{paidPrice.range ? `Usually ${paidPrice.range}` : `From ${paidPrice.low}`} for a {formData.bedrooms} bed / {formData.bathrooms} bath {isMoveOutRequest ? "move-in / move-out clean" : isPaidHouseRequest || isRecurringRequest ? "Standard house clean" : "deep clean"}.</p>
+              {!paidPrice.range ? <p className="mt-1 text-xs leading-4 text-ink-soft">Pick your home size for your usual range.</p> : null}
+              <p className="mt-1 text-xs leading-4 text-ink-soft">Heavier buildup costs more. Your exact price is confirmed before you book.</p>
+            </>
+          )}
           {paidPrice.biweekly ? <p className="mt-1 text-xs leading-4 font-semibold text-primary">Every other week: about {paidPrice.biweekly} per visit</p> : null}
           {directBookingUrl && paidPrice.bookableSqft && (formData.service === "Deep cleaning" || isPaidHouseRequest) ? (
             <PaidPriceBookingButton
@@ -1219,7 +1243,7 @@ export default function QuickQuoteForm({
 
   const renderStepTitle = (index: number) => (
     <p ref={step === index ? stepTitleRef : undefined} tabIndex={-1} className="qf-step-title">
-      Step {index} of {stepCount} · <b>{stepLabels[index - 1]}</b>
+      {stagedPaid ? <><b>{stepLabels[index - 1]}</b><span>{index} of {stepCount}</span></> : <>Step {index} of {stepCount} · <b>{stepLabels[index - 1]}</b></>}
     </p>
   );
 
@@ -1290,7 +1314,7 @@ export default function QuickQuoteForm({
     </div>
   ) : quickPaid ? (
     <div data-quote-step={stagedPaid ? undefined : "1"}>
-      {stagedPaid ? renderStepTitle(step) : null}
+
       <div data-quote-step={stagedPaid ? "1" : undefined} hidden={stagedPaid && step !== 1}>
         <div className="qf-stack">
           {!paidServicePrefilled ? renderServiceField() : <input type="hidden" name="service" value={formData.service} readOnly />}
@@ -1304,7 +1328,7 @@ export default function QuickQuoteForm({
         {stagedPaid ? (
           <>
             <div className="qf-actions">
-              <button type="submit" className="qf-submit">Get my quote <ArrowIcon /></button>
+              <button type="submit" disabled={isSubmitting} className="qf-submit">Get my quote <ArrowIcon /></button>
             </div>
             <p className="qf-help mt-3 text-center">Next: where to send your price and open dates. No payment.</p>
           </>
@@ -1449,8 +1473,8 @@ export default function QuickQuoteForm({
       className={stagedPaid ? "qf paid-flow-form" : compactPaid ? `qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3 ${stickyPaid ? "max-md:pt-3 max-md:[&_.qf-head_h2]:text-xl max-md:[&_.qf-head_h2]:leading-tight max-md:[&_.qf-head_p]:mt-1" : ""}` : "qf"}
     >
       <div className="qf-head">
-        <h2>{title}</h2>
-        {subtitle ? <p>{subtitle}</p> : null}
+        {stagedPaid ? renderStepTitle(step) : <h2>{title}</h2>}
+        {subtitle && !(stagedPaid && (formData.bedrooms || formData.bathrooms || formData.sqft || formData.city || formData.timeline)) ? <p>{subtitle}</p> : null}
         {!paidSearch && !isCommercialRequest && step === 1 && !contactOnly ? (
           <button type="button" className="qf-reset" onClick={() => {
             setContactOnly(true);

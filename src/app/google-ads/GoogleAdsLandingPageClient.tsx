@@ -147,7 +147,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
     h1: () => "House Cleaning in Fresno & Clovis",
-    subhead: "Kitchen, bathrooms, dusting and floors done room by room, once or on a schedule. Tell us about your home and you get one flat price before anything is booked.",
+    subhead: "Kitchen, bathrooms, dusting and floors, once or on a schedule.",
     serviceDefault: "Not sure yet",
     formTitle: "Get a quote",
     priceLine: "House cleaning from $165, depending on size and buildup. Total confirmed before you book.",
@@ -167,7 +167,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   move: {
     eyebrow: "Move-in / move-out cleaning",
     h1: () => "Move-Out & Move-In Cleaning in Fresno & Clovis",
-    subhead: "Tell us when you need it done. Empty cabinet, drawer and closet interiors are included.",
+    subhead: "Empty cabinet, drawer and closet interiors included.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Get a quote",
     priceLine: "Move-in/out cleaning from $325, depending on size and buildup. Total confirmed before you book.",
@@ -190,7 +190,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   deep: {
     eyebrow: "Detailed deep cleaning",
     h1: () => "Deep House Cleaning in Fresno & Clovis",
-    subhead: "Baseboards, fixtures, built-up grime and the detail work a regular clean skips. Tell us which rooms bother you most and we plan the time around them.",
+    subhead: "Baseboards, fixtures and the buildup a regular clean skips.",
     serviceDefault: "Deep cleaning",
     formTitle: "Get a quote",
     priceLine: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
@@ -649,7 +649,7 @@ export default function GoogleAdsLandingPageClient({
       </header>
 
       <section className="paid-hero-dark" data-compact-hero={compactResidentialHero || undefined} aria-labelledby="paid-title">
-        <div className={compactResidentialHero ? "home-wrap py-8 md:py-12 lg:py-16" : "home-wrap py-5 sm:py-8 lg:py-10"}>
+        <div className={compactResidentialHero ? "home-wrap py-4 md:py-12 lg:py-16" : "home-wrap py-5 sm:py-8 lg:py-10"}>
           <div className="paid-hero-grid">
             <div className="paid-hero-story">
             <div className="paid-hero-copy min-w-0">
@@ -657,7 +657,7 @@ export default function GoogleAdsLandingPageClient({
               <h1 id="paid-title" className={compactResidentialHero ? "max-w-2xl break-words text-[2rem] leading-[1.15] text-primary md:mt-3 md:text-5xl lg:text-[3.25rem]" : "mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]"}>
                 {intent.h1(city.label)}
               </h1>
-              <p className="mt-4 max-w-xl text-base leading-7 text-ink-soft">
+              <p className={compactResidentialHero ? "mt-2 max-w-xl text-base leading-6 text-ink-soft md:mt-4 md:leading-7" : "mt-4 max-w-xl text-base leading-7 text-ink-soft"}>
                 {intent.subhead}
               </p>
               {intent.scope && !compactResidentialHero ? <ScopeNote scope={intent.scope} /> : null}
@@ -666,7 +666,7 @@ export default function GoogleAdsLandingPageClient({
                   <li key={point}><Icon name="check" />{point}</li>
                 ))}
               </ul>
-              <div className="mt-3">
+              <div className={compactResidentialHero ? "mt-3 hidden md:block" : "mt-3"}>
                 <TrustLine commercial={isBusinessRequest} />
               </div>
             </div>

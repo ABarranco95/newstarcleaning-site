@@ -67,20 +67,31 @@
 .paid-flow .paid-hero-form > p .home-text-link { color: var(--color-primary); text-decoration-color: currentColor; }
 .paid-flow .paid-flow-form { padding: 24px; border: 1px solid var(--color-line); border-radius: 12px; background: #f8fafc; box-shadow: none; }
 .paid-flow-form .qf-head h2 { font-size: 26px; line-height: 1.2; }
-.paid-flow-form .qf-head p { margin-top: 12px; font-size: 14px; line-height: 1.6; }
+.paid-flow-form .qf-head p { margin-top: 12px; font-size: 16px; line-height: 1.5; }
 .paid-flow-form .qf-stack, .paid-flow-form .qf-row { gap: 20px; }
-.paid-flow-form .qf-step-title { margin: 0 0 24px; font-size: 13px; }
+.paid-flow-form .qf-head .qf-step-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0; font-size: 16px; }
+.paid-flow-form .qf-step-title b { font-size: 24px; }
+.paid-flow-form .qf-step-title span { font-weight: 400; }
+.paid-flow-form .qf-label, .paid-flow-form .qf-optional, .paid-flow-form .qf-help { font-size: 16px; }
 .paid-flow-form .qf-actions { margin-top: 24px; }
 .paid-flow-form .qf-consent { margin-top: 4px; font-size: 13px; line-height: 1.6; }
 .paid-flow-form .qf-fine { margin-top: 16px; }
 .paid-flow-form .qf-disclosure { margin-top: 24px; padding-top: 12px; }
 .paid-flow-form .paid-flow-price { padding-top: 20px; border-top: 1px solid var(--color-line); }
-.paid-flow-form .paid-flow-price > p:first-child { font-size: 16px; line-height: 1.5; }
+.paid-flow-form .paid-flow-price > p { font-size: 16px; line-height: 1.5; }
+.paid-flow-form .paid-flow-price .paid-flow-range { font-size: 40px; line-height: 1.1; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
 .paid-flow-form .paid-flow-price [data-paid-booking] { margin-top: 16px; }
 .paid-flow-form .paid-decision-proof { margin-top: 24px; padding-top: 24px; }
 .paid-flow-form .paid-decision-proof blockquote { font-size: 14px; line-height: 1.6; }
 
 @media (max-width: 639px) {
+  .paid-flow .paid-hero-grid { gap: 16px; }
+  .paid-flow .paid-flow-form { padding: 16px; }
+  .paid-flow-form > form { margin-top: 12px; }
+  .paid-flow-form .qf-head p { margin-top: 8px; }
+  .paid-flow-form .qf-stack, .paid-flow-form .qf-row { gap: 12px; }
+  .paid-flow-form .qf-actions { margin-top: 16px; }
+  .paid-flow-form .qf-input { min-height: 48px; padding-block: 10px; }
   .paid-flow-form .qf-chips:has(input[name="timeline"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 640px) {
