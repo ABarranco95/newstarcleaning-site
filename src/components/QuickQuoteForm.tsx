@@ -29,6 +29,7 @@ type QuickQuoteFormProps = {
   decisionProof?: ReactNode;
   submitLabel?: string;
   stickyPaidCta?: boolean;
+  paidFlow?: boolean;
   onStickyPaidClick?: () => void;
 
 };
@@ -280,6 +281,7 @@ export default function QuickQuoteForm({
   decisionProof,
   submitLabel,
   stickyPaidCta = false,
+  paidFlow = false,
   onStickyPaidClick,
 
   directBookingUrl = null,
@@ -306,7 +308,7 @@ export default function QuickQuoteForm({
   // Keep the same identity on a deliberate resubmit. No automatic retry:
   // the legacy /api/incoming destination does not dedupe by submissionId.
   const submissionIdRef = useRef("");
-  // Every quote form (organic and paid) walks through three short steps.
+  // Organic intake has three steps; the paid flow separates home and contact.
 
   useEffect(() => {
     setFormData((current) => ({
@@ -423,9 +425,10 @@ export default function QuickQuoteForm({
     : undefined;
   const quickContact = !paidSearch && contactOnly && !isCommercialRequest;
   const compactPaid = quickPaid && compact;
+  const stagedPaid = compactPaid && paidFlow;
   const stickyPaid = compactPaid && stickyPaidCta;
   const paidSubmitLabel = submitLabel;
-  const stepCount = quickPaid || quickContact ? 1 : STEP_COUNT;
+  const stepCount = stagedPaid ? 2 : quickPaid || quickContact ? 1 : STEP_COUNT;
   const paidPrice = usePaidPriceRange({
     enabled: quickPaid,
     service: formData.service,
@@ -439,7 +442,7 @@ export default function QuickQuoteForm({
     const form = formRef.current;
     if (!form || isSubmitting) return;
     onStickyPaidClick?.();
-    const invalid = firstInvalidControl(form.querySelector('[data-quote-step="1"]'));
+    const invalid = firstInvalidControl(form.querySelector(`[data-quote-step="${step}"]`));
     if (invalid) {
       invalid.scrollIntoView({ block: "center" });
       invalid.focus({ preventScroll: true });
@@ -485,15 +488,14 @@ export default function QuickQuoteForm({
         }
       }
     }
-    // The paid residential form submits from its first visible screen. A
-    // valid screen is step 1 complete even though there is no Continue click.
+    // Mark the final paid step only after its required controls validate.
     if (quickPaid) {
       trackFunnelEvent("quote_step_complete", {
         source,
         service: formData.service,
         city: formData.city,
         page: window.location.pathname,
-        ctaLocation: "step_1",
+        ctaLocation: stagedPaid ? "step_2" : "step_1",
       });
     }
     // Freeze the submitted customer values, not edits made during the request.
@@ -905,7 +907,8 @@ export default function QuickQuoteForm({
   );
 
   const renderPaidPrice = () => (
-    <div className="min-h-32 text-sm leading-5" role="status" aria-live="polite" aria-atomic="true" data-paid-price>
+    <div className={stagedPaid ? "paid-flow-price text-sm leading-6" : "min-h-32 text-sm leading-5"} role="status" aria-live="polite" aria-atomic="true" data-paid-price>
+      {stagedPaid && paidPrice.status === "hidden" ? <p className="text-sm text-ink-soft">{formData.bedrooms && formData.bathrooms ? "We’ll confirm your price personally. You can still request a quote." : "Choose bedrooms and bathrooms to see a starting price. Add home size for a range."}</p> : null}
       {paidPrice.status === "loading" ? <p className="text-xs text-ink-soft">Checking price...</p> : null}
       {paidPrice.status === "custom" ? <p className="font-semibold text-primary">This size needs a custom quote. Send the form and we&apos;ll price it.</p> : null}
       {paidPrice.status === "ready" ? (
@@ -1016,7 +1019,7 @@ export default function QuickQuoteForm({
   );
 
   const renderNameAndPhone = () => (
-    <div className={compactPaid ? "qf-row grid-cols-2" : "qf-row qf-row-2"}>
+    <div className={stagedPaid ? "qf-row" : compactPaid ? "qf-row grid-cols-2" : "qf-row qf-row-2"}>
       <div>
         <FieldLabel htmlFor="quote-name" required>Name</FieldLabel>
         <input
@@ -1211,7 +1214,7 @@ export default function QuickQuoteForm({
   ) : null);
 
   const stepLabels = quickPaid
-    ? ["Your home"]
+    ? stagedPaid ? ["Your home", "Your quote"] : ["Your home"]
     : [paidServicePrefilled ? "Where and when" : stepNames[0], stepNames[1], stepNames[2]];
 
   const renderStepTitle = (index: number) => (
@@ -1286,37 +1289,53 @@ export default function QuickQuoteForm({
       {renderFinePrint()}
     </div>
   ) : quickPaid ? (
-    <>
-      <div data-quote-step="1">
+    <div data-quote-step={stagedPaid ? undefined : "1"}>
+      {stagedPaid ? renderStepTitle(step) : null}
+      <div data-quote-step={stagedPaid ? "1" : undefined} hidden={stagedPaid && step !== 1}>
         <div className="qf-stack">
           {!paidServicePrefilled ? renderServiceField() : <input type="hidden" name="service" value={formData.service} readOnly />}
+          {stagedPaid && isMoveOutRequest ? renderPaidMoveTiming() : null}
           {compactPaid ? renderBedBathFields() : renderBedBathChips()}
           {renderSqftField(true)}
           {renderCityField()}
           {renderPaidPrice()}
           {isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null}
+        </div>
+        {stagedPaid ? (
+          <>
+            <div className="qf-actions">
+              <button type="submit" className="qf-submit">Get my quote <ArrowIcon /></button>
+            </div>
+            <p className="qf-help mt-3 text-center">Next: where to send your price and open dates. No payment.</p>
+          </>
+        ) : null}
+      </div>
+      <div data-quote-step={stagedPaid ? "2" : undefined} hidden={stagedPaid && step !== 2}>
+        <div className="qf-stack">
+          {stagedPaid ? <p className="qf-help">{formData.bedrooms} bed · {formData.bathrooms} bath · {formData.city}. We’ll confirm scope, price and available dates with you.</p> : null}
           {renderNameAndPhone()}
-          {isMoveOutRequest ? renderPaidMoveTiming() : null}
+          {isMoveOutRequest && !stagedPaid ? renderPaidMoveTiming() : null}
           {renderContactChips()}
           {renderSmsConsent()}
           {renderError()}
         </div>
         <div className="qf-actions">
+          {stagedPaid ? <button type="button" className="qf-back" onClick={() => goToStep(1)}>Back</button> : null}
           <SubmitButton
             isSubmitting={isSubmitting}
             compact={compact}
             commercial={false}
             paidSearch
-            label={paidSubmitLabel}
+            label={stagedPaid && (formData.contactPreference === "call" || !smsOptIn) ? "Request my quote" : paidSubmitLabel}
           />
         </div>
         {submitAlternative}
         {renderFinePrint()}
         {renderPaidDisclosure()}
-        <p className="qf-help">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p>
+        {!stagedPaid ? <p className="qf-help">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p> : null}
       </div>
       {decisionProof}
-    </>
+    </div>
   ) : (
     <>
       <div className="qf-progress" aria-hidden="true">
@@ -1426,8 +1445,8 @@ export default function QuickQuoteForm({
       id="quote"
       ref={containerRef}
       data-paid-search={paidSearch || undefined}
-      data-quote-layout={quickContact ? "contact-first" : "stepped"}
-      className={compactPaid ? `qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3 ${stickyPaid ? "max-md:pt-3 max-md:[&_.qf-head_h2]:text-xl max-md:[&_.qf-head_h2]:leading-tight max-md:[&_.qf-head_p]:mt-1" : ""}` : "qf"}
+      data-quote-layout={stagedPaid ? "paid-price-first" : quickContact ? "contact-first" : "stepped"}
+      className={stagedPaid ? "qf paid-flow-form" : compactPaid ? `qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3 ${stickyPaid ? "max-md:pt-3 max-md:[&_.qf-head_h2]:text-xl max-md:[&_.qf-head_h2]:leading-tight max-md:[&_.qf-head_p]:mt-1" : ""}` : "qf"}
     >
       <div className="qf-head">
         <h2>{title}</h2>
@@ -1460,7 +1479,7 @@ export default function QuickQuoteForm({
             validationField: field || "unknown",
           });
         }}
-        className={paidSearch ? compactPaid ? stickyPaid ? "mt-2 md:mt-3" : "mt-3" : "mt-4" : ""}
+        className={stagedPaid ? "mt-6" : paidSearch ? compactPaid ? stickyPaid ? "mt-2 md:mt-3" : "mt-3" : "mt-4" : ""}
       >
         <div className="hidden" aria-hidden="true">
           <label htmlFor="quote-website-url">Leave this blank</label>
@@ -1479,8 +1498,9 @@ export default function QuickQuoteForm({
       {stickyPaid ? (
         <PaidQuoteStickyCTA
           formRef={formRef}
+          activeStep={stagedPaid ? step : undefined}
           isSubmitting={isSubmitting}
-          label={paidSubmitLabel || "Get a quote"}
+          label={stagedPaid ? step === 1 ? "Get my quote" : "Request my quote" : paidSubmitLabel || "Get a quote"}
           onClick={handleStickySubmit}
         />
       ) : null}

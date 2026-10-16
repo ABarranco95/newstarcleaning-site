@@ -4,10 +4,11 @@ import { reviewsFor, type GoogleReview, type ReviewTopic } from "@/lib/googleRev
 // Verbatim Google review excerpts. Omitted text is marked with an ellipsis.
 // No link out to the profile (Angel, 2026-10-06). Pass `reviews` for a
 // fixed set, or a `topic` to lead with reviews about that service.
-export default function ReviewCards({ reviews, topic = "home", count = 3 }: {
+export default function ReviewCards({ reviews, topic = "home", count = 3, showRating = true }: {
   reviews?: GoogleReview[];
   topic?: ReviewTopic;
   count?: number;
+  showRating?: boolean;
 }) {
   const list = reviews ?? reviewsFor(topic, count);
   return (
@@ -16,7 +17,7 @@ export default function ReviewCards({ reviews, topic = "home", count = 3 }: {
         {list.map((review) => (
           <figure key={review.id} className="ns-review" data-review-id={review.id}>
             <div className="ns-review-head">
-              <StarRow />
+              {showRating ? <StarRow /> : null}
               <span className="ns-review-source">Google review</span>
             </div>
             <blockquote>
@@ -27,7 +28,7 @@ export default function ReviewCards({ reviews, topic = "home", count = 3 }: {
               <span>
                 <strong>{review.author}</strong>
                 {review.label}
-                <span className="ns-sr">, rated 5 out of 5</span>
+                {showRating ? <span className="ns-sr">, rated 5 out of 5</span> : null}
               </span>
             </figcaption>
           </figure>

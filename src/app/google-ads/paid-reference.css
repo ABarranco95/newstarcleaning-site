@@ -53,3 +53,42 @@
   /* Keep the quote card in view while the visitor reads the left column. */
   .paid-hero-dark .paid-hero-form { position: sticky; top: 24px; align-self: start; }
 }
+
+/* The price-first residential flow is an open page, not a compressed form
+   floating inside a dark panel. Non-residential and organic forms stay intact. */
+.paid-flow .paid-hero-dark { background: #fff; color: var(--color-ink); }
+.paid-flow .paid-hero-story .text-primary { color: var(--color-primary); }
+.paid-flow .paid-hero-story .text-ink-soft { color: var(--color-ink-soft); }
+.paid-flow .paid-hero-grid { gap: 32px; }
+.paid-flow .home-header-quote { background: transparent; color: #fff; padding-inline: 0; }
+.paid-flow .home-header-quote:hover { text-decoration: underline; text-underline-offset: 4px; }
+.paid-flow .paid-job-photo figcaption { color: var(--color-ink-soft); }
+.paid-flow .paid-job-photo-frame { border-radius: 8px; }
+.paid-flow .paid-hero-form > p .home-text-link { color: var(--color-primary); text-decoration-color: currentColor; }
+.paid-flow .paid-flow-form { padding: 24px; border: 1px solid var(--color-line); border-radius: 12px; background: #f8fafc; box-shadow: none; }
+.paid-flow-form .qf-head h2 { font-size: 26px; line-height: 1.2; }
+.paid-flow-form .qf-head p { margin-top: 12px; font-size: 14px; line-height: 1.6; }
+.paid-flow-form .qf-stack, .paid-flow-form .qf-row { gap: 20px; }
+.paid-flow-form .qf-step-title { margin: 0 0 24px; font-size: 13px; }
+.paid-flow-form .qf-actions { margin-top: 24px; }
+.paid-flow-form .qf-consent { margin-top: 4px; font-size: 13px; line-height: 1.6; }
+.paid-flow-form .qf-fine { margin-top: 16px; }
+.paid-flow-form .qf-disclosure { margin-top: 24px; padding-top: 12px; }
+.paid-flow-form .paid-flow-price { padding-top: 20px; border-top: 1px solid var(--color-line); }
+.paid-flow-form .paid-flow-price > p:first-child { font-size: 16px; line-height: 1.5; }
+.paid-flow-form .paid-flow-price [data-paid-booking] { margin-top: 16px; }
+.paid-flow-form .paid-decision-proof { margin-top: 24px; padding-top: 24px; }
+.paid-flow-form .paid-decision-proof blockquote { font-size: 14px; line-height: 1.6; }
+
+@media (max-width: 639px) {
+  .paid-flow-form .qf-chips:has(input[name="timeline"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 640px) {
+  .paid-flow .ns-reviews { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .paid-flow .paid-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: 80px; }
+  .paid-flow .paid-hero-story { gap: 40px; }
+  .paid-flow .paid-flow-form { padding: 32px; }
+  .paid-flow .paid-hero-form { position: static; }
+}

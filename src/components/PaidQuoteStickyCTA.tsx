@@ -8,13 +8,15 @@ type PaidQuoteStickyCTAProps = {
   isSubmitting: boolean;
   label: string;
   onClick: () => void;
+  activeStep?: number;
 };
 
-export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onClick }: PaidQuoteStickyCTAProps) {
+export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onClick, activeStep }: PaidQuoteStickyCTAProps) {
   const [submitInView, setSubmitInView] = useState(false);
 
   useEffect(() => {
-    const submit = formRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const selector = activeStep ? `[data-quote-step="${activeStep}"] button[type="submit"]` : 'button[type="submit"]';
+    const submit = formRef.current?.querySelector<HTMLButtonElement>(selector);
     if (!submit) return;
     const observer = new IntersectionObserver(([entry]) => setSubmitInView(entry.isIntersecting), {
       // Step aside before even the first edge of the submit enters the bar.
@@ -22,7 +24,7 @@ export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onCli
     });
     observer.observe(submit);
     return () => observer.disconnect();
-  }, [formRef]);
+  }, [formRef, activeStep]);
 
   // While someone is typing, the phone keyboard is up and a fixed bar would
   // sit on top of the field they're filling, so step aside until they leave.

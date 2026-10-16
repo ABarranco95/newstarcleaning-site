@@ -16,12 +16,13 @@ const messages: Record<PrefillSendStatus, string> = {
   cancelled: "Home-detail transfer stopped. Nothing was booked or submitted.",
 };
 
-export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet }: {
+export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, primary = false }: {
   baseUrl: string;
   service: "Deep cleaning" | "Standard recurring cleaning";
   bedrooms: string;
   bathrooms: string;
   squareFeet: string;
+  primary?: boolean;
 }) {
   const [destination] = useState<string | null>(() => {
     try {
@@ -45,7 +46,9 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
       <button
         type="button"
         disabled={pending}
-        className="min-h-11 text-left text-sm font-semibold text-primary underline underline-offset-4 disabled:cursor-wait disabled:opacity-60"
+        className={primary
+          ? "qf-submit w-full disabled:cursor-wait disabled:opacity-60"
+          : "flex min-h-12 w-full items-center justify-center rounded-lg border border-primary bg-white px-4 py-3 text-center text-sm font-semibold text-primary transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-60"}
         onClick={() => {
           cancelRef.current?.();
           // Deliberately independent of acceptedPrefillSnapshot: this explicit
@@ -63,9 +66,9 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           } catch { /* Analytics must not interrupt the synchronous handoff. */ }
         }}
       >
-        Book online at this price
+        Review price &amp; choose a date
       </button>
-      <p className="text-xs leading-4 text-ink-soft">For a kept-up home at the low end of your size range. Confirm your exact size and condition before booking.</p>
+      <p className="mt-3 text-xs leading-5 text-ink-soft">Opens booking in a new tab with your home details. Starts at the low end of this range for a kept-up home. Review size, condition and extras before choosing your date.</p>
       {status ? <p role="status" className="mt-1 text-xs leading-4 text-ink-soft">{messages[status]}</p> : null}
     </div>
   );

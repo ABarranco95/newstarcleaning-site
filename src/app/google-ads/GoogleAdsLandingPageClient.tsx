@@ -323,7 +323,7 @@ function TrustLine({ commercial = false, onDark = false }: { commercial?: boolea
 
 function ScopeNote({ scope }: { scope: NonNullable<PaidIntentConfig["scope"]> }) {
   return (
-    <dl className="mt-3 hidden gap-2 text-sm leading-6 sm:grid">
+    <dl className="paid-scope mt-6 grid gap-3 text-sm leading-6">
       <div>
         <dt className="inline font-medium text-primary">Included: </dt>
         <dd className="inline text-ink-soft">{scope.included}</dd>
@@ -455,7 +455,7 @@ function ReviewStrip({ intent, excludeReviewId }: { intent: PaidIntent; excludeR
           <GoogleRating prominent />
         </div>
         <div className="mt-8">
-          <ReviewCards reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} />
+          <ReviewCards showRating={false} reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} />
         </div>
       </div>
     </section>
@@ -634,7 +634,7 @@ export default function GoogleAdsLandingPageClient({
   };
 
   return (
-    <div className={compactResidentialHero ? "site-reference paid-reference bg-white pb-[calc(80px+env(safe-area-inset-bottom,0px))] text-ink md:pb-0" : "site-reference paid-reference bg-white pb-24 text-ink md:pb-0"}>
+    <div className={compactResidentialHero ? "site-reference paid-reference paid-flow bg-white pb-[calc(80px+env(safe-area-inset-bottom,0px))] text-ink md:pb-0" : "site-reference paid-reference bg-white pb-24 text-ink md:pb-0"}>
       <header className="bg-primary text-white">
         <div className="home-wrap flex h-16 items-center justify-between gap-4">
           <PaidBrand />
@@ -649,19 +649,19 @@ export default function GoogleAdsLandingPageClient({
       </header>
 
       <section className="paid-hero-dark" data-compact-hero={compactResidentialHero || undefined} aria-labelledby="paid-title">
-        <div className={compactResidentialHero ? "home-wrap py-3 md:py-8 lg:py-10" : "home-wrap py-5 sm:py-8 lg:py-10"}>
-          <div className={compactResidentialHero ? "paid-hero-grid max-md:gap-2" : "paid-hero-grid"}>
+        <div className={compactResidentialHero ? "home-wrap py-8 md:py-12 lg:py-16" : "home-wrap py-5 sm:py-8 lg:py-10"}>
+          <div className="paid-hero-grid">
             <div className="paid-hero-story">
             <div className="paid-hero-copy min-w-0">
               <p className={compactResidentialHero ? "hidden text-xs text-ink-soft md:block" : "text-xs text-ink-soft"}>{intent.eyebrow}</p>
-              <h1 id="paid-title" className={compactResidentialHero ? "max-w-2xl break-words text-2xl leading-[1.09] text-primary md:mt-2 md:text-5xl lg:text-[3.25rem]" : "mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]"}>
+              <h1 id="paid-title" className={compactResidentialHero ? "max-w-2xl break-words text-[2rem] leading-[1.15] text-primary md:mt-3 md:text-5xl lg:text-[3.25rem]" : "mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]"}>
                 {intent.h1(city.label)}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
+              <p className="mt-4 max-w-xl text-base leading-7 text-ink-soft">
                 {intent.subhead}
               </p>
-              {intent.scope ? <ScopeNote scope={intent.scope} /> : null}
-              <ul className="site-form-points paid-hero-points">
+              {intent.scope && !compactResidentialHero ? <ScopeNote scope={intent.scope} /> : null}
+              <ul className={compactResidentialHero ? "hidden" : "site-form-points paid-hero-points"}>
                 {(isBusinessRequest ? BUSINESS_POINTS : HOME_POINTS).map((point) => (
                   <li key={point}><Icon name="check" />{point}</li>
                 ))}
@@ -704,6 +704,7 @@ export default function GoogleAdsLandingPageClient({
                   extended
                   paidSearch
                   compact={Boolean(intent.priceLine)}
+                  paidFlow={compactResidentialHero}
                   stickyPaidCta={compactResidentialHero}
                   onStickyPaidClick={() => trackStickyCta("sticky_paid")}
                   submitLabel={compactResidentialHero ? intentKey === "move" ? "Text me my price + move-out dates" : "Text me my price + open dates" : undefined}
@@ -718,7 +719,7 @@ export default function GoogleAdsLandingPageClient({
                     </a>
                   ) : null}
                   decisionProof={decisionReview ? (
-                    <figure className="mt-3 border-t border-line pt-3" data-review-id={decisionReview.id}>
+                    <figure className="paid-decision-proof mt-6 border-t border-line pt-6" data-review-id={decisionReview.id}>
                       <blockquote className="text-sm leading-5 text-ink">
                         <p>&ldquo;{decisionReview.excerpt.join(" … ")}&rdquo;</p>
                       </blockquote>
@@ -730,7 +731,7 @@ export default function GoogleAdsLandingPageClient({
 
                 />
               )}
-              <p className="mt-2 text-center text-sm">
+              <p className="mt-4 text-center text-sm">
                 <a href={"sms:+1" + "559" + "785" + "2822"} data-phone-location="paid_under_form" className="home-text-link min-h-11">Prefer to text? Text us</a>
               </p>
 
@@ -750,6 +751,7 @@ export default function GoogleAdsLandingPageClient({
         <div className="site-section grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-16">
           <div>
             <h2 className="text-primary">{isBusinessRequest ? "Before we propose the work." : "Before you book."}</h2>
+            {compactResidentialHero && intent.scope ? <ScopeNote scope={intent.scope} /> : null}
             <div className="mt-6">
               <FAQAccordion faqs={intent.faqs} />
             </div>
