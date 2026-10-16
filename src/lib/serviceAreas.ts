@@ -12,6 +12,10 @@ export interface ServiceArea {
   homeProfiles: string[];
   commonJobs: string[];
   bookingNote: string;
+  serviceDetails?: {
+    deep: string;
+    move: string;
+  };
 }
 
 export const serviceAreas: ServiceArea[] = [
@@ -50,6 +54,10 @@ export const serviceAreas: ServiceArea[] = [
     ],
     bookingNote:
       "Appointment options depend on the address, service, home size, and requested date. We confirm the available window before booking.",
+    serviceDetails: {
+      deep: "From detailed trim in older homes to more bathrooms and floor area in larger homes, the work depends on the property. Tell us which rooms and buildup areas need attention.",
+      move: "Share the empty-home date, walkthrough deadline and access details. Empty cabinet, drawer and closet interiors are included; oven and fridge interiors and window cleaning are optional add-ons.",
+    },
   },
   {
     slug: "clovis",
@@ -85,6 +93,10 @@ export const serviceAreas: ServiceArea[] = [
     ],
     bookingNote:
       "Share the Clovis address and preferred timing with the quote request. We confirm route availability before booking.",
+    serviceDetails: {
+      deep: "Old Town homes and newer Harlan Ranch and Loma Vista floor plans differ. Share the room count and shower, baseboard or fixture buildup so we can quote the right work.",
+      move: "Tell us when the home will be empty, the handoff date and which cabinets and closets will be cleared. We confirm the cleaning window before booking.",
+    },
   },
   {
     slug: "madera",
@@ -117,6 +129,10 @@ export const serviceAreas: ServiceArea[] = [
     ],
     bookingNote:
       "Madera availability depends on route capacity and the exact address. We confirm travel and timing before booking.",
+    serviceDetails: {
+      deep: "Appointments depend on the exact address and route capacity. Share the home's size, buildup areas and preferred date so we can confirm timing.",
+      move: "Tell us when the home will be empty and your deadline. Empty cabinet, drawer and closet interiors are included; route timing must be confirmed.",
+    },
   },
   {
     slug: "tower-district",

@@ -127,6 +127,7 @@ export default function OurWorkPage() {
 
       <section id="empty-homes" className="home-wrap work-section" aria-labelledby="work-empty-title">
         <div className="work-section-heading"><h2 id="work-empty-title">Empty homes</h2><p>Move-in and move-out cleaning covers the full deep-cleaning scope plus empty cabinet, drawer, and closet interiors. Oven, fridge, and interior windows are optional add-ons.</p></div>
+        <Link href="/services/move-out-cleaning" className="home-text-link">See the full move-in and move-out cleaning scope <span aria-hidden="true">→</span></Link>
         <div className="work-grid work-grid-wide">
           {emptyHomes.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
         </div>

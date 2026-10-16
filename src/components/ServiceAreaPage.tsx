@@ -112,6 +112,20 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         </div>
         <div className="mt-8"><Suspense fallback={null}><HomeServices defaultCity={area.name} /></Suspense></div>
         <p className="home-service-notes">Oven and fridge interiors, interior window glass, and cabinet interiors on standard or deep cleans are optional add-ons. Move-in / move-out includes empty cabinet, drawer, and closet interiors.</p>
+        {area.serviceDetails && (
+          <div className="site-split mt-8">
+            <section id="deep-cleaning" className="site-copy scroll-mt-24" aria-labelledby="area-deep-title">
+              <h2 id="area-deep-title">Deep cleaning in {area.name}</h2>
+              <p className="site-intro">{area.serviceDetails.deep}</p>
+              <Link href="/services/deep-cleaning" className="home-text-link">See the full deep-cleaning scope <span aria-hidden="true">→</span></Link>
+            </section>
+            <section id="move-out-cleaning" className="site-copy scroll-mt-24" aria-labelledby="area-move-title">
+              <h2 id="area-move-title">Move-out and move-in cleaning in {area.name}</h2>
+              <p className="site-intro">{area.serviceDetails.move}</p>
+              <Link href="/services/move-out-cleaning" className="home-text-link">See the full move-in/move-out scope <span aria-hidden="true">→</span></Link>
+            </section>
+          </div>
+        )}
       </section>
 
       <section className="site-muted" aria-labelledby="area-reviews-title">
@@ -198,13 +212,15 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       ]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org", "@type": "Service",
+        "@id": `${siteUrl}/cleaning-services-${area.slug}#service`,
+        url: `${siteUrl}/cleaning-services-${area.slug}`,
         name: `House Cleaning Service in ${area.name}, CA`, description: area.description,
         provider: { "@id": "https://newstarcleaning.com/#localbusiness" },
         areaServed: { "@type": "City", name: area.name, addressRegion: "CA" },
         hasOfferCatalog: { "@type": "OfferCatalog", name: "Cleaning Services", itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning" } },
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Move-In/Move-Out Cleaning" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning", url: `${siteUrl}/services/standard-cleaning` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning", url: `${siteUrl}/services/deep-cleaning` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Move-In/Move-Out Cleaning", url: `${siteUrl}/services/move-out-cleaning` } },
         ] },
       }) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

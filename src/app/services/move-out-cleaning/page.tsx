@@ -5,17 +5,17 @@ import { getService } from "@/lib/services";
 const service = getService("move-out-cleaning")!;
 
 export const metadata: Metadata = {
-  title: "Move-In / Move-Out Cleaning in Fresno, CA",
+  title: "Move-Out & Move-In Cleaning in Fresno & Clovis",
   description:
-    "Move-out and move-in cleaning for Fresno tenants, owners, sellers, buyers, and property turnovers. Request pricing and current availability.",
+    "Empty-home cleaning in Fresno and Clovis, including empty cabinet, drawer and closet interiors. Oven and fridge interiors are optional. Request a quote.",
   alternates: {
     canonical: "/services/move-out-cleaning",
   },
   openGraph: {
     title:
-      "Move-In / Move-Out Cleaning in Fresno, CA | New Star Cleaning",
+      "Move-Out & Move-In Cleaning in Fresno & Clovis | New Star Cleaning",
     description:
-      "Move-out cleaning across Fresno, Clovis & Madera. Detailed empty-home cleaning for kitchens, bathrooms, baseboards, and floors, including empty cabinet and closet interiors. Oven and refrigerator interiors are optional add-ons.",
+      "Move-out and move-in cleaning in Fresno and Clovis, including empty cabinet and closet interiors. Oven and refrigerator interiors are optional add-ons.",
     url: "https://newstarcleaning.com/services/move-out-cleaning",
   },
 };
@@ -24,7 +24,7 @@ export default function MoveOutCleaningPage() {
   return (
     <ServiceDetailPage
       service={service}
-      h1="Move-Out Cleaning in Fresno, CA"
+      h1="Move-Out & Move-In Cleaning in Fresno & Clovis"
     />
   );
 }

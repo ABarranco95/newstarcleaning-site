@@ -137,8 +137,23 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           <div className="se-fit">
             <div className="se-fit-copy">
               <p className="se-kicker">Is this the right clean for your home?</p>
-              <h2>{isStandard ? "For homes we keep clean." : isDeep ? "When it needs more than a touch-up." : "For the day the home changes hands."}</h2>
-              <p className="se-lead">{presentation.summary}</p>
+              {isMoveOut ? (
+                <>
+                  <section>
+                    <h2>Move-out cleaning before your walkthrough</h2>
+                    <p className="se-lead">Tell us when the home will be empty and when the walkthrough is scheduled. Empty cabinet, drawer and closet interiors are included. The landlord or property manager decides deposit deductions; cleaning does not repair damage.</p>
+                  </section>
+                  <section className="mt-6">
+                    <h2>Move-in cleaning before furniture arrives</h2>
+                    <p className="se-lead">Schedule cleaning after the previous occupants and belongings are out, and before your furniture and boxes arrive. Share your access arrangements and move date so we can confirm timing.</p>
+                  </section>
+                </>
+              ) : (
+                <>
+                  <h2>{isStandard ? "For homes we keep clean." : "Deep cleaning for buildup a regular visit misses"}</h2>
+                  <p className="se-lead">{presentation.summary}</p>
+                </>
+              )}
               {isStandard && (
                 <>
                   <div className="se-cadence">
@@ -153,9 +168,12 @@ export default function ServiceDetailPage({ service, h1, intro }: {
                 </>
               )}
               {isDeep && (
-                <ul className="home-scope-includes mt-6">
-                  {deepTargets.map((item) => <li key={item}>{item}</li>)}
-                </ul>
+                <>
+                  <p className="se-lead">We provide deep cleaning in Fresno and Clovis. Madera visits depend on the address and route availability. Tell us about the rooms and buildup that need the most attention.</p>
+                  <ul className="home-scope-includes mt-6">
+                    {deepTargets.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </>
               )}
               {isMoveOut && (
                 <>
@@ -253,9 +271,11 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           {service.localNotes && <p className="site-intro">{service.localNotes}</p>}
           <p className="site-note">{intro ?? service.tagline}</p>
           <div className="site-links">
-            <Link href="/cleaning-services-fresno" className="home-text-link">Fresno</Link>
-            <Link href="/cleaning-services-clovis" className="home-text-link">Clovis</Link>
-            <Link href="/cleaning-services-madera" className="home-text-link">Madera</Link>
+            {["Fresno", "Clovis", "Madera"].map((city) => (
+              <Link key={city} href={`/cleaning-services-${city.toLowerCase()}${isDeep ? "#deep-cleaning" : isMoveOut ? "#move-out-cleaning" : ""}`} className="home-text-link">
+                {isDeep ? `Deep cleaning in ${city}` : isMoveOut ? `Move-in and move-out cleaning in ${city}` : city}
+              </Link>
+            ))}
           </div>
           <Link href={service.slug === "deep-cleaning" ? "/services/standard-cleaning" : "/services/deep-cleaning"} className="home-text-link">Compare {service.slug === "deep-cleaning" ? "standard" : "deep"} cleaning <span aria-hidden="true">→</span></Link>
           {isMoveOut && <Link href="/blog/move-out-cleaning-checklist-before-inspection" className="home-text-link">Fresno rental turnover guide <span aria-hidden="true">↗</span></Link>}
@@ -283,7 +303,9 @@ export default function ServiceDetailPage({ service, h1, intro }: {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Service",
-        name: service.name,
+        "@id": `${siteUrl}/services/${service.slug}#service`,
+        url: `${siteUrl}/services/${service.slug}`,
+        name: isMoveOut ? "Move-In and Move-Out Cleaning" : service.name,
         serviceType: service.schemaServiceType,
         description: service.description,
         provider: { "@id": `${business.siteUrl}/#localbusiness` },

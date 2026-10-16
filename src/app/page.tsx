@@ -145,6 +145,11 @@ export default function Home() {
           <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">→</span></Link>
         </div>
         <Suspense fallback={<p>Standard, deep, and move-in / move-out cleaning. <Link href="/services">View services</Link>.</p>}><HomeServices /></Suspense>
+        <nav className="site-links" aria-label="Cleaning service details">
+          <Link href="/services/deep-cleaning" className="home-text-link">Deep cleaning in Fresno &amp; Clovis</Link>
+          <Link href="/services/move-out-cleaning" className="home-text-link">Move-in and move-out cleaning</Link>
+          <Link href="/services/standard-cleaning" className="home-text-link">Recurring house cleaning</Link>
+        </nav>
         <p className="home-service-notes">Oven and fridge interiors, interior window glass, and reachable window tracks are optional add-ons. Cabinet interiors are optional for standard and deep cleaning.</p>
       </section>
 
