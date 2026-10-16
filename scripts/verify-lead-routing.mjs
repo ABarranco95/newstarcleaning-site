@@ -26,7 +26,8 @@ assert(!read("src/app/api/lead/route.ts").includes("apexData"), "organic lead fa
 includes("src/components/QuickQuoteForm.tsx", "bookingIntent", "quote form must capture booking intent");
 includes("src/components/QuickQuoteForm.tsx", "contactPreference", "quote form must capture contact preference");
 includes("src/components/QuickQuoteForm.tsx", "smsConsent", "quote form must preserve SMS consent context");
-includes("src/components/QuickQuoteForm.tsx", "homeSize: formData.sqft", "quote form must forward home-size signal to Apex");
+includes("src/components/QuickQuoteForm.tsx", "homeSize: quickPaid ? paidLeadHomeSize(formData.sqft) : formData.sqft", "quote form must forward canonical paid size bands and unchanged organic sizes to Apex");
+includes("src/components/QuickQuoteForm.tsx", "Home size selected: ${paidSize.label} sq ft.", "exact paid size selection must survive coarser lead bands in the existing notes");
 includes("src/components/QuickQuoteForm.tsx", "quote-website-url", "quote form must include the renamed honeypot field");
 includes("src/components/ContactForm.tsx", "QuickQuoteForm", "legacy contact form component must delegate to the shared quote form");
 includes("src/components/QuickQuoteForm.tsx", "gclid", "shared quote form must capture gclid for paid traffic");

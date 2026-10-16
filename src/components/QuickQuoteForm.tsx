@@ -9,8 +9,11 @@ import { buildQuoteSmsConsent, QUOTE_SMS_DISCLOSURE } from "@/lib/quoteSmsConsen
 import { serviceAreaToday, specificDeadlineError } from "@/lib/assistedIntakeValidation";
 import BookingPrefillLink from "@/components/BookingPrefillLink";
 import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
+import PaidPriceBookingButton from "@/components/PaidPriceBookingButton";
 import { acceptedPrefillSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
 import { business as BUSINESS } from "@/lib/business";
+import usePaidPriceRange from "@/lib/usePaidPriceRange";
+import { PAID_HOME_SIZES, paidHomeSize, paidLeadHomeSize } from "@/lib/paidHomeSize";
 
 type QuickQuoteFormProps = {
   title?: string;
@@ -99,6 +102,15 @@ const moveOutAddons = [
   "Extra blind detail",
   "Heavy pet hair or heavy buildup",
 ];
+
+// Apex's current timeline enum cannot represent a two-week window. Keep its
+// canonical values and preserve the exact chip answer in the existing notes.
+const paidMoveTimingChoices = [
+  { value: "this-week", label: "This week", timeline: "this-week" },
+  { value: "next-2-weeks", label: "Next 2 weeks", timeline: "unknown" },
+  { value: "later", label: "Later", timeline: "flexible" },
+  { value: "not-sure", label: "Not sure", timeline: "unknown" },
+] as const;
 
 const fieldClass = "qf-input";
 
@@ -403,15 +415,25 @@ export default function QuickQuoteForm({
   const paidServicePrefilled = paidSearch && Boolean(formData.service.trim());
   const showPaidOptionalDetails = extended && paidSearch;
   const showInlineExtendedDetails = extended && !paidSearch;
-  // Paid residential visitors get one short screen: city, beds/baths and how
-  // to reach them. Timing, size and condition are optional; Angel or Stella
-  // collects anything missing over text or call.
+  // Paid residential stays in one form: home/price first, then contact.
+  // Timing, size and condition details stay optional.
   const quickPaid = paidSearch && !isCommercialRequest;
+  const paidMoveTimingChoice = quickPaid && isMoveOutRequest
+    ? paidMoveTimingChoices.find((choice) => choice.value === formData.timeline)
+    : undefined;
   const quickContact = !paidSearch && contactOnly && !isCommercialRequest;
   const compactPaid = quickPaid && compact;
   const stickyPaid = compactPaid && stickyPaidCta;
   const paidSubmitLabel = submitLabel;
   const stepCount = quickPaid || quickContact ? 1 : STEP_COUNT;
+  const paidPrice = usePaidPriceRange({
+    enabled: quickPaid,
+    service: formData.service,
+    bedrooms: formData.bedrooms,
+    bathrooms: formData.bathrooms,
+    sqft: formData.sqft,
+  });
+  const paidSize = quickPaid ? paidHomeSize(formData.sqft) : undefined;
 
   const handleStickySubmit = () => {
     const form = formRef.current;
@@ -520,11 +542,18 @@ export default function QuickQuoteForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-
+          ...(quickPaid ? { sqft: paidLeadHomeSize(formData.sqft) } : {}),
+          timeline: paidMoveTimingChoice?.timeline || formData.timeline,
+          message: [
+            formData.message,
+            paidSize ? `Home size selected: ${paidSize.label} sq ft.` : "",
+            paidMoveTimingChoice ? `Move cleaning timing requested: ${paidMoveTimingChoice.label}.` : "",
+            paidPrice.status === "ready" ? paidPrice.note : "",
+          ].filter(Boolean).join("\n\n"),
           requestedDate: formData.timeline === "specific-deadline" ? formData.requestedDate : undefined,
           ...tracking,
           ...attribution,
-          homeSize: formData.sqft,
+          homeSize: quickPaid ? paidLeadHomeSize(formData.sqft) : formData.sqft,
 
           source,
           sourceForm: source,
@@ -720,7 +749,7 @@ export default function QuickQuoteForm({
 
   const renderSqftField = (optional = false) => (
     <div>
-      <FieldLabel htmlFor="quote-sqft" optional={optional}>Approx. sq ft</FieldLabel>
+      <FieldLabel htmlFor="quote-sqft" optional={optional}>{quickPaid ? "Home size" : "Approx. sq ft"}</FieldLabel>
       <select
         id="quote-sqft"
         name="sqft"
@@ -730,6 +759,9 @@ export default function QuickQuoteForm({
         className={fieldClass}
       >
         <option value="">Select size…</option>
+        {quickPaid ? PAID_HOME_SIZES.map((size) => (
+          <option key={size.value} value={size.value}>{size.label}</option>
+        )) : <>
         <option value="under-1000">Under 1,000</option>
         <option value="1000-1499">1,000 – 1,499</option>
         <option value="1500-1999">1,500 – 1,999</option>
@@ -741,6 +773,7 @@ export default function QuickQuoteForm({
         <option value="10000-19999">10,000 – 19,999</option>
         <option value="20000+">20,000+</option>
         {paidSearch ? <option value="not-sure">Not sure — Angel can confirm</option> : null}
+        </>}
       </select>
     </div>
   );
@@ -828,7 +861,7 @@ export default function QuickQuoteForm({
   );
 
   const renderChoiceChips = (
-    field: "bedrooms" | "bathrooms" | "contactPreference",
+    field: "bedrooms" | "bathrooms" | "contactPreference" | "timeline",
     legend: string,
     options: ReadonlyArray<{ value: string; label: string }>,
     required: boolean,
@@ -859,6 +892,41 @@ export default function QuickQuoteForm({
         })}
       </div>
     </fieldset>
+  );
+
+  // A tap is not needed to submit. The exact answer travels in existing notes
+  // where Apex's canonical timeline cannot represent the selected window.
+  const renderPaidMoveTiming = () => renderChoiceChips(
+    "timeline",
+    "When do you need it done?",
+    paidMoveTimingChoices,
+    false,
+    4,
+  );
+
+  const renderPaidPrice = () => (
+    <div className="min-h-32 text-sm leading-5" role="status" aria-live="polite" aria-atomic="true" data-paid-price>
+      {paidPrice.status === "loading" ? <p className="text-xs text-ink-soft">Checking price...</p> : null}
+      {paidPrice.status === "custom" ? <p className="font-semibold text-primary">This size needs a custom quote. Send the form and we&apos;ll price it.</p> : null}
+      {paidPrice.status === "ready" ? (
+        <>
+          <p className="font-semibold text-primary">{paidPrice.range ? `Usually ${paidPrice.range}` : `From ${paidPrice.low}`} for a {formData.bedrooms} bed / {formData.bathrooms} bath {isMoveOutRequest ? "move-in / move-out clean" : isPaidHouseRequest || isRecurringRequest ? "Standard house clean" : "deep clean"}.</p>
+          {!paidPrice.range ? <p className="mt-1 text-xs leading-4 text-ink-soft">Pick your home size for your usual range.</p> : null}
+          <p className="mt-1 text-xs leading-4 text-ink-soft">Heavier buildup costs more. Your exact price is confirmed before you book.</p>
+          {paidPrice.biweekly ? <p className="mt-1 text-xs leading-4 font-semibold text-primary">Every other week: about {paidPrice.biweekly} per visit</p> : null}
+          {directBookingUrl && paidPrice.bookableSqft && (formData.service === "Deep cleaning" || isPaidHouseRequest) ? (
+            <PaidPriceBookingButton
+              key={`${formData.service}:${formData.bedrooms}:${formData.bathrooms}:${paidPrice.bookableSqft}`}
+              baseUrl={directBookingUrl}
+              service={isPaidHouseRequest ? "Standard recurring cleaning" : "Deep cleaning"}
+              bedrooms={formData.bedrooms}
+              bathrooms={formData.bathrooms}
+              squareFeet={paidPrice.bookableSqft}
+            />
+          ) : null}
+        </>
+      ) : null}
+    </div>
   );
 
   const renderBedBathChips = () => (
@@ -1189,9 +1257,8 @@ export default function QuickQuoteForm({
       </button>
       {showPaidDetails ? (
         <div className="qf-stack mt-4">
-          {quickPaid ? renderTimelineField(true) : null}
-          {quickPaid ? renderRequestedDate() : null}
-          {quickPaid ? renderSqftField(true) : null}
+          {quickPaid && !isMoveOutRequest ? renderTimelineField(true) : null}
+          {quickPaid && !isMoveOutRequest ? renderRequestedDate() : null}
           {quickPaid ? renderConditionField(true) : null}
           {quickPaid && isMoveOutRequest ? renderMoveOutEmpty() : null}
           {renderExtendedDetails(true)}
@@ -1222,17 +1289,18 @@ export default function QuickQuoteForm({
     <>
       <div data-quote-step="1">
         <div className="qf-stack">
-          {renderCityField()}
           {!paidServicePrefilled ? renderServiceField() : <input type="hidden" name="service" value={formData.service} readOnly />}
           {compactPaid ? renderBedBathFields() : renderBedBathChips()}
+          {renderSqftField(true)}
+          {renderCityField()}
+          {renderPaidPrice()}
           {isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null}
           {renderNameAndPhone()}
+          {isMoveOutRequest ? renderPaidMoveTiming() : null}
           {renderContactChips()}
           {renderSmsConsent()}
-          {renderPaidDisclosure()}
           {renderError()}
         </div>
-        {renderFinePrint()}
         <div className="qf-actions">
           <SubmitButton
             isSubmitting={isSubmitting}
@@ -1243,6 +1311,8 @@ export default function QuickQuoteForm({
           />
         </div>
         {submitAlternative}
+        {renderFinePrint()}
+        {renderPaidDisclosure()}
         <p className="qf-help">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p>
       </div>
       {decisionProof}

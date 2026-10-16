@@ -24,9 +24,9 @@ assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring 
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(
-  paidPage.includes("House cleaning in ${city}, one-time or recurring.") &&
+  paidPage.includes("House Cleaning in Fresno & Clovis") &&
     !paidPage.includes("without the guesswork"),
-  "generic house headline covers one-time and recurring shoppers",
+  "generic house headline matches the paid search service and core cities",
 );
 // Approved L1 price anchors replace the earlier no-price policy. Check the
 // exact scoped copy on the rendered form, not merely the presence of a price.
@@ -131,8 +131,13 @@ const render = (service, frequency = "", directBookingUrl = "https://booking.exa
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
 const expectedPriceLines = {
   deep: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
-  move: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
-  house: "House cleaning from $165, depending on size and condition. Total confirmed before you book.",
+  move: "Move-in/out cleaning from $325, depending on size and buildup. Total confirmed before you book.",
+  house: "House cleaning from $165, depending on size and buildup. Total confirmed before you book.",
+};
+const expectedHeadlines = {
+  deep: "Deep House Cleaning in Fresno & Clovis",
+  move: "Move-Out & Move-In Cleaning in Fresno & Clovis",
+  house: "House Cleaning in Fresno & Clovis",
 };
 const expectedDecisionReviews = { deep: "daniel", move: "daviana-j", house: "merle-f" };
 for (const intent of Object.keys(INTENT_CONFIG)) {
@@ -142,8 +147,13 @@ for (const intent of Object.keys(INTENT_CONFIG)) {
   assert(!Object.hasOwn(result.forms[0].props, "offer") && !Object.hasOwn(result.forms[0].props, "recurringOffer"), `${intent}: no incentive props can reach intake`);
 }
 for (const [intent, priceLine] of Object.entries(expectedPriceLines)) {
-  const form = render(intent).forms[0];
+  const result = render(intent);
+  const form = result.forms[0];
+  assert(result.nodes.find((node) => node.type === "h1")?.props.children === expectedHeadlines[intent], `${intent}: exact message-matched H1`);
+  const hero = result.nodes.find((node) => node.type === "section" && node.props["aria-labelledby"] === "paid-title");
+  assert(!JSON.stringify(hero).includes('"data-boundary":"BookingPortalLink"'), `${intent}: no competing self-book exit in the hero or form`);
   assert(form.props.subtitle === priceLine && form.props.compact === true, `${intent}: approved price replaces the subtitle on the compact one-step form`);
+  assert(form.props.submitLabel === (intent === "move" ? "Text me my price + move-out dates" : "Text me my price + open dates"), `${intent}: approved price-first submit label`);
   const call = form.props.submitAlternative;
   assert(call?.type === "a" && call.props.href === "tel:+1" + "559" + "785" + "2822" && call.props["data-phone-location"] === "paid_quote_submit" && !call.props.onClick, `${intent}: secondary call uses the customer number and existing delegated tel tracker without a duplicate click handler`);
   const proof = form.props.decisionProof;
@@ -169,11 +179,11 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
   const result = render(service, frequency);
   const form = result.forms[0];
   assert(detectIntent(service, frequency) === expected && form?.props["data-boundary"] === "QuickQuoteForm" && form.props.source === "google-ads" && form.props.paidSearch === true && form.props.extended === true && form.props.defaultService === INTENT_CONFIG[expected].serviceDefault && form.props.landingCity === "Clovis" && form.props.directBookingUrl === "https://booking.example.test/", `${service || "missing"} / ${frequency}: preserves residential intent and paid form props`);
-  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").length === 2 && result.nodes.filter((node) => /\/photos\/real-work\/paid\//.test(node.props?.src || "")).length === 12, `${service || "missing"} / ${frequency}: preserves both booking exits and all six proof pairs`);
+  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").length === 1 && result.nodes.filter((node) => /\/photos\/real-work\/paid\//.test(node.props?.src || "")).length === 12, `${service || "missing"} / ${frequency}: keeps only the lower booking exit and all six proof pairs`);
   const photoName = expected === "deep" ? "glass-shower-freestanding-tub-new-star.webp" : expected === "move" ? "dining-kitchen-turnover-new-star.webp" : "kitchen-island-clean-new-star.webp";
   const photo = [...photosModule.exports.bathroomResultPhotos, ...photosModule.exports.emptyHomeResultPhotos, ...photosModule.exports.homeResultPhotos].find((item) => item.src.endsWith(`/${photoName}`));
   assert(result.nodes.filter((node) => node.props?.src === photo.src && node.props?.alt === photo.alt).length === 1, `${expected}: one genuine intent-matched hero photo with approved alt text`);
-  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.label === "Choose a date online" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: explicit date-selection exits carry only matching frequency`);
+  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.ctaLocation === "paid_closing" && node.props.label === "Choose a date online" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: lower date-selection exit retains its location and matching frequency`);
   const gallery = result.nodes.find((node) => node.props?.id === "paid-proof-gallery");
   assert(gallery?.props.role === "region" && gallery.props.tabIndex === 0 && gallery.props["aria-label"] && typeof gallery.props.onKeyDown === "function" && result.nodes.filter((node) => node.type === "button" && node.props["aria-controls"] === "paid-proof-gallery").length === 2, `${expected}: gallery exposes focus, keyboard handler, label and two controls`);
   const scrollCalls = [];
@@ -183,7 +193,7 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
   for (const control of result.nodes.filter((node) => node.type === "button" && node.props["aria-controls"] === "paid-proof-gallery")) control.props.onClick();
   assert(prevented === 2 && scrollCalls.join(",") === "344,-344,-344,344", `${expected}: arrow keys and both buttons execute scrolling without trapping Tab`);
   assert(result.text.includes("Cleaning doesn’t remove every stain or sign of wear") && result.text.includes("Oven and fridge interiors are optional extras"), `${expected}: visible photo caption preserves stain/wear limits and optional appliance scope`);
-  assert(!render(service, frequency, null).nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink"), `${expected}: missing booking configuration removes both exits`);
+  assert(!render(service, frequency, null).nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink"), `${expected}: missing booking configuration removes the lower exit`);
 }
 const project = render("post-construction-cleaning", "weekly");
 assert(detectIntent("post-construction-cleaning", "weekly") === "postConstruction" && project.forms[0]?.props["data-boundary"] === "QuickQuoteForm" && project.forms[0].props.defaultService === "Post-construction cleaning" && project.forms[0].props.directBookingUrl === null && !project.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "")), "post-construction retains its existing conditional form and no residential booking/proof");
@@ -192,10 +202,54 @@ assert(INTENT_CONFIG.postConstruction.proofOrder.length === 0 && !("priceContext
 for (const frequency of ["", "weekly", "biweekly", "monthly", "bi-weekly", "recurring", "WEEKLY", "  Bi-Weekly  ", " MONTHLY ", "unknown"]) {
   const bookingLinks = render("recurring-cleaning", frequency).nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink");
   const normalized = frequency.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
-  assert(bookingLinks.length === 2 && bookingLinks.every((node) => node.props.frequency === (["weekly", "biweekly", "monthly"].includes(normalized) ? normalized : undefined)), `recurring booking frequency ${frequency || "missing"}: explicit aliases become canonical, never forced`);
+  assert(bookingLinks.length === 1 && bookingLinks.every((node) => node.props.frequency === (["weekly", "biweekly", "monthly"].includes(normalized) ? normalized : undefined)), `recurring booking frequency ${frequency || "missing"}: explicit aliases become canonical, never forced`);
 }
 for (const intent of Object.keys(INTENT_CONFIG)) assert(INTENT_CONFIG[intent].faqs.length === 2, `${intent}: exactly two scoped FAQs`);
 assert(paidPage.includes("captureFirstPaidTouch({") && paidPage.includes("if (!hasTrackedLandingView.current)") && paidPage.includes('trackFunnelEvent("paid_landing_view"') && paidPage.includes('trackFunnelEvent("quote_cta_click"'), "first-touch and once-only paid attribution guards remain intact");
+
+// Synthetic transport only: production browser proof records the real totals.
+const priceModule = { exports: {} };
+const sizeModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/paidHomeSize.ts"), "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText, { exports: sizeModule.exports, module: sizeModule });
+let quoteReply = { ok: true, body: { totalPrice: 34567, frequencyTotals: { BIWEEKLY: 31050 } } };
+const priceCalls = [];
+vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/usePaidPriceRange.ts"), "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText + "\nexports.testPrice = { buildRequest, fetchPrice, formatPrice };", {
+  exports: priceModule.exports, module: priceModule, Intl,
+  require: (name) => { if (name === "react") return {}; if (name === "@/lib/paidHomeSize") return sizeModule.exports; throw new Error(name); },
+  fetch: async (url, init) => { priceCalls.push({ url, ...init, body: JSON.parse(init.body) }); return { ok: quoteReply.ok, json: async () => quoteReply.body }; },
+});
+const priceTest = priceModule.exports.testPrice;
+const priceInput = { enabled: true, service: "Deep cleaning", bedrooms: "4", bathrooms: "2.5", sqft: "" };
+const quoteRequest = priceTest.buildRequest(priceInput);
+assert(quoteRequest.serviceType === "DEEP" && quoteRequest.beds === 4 && quoteRequest.baths === 2 && quoteRequest.halfBaths === 1 && !("sqft" in quoteRequest), "live price request splits half baths and omits unknown size");
+assert(priceTest.buildRequest({ ...priceInput, service: "Not sure yet", sqft: "1500-1999" }).serviceType === "STANDARD" && priceTest.buildRequest({ ...priceInput, sqft: "1500-1999" }).sqft === 1500 && priceTest.buildRequest({ ...priceInput, sqft: "1500-1999" }, "high").sqft === 1999, "house price uses STANDARD; normal uses band minimum and dusty uses maximum");
+assert(sizeModule.exports.PAID_HOME_SIZES.filter(size => size.max !== null).map(size => size.max).join() === "999,1499,1999,2499,2999,3499,3999,4499,4999,5499", "size choices follow all ten Apex residential pricing tiers");
+assert(sizeModule.exports.paidLeadHomeSize("4000-4499") === "3500-4999" && sizeModule.exports.paidLeadHomeSize("5000-5499") === "5000-9999" && sizeModule.exports.paidLeadHomeSize("larger") === "", "lead size uses existing Apex bands, never a fabricated exact measurement");
+for (const change of [{ enabled: false }, { bedrooms: "" }, { bedrooms: "6+" }, { bathrooms: "4+" }, { sqft: "99" }, { sqft: "1800.5" }, { sqft: "20001" }, { service: "Office / commercial cleaning" }]) {
+  assert(priceTest.buildRequest({ ...priceInput, ...change }) === null, `no guessed price for unsupported/incomplete input ${JSON.stringify(change)}`);
+}
+const priceSignal = new AbortController().signal;
+const priced = await priceTest.fetchPrice(quoteRequest, "normal", priceSignal);
+assert(priced.total === 34567 && priced.biweekly === 31050 && priceTest.formatPrice(priced.total) === "$345" && priceTest.formatPrice(priced.total, "high") === "$346" && priceTest.formatPrice(priced.biweekly, "nearest") === "$311", "engine cents stay intact; display rounds low down, high up and biweekly to nearest whole dollar");
+const sent = priceCalls.at(-1);
+assert(sent.url === "https://book.newstarcleaning.com/api/public/quote" && sent.credentials === "omit" && sent.signal === priceSignal && sent.body.condition === "normal" && sent.body.frequency === "ONE_TIME" && sent.body.propertyType === "house" && sent.body.addons.length === 0 && sent.body.hasPets === false, "browser quote transport uses explicit one-time defaults, shared cancellation and no credentials");
+const moveRequest = priceTest.buildRequest({ ...priceInput, service: "Move-in / move-out cleaning" });
+quoteReply.body = { totalPrice: 50000, moveOutPackages: { essentials: 42500 } };
+assert((await priceTest.fetchPrice(moveRequest, "dusty", priceSignal)).total === 42500 && priceCalls.at(-1).body.condition === "dusty", "Move range prefers engine Essentials for the requested condition");
+quoteReply.body = { totalPrice: 50000 };
+assert((await priceTest.fetchPrice(moveRequest, "normal", priceSignal)).total === 50000, "Move supports older quote responses without packages");
+quoteReply = { ok: false, body: { code: "CUSTOM_QUOTE_REQUIRED" } };
+assert(await priceTest.fetchPrice(quoteRequest, "normal", priceSignal) === "custom", "custom-size API response is not mistaken for a price");
+for (const reply of [{ ok: false, body: { error: "unavailable" } }, { ok: true, body: { totalPrice: null } }, { ok: true, body: { totalPrice: -1 } }, { ok: true, body: { totalPrice: "34500" } }]) {
+  quoteReply = reply;
+  let rejected = false;
+  try { await priceTest.fetchPrice(quoteRequest, "normal", priceSignal); } catch { rejected = true; }
+  assert(rejected, "bad quote responses cannot render fabricated prices");
+}
 
 if (failures.length) {
   console.error("Paid intent routing verification failed:");

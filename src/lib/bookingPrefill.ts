@@ -1,5 +1,6 @@
 // Private customer details travel only in memory, after an accepted lead and
-// an explicit click. Keep this wire contract in sync with Apex booking-prefill.
+// an explicit click. Paid-price clicks may send non-personal home inputs only,
+// without a lead. Keep this wire contract in sync with Apex booking-prefill.
 export const PREFILL_CHANNEL = "nsc.booking-prefill.v1";
 export const PREFILL_VERSION = 1;
 export const PREFILL_PARAM = "nsc_prefill";

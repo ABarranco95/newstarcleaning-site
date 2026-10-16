@@ -146,11 +146,11 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
-    h1: (city) => `House cleaning in ${city}, one-time or recurring.`,
+    h1: () => "House Cleaning in Fresno & Clovis",
     subhead: "Kitchen, bathrooms, dusting and floors done room by room, once or on a schedule. Tell us about your home and you get one flat price before anything is booked.",
     serviceDefault: "Not sure yet",
     formTitle: "Get a quote",
-    priceLine: "House cleaning from $165, depending on size and condition. Total confirmed before you book.",
+    priceLine: "House cleaning from $165, depending on size and buildup. Total confirmed before you book.",
 
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
@@ -166,11 +166,11 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: (city) => `Move-in and move-out cleaning for ${city} homes.`,
-    subhead: "The empty home cleaned top to bottom, inside cabinets, drawers and closets included, so it’s ready for the walkthrough. Tell us your move date.",
+    h1: () => "Move-Out & Move-In Cleaning in Fresno & Clovis",
+    subhead: "Tell us when you need it done. Empty cabinet, drawer and closet interiors are included.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Get a quote",
-    priceLine: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
+    priceLine: "Move-in/out cleaning from $325, depending on size and buildup. Total confirmed before you book.",
     scope: {
       included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
       addOns: "Inside the oven and refrigerator, interior window glass, and reachable window tracks.",
@@ -189,7 +189,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   deep: {
     eyebrow: "Detailed deep cleaning",
-    h1: (city) => `Deep cleaning for ${city} homes.`,
+    h1: () => "Deep House Cleaning in Fresno & Clovis",
     subhead: "Baseboards, fixtures, built-up grime and the detail work a regular clean skips. Tell us which rooms bother you most and we plan the time around them.",
     serviceDefault: "Deep cleaning",
     formTitle: "Get a quote",
@@ -657,7 +657,7 @@ export default function GoogleAdsLandingPageClient({
               <h1 id="paid-title" className={compactResidentialHero ? "max-w-2xl break-words text-2xl leading-[1.09] text-primary md:mt-2 md:text-5xl lg:text-[3.25rem]" : "mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]"}>
                 {intent.h1(city.label)}
               </h1>
-              <p className={compactResidentialHero ? "mt-3 hidden max-w-xl text-sm leading-6 text-ink-soft sm:block sm:text-base" : "mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base"}>
+              <p className="mt-3 max-w-xl text-sm leading-6 text-ink-soft sm:text-base">
                 {intent.subhead}
               </p>
               {intent.scope ? <ScopeNote scope={intent.scope} /> : null}
@@ -706,7 +706,7 @@ export default function GoogleAdsLandingPageClient({
                   compact={Boolean(intent.priceLine)}
                   stickyPaidCta={compactResidentialHero}
                   onStickyPaidClick={() => trackStickyCta("sticky_paid")}
-                  submitLabel={compactResidentialHero ? "Get a quote" : undefined}
+                  submitLabel={compactResidentialHero ? intentKey === "move" ? "Text me my price + move-out dates" : "Text me my price + open dates" : undefined}
 
                   submitAlternative={intent.priceLine ? (
                     <a
@@ -714,7 +714,7 @@ export default function GoogleAdsLandingPageClient({
                       data-phone-location="paid_quote_submit"
                       className="mt-1 flex min-h-11 items-center justify-center text-center text-sm text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     >
-                      Prefer to talk? Call (559) 785-2822
+                      Prefer to call? (559) 785-2822
                     </a>
                   ) : null}
                   decisionProof={decisionReview ? (
@@ -733,21 +733,7 @@ export default function GoogleAdsLandingPageClient({
               <p className="mt-2 text-center text-sm">
                 <a href={"sms:+1" + "559" + "785" + "2822"} data-phone-location="paid_under_form" className="home-text-link min-h-11">Prefer to text? Text us</a>
               </p>
-              {residentialBookingUrl ? (
-                <p className="mt-1 text-center text-xs text-ink-soft">
-                  <BookingPortalLink
-                    baseUrl={residentialBookingUrl}
-                    sourcePage="/google-ads"
-                    ctaLocation="paid_under_form"
-                    service={intent.serviceDefault}
-                    city={city.formValue || undefined}
-                    frequency={bookingFrequency}
-                    label="Choose a date online"
-                    showIcon={false}
-                    className="home-text-link"
-                  />
-                </p>
-              ) : null}
+
             </div>
 
 

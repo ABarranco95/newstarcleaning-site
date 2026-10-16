@@ -130,7 +130,7 @@ assert(
     quickQuoteForm.includes('params.get("city")') &&
     quickQuoteForm.includes('params.get("service")') &&
     quickQuoteForm.includes('params.get("frequency")') &&
-    quickQuoteForm.includes('homeSize: formData.sqft'),
+    quickQuoteForm.includes('homeSize: quickPaid ? paidLeadHomeSize(formData.sqft) : formData.sqft'),
   "quote form supports city, service, and recurring-frequency prefill and forwards the home-size signal",
 );
 

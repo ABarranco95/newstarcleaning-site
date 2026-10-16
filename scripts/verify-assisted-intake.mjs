@@ -257,6 +257,10 @@ function mountForm(props = {}) {
       // Sticky CTA visibility/scrolling needs a real DOM and is covered by
       // paid UX checks. Keep this intake handler harness inert on that import.
       "@/components/PaidQuoteStickyCTA": { default: () => null },
+      "@/components/PaidPriceBookingButton": { default: () => null },
+      // Price failures/loading must not affect intake. Quote transport is
+      // exercised separately; this boundary only supplies the displayed note.
+      "@/lib/usePaidPriceRange": { default: () => props.testPrice || { status: "hidden" } },
       "@/lib/conversionTracking": { trackLeadConversion: (value) => conversions.push(value), trackFunnelEvent: (...args) => events.push(args) },
     },
   }).default;
@@ -310,12 +314,27 @@ function mountForm(props = {}) {
   return { nodes, fields, field, change, openDetails, contactFirst, submit, conversions, submissions, events, setReply(value) { reply = value; } };
 }
 
+// Pricing never gates the actual submit handler or changes its lead contract.
+for (const status of ["hidden", "loading", "custom", "ready"]) {
+  const note = "Range shown on page: $345–$380 (normal–dusty, 3 bed / 2 bath, Deep cleaning).";
+  const form = mountForm({ paidSearch: true, compact: true, defaultService: "Deep cleaning", testPrice: { status, note, range: "$345–$380" } });
+  form.change("name", "Intake Fixture"); form.change("phone", "559-555-0142");
+  form.change("city", "Fresno"); form.change("bedrooms", "3"); form.change("bathrooms", "2");
+  form.openDetails(); form.change("message", sentinel.message);
+  form.setReply({ ok: true, status: 201, body: { metadata: { apex: { success: true } } } });
+  await form.submit();
+  assert.equal(form.submissions.length, 1, `${status}: quote state never blocks intake`);
+  assert.equal(form.submissions[0].url, "/api/google-ads-lead");
+  assert.equal(form.submissions[0].body.message, sentinel.message + (status === "ready" ? `\n\n${note}` : ""));
+  assert.equal(form.submissions[0].body.smsConsent.status, "denied");
+}
+
 for (const props of [
   { compact: true }, {}, { extended: true }, { compact: true, extended: true },
   { paidSearch: true, extended: true }, { paidSearch: true, compact: true, extended: true }, { paidSearch: true },
 ]) {
   const form = mountForm({ ...props, defaultService: "Deep cleaning", defaultCity: "Fresno" });
-  // Paid residential now keeps timing/size/condition in its disclosure and
+  // Paid residential keeps timing/condition in its disclosure and
   // renders bed/bath/contact radio groups unless compact selects are used.
   if (props.paidSearch) form.openDetails();
   form.change("name", "Intake Fixture");
@@ -350,14 +369,15 @@ for (const props of [
   assert.equal(first.url, props.paidSearch ? "/api/google-ads-lead" : "/api/lead");
   assert.equal(first.body.requestedDate, sentinel.requestedDate);
   assert.equal(first.body.timeline, "specific-deadline");
-  assert.equal(first.body.message, sentinel.message);
+  const expectedMessage = sentinel.message + (props.paidSearch ? "\n\nHome size selected: 1,500–1,999 sq ft." : "");
+  assert.equal(first.body.message, expectedMessage);
   assert.equal(first.body.contactPreference, "text");
   assert.equal(first.body.smsConsent.status, "denied");
   assert.equal(first.body.gclid, "synthetic-gclid");
   const route = props.paidSearch ? paid : organic;
   assert.equal((await route.POST(request(first.body))).status, 201, "actual form payload passes actual website route");
   const endToEnd = canonical.normalizeLeadIntakeV1(forwarded.at(-1)).normalized;
-  assert.equal(endToEnd.customerMessage, sentinel.message);
+  assert.equal(endToEnd.customerMessage, expectedMessage);
   assert.equal(endToEnd.requestedDate, sentinel.requestedDate);
   assert.equal(endToEnd.timeline, "specific-deadline");
   assert.equal(endToEnd.preferredChannel, "text");
@@ -460,6 +480,42 @@ for (const form of [move, commercial, emailForm]) {
   const ids = form.nodes().map((node) => node.props.id).filter(Boolean);
   assert.equal(new Set(ids).size, ids.length, "no duplicate field IDs within a form");
 }
+// Paid Move is price-first, retaining optional canonical timing chips.
+// No extra required field, real lead or external API is introduced.
+const paidMove = mountForm({ paidSearch: true, compact: true, extended: true, defaultService: "Move-in / move-out cleaning" });
+const requiredMoveFields = paidMove.nodes().filter((node) => ["input", "select", "textarea"].includes(node.type) && node.props.required).map((node) => node.props.name);
+assert.deepEqual(requiredMoveFields, ["bedrooms", "bathrooms", "city", "name", "phone"], "price-first order adds zero required fields");
+assert.equal(paidMove.fields("timeline").length, 4);
+assert(paidMove.fields("timeline").every((field) => field.props.required === false && !field.props.checked), "timing is optional with no preselected answer");
+assert.equal(paidMove.fields("requestedDate").length, 0, "no date picker");
+paidMove.openDetails();
+assert.equal(paidMove.fields("timeline").length, 4, "disclosure does not offer conflicting timing");
+paidMove.change("name", "Intake Fixture");
+paidMove.change("phone", "559-555-0142");
+paidMove.change("city", "Clovis");
+paidMove.change("message", sentinel.message);
+await paidMove.submit();
+assert.equal(paidMove.submissions.at(-1).body.timeline, "", "no chip tap is needed to submit");
+for (const [choice, label, timeline] of [
+  ["this-week", "This week", "this-week"],
+  ["next-2-weeks", "Next 2 weeks", "unknown"],
+  ["later", "Later", "flexible"],
+  ["not-sure", "Not sure", "unknown"],
+]) {
+  paidMove.change("timeline", choice);
+  await paidMove.submit();
+  const movePayload = paidMove.submissions.at(-1).body;
+  assert.equal(movePayload.timeline, timeline);
+  assert(!Object.hasOwn(movePayload, "requestedDate"), "urgency is not an appointment date");
+  assert.equal((await paid.POST(request(movePayload))).status, 201);
+  assert.equal(forwarded.at(-1).timeline, timeline, "timing uses the existing Apex enum without misrepresenting the window");
+  const expectedMessage = `${sentinel.message}\n\nMove cleaning timing requested: ${label}.`;
+  assert.equal(forwarded.at(-1).message, expectedMessage, "existing notes retain the customer's words and exact chip answer");
+  const normalizedMove = canonical.normalizeLeadIntakeV1(forwarded.at(-1)).normalized;
+  assert.equal(normalizedMove.timeline, timeline);
+  assert.equal(normalizedMove.customerMessage, expectedMessage, "Apex normalization retains the exact timing answer");
+}
+
 const failedPaid = mountForm({ paidSearch: true, compact: true, extended: true, defaultService: "Deep cleaning" });
 failedPaid.change("name", "Intake Fixture");
 failedPaid.change("phone", "559-555-0142");

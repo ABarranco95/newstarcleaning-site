@@ -17,7 +17,8 @@ export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onCli
     const submit = formRef.current?.querySelector<HTMLButtonElement>('button[type="submit"]');
     if (!submit) return;
     const observer = new IntersectionObserver(([entry]) => setSubmitInView(entry.isIntersecting), {
-      rootMargin: "0px 0px -80px 0px",
+      // Step aside before even the first edge of the submit enters the bar.
+      rootMargin: "0px 0px 120px 0px",
     });
     observer.observe(submit);
     return () => observer.disconnect();

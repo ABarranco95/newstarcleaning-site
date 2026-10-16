@@ -7,8 +7,9 @@ import ts from "typescript";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-// Review-proof contract: the rating and every quote must trace to the
-// recorded Google Business Profile read. Public proof has no counts or links.
+// Review-proof contract: every quote traces to the recorded profile read.
+// The historical rating stays recorded, not public: the reinstated listing
+// does not display it. Public proof has no rating claims, counts or links.
 const require = createRequire(import.meta.url);
 const read = (file) => readFileSync(file, "utf8");
 function load(file, imports = {}) {
@@ -74,10 +75,18 @@ for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, 
   const html = renderToStaticMarkup(createElement(GoogleRating, props));
   assertReviewPresentation(html, "GoogleRating");
   const visible = html.replace(/<[^>]*>/g, "");
-  assert(visible.includes(`${googleRating.score} on Google`), "visible score and Google attribution match the recorded read");
-  assert.equal(visible.includes(homesServedLine), Boolean(props.prominent), "only prominent badges show the recorded homes served line");
+  assert(!/on Google|5\.0|ns-rating-score|<svg/i.test(html), "shared proof renders no unverifiable Google score, mark or rating stars");
+  assert.equal(visible.includes(homesServedLine), Boolean(props.prominent), "only prominent placements retain the recorded homes served line");
+  if (!props.prominent) assert.equal(html, "", "ordinary badge placements render nothing");
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
 }
+const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
+  "@/lib/googleRating": ratingModule,
+  "@/components/Icon": StarRowModule,
+});
+const stripHtml = renderToStaticMarkup(createElement(TrustStrip));
+assertReviewPresentation(stripHtml, "TrustStrip");
+assert(!/on Google|5\.0/.test(stripHtml) && stripHtml.includes("Locally owned"), "shared trust strip replaces the unverifiable rating with local ownership");
 
 const { default: ReviewCards } = load("src/components/ReviewCards.tsx", {
   "@/lib/googleReviews": reviewsModule,
@@ -113,6 +122,7 @@ for (const file of sourceFiles("src")) {
     assert.fail(`${file}: "${match[0]}" is a public numerical review-count claim`);
   }
   assert(!/aggregateRating|reviewCount"\s*:/.test(source), `${file}: no self-served review schema`);
+  if (file.endsWith(".tsx")) assert(!/googleRating\.score|5\.0\s*(?:on Google|★)/.test(source), `${file}: no public historical rating claim`);
 }
 
 const home = read("src/app/page.tsx");
@@ -128,4 +138,4 @@ assert(paid.includes("<GoogleRating") && paid.includes("<ReviewCards") && !paid.
 assert(!paid.includes("usually the same day") && !paid.includes("rushing a free re-clean"));
 const terms = read("src/app/terms/page.tsx").replace(/\s+/g, " ");
 assert(terms.includes("If something included in the agreed cleaning scope was missed, contact us within 24 hours of the completed service and we will come back and fix it at no charge.") && terms.includes("Requests for work outside the confirmed scope are not included."), "the scoped 24-hour free-return promise is backed by the published terms");
-console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews, ${googleRating.score} on Google (recorded read ${googleRating.checkedOn}), four rendered badge variants and ReviewCards without review links or public counts, prominent homes served line, no self-served rating schema, 24-hour promise backed by terms.`);
+console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews (read ${googleRating.checkedOn}), historical rating suppressed in all shared badge variants and TrustStrip, ReviewCards without review links or public counts, prominent homes served line, no self-served rating schema, 24-hour promise backed by terms.`);
