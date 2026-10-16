@@ -6,7 +6,12 @@ export const business = {
   phoneE164: "+1-559-785-2822",
   phoneHref: "tel:+15597852822",
   email: "support@newstarcleaning.com",
-  googleMapsUrl: "https://www.google.com/maps?cid=12575787905603463321",
+  // Live listing after the Oct 2026 reinstatement (same Business Profile, new Maps CID).
+  // The old CID 12575787905603463321 opens a blank map. If Google ever moves the profile
+  // back to the old CID, change this one value.
+  googleMapsUrl: "https://www.google.com/maps?cid=17160713985942079636",
+  // Same Business Profile before the CID change; review/rating reads recorded there stay valid.
+  previousGoogleMapsUrls: ["https://www.google.com/maps?cid=12575787905603463321"],
   facebookUrl: "https://www.facebook.com/newstarcleaning/",
   address: {
     streetAddress: "132 W Nees Ave Unit 106",

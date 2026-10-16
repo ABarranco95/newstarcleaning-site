@@ -47,7 +47,7 @@ const reviewsModule = load("src/lib/googleReviews.ts");
 const { googleReviews, reviewsFor } = reviewsModule;
 const profileRead = read("src/lib/googleReviews.ts").match(/^\/\/ \((https:\/\/www\.google\.com\/maps\?cid=\d+)\), read (\d{4}-\d{2}-\d{2})\.$/m);
 assert(profileRead, "reviews retain their recorded profile provenance");
-assert.equal(profileRead[1], business.googleMapsUrl, "recorded reviews come from the business's own Google profile");
+assert([business.googleMapsUrl, ...(business.previousGoogleMapsUrls ?? [])].includes(profileRead[1]), "recorded reviews come from the business's own Google profile");
 assert.equal(profileRead[2], googleRating.checkedOn, "reviews and rating share the recorded read date");
 assert(googleReviews.length >= 3, "at least three verbatim reviews are available");
 assert.equal(new Set(googleReviews.map((review) => review.id)).size, googleReviews.length, "review ids are unique");
