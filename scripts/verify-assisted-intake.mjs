@@ -157,6 +157,9 @@ async function assertProjection(payload) {
 }
 
 for (const route of [organic, paid]) {
+  const noOffer = await route.POST(request({ ...sentinel, offer: "free_inside_oven_first_deep" }));
+  assert.equal(noOffer.status, 201);
+  assert(!Object.hasOwn(forwarded.at(-1), "offer"), "retired incentive cannot pass through either website proxy");
   for (const contactPreference of ["text", "call", "either"]) {
     const response = await route.POST(request({ ...sentinel, contactPreference }));
     assert.equal(response.status, 201);
@@ -300,7 +303,11 @@ function mountForm(props = {}) {
     assert(button, "paid optional details button exists"); button.props.onClick(); render();
   }
   async function submit() { await nodes().find((node) => node.type === "form").props.onSubmit({ preventDefault() {} }); render(); }
-  return { nodes, fields, field, change, openDetails, submit, conversions, submissions, events, setReply(value) { reply = value; } };
+  function contactFirst() {
+    const button = nodes().find((node) => node.type === "button" && node.props.children === "Prefer a call or text? We'll reach out.");
+    assert(button, "organic form exposes a contact-first alternative"); button.props.onClick(); render();
+  }
+  return { nodes, fields, field, change, openDetails, contactFirst, submit, conversions, submissions, events, setReply(value) { reply = value; } };
 }
 
 for (const props of [
@@ -387,6 +394,28 @@ for (const props of [
   assert.equal(form.conversions.length, 1);
   assert(form.submissions.every((value) => value.body.submissionId === first.body.submissionId), "retry identity is stable");
 }
+
+// The alternative submits only contact/location, with missing home details
+// left unknown. It keeps the same acceptance, consent and retry boundary.
+const shortForm = mountForm({ compact: true, defaultService: "Deep cleaning", source: "organic_quote_page" });
+shortForm.contactFirst();
+for (const missing of ["sqft", "bedrooms", "bathrooms", "condition", "timeline"]) assert.equal(shortForm.fields(missing).length, 0);
+shortForm.change("name", "Intake Fixture");
+shortForm.change("phone", "559-555-0142");
+shortForm.change("city", "Fresno");
+shortForm.change("contactPreference", "text");
+assert.equal(shortForm.field("smsOptIn").props.checked, false);
+await shortForm.submit();
+assert.equal(shortForm.conversions.length, 0);
+assert.equal(shortForm.field("name").props.value, "Intake Fixture");
+const shortId = shortForm.submissions[0].body.submissionId;
+shortForm.setReply({ ok: true, status: 201, body: { metadata: { apex: { success: true } } } });
+await shortForm.submit();
+assert.equal(shortForm.submissions.at(-1).body.submissionId, shortId);
+assert.equal(shortForm.submissions.at(-1).body.smsConsent.status, "denied");
+assert.equal(shortForm.submissions.at(-1).body.source, "organic_quote_page");
+assert.equal(shortForm.submissions.at(-1).body.service, "Deep cleaning");
+assert.equal(shortForm.conversions.length, 1);
 
 // Accepted organic reset, independent optional email, duplicate-free paid
 // commercial fields, and preserved move-out disclosures/add-ons.

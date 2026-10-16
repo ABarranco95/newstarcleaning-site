@@ -111,7 +111,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
                   baseUrl={directBookingUrl}
                   service={quoteFormService(service)}
                   sourcePage={`/services/${service.slug}`}
-                  label="Ready to book? Book online"
+                  label="Choose a date online"
                   showIcon={false}
                   className="home-text-link"
                 />

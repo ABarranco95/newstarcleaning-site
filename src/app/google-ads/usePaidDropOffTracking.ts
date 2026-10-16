@@ -86,7 +86,7 @@ export function usePaidDropOffTracking({ service, city, intent }: PaidPageContex
     const sections: Array<readonly [string, Element | null]> = [
       ["hero", document.getElementById("paid-title")],
       ["form", document.getElementById("booking-form")],
-      ["offer", document.querySelector("#booking-form [data-recurring-offer], #booking-form .qf-offer")],
+
       ["proof", document.getElementById("paid-proof-title")],
       ["reviews", document.getElementById("paid-reviews-title")],
       ["faq", document.getElementById("paid-faq-trigger-0")?.closest("section")?.querySelector("h2") || null],

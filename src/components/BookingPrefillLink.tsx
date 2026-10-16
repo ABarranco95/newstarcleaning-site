@@ -31,7 +31,7 @@ export default function BookingPrefillLink({ baseUrl, snapshot, onRelease }: {
   if (process.env.NEXT_PUBLIC_BOOKING_PREFILL_ENABLED !== "true") {
     return (
       <div className="mt-5">
-        <Suspense fallback={<a href={baseUrl} className="home-button">Book online</a>}>
+        <Suspense fallback={<a href={baseUrl} className="home-button">Choose a date online</a>}>
           <BookingPortalLink
             baseUrl={baseUrl}
             service={snapshot?.service}
@@ -39,7 +39,7 @@ export default function BookingPrefillLink({ baseUrl, snapshot, onRelease }: {
             frequency={snapshot?.frequency}
             sourcePage={typeof window !== "undefined" ? window.location.pathname : undefined}
             ctaLocation={typeof window !== "undefined" && window.location.pathname.startsWith("/google-ads") ? "paid_success_card" : "quote_success"}
-            label="Book online"
+            label="Choose a date online"
             showIcon={false}
             className="home-button"
           />

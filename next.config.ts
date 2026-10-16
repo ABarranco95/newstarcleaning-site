@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+
+      {
+        source: "/reviews",
+        destination: "/#home-reviews-title",
+        permanent: true,
+      },
       {
         source: "/cleaning-services-sanger",
         destination: "/service-areas",

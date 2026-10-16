@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="text-mute mb-12">
-          Last Updated: March 8, 2026
+          Last Updated: October 15, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -94,7 +94,7 @@ export default function PrivacyPolicy() {
               </li>
               <li>To process payments and send invoices</li>
               <li>
-                To send you promotional offers and marketing communications
+                To send you news about our cleaning services
                 (with your consent)
               </li>
               <li>To request feedback and reviews about our services</li>
@@ -118,7 +118,7 @@ export default function PrivacyPolicy() {
               <li>Service follow-ups and satisfaction check-ins</li>
               <li>Review and feedback requests</li>
               <li>
-                Promotional offers and discounts (only with your express
+                News about our cleaning services (only with your express
                 consent)
               </li>
             </ul>

@@ -50,8 +50,13 @@ for (const file of [
 
 assert(
   !layout.includes("MobileCTABar") &&
-    !existsSync(path.join(root, "src/components/MobileCTABar.tsx")),
-  "global sticky mobile CTA is removed",
+    !existsSync(path.join(root, "src/components/MobileCTABar.tsx")) &&
+    layout.includes("<MobileContactActions") &&
+    read("src/components/MobileContactActions.tsx").includes('pathname.startsWith("/google-ads")') &&
+    read("src/components/MobileContactActions.tsx").includes('hidden={editing || quoteInView === pathname}') &&
+    read("src/components/MobileContactActions.tsx").includes('observer.observe(quote)') &&
+    read("src/components/MobileContactActions.tsx").includes('data-phone-location="mobile_contact"'),
+  "mobile contact actions replace the retired bar, stay out of paid pages and hide during editing or while the quote form is visible",
 );
 
 assert(
@@ -68,7 +73,7 @@ assert(
     home.includes("compact") &&
     home.includes("<HomeQuoteLink") &&
     home.includes('href="/book-now"') &&
-    home.includes("Request a quote"),
+    home.includes("Get a quote"),
   "homepage embeds the stepped quote form in the hero and keeps quote-first links",
 );
 
@@ -163,7 +168,7 @@ assert(
   quickQuoteForm.includes("showPaidDetails") &&
     quickQuoteForm.includes("Add home details (optional)") &&
     quickQuoteForm.includes("home like right now") &&
-    quickQuoteForm.includes("Request my quote") &&
+    quickQuoteForm.includes("Get a quote") &&
     quickQuoteForm.includes('data-clarity-mask="true"') &&
     quickQuoteForm.includes("paidSearch={paidSearch}") &&
     quickQuoteForm.includes("landingCity?: string;") &&

@@ -69,7 +69,7 @@ export default function AboutPage() {
         <ul className="site-hero-points">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
-        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link" data-phone-location="about_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
+        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><a href={business.phoneHref} className="home-text-link" data-phone-location="about_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
         <div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>
 

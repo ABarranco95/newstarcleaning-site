@@ -50,7 +50,7 @@ export default function Home() {
     <div className="home-reference">
       <section className="hx" aria-labelledby="home-title">
         <div className="hx-backdrop" aria-hidden="true">
-          <Image src={hero.src} alt="" fill preload sizes="100vw" />
+          <Image src={hero.src} alt="" fill preload fetchPriority="high" sizes="100vw" />
         </div>
         <div className="hx-inner">
           <div className="hx-copy">
@@ -68,7 +68,7 @@ export default function Home() {
           </div>
           <div className="hx-form">
             <QuickQuoteForm
-              title="Get your cleaning price"
+              title="Get a quote"
               subtitle="Tell us about your home. We'll text or call with your price."
               source="organic_home_hero"
               directBookingUrl={directBookingUrl}
@@ -117,7 +117,7 @@ export default function Home() {
           </div>
 
           <div className="mt-8">
-            <Suspense fallback={<Link href="/book-now" className="home-button">Get your cleaning price <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get your cleaning price <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
+            <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           </div>
         </div>
       </section>
@@ -127,7 +127,7 @@ export default function Home() {
           <div className="ns-section-head">
             <div>
               <p className="ns-kicker">Reviews</p>
-              <h2 id="home-reviews-title" className="ns-h2">What customers say on Google.</h2>
+              <h2 id="home-reviews-title" className="ns-h2 scroll-mt-24">What customers say on Google.</h2>
             </div>
             <GoogleRating prominent />
           </div>
@@ -166,7 +166,7 @@ export default function Home() {
           ))}
         </ol>
         <div className="home-steps-cta">
-          <Suspense fallback={<Link href="/book-now" className="home-button">Request a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Request a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
+          <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           <a href={business.phoneHref} className="home-text-link" data-phone-location="home_process"><Icon name="phone" /> Or call {business.phoneDisplay}</a>
         </div>
       </section>

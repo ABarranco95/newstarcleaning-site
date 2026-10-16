@@ -27,10 +27,7 @@ type QuickQuoteFormProps = {
   submitLabel?: string;
   stickyPaidCta?: boolean;
   onStickyPaidClick?: () => void;
-  /** Paid recurring incentive; the office applies it when quoting. */
-  recurringOffer?: { line: string; conditions: string; messageNote: string; cta?: string } | null;
-  /** Paid-page incentive shown above the form and tagged on the lead. */
-  offer?: { code: string; line: string } | null;
+
 };
 
 type FormState = {
@@ -234,9 +231,7 @@ function firstInvalidControl(root: ParentNode | null): FormControl | null {
 
 function SubmitButton({
   isSubmitting,
-  compact,
   commercial,
-  paidSearch,
   label,
 }: {
   isSubmitting: boolean;
@@ -253,18 +248,14 @@ function SubmitButton({
           ? label
           : commercial
           ? "Request a walkthrough"
-          : paidSearch
-            ? "Request my quote"
-            : compact
-              ? "Get my quote"
-              : "Get pricing & availability"}
+          : "Get a quote"}
       {!isSubmitting ? <ArrowIcon /> : null}
     </button>
   );
 }
 
 export default function QuickQuoteForm({
-  title = "Get pricing & availability",
+  title = "Get a quote",
   subtitle = "Tell us where to send availability and pricing — we'll follow up quickly with the best next step for your home.",
   source = "organic_website",
   defaultCity,
@@ -278,8 +269,7 @@ export default function QuickQuoteForm({
   submitLabel,
   stickyPaidCta = false,
   onStickyPaidClick,
-  recurringOffer = null,
-  offer = null,
+
   directBookingUrl = null,
 }: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService, paidSearch));
@@ -295,6 +285,7 @@ export default function QuickQuoteForm({
   const [tracking, setTracking] = useState<Record<string, string>>({});
   const [showPaidDetails, setShowPaidDetails] = useState(false);
   const [step, setStep] = useState(1);
+  const [contactOnly, setContactOnly] = useState(false);
   const hasTrackedFormStart = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -416,11 +407,11 @@ export default function QuickQuoteForm({
   // to reach them. Timing, size and condition are optional; Angel or Stella
   // collects anything missing over text or call.
   const quickPaid = paidSearch && !isCommercialRequest;
+  const quickContact = !paidSearch && contactOnly && !isCommercialRequest;
   const compactPaid = quickPaid && compact;
-  const paidRecurringOffer = paidSearch ? recurringOffer : null;
   const stickyPaid = compactPaid && stickyPaidCta;
-  const paidSubmitLabel = paidRecurringOffer?.cta || submitLabel;
-  const stepCount = quickPaid ? 1 : STEP_COUNT;
+  const paidSubmitLabel = submitLabel;
+  const stepCount = quickPaid || quickContact ? 1 : STEP_COUNT;
 
   const handleStickySubmit = () => {
     const form = formRef.current;
@@ -529,14 +520,12 @@ export default function QuickQuoteForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          message: paidRecurringOffer && window.location.pathname === "/google-ads"
-            ? [formData.message, paidRecurringOffer.messageNote].filter(Boolean).join("\n\n")
-            : formData.message,
+
           requestedDate: formData.timeline === "specific-deadline" ? formData.requestedDate : undefined,
           ...tracking,
           ...attribution,
           homeSize: formData.sqft,
-          ...(offer ? { offer: offer.code } : {}),
+
           source,
           sourceForm: source,
           submissionId: submissionIdRef.current,
@@ -959,7 +948,7 @@ export default function QuickQuoteForm({
   );
 
   const renderNameAndPhone = () => (
-    <div className={compactPaid && paidRecurringOffer ? "qf-row grid-cols-2" : "qf-row qf-row-2"}>
+    <div className={compactPaid ? "qf-row grid-cols-2" : "qf-row qf-row-2"}>
       <div>
         <FieldLabel htmlFor="quote-name" required>Name</FieldLabel>
         <input
@@ -1075,7 +1064,7 @@ export default function QuickQuoteForm({
         {paidSearch
           ? stickyPaid
             ? "Takes under a minute. We text or call with your price and next open dates. No payment, nothing booked until you say yes."
-            : `${paidRecurringOffer ? "Takes under a minute. " : ""}We'll text or call you with your price. No payment, nothing booked until you confirm.`
+            : "We'll text or call you with your price. No payment, nothing booked until you confirm."
           : "No payment, and nothing is booked until you confirm."}{" "}
         <Link href="/privacy" target="_blank" rel="noopener">Privacy</Link>
       </span>
@@ -1113,7 +1102,7 @@ export default function QuickQuoteForm({
       <FieldLabel htmlFor="quote-frequency" required={isRecurringRequest} optional={!isRecurringRequest}>How often would you like cleaning?</FieldLabel>
       <select id="quote-frequency" name="frequency" required={isRecurringRequest} value={formData.frequency} onChange={(event) => updateField("frequency", event.target.value)} className={fieldClass}>
         <option value="">Choose a frequency…</option>
-        {!isRecurringRequest ? <option value="one-time">One-Time</option> : null}
+        <option value="one-time">One-Time</option>
         <option value="weekly">Weekly</option>
         <option value="bi-weekly">Biweekly</option>
         <option value="monthly">Monthly</option>
@@ -1212,7 +1201,24 @@ export default function QuickQuoteForm({
     </div>
   );
 
-  const renderSteps = () => (quickPaid ? (
+  const renderSteps = () => (quickContact ? (
+    <div data-quote-step="1">
+      <div className="qf-stack">
+        <p className="qf-help">We can work out the home details with you. Nothing is booked with this request.</p>
+        {renderCityField()}
+        {renderRequestedDate()}
+        {renderNameAndPhone()}
+        {renderContactChips()}
+        {renderSmsConsent()}
+        {renderError()}
+      </div>
+      <div className="qf-actions">
+        <SubmitButton isSubmitting={isSubmitting} compact={compact} commercial={false} paidSearch={false} label="Contact me about a cleaning" />
+      </div>
+      <button type="button" className="qf-reset" onClick={() => setContactOnly(false)}>Use the full home-details form</button>
+      {renderFinePrint()}
+    </div>
+  ) : quickPaid ? (
     <>
       <div data-quote-step="1">
         <div className="qf-stack">
@@ -1332,6 +1338,7 @@ export default function QuickQuoteForm({
             setSubmittedAccepted(false);
             setAcceptedSnapshot(null);
             setSmsOptIn(false);
+            setContactOnly(false);
             setStep(1);
             setIsSuccess(false);
           }}
@@ -1349,19 +1356,18 @@ export default function QuickQuoteForm({
       id="quote"
       ref={containerRef}
       data-paid-search={paidSearch || undefined}
-      data-quote-layout="stepped"
+      data-quote-layout={quickContact ? "contact-first" : "stepped"}
       className={compactPaid ? `qf px-4 py-4 sm:p-6 [&_.qf-head_p]:text-sm [&_.qf-head_p]:leading-5 [&_.qf-stack]:gap-2 [&_.qf-row]:gap-2 [&_.qf-label]:mb-1 [&_.qf-input]:min-h-11 [&_.qf-input]:py-2 [&_.qf-chip_span]:min-h-11 [&_.qf-consent]:gap-2 [&_.qf-consent]:leading-4 [&_.qf-disclosure]:mt-0 [&_.qf-disclosure]:pt-1 [&_.qf-actions]:mt-3 ${stickyPaid ? "max-md:pt-3 max-md:[&_.qf-head_h2]:text-xl max-md:[&_.qf-head_h2]:leading-tight max-md:[&_.qf-head_p]:mt-1" : ""}` : "qf"}
     >
       <div className="qf-head">
         <h2>{title}</h2>
         {subtitle ? <p>{subtitle}</p> : null}
-        {paidRecurringOffer ? (
-          <div className={stickyPaid ? "mt-1 text-sm leading-5 text-primary md:mt-2" : "mt-2 text-sm leading-5 text-primary"} data-recurring-offer>
-            <strong className="block font-semibold">{paidRecurringOffer.line}</strong>
-            <small className="mt-1 block text-xs leading-4 text-ink-soft">{paidRecurringOffer.conditions}</small>
-          </div>
+        {!paidSearch && !isCommercialRequest && step === 1 && !contactOnly ? (
+          <button type="button" className="qf-reset" onClick={() => {
+            setContactOnly(true);
+            trackFunnelEvent("quote_cta_click", { source, page: window.location.pathname, ctaLocation: "contact_first" });
+          }}>Prefer a call or text? We&apos;ll reach out.</button>
         ) : null}
-        {offer ? <p className="qf-offer">{offer.line}</p> : null}
       </div>
 
       <form
@@ -1404,7 +1410,7 @@ export default function QuickQuoteForm({
         <PaidQuoteStickyCTA
           formRef={formRef}
           isSubmitting={isSubmitting}
-          label={paidSubmitLabel || "Get my price + open dates"}
+          label={paidSubmitLabel || "Get a quote"}
           onClick={handleStickySubmit}
         />
       ) : null}

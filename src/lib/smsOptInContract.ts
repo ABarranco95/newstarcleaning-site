@@ -2,10 +2,10 @@
 // Apex records consent from a structured smsConsent object; a sentence in the
 // message body does not count. This builder produces that structured payload,
 // and the page may only show "opted in" after Apex accepts it.
-export const SMS_OPT_IN_DISCLOSURE_VERSION = "newstar-sms-opt-in-page-2026-07-30";
+export const SMS_OPT_IN_DISCLOSURE_VERSION = "newstar-sms-opt-in-page-2026-10-15";
 
 const SMS_OPT_IN_CONSENT_TEXT =
-  "Visitor checked the SMS opt-in consent box on newstarcleaning.com/sms-opt-in agreeing to receive recurring automated text messages from New Star Cleaning LLC (appointment confirmations, reminders, service updates, and occasional promotional offers). Message frequency varies; message and data rates may apply; consent is not a condition of purchase; reply STOP to opt out, HELP for help.";
+  "Visitor checked the SMS opt-in consent box on newstarcleaning.com/sms-opt-in agreeing to receive recurring automated text messages from New Star Cleaning LLC (appointment confirmations, reminders, and service updates). Message frequency varies; message and data rates may apply; consent is not a condition of purchase; reply STOP to opt out, HELP for help.";
 
 export type SmsOptInForwardPayload = {
   [key: string]: unknown;

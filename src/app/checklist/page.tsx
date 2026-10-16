@@ -102,7 +102,7 @@ export default function ChecklistPage() {
   return (
     <div className="site-reference">
       <SiteHero tone="dark" eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="Compare the three services, then open the room-by-room list. We confirm the work and price before your appointment." breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><a href="#services" className="home-button">See the full checklists <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a free quote</Link>}><HomeQuoteLink className="home-text-link">Get a free quote</HomeQuoteLink></Suspense></div>
+        <div className="site-actions"><a href="#services" className="home-button">See the full checklists <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote</Link>}><HomeQuoteLink className="home-text-link">Get a quote</HomeQuoteLink></Suspense></div>
         <div className="site-proof-row"><GoogleRating /></div>
       </SiteHero>
       <TrustStrip />

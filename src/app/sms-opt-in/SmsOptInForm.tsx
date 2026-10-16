@@ -188,8 +188,8 @@ export default function SmsOptInForm() {
           <span className="text-sm leading-relaxed text-ink-soft">
             I agree to receive automated SMS/text messages from{" "}
             <strong className="text-ink">New Star Cleaning LLC</strong> at the phone number
-            provided. Messages may include appointment confirmations, reminders, service updates,
-            and promotional offers. Message frequency varies. Message and data rates may apply.
+            provided. Messages may include appointment confirmations, reminders, and service updates.
+            Message frequency varies. Message and data rates may apply.
             Consent is not a condition of purchase. Reply <strong>STOP</strong> to opt out at any
             time. Reply <strong>HELP</strong> for assistance. View our{" "}
             <Link href="/privacy" className="font-semibold text-primary underline">Privacy Policy</Link>{" "}

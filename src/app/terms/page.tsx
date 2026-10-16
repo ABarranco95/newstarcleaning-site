@@ -21,7 +21,7 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="text-mute mb-12">
-          Last Updated: June 12, 2026
+          Last Updated: October 15, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -178,7 +178,7 @@ export default function TermsOfService() {
                   <li>Service follow-ups and satisfaction check-ins</li>
                   <li>Review and feedback requests</li>
                   <li>
-                    Promotional offers and discounts (with your express consent)
+                    News about our cleaning services (with your express consent)
                   </li>
                 </ul>
               </div>

@@ -107,7 +107,7 @@ export default function ServicesPage() {
         <ul className="site-hero-points">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
-        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><a href="#compare" className="home-text-link">Compare services</a></div>
+        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><a href="#compare" className="home-text-link">Compare services</a></div>
         <div className="site-hero-meta"><GoogleRating /><a href={business.phoneHref} className="site-hero-phone" data-phone-location="services_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
       </SiteHero>
 

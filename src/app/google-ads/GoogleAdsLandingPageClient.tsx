@@ -50,14 +50,7 @@ type PaidIntentConfig = {
   serviceDefault: string;
   formTitle: string;
   priceLine?: string;
-  recurringOffer?: {
-    line: string;
-    conditions: string;
-    /** Submit label while the offer shows; defaults to the paid label. */
-    cta?: string;
-    /** Office note appended to the lead; defaults to the recurring offer note. */
-    messageNote?: string;
-  };
+
   /** Included scope and optional add-ons, from the service scope contracts. */
   scope?: {
     included: string;
@@ -149,17 +142,6 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
   },
 };
 
-// First-deep-clean incentive. Move-out already includes the inside of the oven
-// (SOP 02 / pricing engine serviceDefaultOn), so this only runs on Deep.
-// Off until NEXT_PUBLIC_PAID_OVEN_OFFER=on is set at build time.
-const PAID_OVEN_OFFER_ON = process.env.NEXT_PUBLIC_PAID_OVEN_OFFER === "on";
-const DEEP_OVEN_OFFER = {
-  code: "free_inside_oven_first_deep",
-  line: "Inside of the oven included free with your first deep clean.",
-};
-
-const RECURRING_OFFER_MESSAGE = "Offer shown: $50 off first clean with weekly/biweekly, first clean $350+, ends Oct 24. Honor it for 72 hours after the price is sent.";
-const DEEP_OFFER_MESSAGE = "Offer shown: $50 off first deep clean, one-time or recurring, deep clean $350+, ends Oct 24. Honor it for 72 hours after the price is sent.";
 
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
@@ -167,12 +149,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `House cleaning in ${city}, one-time or recurring.`,
     subhead: "Kitchen, bathrooms, dusting and floors done room by room, once or on a schedule. Tell us about your home and you get one flat price before anything is booked.",
     serviceDefault: "Not sure yet",
-    formTitle: "Get your price and next open date",
+    formTitle: "Get a quote",
     priceLine: "House cleaning from $165, depending on size and condition. Total confirmed before you book.",
-    recurringOffer: {
-      line: "Weekly saves 15% on every visit. Every other week saves 10%.",
-      conditions: "Starting with a deep clean? Take $50 off it too. Ends Oct 24, first clean $350+.",
-    },
+
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
@@ -190,7 +169,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Move-in and move-out cleaning for ${city} homes.`,
     subhead: "The empty home cleaned top to bottom, inside cabinets, drawers and closets included, so it’s ready for the walkthrough. Tell us your move date.",
     serviceDefault: "Move-in / move-out cleaning",
-    formTitle: "Get your price and next open date",
+    formTitle: "Get a quote",
     priceLine: "Move-in/out cleaning starts at $325. Inside cabinets, drawers and closets are included. Oven, fridge and windows are optional extras. We confirm the total before you book.",
     scope: {
       included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
@@ -213,14 +192,9 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Deep cleaning for ${city} homes.`,
     subhead: "Baseboards, fixtures, built-up grime and the detail work a regular clean skips. Tell us which rooms bother you most and we plan the time around them.",
     serviceDefault: "Deep cleaning",
-    formTitle: "Get your price and next open date",
+    formTitle: "Get a quote",
     priceLine: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
-    recurringOffer: {
-      line: "$50 off your first deep clean, one-time or recurring.",
-      conditions: "Ends Oct 24 · Deep clean $350+ · Your $50 holds 72 hours after we send your price.",
-      cta: "Get my price + $50 off",
-      messageNote: DEEP_OFFER_MESSAGE,
-    },
+
     scope: {
       included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
       addOns: "Inside the oven and fridge, cabinet interiors, and interior windows.",
@@ -278,7 +252,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     h1: (city) => `Reliable recurring house cleaning for ${city} homes.`,
     subhead: "We’ll keep up with the kitchen, bathrooms, dusting, and floors. Choose weekly, every other week, or monthly cleaning.",
     serviceDefault: "Standard recurring cleaning",
-    formTitle: "Request recurring pricing",
+    formTitle: "Get a quote",
     proofOrder: ["shower", "tub", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
@@ -584,8 +558,9 @@ function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false }: { on
         <a href={"tel:+1" + "559" + "785" + "2822"} onClick={onCallClick} className="home-text-link flex-1 justify-center">
           Call
         </a>
+        <a href={"sms:+1" + "559" + "785" + "2822"} data-phone-location="paid_mobile_text" className="home-text-link flex-1 justify-center">Text</a>
         <a href="#booking-form" onClick={onQuoteClick} className="home-button flex-1">
-          {commercial ? "Request a proposal" : "Get my quote"}
+          {commercial ? "Request a proposal" : "Get a quote"}
         </a>
       </div>
     </div>
@@ -659,7 +634,7 @@ export default function GoogleAdsLandingPageClient({
   };
 
   return (
-    <div className={compactResidentialHero ? "site-reference paid-reference bg-white pb-[calc(72px+env(safe-area-inset-bottom,0px))] text-ink md:pb-0" : "site-reference paid-reference bg-white pb-24 text-ink md:pb-0"}>
+    <div className={compactResidentialHero ? "site-reference paid-reference bg-white pb-[calc(80px+env(safe-area-inset-bottom,0px))] text-ink md:pb-0" : "site-reference paid-reference bg-white pb-24 text-ink md:pb-0"}>
       <header className="bg-primary text-white">
         <div className="home-wrap flex h-16 items-center justify-between gap-4">
           <PaidBrand />
@@ -668,8 +643,7 @@ export default function GoogleAdsLandingPageClient({
             className="home-header-quote"
           >
             <Icon name="phone" />
-            <span className="sm:hidden">Call us</span>
-            <span className="hidden sm:inline">Call (559) 785-2822</span>
+            <span>(559) 785-2822</span>
           </a>
         </div>
       </header>
@@ -692,7 +666,7 @@ export default function GoogleAdsLandingPageClient({
                   <li key={point}><Icon name="check" />{point}</li>
                 ))}
               </ul>
-              <div className={compactResidentialHero ? "mt-3 hidden sm:block" : "mt-3"}>
+              <div className="mt-3">
                 <TrustLine commercial={isBusinessRequest} />
               </div>
             </div>
@@ -732,8 +706,8 @@ export default function GoogleAdsLandingPageClient({
                   compact={Boolean(intent.priceLine)}
                   stickyPaidCta={compactResidentialHero}
                   onStickyPaidClick={() => trackStickyCta("sticky_paid")}
-                  submitLabel={compactResidentialHero ? "Get my price + open dates" : undefined}
-                  recurringOffer={intent.recurringOffer ? { ...intent.recurringOffer, messageNote: intent.recurringOffer.messageNote ?? RECURRING_OFFER_MESSAGE } : null}
+                  submitLabel={compactResidentialHero ? "Get a quote" : undefined}
+
                   submitAlternative={intent.priceLine ? (
                     <a
                       href={"tel:+1" + "559" + "785" + "2822"}
@@ -753,9 +727,12 @@ export default function GoogleAdsLandingPageClient({
                       </figcaption>
                     </figure>
                   ) : null}
-                  offer={intentKey === "deep" && PAID_OVEN_OFFER_ON ? DEEP_OVEN_OFFER : null}
+
                 />
               )}
+              <p className="mt-2 text-center text-sm">
+                <a href={"sms:+1" + "559" + "785" + "2822"} data-phone-location="paid_under_form" className="home-text-link min-h-11">Prefer to text? Text us</a>
+              </p>
               {residentialBookingUrl ? (
                 <p className="mt-1 text-center text-xs text-ink-soft">
                   <BookingPortalLink
@@ -765,7 +742,7 @@ export default function GoogleAdsLandingPageClient({
                     service={intent.serviceDefault}
                     city={city.formValue || undefined}
                     frequency={bookingFrequency}
-                    label="Book online with New Star"
+                    label="Choose a date online"
                     showIcon={false}
                     className="home-text-link"
                   />
@@ -773,11 +750,6 @@ export default function GoogleAdsLandingPageClient({
               ) : null}
             </div>
 
-            {compactResidentialHero ? (
-              <div className="paid-mobile-trust sm:hidden">
-                <TrustLine onDark />
-              </div>
-            ) : null}
 
           </div>
         </div>
@@ -804,7 +776,7 @@ export default function GoogleAdsLandingPageClient({
             </p>
             <div className="site-actions">
               <a href="#booking-form" onClick={() => trackQuoteCta("closing_section")} className="home-button">
-                {isBusinessRequest ? "Request a proposal" : "Get my quote"}
+                {isBusinessRequest ? "Request a proposal" : "Get a quote"}
                 <span aria-hidden="true">↗</span>
               </a>
               <a href={"tel:+1" + "559" + "785" + "2822"} className="home-text-link">
@@ -820,7 +792,7 @@ export default function GoogleAdsLandingPageClient({
                   service={intent.serviceDefault}
                   city={city.formValue || undefined}
                   frequency={bookingFrequency}
-                  label="Book online with New Star"
+                  label="Choose a date online"
                   showIcon={false}
                   className="home-text-link"
                 />

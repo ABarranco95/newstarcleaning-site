@@ -137,6 +137,9 @@ const expectedPriceLines = {
 const expectedDecisionReviews = { deep: "daniel", move: "daviana-j", house: "merle-f" };
 for (const intent of Object.keys(INTENT_CONFIG)) {
   assert(INTENT_CONFIG[intent].priceLine === expectedPriceLines[intent], `${intent}: only approved service-specific starting-price copy`);
+  const result = render(intent);
+  assert(!/\$50|\d+%|\boff your\b|included free|ends Oct|72 hours/i.test(result.text), `${intent}: no money-off, free-add-on or urgency promise`);
+  assert(!Object.hasOwn(result.forms[0].props, "offer") && !Object.hasOwn(result.forms[0].props, "recurringOffer"), `${intent}: no incentive props can reach intake`);
 }
 for (const [intent, priceLine] of Object.entries(expectedPriceLines)) {
   const form = render(intent).forms[0];
@@ -170,7 +173,7 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
   const photoName = expected === "deep" ? "glass-shower-freestanding-tub-new-star.webp" : expected === "move" ? "dining-kitchen-turnover-new-star.webp" : "kitchen-island-clean-new-star.webp";
   const photo = [...photosModule.exports.bathroomResultPhotos, ...photosModule.exports.emptyHomeResultPhotos, ...photosModule.exports.homeResultPhotos].find((item) => item.src.endsWith(`/${photoName}`));
   assert(result.nodes.filter((node) => node.props?.src === photo.src && node.props?.alt === photo.alt).length === 1, `${expected}: one genuine intent-matched hero photo with approved alt text`);
-  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.label === "Book online with New Star" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: named New Star booking exits carry only explicit matching frequency`);
+  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.label === "Choose a date online" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: explicit date-selection exits carry only matching frequency`);
   const gallery = result.nodes.find((node) => node.props?.id === "paid-proof-gallery");
   assert(gallery?.props.role === "region" && gallery.props.tabIndex === 0 && gallery.props["aria-label"] && typeof gallery.props.onKeyDown === "function" && result.nodes.filter((node) => node.type === "button" && node.props["aria-controls"] === "paid-proof-gallery").length === 2, `${expected}: gallery exposes focus, keyboard handler, label and two controls`);
   const scrollCalls = [];

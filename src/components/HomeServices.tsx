@@ -51,7 +51,7 @@ export default function HomeServices({ defaultCity }: { defaultCity?: string }) 
           <ul className="home-scope-includes">
             {selected.includes.map((item) => <li key={item}>{item}</li>)}
           </ul>
-          <Link href={`/book-now?${query.toString()}`} className="home-button" data-home-service-quote>{selected.action}<span aria-hidden="true">→</span></Link>
+          <Link href={`/book-now?${query.toString()}`} className="home-button" data-home-service-quote>Get a quote<span aria-hidden="true">→</span></Link>
           <Link href={`/services/${selected.slug}?${query.toString()}#whats-included`} className="home-text-link">What’s included <span aria-hidden="true">→</span></Link>
         </div>
       </div>

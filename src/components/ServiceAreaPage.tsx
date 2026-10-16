@@ -82,7 +82,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
                   baseUrl={directBookingUrl}
                   city={area.name}
                   sourcePage={`/cleaning-services-${area.slug}`}
-                  label="Ready to self-schedule? Book online"
+                  label="Choose a date online"
                   showIcon={false}
                   className="home-text-link"
                 />

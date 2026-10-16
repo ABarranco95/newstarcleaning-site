@@ -12,5 +12,5 @@ export default function HomeBookingContextLink({ baseUrl, onDark, placement }: H
   const pathname = usePathname();
   const query = siteQuoteParams(pathname, useSearchParams().toString());
   if (isBusinessCleaning(query.get("service"))) return null;
-  return <BookingPortalLink baseUrl={baseUrl} service={query.get("service") || undefined} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation={`home-${placement}`} label="Book online" showIcon={false} className={`font-medium underline underline-offset-4 ${onDark ? "text-white/85 hover:text-white" : "text-primary hover:text-primary-light"}`} />;
+  return <BookingPortalLink baseUrl={baseUrl} service={query.get("service") || undefined} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation={`home-${placement}`} label="Choose a date online" showIcon={false} className={`font-medium underline underline-offset-4 ${onDark ? "text-white/85 hover:text-white" : "text-primary hover:text-primary-light"}`} />;
 }

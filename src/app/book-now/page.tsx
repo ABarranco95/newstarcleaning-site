@@ -23,7 +23,7 @@ const bookNowFaqs = [
   },
   {
     q: "Can I skip the quote and book directly?",
-    a: directBookingUrl ? "Yes. Book online lets you review residential cleaning options, pricing, and available times before confirming. For heavy buildup or unusual scope, request a quote so we can review the home first." : "Online booking is not currently available. Request a quote or call us to review pricing and appointment times.",
+    a: directBookingUrl ? "Yes. Choose a date online opens our booking form, where you review the service, price and available times before confirming. For heavy buildup or unusual scope, request a quote so we can review the home first." : "Online booking is not currently available. Request a quote or call us to review pricing and appointment times.",
   },
   {
     q: "What if I'm not sure which cleaning service I need?",
@@ -51,7 +51,7 @@ export default function BookNow() {
         <div className="site-form-heading">
           <nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav>
           <GoogleRating />
-          <h1 className="mt-2">Get your cleaning price.</h1>
+          <h1 className="mt-2">Get a quote.</h1>
           <p>Tell us about your home. We’ll text or call with your price and available times. No payment, and nothing is booked with this form.</p>
         </div>
         <div id="quote-form" className="site-form-panel"><QuickQuoteForm title="Your cleaning quote" subtitle="Start with the basics. We'll help with anything you're unsure about." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div>

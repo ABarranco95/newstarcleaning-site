@@ -11,6 +11,8 @@ import AnalyticsTags from "@/components/AnalyticsTags";
 import PageViewTracker from "@/components/PageViewTracker";
 import WebsiteCallTracker from "@/components/WebsiteCallTracker";
 import PaidAttributionTracker from "@/components/PaidAttributionTracker";
+import MobileContactActions from "@/components/MobileContactActions";
+import { Suspense } from "react";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -95,6 +97,7 @@ export default function RootLayout({
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <Suspense fallback={null}><MobileContactActions /></Suspense>
       </body>
     </html>
   );

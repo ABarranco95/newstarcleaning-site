@@ -82,13 +82,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: deadlineError }, { status: 400 });
     }
 
+    // New requests must not reintroduce retired incentives through a stale tab.
+    const forwardedBody = { ...body };
+    delete forwardedBody.offer;
     const apexRes = await fetch(APEX_LEAD_URL, {
       method: "POST",
       redirect: "error",
       signal: AbortSignal.timeout(15000),
       headers: forwardedHeaders(req),
       body: JSON.stringify({
-        ...body,
+        ...forwardedBody,
         name,
         phone,
         email: email || undefined,

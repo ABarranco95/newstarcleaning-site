@@ -32,7 +32,7 @@ export default function ServiceAreasPage() {
   return (
     <div className="site-reference">
       <SiteHero tone="dark" eyebrow="Service area" title="House cleaning across Fresno, Clovis & Madera." description="We're based in Fresno and clean homes in Clovis too. In Madera, we have fewer openings. Tell us your address and preferred date and we'll check for you." photo={emptyHomeResultPhotos[4]} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><a href="#cities" className="home-button">Find your area <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a free quote</Link>}><HomeQuoteLink className="home-text-link">Get a free quote</HomeQuoteLink></Suspense></div>
+        <div className="site-actions"><a href="#cities" className="home-button">Find your area <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote</Link>}><HomeQuoteLink className="home-text-link">Get a quote</HomeQuoteLink></Suspense></div>
         <div className="site-hero-meta"><GoogleRating /><a href={business.phoneHref} className="site-hero-phone" data-phone-location="areas_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
       </SiteHero>
 

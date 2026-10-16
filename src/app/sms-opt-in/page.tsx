@@ -21,8 +21,8 @@ export default function SmsOptIn() {
               <p className="text-xs leading-relaxed text-mute">
                 By submitting this form, you expressly consent to receive recurring automated
                 text messages from New Star Cleaning at the phone number you provide. Message
-                frequency varies (typically 1–4 messages per service interaction, no more than 4
-                promotional messages per month). Message and data rates may apply. Consent is not
+                frequency varies (typically 1–4 messages per service interaction).
+                Message and data rates may apply. Consent is not
                 required to purchase goods or services. You can opt out at any time by replying
                 STOP. For help, reply HELP or contact us at{" "}
                 <a href="mailto:support@newstarcleaning.com" className="text-primary underline">

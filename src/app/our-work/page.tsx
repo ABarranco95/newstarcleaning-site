@@ -143,7 +143,7 @@ export default function OurWorkPage() {
         <h2>Have a spot like this at home?</h2>
         <p>Tell us what needs attention. We&apos;ll explain what we can clean and give you a price before you book.</p>
         <div className="work-cta-actions">
-          <Suspense fallback={<Link href="/book-now" className="home-button">Get a free quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a free quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
+          <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           <a href={business.phoneHref} className="home-text-link" data-phone-location="our_work_cta"><Icon name="phone" /> {business.phoneDisplay}</a>
         </div>
         <div className="work-cta-links">

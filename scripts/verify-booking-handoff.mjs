@@ -103,6 +103,6 @@ for (const frequency of ["weekly", "bi-weekly", "monthly"]) {
 }
 check(form.includes("acceptedPrefillSnapshot(formData, true, customerCityRef.current)") && form.includes("setAcceptedSnapshot(apexAccepted ? submittedSnapshot : null)"), "success snapshot comes from the submitted customer closure and is acceptance-gated");
 check(form.includes("<BookingPrefillLink baseUrl={directBookingUrl} snapshot={acceptedSnapshot}") && form.includes("onRelease={() => setAcceptedSnapshot(null)}"), "success card passes frequency privately and releases the snapshot after transfer");
-check(form.includes('"Request my quote"') && !form.includes('"Get my price"'), "paid lead submit describes a quote request, not instant pricing");
+check(form.includes('"Get a quote"') && !form.includes('"Get my price"'), "paid lead submit describes a quote request, not instant pricing");
 check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
 console.log(`Booking continuity: ${checks}/${checks} checks passed (inert module tests; no network or live booking).`);
