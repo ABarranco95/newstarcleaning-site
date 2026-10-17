@@ -105,4 +105,57 @@ check(form.includes("acceptedPrefillSnapshot(formData, true, customerCityRef.cur
 check(form.includes("<BookingPrefillLink baseUrl={directBookingUrl} snapshot={acceptedSnapshot}") && form.includes("onRelease={() => setAcceptedSnapshot(null)}"), "success card passes frequency privately and releases the snapshot after transfer");
 check(form.includes('"Get a quote"') && !form.includes('"Get my price"'), "paid lead submit describes a quote request, not instant pricing");
 check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
+
+const prefill = prefillModule.exports;
+const emptyMove = prefill.acceptedPrefillSnapshot({ service: "Move-in / move-out cleaning", moveOutAddons: [] }, true, true);
+check(Array.isArray(emptyMove.moveOutAddons) && emptyMove.moveOutAddons.length === 0 && Object.isFrozen(emptyMove.moveOutAddons), "explicit empty Move extras survive as a frozen Essentials selection");
+check(!Object.hasOwn(prefill.acceptedPrefillSnapshot({ service: "Move-in / move-out cleaning" }, true, true), "moveOutAddons"), "omitted Move extras remain omitted, not silently changed to Essentials");
+const attributionInput = Object.fromEntries(prefill.BOOKING_ATTRIBUTION_FIELDS.map(field => [field, ` ${field}-fixture `]));
+const attribution = prefill.bookingAttributionSnapshot({ ...attributionInput, fbclid: "excluded", name: "excluded", smsConsent: "excluded", totalPrice: "1", capturedAt: "excluded" });
+check(Object.keys(attribution).sort().join() === prefill.BOOKING_ATTRIBUTION_FIELDS.slice().sort().join() && Object.isFrozen(attribution), "booking attribution includes only Apex's exact allowlist, never identity, consent, price or capture metadata");
+check(Object.values(attribution).every(value => !value.startsWith(" ") && !value.endsWith(" ")), "booking attribution trims values");
+check(Object.keys(prefill.bookingAttributionSnapshot({ gclid: "x".repeat(513), utm_source: "  ", firstReferrer: "x".repeat(2049), nsinternal: 1 })).length === 0, "blank, non-string and overlength attribution is dropped, not truncated");
+check(prefill.bookingAttributionSnapshot({ gclid: "x".repeat(512), firstLandingPage: "x".repeat(2048) }).firstLandingPage.length === 2048, "Apex's attribution boundary lengths survive");
+check(prefill.validPayload({ service: "Deep cleaning", ...attribution }) && !prefill.validPayload({ service: "Deep cleaning", price: "1" }) && !prefill.validPayload({ gclid: 123 }), "transport accepts string attribution without accepting arbitrary authority or non-string fields");
+
+// Execute each paid click with the real allowlist; transport is an inert
+// boundary here. Browser proof separately exercises real origin/nonce/ACK.
+let paidInternal = false;
+let storageInternal = false;
+let storageBlocked = false;
+const transfers = [];
+const paidModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync("src/components/PaidPriceBookingButton.tsx", "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2020 },
+}).outputText, {
+  module: paidModule, exports: paidModule.exports, URL, URLSearchParams,
+  window: { location: { origin: "https://newstarcleaning.com", pathname: "/google-ads", get search() { return paidInternal ? "?nsinternal=1" : ""; } }, localStorage: { getItem() { if (storageBlocked) throw new Error("blocked"); return storageInternal ? "1" : null; } } },
+  require(name) {
+    if (name === "react/jsx-runtime") return { jsx, jsxs: jsx };
+    if (name === "react") return { useEffect() {}, useRef: current => ({ current }), useState: initial => [typeof initial === "function" ? initial() : initial, () => {}] };
+    if (name === "@/lib/bookingPrefill") return { ...prefill, startBookingPrefill: (_win, destination, snapshot) => { transfers.push({ destination, snapshot }); return () => {}; } };
+    if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => ({ ...attributionInput, name: "excluded", fbclid: "excluded" }) };
+    if (name === "@/lib/conversionTracking") return { trackFunnelEvent: (event, payload) => events.push({ event, payload }) };
+    throw new Error(`Unexpected paid booking dependency: ${name}`);
+  },
+});
+for (const service of ["Deep cleaning", "Standard recurring cleaning", "Move-in / move-out cleaning"]) {
+  for (const mode of ["external", "url", "storage", "blocked-storage"]) {
+    paidInternal = mode === "url" || mode === "blocked-storage";
+    storageInternal = mode === "storage";
+    storageBlocked = mode === "blocked-storage";
+    const tree = paidModule.exports.default({ baseUrl: "https://book.newstarcleaning.com/book?name=excluded&gclid=excluded", service, bedrooms: "3", bathrooms: "2", squareFeet: "1500", primary: true });
+    const button = tree.props.children[0];
+    const count = transfers.length;
+    check(button.props.type === "button" && button.props.className.includes("qf-submit") && transfers.length === count, "priced booking is the primary non-submit action; rendering does not open booking");
+    button.props.onClick();
+    const { destination, snapshot } = transfers.at(-1);
+    const url = new URL(destination);
+    check(transfers.length === count + 1 && url.searchParams.get("nsinternal") === (mode === "external" ? null : "1") && [...url.searchParams.keys()].every(key => key === "nsinternal"), "explicit click carries internal exclusion on the URL, not identity or attribution IDs");
+    check(snapshot.service === service && snapshot.squareFeet === "1500" && snapshot.frequency === "one-time" && snapshot.condition === "normal" && snapshot.gclid === "gclid-fixture" && !snapshot.name && !snapshot.fbclid && !snapshot.smsConsent, "paid prefill keeps home pricing defaults and allowlisted attribution only");
+    check(service === "Move-in / move-out cleaning" ? Array.isArray(snapshot.moveOutAddons) && snapshot.moveOutAddons.length === 0 : !Object.hasOwn(snapshot, "moveOutAddons"), "Move alone explicitly requests Essentials with empty extras");
+    check(events.at(-1).event === "booking_cta_click" && events.at(-1).payload.ctaLocation === "paid_live_price", "paid click retains the diagnostic funnel event, not a lead conversion");
+  }
+}
+check(form.includes("Rather we text you a price?") && form.includes("primary={stagedPaid}"), "priced paid flow makes booking primary and leaves the quote path quiet");
 console.log(`Booking continuity: ${checks}/${checks} checks passed (inert module tests; no network or live booking).`);

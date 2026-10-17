@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { allowedPrefillPair, startBookingPrefill, type BookingPrefillPayload, type PrefillSendStatus } from "@/lib/bookingPrefill";
+import { allowedPrefillPair, bookingAttributionSnapshot, startBookingPrefill, type BookingPrefillPayload, type PrefillSendStatus } from "@/lib/bookingPrefill";
+import { captureFirstPaidTouch } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 
 const messages: Record<PrefillSendStatus, string> = {
@@ -18,7 +19,7 @@ const messages: Record<PrefillSendStatus, string> = {
 
 export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, primary = false }: {
   baseUrl: string;
-  service: "Deep cleaning" | "Standard recurring cleaning";
+  service: "Deep cleaning" | "Standard recurring cleaning" | "Move-in / move-out cleaning";
   bedrooms: string;
   bathrooms: string;
   squareFeet: string;
@@ -28,8 +29,8 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
     try {
       const url = new URL(baseUrl);
       if (allowedPrefillPair(window.location.origin, url.origin) && ["/book", "/book/"].includes(url.pathname) && !url.username && !url.password) {
-        // No identity, campaign/click IDs or arbitrary configured query values
-        // travel on this pre-contact path. Only the nonce is added by transport.
+        // Discard configured query values. Attribution travels privately; only
+        // the internal flag and transport nonce belong on the destination URL.
         return `${url.origin}/book`;
       }
     } catch { /* Unsupported destinations fail closed. */ }
@@ -52,12 +53,19 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
         onClick={() => {
           cancelRef.current?.();
           // Deliberately independent of acceptedPrefillSnapshot: this explicit
-          // click transfers home-only pricing inputs, never a lead or consent.
+          // click transfers home inputs and attribution, never a lead or consent.
+          let internal = new URLSearchParams(window.location.search).get("nsinternal") === "1";
+          try { internal ||= window.localStorage.getItem("ns_internal") === "1"; } catch { /* URL flag still works without storage. */ }
+          const attribution = bookingAttributionSnapshot({ ...captureFirstPaidTouch(), ...(internal ? { nsinternal: "1" } : {}) });
           const snapshot: BookingPrefillPayload = Object.freeze({
             service, bedrooms, bathrooms, squareFeet,
             frequency: "one-time", condition: "normal",
+            ...(service === "Move-in / move-out cleaning" ? { moveOutAddons: Object.freeze([]) } : {}),
+            ...attribution,
           });
-          cancelRef.current = startBookingPrefill(window, destination, snapshot, setStatus);
+          const url = new URL(destination);
+          if (internal) url.searchParams.set("nsinternal", "1");
+          cancelRef.current = startBookingPrefill(window, url.toString(), snapshot, setStatus);
           try {
             trackFunnelEvent("booking_cta_click", {
               source: "google-ads", service, page: window.location.pathname,
@@ -66,9 +74,9 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           } catch { /* Analytics must not interrupt the synchronous handoff. */ }
         }}
       >
-        Review price &amp; choose a date
+        Book online at this price <span aria-hidden="true">→</span>
       </button>
-      <p className="mt-3 text-xs leading-5 text-ink-soft">Opens booking in a new tab with your home details. Starts at the low end of this range for a kept-up home. Review size, condition and extras before choosing your date.</p>
+      <p className="mt-3 text-xs leading-5 text-ink-soft">Pick your day and time. We confirm everything with you after you book.</p>
       {status ? <p role="status" className="mt-1 text-xs leading-4 text-ink-soft">{messages[status]}</p> : null}
     </div>
   );

@@ -1,5 +1,5 @@
 // Private customer details travel only in memory, after an accepted lead and
-// an explicit click. Paid-price clicks may send non-personal home inputs only,
+// an explicit click. Paid-price clicks may send home inputs and allowlisted attribution,
 // without a lead. Keep this wire contract in sync with Apex booking-prefill.
 export const PREFILL_CHANNEL = "nsc.booking-prefill.v1";
 export const PREFILL_VERSION = 1;
@@ -7,7 +7,20 @@ export const PREFILL_PARAM = "nsc_prefill";
 export const SITE_ORIGINS = ["https://newstarcleaning.com", "https://www.newstarcleaning.com"] as const;
 export const BOOKING_ORIGINS = ["https://book.newstarcleaning.com", "https://apex-crm-abarranco95-s-team.vercel.app"] as const;
 export const CUSTOMER_FIELDS = ["name", "email", "phone", "city", "service", "frequency", "bedrooms", "bathrooms", "squareFeet", "propertyType", "condition", "message", "timeline", "requestedDate", "contactPreference"] as const;
-export type BookingPrefillPayload = Readonly<Partial<Record<typeof CUSTOMER_FIELDS[number], string>> & { moveOutAddons?: readonly string[] }>;
+export const BOOKING_ATTRIBUTION_FIELDS = ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "firstLandingPage", "firstReferrer", "nsinternal"] as const;
+type BookingAttribution = Partial<Record<typeof BOOKING_ATTRIBUTION_FIELDS[number], string>>;
+export type BookingPrefillPayload = Readonly<Partial<Record<typeof CUSTOMER_FIELDS[number], string>> & BookingAttribution & { moveOutAddons?: readonly string[] }>;
+
+/** Match Apex's attribution allowlist and limits; never spread a capture record. */
+export function bookingAttributionSnapshot(record: Record<string, unknown>): Readonly<BookingAttribution> {
+  const snapshot: BookingAttribution = {};
+  for (const field of BOOKING_ATTRIBUTION_FIELDS) {
+    const value = record[field];
+    const max = field === "firstLandingPage" || field === "firstReferrer" ? 2048 : 512;
+    if (typeof value === "string" && value.trim() && value.trim().length <= max) snapshot[field] = value.trim();
+  }
+  return Object.freeze(snapshot);
+}
 export type PrefillSendStatus = "waiting" | "sent" | "applied" | "review" | "rejected" | "blocked" | "unsupported" | "unavailable" | "cancelled";
 
 export function loopbackOrigin(origin: string): boolean {
@@ -28,7 +41,7 @@ export function validPayload(value: unknown): value is BookingPrefillPayload {
   const obj = value as Record<string, unknown>;
   return Object.keys(obj).length > 0 && Object.entries(obj).every(([key, v]) =>
     key === "moveOutAddons" ? Array.isArray(v) && v.every((entry) => typeof entry === "string") :
-      CUSTOMER_FIELDS.some((field) => field === key) && typeof v === "string");
+      (CUSTOMER_FIELDS.some((field) => field === key) || BOOKING_ATTRIBUTION_FIELDS.some((field) => field === key)) && typeof v === "string");
 }
 export function isBookableIntake(service: string): boolean {
   return ["Standard recurring cleaning", "Deep cleaning", "Move-in / move-out cleaning"].includes(service);
@@ -43,7 +56,7 @@ export function acceptedPrefillSnapshot(form: Record<string, unknown>, apexAccep
     const value = form[field === "squareFeet" ? "sqft" : field];
     if (typeof value === "string" && value.trim()) snapshot[field] = value;
   }
-  if (Array.isArray(form.moveOutAddons) && form.moveOutAddons.length && form.moveOutAddons.every((v) => typeof v === "string")) {
+  if (Array.isArray(form.moveOutAddons) && form.moveOutAddons.every((v) => typeof v === "string")) {
     snapshot.moveOutAddons = Object.freeze([...form.moveOutAddons]);
   }
   return Object.freeze(snapshot);

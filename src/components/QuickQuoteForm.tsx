@@ -941,14 +941,15 @@ export default function QuickQuoteForm({
             </>
           )}
           {paidPrice.biweekly ? <p className="mt-1 text-xs leading-4 font-semibold text-primary">Every other week: about {paidPrice.biweekly} per visit</p> : null}
-          {directBookingUrl && paidPrice.bookableSqft && (formData.service === "Deep cleaning" || isPaidHouseRequest) ? (
+          {directBookingUrl && paidPrice.bookableSqft && (formData.service === "Deep cleaning" || isPaidHouseRequest || isMoveOutRequest) ? (
             <PaidPriceBookingButton
               key={`${formData.service}:${formData.bedrooms}:${formData.bathrooms}:${paidPrice.bookableSqft}`}
               baseUrl={directBookingUrl}
-              service={isPaidHouseRequest ? "Standard recurring cleaning" : "Deep cleaning"}
+              service={isPaidHouseRequest ? "Standard recurring cleaning" : isMoveOutRequest ? "Move-in / move-out cleaning" : "Deep cleaning"}
               bedrooms={formData.bedrooms}
               bathrooms={formData.bathrooms}
               squareFeet={paidPrice.bookableSqft}
+              primary={stagedPaid}
             />
           ) : null}
         </>
@@ -1327,10 +1328,19 @@ export default function QuickQuoteForm({
         </div>
         {stagedPaid ? (
           <>
-            <div className="qf-actions">
-              <button type="submit" disabled={isSubmitting} className="qf-submit">Get my quote <ArrowIcon /></button>
-            </div>
-            <p className="qf-help mt-3 text-center">Next: where to send your price and open dates. No payment.</p>
+            {directBookingUrl && paidPrice.status === "ready" && paidPrice.bookableSqft ? (
+              <div className="mt-4 text-center">
+                <button type="submit" disabled={isSubmitting} className="min-h-11 text-sm text-ink-soft hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Rather we text you a price? <span className="font-semibold underline underline-offset-4">Get a quote</span></button>
+                {submitAlternative}
+              </div>
+            ) : (
+              <>
+                <div className="qf-actions">
+                  <button type="submit" disabled={isSubmitting} className="qf-submit">Get my quote <ArrowIcon /></button>
+                </div>
+                <p className="qf-help mt-3 text-center">Next: where to send your price and open dates. No payment.</p>
+              </>
+            )}
           </>
         ) : null}
       </div>
