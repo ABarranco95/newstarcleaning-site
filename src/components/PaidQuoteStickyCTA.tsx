@@ -9,22 +9,28 @@ type PaidQuoteStickyCTAProps = {
   label: string;
   onClick: () => void;
   activeStep?: number;
+  bookingAvailable?: boolean;
 };
 
-export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onClick, activeStep }: PaidQuoteStickyCTAProps) {
-  const [submitInView, setSubmitInView] = useState(false);
+export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onClick, activeStep, bookingAvailable = false }: PaidQuoteStickyCTAProps) {
+  const [actionInView, setActionInView] = useState(false);
 
   useEffect(() => {
-    const selector = activeStep ? `[data-quote-step="${activeStep}"] button[type="submit"]` : 'button[type="submit"]';
-    const submit = formRef.current?.querySelector<HTMLButtonElement>(selector);
-    if (!submit) return;
-    const observer = new IntersectionObserver(([entry]) => setSubmitInView(entry.isIntersecting), {
-      // Step aside before even the first edge of the submit enters the bar.
+    const form = formRef.current;
+    const scope = activeStep ? form?.querySelector(`[data-quote-step="${activeStep}"]`) : form;
+    const actions = scope?.querySelectorAll<HTMLButtonElement>('button[type="submit"], [data-paid-booking] button');
+    if (!actions?.length) return;
+    const visibility = new Map<Element, boolean>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) visibility.set(entry.target, entry.isIntersecting);
+      setActionInView([...visibility.values()].some(Boolean));
+    }, {
+      // Step aside before either in-form action reaches the fixed bar.
       rootMargin: "0px 0px 120px 0px",
     });
-    observer.observe(submit);
+    actions.forEach((action) => observer.observe(action));
     return () => observer.disconnect();
-  }, [formRef, activeStep]);
+  }, [formRef, activeStep, bookingAvailable]);
 
   // While someone is typing, the phone keyboard is up and a fixed bar would
   // sit on top of the field they're filling, so step aside until they leave.
@@ -49,7 +55,7 @@ export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onCli
     };
   }, [formRef]);
 
-  if (submitInView || isSubmitting || typing) return null;
+  if (actionInView || isSubmitting || typing) return null;
 
   return (
     <div

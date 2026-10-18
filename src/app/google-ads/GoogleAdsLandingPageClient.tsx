@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import GoogleRating from "@/components/GoogleRating";
@@ -569,15 +568,20 @@ function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false }: { on
 
 export default function GoogleAdsLandingPageClient({
   directBookingUrl = null,
+  service = null,
+  city: cityParam = null,
+  frequency = null,
 }: {
   directBookingUrl?: string | null;
+  service?: string | null;
+  city?: string | null;
+  frequency?: string | null;
 }) {
-  const searchParams = useSearchParams();
   const hasTrackedLandingView = useRef(false);
-  const city = useMemo(() => normalizeCity(searchParams.get("city")), [searchParams]);
+  const city = useMemo(() => normalizeCity(cityParam), [cityParam]);
   const intentKey = useMemo(
-    () => detectIntent(searchParams.get("service"), searchParams.get("frequency")),
-    [searchParams]
+    () => detectIntent(service, frequency),
+    [service, frequency]
   );
   const intent = INTENT_CONFIG[intentKey];
   const decisionReview = reviewsFor(REVIEW_TOPIC[intentKey]).find((review) => review.id === DECISION_REVIEW_ID[intentKey]);
@@ -586,14 +590,14 @@ export default function GoogleAdsLandingPageClient({
   const isBusinessRequest = isProjectRequest || isCommercialRequest;
   const compactResidentialHero = intentKey === "deep" || intentKey === "move" || intentKey === "house";
   const residentialBookingUrl = isBusinessRequest ? null : directBookingUrl;
-  const requestedFrequency = searchParams.get("frequency")?.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
+  const requestedFrequency = frequency?.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
   const bookingFrequency = intentKey === "recurring" && (requestedFrequency === "weekly" || requestedFrequency === "biweekly" || requestedFrequency === "monthly") ? requestedFrequency : undefined;
   const heroPhoto = isBusinessRequest ? null : intentKey === "deep" ? PAID_HERO_PHOTOS.deep : intentKey === "move" ? PAID_HERO_PHOTOS.move : PAID_HERO_PHOTOS.house;
 
   useEffect(() => {
     captureFirstPaidTouch({
-      landingService: searchParams.get("service") || intentKey,
-      landingCity: searchParams.get("city") || city.label,
+      landingService: service || intentKey,
+      landingCity: cityParam || city.label,
     });
 
     if (!hasTrackedLandingView.current) {
@@ -606,7 +610,7 @@ export default function GoogleAdsLandingPageClient({
         intent: intentKey,
       });
     }
-  }, [city.formValue, city.label, intent.serviceDefault, intentKey, searchParams]);
+  }, [city.formValue, city.label, intent.serviceDefault, intentKey, service, cityParam]);
 
   usePaidDropOffTracking({ service: intent.serviceDefault, city: city.formValue || city.label, intent: intentKey });
 

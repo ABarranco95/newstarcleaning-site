@@ -481,10 +481,10 @@ for (const form of [move, commercial, emailForm]) {
   assert.equal(new Set(ids).size, ids.length, "no duplicate field IDs within a form");
 }
 // Paid Move is price-first, retaining optional canonical timing chips.
-// No extra required field, real lead or external API is introduced.
+// Home size is required for booking; timing remains optional. No live writes.
 const paidMove = mountForm({ paidSearch: true, compact: true, extended: true, defaultService: "Move-in / move-out cleaning" });
 const requiredMoveFields = paidMove.nodes().filter((node) => ["input", "select", "textarea"].includes(node.type) && node.props.required).map((node) => node.props.name);
-assert.deepEqual(requiredMoveFields, ["bedrooms", "bathrooms", "city", "name", "phone"], "price-first order adds zero required fields");
+assert.deepEqual(requiredMoveFields, ["bedrooms", "bathrooms", "sqft", "city", "name", "phone"], "paid home size is required before contact; timing remains optional");
 assert.equal(paidMove.fields("timeline").length, 4);
 assert(paidMove.fields("timeline").every((field) => field.props.required === false && !field.props.checked), "timing is optional with no preselected answer");
 assert.equal(paidMove.fields("requestedDate").length, 0, "no date picker");

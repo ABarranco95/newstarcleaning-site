@@ -14,8 +14,11 @@ assert(!page.includes('defaultCity={city.formValue}'), "Paid landing must not pr
 assert(form.includes("landingCity?: string;"), "Paid quote form must type landingCity separately");
 assert(form.includes('city: paidSearch ? "" : defaultCity || ""'), "Paid form state must start with an empty customer location");
 assert(form.includes("if (!paidSearch && city)"), "Paid form must ignore campaign URL city when filling customer location");
-// 2026-09-22: every quote form is stepped; step 1 renders the city field unconditionally.
-assert(/data-quote-step="1"[\s\S]{0,900}\{renderCityField\(\)\}/.test(form), "Paid form must always render an editable required customer location field");
+const paidSteps = form.slice(form.indexOf(") : quickPaid ? ("), form.indexOf("      {decisionProof}"));
+const paidStep2 = paidSteps.indexOf('data-quote-step={stagedPaid ? "2" : undefined}');
+assert(paidStep2 > 0 && !paidSteps.slice(0, paidStep2).includes("renderCityField()"), "Paid price step must not block on customer location");
+assert(/\{renderCityField\(\)\}\s*\{renderNameAndPhone\(\)\}/.test(paidSteps.slice(paidStep2)), "Paid contact step requires editable customer location above name and phone");
+assert(paidSteps.includes("renderSqftField(false)") && /id="quote-city"[\s\S]{0,100}\brequired\b/.test(form), "Paid size and final customer location remain required");
 assert(!form.includes('<input type="hidden" name="city"'), "Paid form must never hide a campaign-prefilled customer location");
 assert(form.includes("landingCity,"), "Paid submission must merge campaign landingCity independently from form city");
 

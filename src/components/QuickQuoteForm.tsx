@@ -419,7 +419,7 @@ export default function QuickQuoteForm({
   const showPaidOptionalDetails = extended && paidSearch;
   const showInlineExtendedDetails = extended && !paidSearch;
   // Paid residential stays in one form: home/price first, then contact.
-  // Timing, size and condition details stay optional.
+  // Size is required for paid booking; timing and condition stay optional.
   const quickPaid = paidSearch && !isCommercialRequest;
   const paidMoveTimingChoice = quickPaid && isMoveOutRequest
     ? paidMoveTimingChoices.find((choice) => choice.value === formData.timeline)
@@ -962,6 +962,7 @@ export default function QuickQuoteForm({
               primary={stagedPaid}
             />
           ) : null}
+          <p className="mt-3 text-xs leading-5 text-ink-soft">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p>
         </>
       ) : null}
     </div>
@@ -1331,8 +1332,7 @@ export default function QuickQuoteForm({
           {!paidServicePrefilled ? renderServiceField() : <input type="hidden" name="service" value={formData.service} readOnly />}
           {stagedPaid && isMoveOutRequest ? renderPaidMoveTiming() : null}
           {compactPaid ? renderBedBathFields() : renderBedBathChips()}
-          {renderSqftField(true)}
-          {renderCityField()}
+          {renderSqftField(false)}
           {renderPaidPrice()}
           {isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null}
         </div>
@@ -1356,7 +1356,8 @@ export default function QuickQuoteForm({
       </div>
       <div data-quote-step={stagedPaid ? "2" : undefined} hidden={stagedPaid && step !== 2}>
         <div className="qf-stack">
-          {stagedPaid ? <p className="qf-help">{formData.bedrooms} bed · {formData.bathrooms} bath · {formData.city}. We’ll confirm scope, price and available dates with you.</p> : null}
+          {stagedPaid ? <p className="qf-help">{formData.bedrooms} bed · {formData.bathrooms} bath{formData.city ? ` · ${formData.city}` : ""}. We’ll confirm scope, price and available dates with you.</p> : null}
+          {renderCityField()}
           {renderNameAndPhone()}
           {isMoveOutRequest && !stagedPaid ? renderPaidMoveTiming() : null}
           {renderContactChips()}
@@ -1376,7 +1377,6 @@ export default function QuickQuoteForm({
         {submitAlternative}
         {renderFinePrint()}
         {renderPaidDisclosure()}
-        {!stagedPaid ? <p className="qf-help">Missed something? Tell us within 24 hours and we&apos;ll come back and fix it at no charge.</p> : null}
       </div>
       {decisionProof}
     </div>
@@ -1543,6 +1543,7 @@ export default function QuickQuoteForm({
         <PaidQuoteStickyCTA
           formRef={formRef}
           activeStep={stagedPaid ? step : undefined}
+          bookingAvailable={paidPrice.status === "ready" && Boolean(paidPrice.bookableSqft)}
           isSubmitting={isSubmitting}
           label={stagedPaid ? step === 1 ? "Get my quote" : "Request my quote" : paidSubmitLabel || "Get a quote"}
           onClick={handleStickySubmit}

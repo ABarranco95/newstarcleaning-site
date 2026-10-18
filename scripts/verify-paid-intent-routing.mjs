@@ -125,7 +125,7 @@ const render = (service, frequency = "", directBookingUrl = "https://booking.exa
     nodes.push(node);
     visit(node.props?.children);
   }
-  visit(runtimeModule.exports.default({ directBookingUrl }));
+  visit(runtimeModule.exports.default({ directBookingUrl, service, frequency, city: params.get("city") }));
   return { nodes, text: text.join(" "), forms: nodes.filter((node) => /QuoteForm$/.test(node.props?.["data-boundary"] || "")) };
 };
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
