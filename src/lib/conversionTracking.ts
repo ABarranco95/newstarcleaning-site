@@ -3,6 +3,8 @@
 import { captureFirstPaidTouch, readFirstPaidTouch } from "@/lib/attribution";
 
 export type FunnelEventName =
+  | "landing_view"
+  | "price_view"
   | "paid_landing_view"
   | "quote_cta_click"
   | "quote_form_start"
@@ -38,6 +40,7 @@ export type FunnelEventPayload = {
   lastField?: string;
   maxScrollPct?: number;
   secondsOnPage?: number;
+  home?: { beds?: number; baths?: number; sqft?: number; zip?: string; service?: string; priceLowCents?: number; priceHighCents?: number };
 };
 
 type FunnelVisitContext = {
@@ -95,9 +98,12 @@ const paidFields = new Set([
   "requestedDate", "server_validation", "rate_limited", "server_error", "network", "unknown",
 ]);
 const paidFunnelEvents = new Set<FunnelEventName>([
+  "landing_view",
+  "price_view",
   "paid_landing_view", "quote_cta_click", "quote_form_start", "quote_step_complete",
   "quote_details_open", "quote_submit_attempt", "quote_validation_error", "lead_submit_accepted",
   "lead_submit_failed",
+  "booking_cta_click", "booking_handoff_started",
   "website_phone_click", "website_text_click", "field_focus", "field_complete",
   "section_view", "sticky_cta_click", "page_exit",
 ]);
@@ -133,7 +139,7 @@ function funnelVisitContext(): FunnelVisitContext {
   };
 }
 
-function paidSessionId(): string {
+export function paidSessionId(): string {
   const key = "nsc_paid_funnel_session";
   try {
     const existing = window.sessionStorage.getItem(key);
@@ -146,18 +152,40 @@ function paidSessionId(): string {
   return fallbackSessionId;
 }
 
+function funnelAttribution(): Record<string, string> {
+  const touch = readFirstPaidTouch() || captureFirstPaidTouch();
+  const result: Record<string, string> = {};
+  for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "gbraid", "wbraid"] as const) {
+    const value = touch?.[key];
+    if (typeof value === "string" && value.length <= 200) result[key] = value;
+  }
+  try { const host = new URL(touch?.firstReferrer || document.referrer).hostname; if (host) result.referrerHost = host; } catch { /* no raw URL */ }
+  return result;
+}
+
+export function completedHome(form: Record<string, unknown>, low?: number, high?: number): FunnelEventPayload["home"] {
+  const number = (value: unknown, max: number) => typeof value === "string" && /^\d+(\.5)?$/.test(value) && Number(value) <= max ? Number(value) : undefined;
+  return {
+    beds: number(form.bedrooms, 10), baths: number(form.bathrooms, 15),
+    sqft: typeof form.sqft === "string" && /^\d+$/.test(form.sqft) && Number(form.sqft) >= 100 && Number(form.sqft) <= 20000 ? Number(form.sqft) : undefined,
+    zip: typeof form.city === "string" && /^\d{5}$/.test(form.city) ? form.city : undefined,
+    service: ({ "Deep cleaning": "DEEP", "Standard recurring cleaning": "STANDARD", "Move-in / move-out cleaning": "MOVE_OUT" } as Record<string, string>)[String(form.service)],
+    priceLowCents: low, priceHighCents: high,
+  };
+}
+
 function sendPaidFunnelEvent(name: FunnelEventName, payload: FunnelEventPayload, context: FunnelVisitContext) {
-  if (!apexFunnelUrl || payload.source !== "google-ads" || window.location.pathname !== "/google-ads" || !paidFunnelEvents.has(name)) return;
+  if (!apexFunnelUrl || !/^\/(?:[a-z0-9-]+\/)*[a-z0-9-]*$/.test(window.location.pathname) || !paidFunnelEvents.has(name)) return;
   try {
     // Exact fields only. The city input can contain ZIP/address/free text, so
     // unrecognized values never leave the browser as telemetry.
     const body = JSON.stringify({
       eventName: name,
-      page: "/google-ads",
+      page: window.location.pathname,
       serviceIntent: payload.service && paidServices.has(payload.service) ? payload.service : undefined,
       city: payload.city && paidCities.has(payload.city) ? payload.city : undefined,
       intent: payload.intent && paidIntents.has(payload.intent) ? payload.intent : undefined,
-      step: name === "quote_step_complete" && payload.ctaLocation === "step_1" ? 1 : undefined,
+      step: name === "quote_step_complete" && /^step_[123]$/.test(payload.ctaLocation ?? "") ? Number(payload.ctaLocation!.slice(-1)) : undefined,
       field: name === "quote_validation_error" || name === "lead_submit_failed"
         ? payload.validationField && paidFields.has(payload.validationField) ? payload.validationField : "unknown"
         : (name === "field_focus" || name === "field_complete") && payload.field && isPaidFormField(payload.field) ? payload.field : undefined,
@@ -169,6 +197,8 @@ function sendPaidFunnelEvent(name: FunnelEventName, payload: FunnelEventPayload,
       secondsOnPage: name === "page_exit" && Number.isFinite(payload.secondsOnPage)
         ? Math.min(600, Math.max(0, Math.floor(payload.secondsOnPage!))) : undefined,
       sessionId: paidSessionId(),
+      attribution: funnelAttribution(),
+      home: ["price_view", "quote_step_complete", "booking_cta_click", "booking_handoff_started"].includes(name) ? payload.home : undefined,
       occurredAt: new Date().toISOString(),
     });
     const url = `${apexFunnelUrl}/api/public/funnel-events`;

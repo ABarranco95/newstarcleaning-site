@@ -67,6 +67,8 @@ export function buildPaidLeadForward(body: Record<string, unknown>): PaidLeadFor
     submissionId,
     idempotencyKey: optionalText(body.idempotencyKey) || submissionId,
     sourceForm: optionalText(body.sourceForm) || "google_ads_landing_quote_form",
+    funnelSessionId: optionalText(body.funnelSessionId),
+    nsinternal: body.nsinternal === "1" ? "1" : undefined,
     firstName,
     lastName,
     phone: phone || "",

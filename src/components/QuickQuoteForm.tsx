@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attribution";
-import { trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
+import { completedHome, paidSessionId, trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
 import { buildQuoteSmsConsent, QUOTE_SMS_DISCLOSURE } from "@/lib/quoteSmsConsent";
 import { serviceAreaToday, specificDeadlineError } from "@/lib/assistedIntakeValidation";
 import BookingPrefillLink from "@/components/BookingPrefillLink";
 import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
 import PaidPriceBookingButton from "@/components/PaidPriceBookingButton";
-import { acceptedPrefillSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
+import { acceptedPrefillSnapshot, bookingAttributionSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
 import { business as BUSINESS } from "@/lib/business";
 import usePaidPriceRange from "@/lib/usePaidPriceRange";
 import { PAID_HOME_SIZES, paidHomeSize, paidLeadHomeSize } from "@/lib/paidHomeSize";
@@ -438,6 +438,12 @@ export default function QuickQuoteForm({
     sqft: formData.sqft,
   });
   const paidSize = quickPaid ? paidHomeSize(formData.sqft) : undefined;
+  const priceLowCents = paidPrice.status === "ready" ? paidPrice.priceLowCents : undefined;
+  const priceHighCents = paidPrice.status === "ready" ? paidPrice.priceHighCents : undefined;
+  useEffect(() => {
+    if (priceLowCents === undefined) return;
+    trackFunnelEvent("price_view", { source, service: formData.service, home: { priceLowCents, priceHighCents } });
+  }, [priceLowCents, priceHighCents, source, formData.service]);
 
   const handleStickySubmit = () => {
     const form = formRef.current;
@@ -479,6 +485,7 @@ export default function QuickQuoteForm({
           city: formData.city,
           page: window.location.pathname,
           ctaLocation: `step_${step}`,
+          home: completedHome(formData, paidPrice.status === "ready" ? paidPrice.priceLowCents : undefined, paidPrice.status === "ready" ? paidPrice.priceHighCents : undefined),
         });
         goToStep(step + 1);
         return;
@@ -503,7 +510,8 @@ export default function QuickQuoteForm({
       });
     }
     // Freeze the submitted customer values, not edits made during the request.
-    const submittedSnapshot = acceptedPrefillSnapshot(formData, true, customerCityRef.current);
+    const prefill = acceptedPrefillSnapshot(formData, true, customerCityRef.current);
+    const submittedSnapshot = prefill ? Object.freeze({ ...prefill, ...bookingAttributionSnapshot(tracking), funnelSessionId: paidSessionId() }) : null;
     trackFunnelEvent("quote_submit_attempt", {
       source,
       service: formData.service,
@@ -564,6 +572,8 @@ export default function QuickQuoteForm({
 
           source,
           sourceForm: source,
+          funnelSessionId: paidSessionId(),
+          nsinternal: new URLSearchParams(window.location.search).get("nsinternal") === "1" ? "1" : undefined,
           submissionId: submissionIdRef.current,
           page: window.location.pathname,
           submittedAt: new Date().toISOString(),

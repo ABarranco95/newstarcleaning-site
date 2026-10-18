@@ -30,7 +30,7 @@ type PriceResult =
 
 type PriceState = PriceResult & { key: string };
 
-const QUOTE_URL = "https://book.newstarcleaning.com/api/public/quote";
+const QUOTE_URL = process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL ? `${process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL.replace(/\/$/, "")}/api/public/quote` : "https://book.newstarcleaning.com/api/public/quote";
 const currency = new Intl.NumberFormat("en-US", {
   style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0,
 });
@@ -146,6 +146,8 @@ export default function usePaidPriceRange(inputs: PriceInputs) {
     status: "ready" as const,
     low,
     range,
+    priceLowCents: Math.floor(result.low / 100) * 100,
+    priceHighCents: result.high === undefined ? undefined : Math.ceil(result.high / 100) * 100,
     bookableSqft: band && range ? String(band.min) : undefined,
     biweekly: result.biweekly === undefined ? undefined : formatPrice(result.biweekly, "nearest"),
     note: `Range shown on page: ${range || `From ${low}`} (${range ? "normal at size minimum–dusty at size maximum" : "normal, no size given"}, ${inputs.bedrooms} bed / ${inputs.bathrooms} bath${band ? `, ${band.label} sqft` : ""}, ${service}).`,

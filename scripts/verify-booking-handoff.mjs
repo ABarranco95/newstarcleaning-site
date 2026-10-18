@@ -135,7 +135,7 @@ vm.runInNewContext(ts.transpileModule(readFileSync("src/components/PaidPriceBook
     if (name === "react") return { useEffect() {}, useRef: current => ({ current }), useState: initial => [typeof initial === "function" ? initial() : initial, () => {}] };
     if (name === "@/lib/bookingPrefill") return { ...prefill, startBookingPrefill: (_win, destination, snapshot) => { transfers.push({ destination, snapshot }); return () => {}; } };
     if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => ({ ...attributionInput, name: "excluded", fbclid: "excluded" }) };
-    if (name === "@/lib/conversionTracking") return { trackFunnelEvent: (event, payload) => events.push({ event, payload }) };
+    if (name === "@/lib/conversionTracking") return { paidSessionId: () => "11111111-1111-4111-8111-111111111111", completedHome: () => ({}), trackFunnelEvent: (event, payload) => events.push({ event, payload }) };
     throw new Error(`Unexpected paid booking dependency: ${name}`);
   },
 });
@@ -153,6 +153,7 @@ for (const service of ["Deep cleaning", "Standard recurring cleaning", "Move-in 
     const url = new URL(destination);
     check(transfers.length === count + 1 && url.searchParams.get("nsinternal") === (mode === "external" ? null : "1") && [...url.searchParams.keys()].every(key => key === "nsinternal"), "explicit click carries internal exclusion on the URL, not identity or attribution IDs");
     check(snapshot.service === service && snapshot.squareFeet === "1500" && snapshot.frequency === "one-time" && snapshot.condition === "normal" && snapshot.gclid === "gclid-fixture" && !snapshot.name && !snapshot.fbclid && !snapshot.smsConsent, "paid prefill keeps home pricing defaults and allowlisted attribution only");
+    check(snapshot.funnelSessionId === "11111111-1111-4111-8111-111111111111", "paid prefill carries the originating journey session");
     check(service === "Move-in / move-out cleaning" ? Array.isArray(snapshot.moveOutAddons) && snapshot.moveOutAddons.length === 0 : !Object.hasOwn(snapshot, "moveOutAddons"), "Move alone explicitly requests Essentials with empty extras");
     check(events.at(-1).event === "booking_cta_click" && events.at(-1).payload.ctaLocation === "paid_live_price", "paid click retains the diagnostic funnel event, not a lead conversion");
   }

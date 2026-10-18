@@ -218,7 +218,7 @@ const priceCalls = [];
 vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/usePaidPriceRange.ts"), "utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 }).outputText + "\nexports.testPrice = { buildRequest, fetchPrice, formatPrice };", {
-  exports: priceModule.exports, module: priceModule, Intl,
+  exports: priceModule.exports, module: priceModule, Intl, process: { env: {} },
   require: (name) => { if (name === "react") return {}; if (name === "@/lib/paidHomeSize") return sizeModule.exports; throw new Error(name); },
   fetch: async (url, init) => { priceCalls.push({ url, ...init, body: JSON.parse(init.body) }); return { ok: quoteReply.ok, json: async () => quoteReply.body }; },
 });

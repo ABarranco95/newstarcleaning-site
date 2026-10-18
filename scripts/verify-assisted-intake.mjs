@@ -261,7 +261,7 @@ function mountForm(props = {}) {
       // Price failures/loading must not affect intake. Quote transport is
       // exercised separately; this boundary only supplies the displayed note.
       "@/lib/usePaidPriceRange": { default: () => props.testPrice || { status: "hidden" } },
-      "@/lib/conversionTracking": { trackLeadConversion: (value) => conversions.push(value), trackFunnelEvent: (...args) => events.push(args) },
+      "@/lib/conversionTracking": { trackLeadConversion: (value) => conversions.push(value), trackFunnelEvent: (...args) => events.push(args), paidSessionId: () => "00000000-0000-4000-8000-000000000000", completedHome: () => undefined },
     },
   }).default;
   function expand(node) {

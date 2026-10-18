@@ -7,7 +7,7 @@ export const PREFILL_PARAM = "nsc_prefill";
 export const SITE_ORIGINS = ["https://newstarcleaning.com", "https://www.newstarcleaning.com"] as const;
 export const BOOKING_ORIGINS = ["https://book.newstarcleaning.com", "https://apex-crm-abarranco95-s-team.vercel.app"] as const;
 export const CUSTOMER_FIELDS = ["name", "email", "phone", "city", "service", "frequency", "bedrooms", "bathrooms", "squareFeet", "propertyType", "condition", "message", "timeline", "requestedDate", "contactPreference"] as const;
-export const BOOKING_ATTRIBUTION_FIELDS = ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "firstLandingPage", "firstReferrer", "nsinternal"] as const;
+export const BOOKING_ATTRIBUTION_FIELDS = ["gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "firstLandingPage", "firstReferrer", "nsinternal", "funnelSessionId"] as const;
 type BookingAttribution = Partial<Record<typeof BOOKING_ATTRIBUTION_FIELDS[number], string>>;
 export type BookingPrefillPayload = Readonly<Partial<Record<typeof CUSTOMER_FIELDS[number], string>> & BookingAttribution & { moveOutAddons?: readonly string[] }>;
 
@@ -72,6 +72,7 @@ export function startBookingPrefill(win: Window, destination: string, snapshot: 
   let attemptId: string;
   try { attemptId = win.crypto.randomUUID(); } catch { onStatus("unavailable"); return () => {}; }
   url.searchParams.set(PREFILL_PARAM, attemptId);
+  if (validAttemptId(snapshot.funnelSessionId)) url.searchParams.set("funnelSessionId", snapshot.funnelSessionId);
   let child: Window | null = null;
   let payload: BookingPrefillPayload | null = snapshot;
   let sent = false;

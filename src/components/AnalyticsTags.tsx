@@ -1,4 +1,5 @@
 import Script from "next/script";
+import JourneyPageView from "@/components/JourneyPageView";
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
@@ -22,6 +23,7 @@ const gtagLoaderId = gaId || googleAdsConversionId;
 export default function AnalyticsTags() {
   return (
     <>
+      <JourneyPageView />
       {/*
         Google Consent Mode v2 — default granted (US, no consent banner yet).
         If a consent banner is added later, set these to 'denied' by default

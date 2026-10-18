@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { allowedPrefillPair, bookingAttributionSnapshot, startBookingPrefill, type BookingPrefillPayload, type PrefillSendStatus } from "@/lib/bookingPrefill";
 import { captureFirstPaidTouch } from "@/lib/attribution";
-import { trackFunnelEvent } from "@/lib/conversionTracking";
+import { completedHome, paidSessionId, trackFunnelEvent } from "@/lib/conversionTracking";
 
 const messages: Record<PrefillSendStatus, string> = {
   waiting: "Booking opened in a new tab. Waiting to transfer your home details.",
@@ -56,7 +56,7 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           // click transfers home inputs and attribution, never a lead or consent.
           let internal = new URLSearchParams(window.location.search).get("nsinternal") === "1";
           try { internal ||= window.localStorage.getItem("ns_internal") === "1"; } catch { /* URL flag still works without storage. */ }
-          const attribution = bookingAttributionSnapshot({ ...captureFirstPaidTouch(), ...(internal ? { nsinternal: "1" } : {}) });
+          const attribution = bookingAttributionSnapshot({ ...captureFirstPaidTouch(), funnelSessionId: paidSessionId(), ...(internal ? { nsinternal: "1" } : {}) });
           const snapshot: BookingPrefillPayload = Object.freeze({
             service, bedrooms, bathrooms, squareFeet,
             frequency: "one-time", condition: "normal",
@@ -70,6 +70,7 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
             trackFunnelEvent("booking_cta_click", {
               source: "google-ads", service, page: window.location.pathname,
               ctaLocation: "paid_live_price",
+              home: completedHome({ service, bedrooms, bathrooms, sqft: squareFeet }),
             });
           } catch { /* Analytics must not interrupt the synchronous handoff. */ }
         }}
