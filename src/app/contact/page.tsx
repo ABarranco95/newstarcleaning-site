@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GoogleRating from "@/components/GoogleRating";
-import { business } from "@/lib/business";
+import { business, businessAreaServed } from "@/lib/business";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 
 export const metadata: Metadata = {
@@ -34,7 +34,7 @@ export default function ContactPage() {
         </div>
         <div className="site-form-panel"><QuickQuoteForm title="Tell us about your home" subtitle="We'll help with the cleaning and the price. This form doesn't book an appointment." source="contact_page" compact /></div>
       </section>
-      <section className="site-section site-split site-rule"><h2>Local, and easy to reach.</h2><div><p className="site-intro">Based in Fresno. Serving Fresno, Clovis, Tower District, Fig Garden, and Woodward Park. Madera dates depend on route availability.</p><div className="site-links"><Link href="/service-areas">Check your area ↗</Link></div><div className="site-disclosures"><details><summary>Office hours</summary><p>Monday–Friday: 8 AM–6 PM. Saturday: 8 AM–5 PM. Sunday: closed.</p></details><details><summary>Commercial or construction work?</summary><p>We review the property and task list before providing a written proposal.</p><Link href="/commercial-quote" className="home-text-link">Request a walkthrough ↗</Link></details></div></div></section>
+      <section className="site-section site-split site-rule"><h2>Local, and easy to reach.</h2><div><p className="site-intro">{business.serviceAreaDescription}. Madera dates depend on route availability.</p><div className="site-links"><Link href="/service-areas">Check your area ↗</Link></div><div className="site-disclosures"><details><summary>Office hours</summary><p>Monday–Friday: 8 AM–6 PM. Saturday: 8 AM–5 PM. Sunday: closed.</p></details><details><summary>Commercial or construction work?</summary><p>We review the property and task list before providing a written proposal.</p><Link href="/commercial-quote" className="home-text-link">Request a walkthrough ↗</Link></details></div></div></section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -46,14 +46,10 @@ export default function ContactPage() {
             mainEntity: {
               "@type": "LocalBusiness",
               name: "New Star Cleaning",
-              areaServed: ["Fresno", "Clovis", "Madera", "Tower District", "Fig Garden", "Woodward Park"],
+              areaServed: businessAreaServed,
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "132 W Nees Ave Unit 106",
-                addressLocality: "Fresno",
-                addressRegion: "CA",
-                postalCode: "93711",
-                addressCountry: "US",
+                ...business.address,
               },
             },
           }),

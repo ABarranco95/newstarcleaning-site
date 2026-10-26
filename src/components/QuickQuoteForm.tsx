@@ -739,7 +739,7 @@ export default function QuickQuoteForm({
         value={formData.city}
         onChange={(event) => updateField("city", event.target.value)}
         autoComplete="address-level2"
-        placeholder="Fresno or 93711"
+        placeholder="e.g. Fresno"
         className={fieldClass}
       />
     </div>

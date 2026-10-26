@@ -13,16 +13,11 @@ export const business = {
   // Same Business Profile before the CID change; review/rating reads recorded there stay valid.
   previousGoogleMapsUrls: ["https://www.google.com/maps?cid=12575787905603463321"],
   facebookUrl: "https://www.facebook.com/newstarcleaning/",
+  serviceAreaDescription: "Serving Fresno, Clovis, Madera and surrounding areas",
   address: {
-    streetAddress: "132 W Nees Ave Unit 106",
     addressLocality: "Fresno",
     addressRegion: "CA",
-    postalCode: "93711",
     addressCountry: "US",
-  },
-  geo: {
-    latitude: 36.8526932,
-    longitude: -119.7917997,
   },
 } as const;
 

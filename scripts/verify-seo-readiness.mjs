@@ -28,6 +28,7 @@ const servicesHub = read("src/app/services/page.tsx");
 const postConstructionPage = read("src/app/services/post-construction-cleaning/page.tsx");
 const commercialCleaningPage = read("src/app/services/commercial-cleaning/page.tsx");
 const business = read("src/lib/business.ts");
+const contactPage = read("src/app/contact/page.tsx");
 const serviceAreasHub = read("src/app/service-areas/page.tsx");
 const header = read("src/components/Header.tsx") + read("src/components/HomeHeader.tsx");
 const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
@@ -99,12 +100,18 @@ assert(
   "LocalBusiness JSON-LD does not use self-serving aggregateRating markup",
 );
 
+// Service-area address only, per the owner's address-removal request.
 assert(
-  business.includes('postalCode: "93711"') &&
-    !schemaMarkup.includes('postalCode: "93720"') &&
-    !serviceAreaPage.includes('postalCode: "93720"') &&
-    !serviceDetailPage.includes('postalCode: "93720"'),
-  "structured NAP uses the reviewed GBP ZIP 93711",
+  business.includes('addressLocality: "Fresno"') &&
+    business.includes('addressRegion: "CA"') &&
+    [business, schemaMarkup, contactPage, serviceAreaPage, serviceDetailPage].every(
+      (source) => !/streetAddress|postalCode|GeoCoordinates/.test(source),
+    ) &&
+    schemaMarkup.includes('...business.address') &&
+    contactPage.includes('...business.address') &&
+    schemaMarkup.includes('areaServed: businessAreaServed') &&
+    contactPage.includes('areaServed: businessAreaServed'),
+  "structured data uses Fresno, CA and service areas without a street address, ZIP or location pin",
 );
 
 // Approved proof policy: recorded reviews + dated rating, no review links (verify:trust-proof).

@@ -27,7 +27,7 @@ const illustrations = {
 
 const heroPoints = {
   "standard-cleaning": ["Kitchens, bathrooms, dusting, and floors every visit", "Weekly, biweekly, or monthly", "Price confirmed before anything is booked"],
-  "deep-cleaning": ["Extra time for baseboards, fixtures, and buildup", "Supplies and equipment brought in", "Price confirmed before anything is booked"],
+  "deep-cleaning": ["Extra time for baseboards, fixtures, and buildup", "We bring our own cleaning supplies", "Price confirmed before anything is booked"],
   "move-out-cleaning": ["Empty cabinet, drawer, and closet interiors included", "Oven and fridge interiors available as add-ons", "Price confirmed before anything is booked"],
 };
 
@@ -120,7 +120,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           </>
         }
       >
-        <p className="site-price">Insured. Supplies and equipment included.</p>
+        <p className="site-price">Insured. Cleaning supplies included.</p>
         <ul className="site-hero-points">
           {heroPoints[service.slug].map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>

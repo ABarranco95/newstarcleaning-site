@@ -10,7 +10,7 @@ const items: TrustItem[] = [
   { icon: "shield", title: "Locally owned", body: `${homesServedLine} in Fresno, Clovis and Madera.` },
   { icon: "clipboard", title: "One flat price, set before we book", body: "Based on your home and the clean you pick, not the hours we spend there." },
   { icon: "check", title: "Missed a spot? We come back", body: "Tell us within 24 hours. We fix missed work included in your cleaning at no charge." },
-  { icon: "home", title: "We bring the supplies", body: "Supplies and equipment are on us. Just clear the surfaces you want cleaned." },
+  { icon: "home", title: "We bring the supplies", body: "We bring our own cleaning supplies. Just clear the surfaces you want cleaned." },
 ];
 
 // `links` is accepted for existing callers; the strip no longer links out.

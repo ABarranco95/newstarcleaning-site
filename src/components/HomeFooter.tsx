@@ -33,10 +33,8 @@ export default function HomeFooter() {
         <div className="home-footer-navigation">
           <div className="home-footer-brand">
             <Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} />
-            <p>Locally owned house cleaning in Fresno, Clovis, and Madera.</p>
+            <p>{business.serviceAreaDescription}</p>
             <address>
-              {business.address.streetAddress}<br />
-              {business.address.addressLocality}, {business.address.addressRegion} {business.address.postalCode}<br />
               <a href={business.phoneHref} data-phone-location="footer_address">{business.phoneDisplay}</a><br />
               Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM
             </address>

@@ -82,7 +82,6 @@ export default function SchemaMarkup() {
         priceRange: "$$",
         areaServed: businessAreaServed,
         address: { "@type": "PostalAddress", ...business.address },
-        geo: { "@type": "GeoCoordinates", ...business.geo },
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",

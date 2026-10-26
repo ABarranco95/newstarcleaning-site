@@ -54,7 +54,7 @@ const steps = [
   },
   {
     title: "The visit",
-    note: "We bring supplies and equipment and work through the rooms on your cleaning checklist. Tell us about a spot you're concerned about before we start.",
+    note: "We bring our own cleaning supplies and work through the rooms on your cleaning checklist. Tell us about a spot you're concerned about before we start.",
   },
   {
     title: "Afterwards",

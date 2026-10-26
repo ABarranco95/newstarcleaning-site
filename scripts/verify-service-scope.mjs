@@ -151,7 +151,7 @@ assert(
 assert(
   terms.includes("New Star Cleaning is a cleaning service") &&
     terms.includes("we do not provide laundry") &&
-    terms.includes("Move-in and move-out cleaning does not guarantee"),
+    terms.includes("Move-in and move-out cleaning does not determine"),
   "terms include service-scope exclusions and deposit disclaimer",
 );
 

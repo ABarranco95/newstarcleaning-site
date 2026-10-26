@@ -128,7 +128,7 @@ export const services: ServiceDefinition[] = [
       {
         title: "Cleaner arrives",
         description:
-          "Your cleaner arrives with supplies and equipment, confirms any priority areas, and starts the agreed cleaning scope.",
+          "Your cleaner brings their own cleaning supplies, confirms any priority areas, and starts the agreed cleaning scope.",
       },
       {
         title: "Room-by-room clean",

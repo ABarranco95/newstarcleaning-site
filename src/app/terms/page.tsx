@@ -21,7 +21,7 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="text-mute mb-12">
-          Last Updated: October 15, 2026
+          Last Updated: October 26, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -72,6 +72,10 @@ export default function TermsOfService() {
               confirmed before service.
             </p>
             <p className="mt-4 text-ink-soft leading-relaxed">
+              We bring our own cleaning supplies. Let us know about delicate
+              surfaces or product sensitivities before your visit.
+            </p>
+            <p className="mt-4 text-ink-soft leading-relaxed">
               New Star Cleaning is a cleaning service, not a household task,
               organizing, moving, or restoration service. Unless expressly
               confirmed in writing, we do not provide laundry, folding,
@@ -83,7 +87,7 @@ export default function TermsOfService() {
               removal, or restoration work.
             </p>
             <p className="mt-4 text-ink-soft leading-relaxed">
-              Move-in and move-out cleaning does not guarantee any landlord,
+              Move-in and move-out cleaning does not determine any landlord,
               property manager, buyer, seller, or deposit decision. We clean
               against the agreed scope; damage, repairs, paint, carpet
               condition, lease terms, and third-party inspection decisions are
@@ -96,35 +100,66 @@ export default function TermsOfService() {
               3. Booking and Scheduling
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
-              Services may be booked through our website, booking platform, or
-              by contacting us directly. By booking a service, you agree to:
+              Book through our website or contact us directly. Our booking
+              system is Apex. Before booking, we confirm the cleaning scope
+              and price. Please:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-ink-soft">
-              <li>Provide accurate and complete information</li>
+              <li>Provide accurate details about your home and its condition</li>
               <li>
                 Provide reasonable access to your property at the scheduled time
               </li>
               <li>
-                Notify us of any changes or cancellations at least 24 hours
-                before your scheduled appointment
-              </li>
-              <li>
-                A cancellation fee may apply for cancellations made less than 24
-                hours before the scheduled service
+                Contact us about changes or cancellations before your visit
               </li>
             </ul>
+            <p className="mt-4 text-ink-soft leading-relaxed">
+              Cancellation is free until 24 hours before your cleaning&apos;s
+              arrival window. Cancel less than 24 hours before that window and
+              50% of that visit&apos;s total is charged.
+            </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
               4. Payment Terms
             </h2>
+            <p className="text-ink-soft leading-relaxed mb-3">
+              For card bookings through Apex, you save a card to book. Nothing
+              is charged at booking. Within 24 hours of your cleaning, we place
+              a hold for the visit total. Your bank may show it as pending.
+              The hold becomes the charge only after the cleaning is done.
+              The late-cancellation charge in section 3 applies if you cancel
+              inside the 24-hour window.
+            </p>
             <p className="text-ink-soft leading-relaxed">
-              Payment is due at the time of service unless other arrangements
-              have been made. We accept major credit cards and other payment
-              methods as specified during booking. Prices are subject to change;
-              however, any price changes will be communicated to you before your
-              next scheduled service.
+              Recurring service is charged after each cleaning, not as a
+              monthly subscription. Any price changes will be communicated to
+              you before your next scheduled visit.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-ink mb-3">
+              Recurring service
+            </h2>
+            <p className="text-ink-soft leading-relaxed mb-3">
+              Recurring cleaning is month to month, with no contract or
+              minimum-term commitment. You can pause or stop anytime by
+              contacting us at least 24 hours before your next visit. There is
+              no separate fee to end the plan; the late-cancellation policy
+              applies to any visit cancelled with less than 24 hours&apos; notice.
+            </p>
+            <p className="text-ink-soft leading-relaxed mb-3">
+              Pausing or stopping a plan in the customer hub does not
+              automatically cancel visits already on the schedule. Cancel
+              those visits separately or contact us to handle them.
+            </p>
+            <p className="text-ink-soft leading-relaxed">
+              Your quote shows the price per visit and what&apos;s included
+              each time. The price depends on whether we come weekly, every
+              other week, or monthly. Changing frequency changes the per-visit
+              price, which we confirm before the next scheduled visit.
             </p>
           </section>
 
@@ -134,9 +169,9 @@ export default function TermsOfService() {
             </h2>
             <p className="text-ink-soft leading-relaxed">
               If something included in the agreed cleaning scope was missed,
-              contact us within 24 hours of the completed service and we will
-              come back and fix it at no charge. Requests for work outside the
-              confirmed scope are not included.
+              tell us within 24 hours of the completed service and we&apos;ll
+              come back and make it right at no charge. Requests for work
+              outside the confirmed scope are not included.
             </p>
           </section>
 

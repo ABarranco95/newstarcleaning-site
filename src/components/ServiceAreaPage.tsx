@@ -36,7 +36,7 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
 const heroPoints = [
   "One-time or recurring cleaning",
   "Price confirmed before anything is booked",
-  "Supplies and equipment brought in",
+  "We bring our own cleaning supplies",
 ];
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
