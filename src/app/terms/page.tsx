@@ -100,9 +100,8 @@ export default function TermsOfService() {
               3. Booking and Scheduling
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
-              Book through our website or contact us directly. Our booking
-              system is Apex. Before booking, we confirm the cleaning scope
-              and price. Please:
+              Book through our website or contact us directly. Before booking,
+              we confirm the cleaning scope and price. Please:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-ink-soft">
               <li>Provide accurate details about your home and its condition</li>
@@ -125,12 +124,13 @@ export default function TermsOfService() {
               4. Payment Terms
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
-              For card bookings through Apex, you save a card to book. Nothing
-              is charged at booking. Within 24 hours of your cleaning, we place
-              a hold for the visit total. Your bank may show it as pending.
-              The hold becomes the charge only after the cleaning is done.
-              The late-cancellation charge in section 3 applies if you cancel
-              inside the 24-hour window.
+              There&apos;s no contract. You pay cleaning to cleaning. A card on
+              file is required to book, and nothing is charged at booking.
+              Within 24 hours before each cleaning, we place a hold for the
+              visit total. Your bank may show it as pending. The hold becomes
+              the charge after the cleaning is finished, usually within a few
+              hours. The late-cancellation charge in section 3 applies if you
+              cancel inside the 24-hour window.
             </p>
             <p className="text-ink-soft leading-relaxed">
               Recurring service is charged after each cleaning, not as a
@@ -342,7 +342,7 @@ export default function TermsOfService() {
               8. Liability and Insurance
             </h2>
             <p className="text-ink-soft leading-relaxed">
-              New Star Cleaning carries general liability insurance. In the
+              New Star Cleaning carries liability insurance. In the
               unlikely event of accidental damage to your property during a
               cleaning, please notify us within 24 hours. We will assess the
               situation and work with you to resolve the issue. Our liability is
