@@ -61,7 +61,7 @@ export default function BookNow() {
             <li><Icon name="check" />One-time or recurring: weekly, every other week or monthly</li>
             <li><Icon name="check" />If we miss something included in your cleaning, tell us within 24 hours. We&apos;ll make it right.</li>
           </ul>
-          <div className="site-links"><a href={business.phoneHref} data-phone-location="book_now_hero">Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} /></div>
+          <div className="site-links"><a href={business.phoneHref} data-phone-location="book_now_hero">Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} placement="footer" /></div>
           <figure className="site-form-review">
             <StarRow />
             <blockquote><p>&ldquo;{featuredReview.excerpt.join(" … ")}&rdquo;</p></blockquote>

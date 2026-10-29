@@ -25,10 +25,16 @@ const illustrations = {
   "move-out-cleaning": "cleaning-empty-home",
 };
 
-const heroPoints = {
-  "standard-cleaning": ["Kitchens, bathrooms, dusting, and floors every visit", "Weekly, biweekly, or monthly", "Price confirmed before anything is booked"],
-  "deep-cleaning": ["Extra time for baseboards, fixtures, and buildup", "We bring our own cleaning supplies", "Price confirmed before anything is booked"],
-  "move-out-cleaning": ["Empty cabinet, drawer, and closet interiors included", "Oven and fridge interiors available as add-ons", "Price confirmed before anything is booked"],
+const startingPrices = {
+  "standard-cleaning": "$165",
+  "deep-cleaning": "$235",
+  "move-out-cleaning": "$325",
+};
+
+const heroDescriptions = {
+  "standard-cleaning": "We handle the kitchen, bathrooms, dusting and floors so you can keep up between visits.",
+  "deep-cleaning": "We spend more time on shower buildup, baseboards, door frames and reachable fixtures.",
+  "move-out-cleaning": "We clean the empty home, including the insides of cleared cabinets, drawers and closets.",
 };
 
 const reviewTopics = {
@@ -92,45 +98,21 @@ export default function ServiceDetailPage({ service, h1, intro }: {
     <div className="site-reference">
       <SiteHero
         title={h1}
-        description={presentation.lead}
-        eyebrow={service.shortName}
+        description={heroDescriptions[service.slug]}
         photo={presentation.photo}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
-        aside={
-          <>
-            <QuickQuoteForm
-              title={`Price your ${service.shortName.toLowerCase()}`}
-              subtitle="Tell us about your home. We'll confirm what we'll clean and the price."
-              source={`organic_${service.slug}_service`}
-              defaultService={quoteFormService(service)}
-              compact
-            />
-            {directBookingUrl ? (
-              <Suspense fallback={null}>
-                <BookingPortalLink
-                  baseUrl={directBookingUrl}
-                  service={quoteFormService(service)}
-                  sourcePage={`/services/${service.slug}`}
-                  label="Choose a date online"
-                  showIcon={false}
-                  className="home-text-link"
-                />
-              </Suspense>
-            ) : null}
-          </>
-        }
       >
-        <p className="site-price">Insured. Cleaning supplies included.</p>
-        <ul className="site-hero-points">
-          {heroPoints[service.slug].map((point) => <li key={point}><Icon name="check" />{point}</li>)}
-        </ul>
+        <p className="site-price">{service.shortName} from <strong>{startingPrices[service.slug]}</strong></p>
+        <p className="site-price-help">Your price depends on size, condition and extras.</p>
+        <div className="site-booking-actions">
+          {directBookingUrl ? <Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} service={quoteFormService(service)} sourcePage={`/services/${service.slug}`} ctaLocation="service_hero" label="See your price and book" showIcon={false} className="home-button" /></Suspense> : <a href="#quote" className="home-button">Get a quote</a>}
+          <a href="#quote" className="home-text-link">Rather get a quote by text?</a>
+        </div>
         <div className="site-hero-meta">
-          <GoogleRating onDark />
           <a href={business.phoneHref} className="site-hero-phone" data-phone-location="service_hero"><Icon name="phone" /> {business.phoneDisplay}</a>
+          <span className="site-hero-hours">Mon–Fri 8–6 · Sat 8–5</span>
         </div>
       </SiteHero>
-
-      <TrustStrip />
 
       <div className="service-editorial">
         <section className="se-section">
@@ -294,6 +276,14 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           <Link href="/contact" className="home-text-link">Still have questions? Contact us <span aria-hidden="true">→</span></Link>
         </div>
       </section>
+
+      <section className="site-muted">
+        <div className="site-section site-quote-layout">
+          <div className="site-copy"><p className="ns-kicker">A quote from us</p><h2>Want us to review your home first?</h2><p className="site-intro">Tell us what needs attention. We&apos;ll confirm the work and your price by text or phone.</p><p className="site-note">Insured, with cleaning supplies included.</p></div>
+          <QuickQuoteForm title={`Price your ${service.shortName.toLowerCase()}`} subtitle="Your service is selected. Start with your city and timing." source={`organic_${service.slug}_service`} defaultService={quoteFormService(service)} compact />
+        </div>
+      </section>
+      <TrustStrip />
 
       <BreadcrumbSchema items={[
         { name: "Home", url: siteUrl },

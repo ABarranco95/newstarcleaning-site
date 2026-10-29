@@ -23,7 +23,7 @@ export default function StandardCleaningPage() {
   return (
     <ServiceDetailPage
       service={service}
-      h1="Standard House Cleaning in Fresno, CA"
+      h1="Standard house cleaning in Fresno, CA."
     />
   );
 }

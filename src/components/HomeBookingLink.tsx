@@ -6,7 +6,7 @@ import HomeBookingContextLink from "@/components/HomeBookingContextLink";
 
 const directBookingUrl = resolveDirectBookingUrl();
 
-export default function HomeBookingLink({ onDark = true, placement = "hero" }: { onDark?: boolean; placement?: "hero" | "footer" }) {
+export default function HomeBookingLink({ onDark = false, placement = "hero" }: { onDark?: boolean; placement?: "hero" | "footer" | "header" | "mobile" }) {
   if (!directBookingUrl) return null;
   return (
     <Suspense fallback={null}>

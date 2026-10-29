@@ -24,7 +24,7 @@ export default function DeepCleaningPage() {
   return (
     <ServiceDetailPage
       service={service}
-      h1="Deep Cleaning in Fresno & Clovis"
+      h1="Deep cleaning in Fresno & Clovis."
     />
   );
 }

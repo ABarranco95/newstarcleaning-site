@@ -1,16 +1,11 @@
 import Icon, { type IconName } from "@/components/Icon";
-import { homesServedLine } from "@/lib/googleRating";
+
 
 type TrustItem = { icon: IconName; title: string; body: string };
 
-// Verified facts only: homes served since 2020 (Angel), flat pricing and the
-// 24-hour return (/terms), supplies and the
-// room-by-room checklist (/checklist). No outbound links (Angel, 2026-10-06).
 const items: TrustItem[] = [
-  { icon: "shield", title: "Locally owned", body: `${homesServedLine} in Fresno, Clovis and Madera.` },
-  { icon: "clipboard", title: "One flat price, set before we book", body: "Based on your home and the clean you pick, not the hours we spend there." },
-  { icon: "check", title: "Missed a spot? We come back", body: "Tell us within 24 hours. We fix missed work included in your cleaning at no charge." },
-  { icon: "home", title: "We bring the supplies", body: "We bring our own cleaning supplies. Just clear the surfaces you want cleaned." },
+  { icon: "shield", title: "Locally owned", body: "Owned and run by Angel Barranco in Fresno." },
+  { icon: "clipboard", title: "Room-by-room work", body: "A written checklist tells you what’s included in your cleaning." },
 ];
 
 // `links` is accepted for existing callers; the strip no longer links out.

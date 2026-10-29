@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
+import HomeBookingLink from "@/components/HomeBookingLink";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import { business } from "@/lib/business";
+
+const directBookingUrl = resolveDirectBookingUrl();
 
 export default function MobileContactActions() {
   const pathname = usePathname();
@@ -42,17 +46,17 @@ export default function MobileContactActions() {
 
   return (
     <>
-      <div className="h-20 md:hidden" aria-hidden="true" />
+      <div className="mobile-contact-spacer" aria-hidden="true" />
       <nav
         aria-label="Contact New Star Cleaning"
         data-mobile-contact
         hidden={editing || quoteInView === pathname}
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-cream px-4 pt-2 pb-[calc(8px+env(safe-area-inset-bottom,0px))] text-primary md:hidden"
+        className="mobile-contact-bar"
       >
-        <div className="mx-auto grid max-w-md grid-cols-3 gap-2 text-sm font-semibold">
-          <a href={business.phoneHref} data-phone-location="mobile_contact" className="flex min-h-12 items-center justify-center rounded-lg border border-line">Call</a>
-          <a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_contact" className="flex min-h-12 items-center justify-center rounded-lg border border-line">Text</a>
-          <HomeQuoteLink className="flex min-h-12 items-center justify-center rounded-lg bg-gold text-primary">Get a quote</HomeQuoteLink>
+        <div className="mobile-contact-inner">
+          <a href={business.phoneHref} data-phone-location="mobile_contact" className="mobile-contact-link">Call</a>
+          <a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_contact" className="mobile-contact-link">Text</a>
+          {directBookingUrl ? <HomeBookingLink placement="mobile" /> : <HomeQuoteLink className="mobile-contact-link">Get a quote</HomeQuoteLink>}
         </div>
       </nav>
     </>

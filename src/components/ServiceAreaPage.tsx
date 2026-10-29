@@ -33,11 +33,6 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
   "woodward-park": emptyHomeResultPhotos[4],
 };
 
-const heroPoints = [
-  "One-time or recurring cleaning",
-  "Price confirmed before anything is booked",
-  "We bring our own cleaning supplies",
-];
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const directBookingUrl = resolveDirectBookingUrl();
@@ -63,44 +58,22 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       <SiteHero
         title={`House cleaning in ${area.name}, CA.`}
         description={area.description}
-        eyebrow={`${area.county} · ${area.areaType}`}
+
         photo={heroPhoto}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}
-        aside={
-          <>
-            <QuickQuoteForm
-              title={`Get your ${area.name} price`}
-              subtitle="Three quick steps. We confirm availability and the price before anything is booked."
-              source={`organic_${area.slug}_service_area`}
-              defaultCity={area.name}
-              landingCity={area.name}
-              compact
-            />
-            {directBookingUrl ? (
-              <Suspense fallback={null}>
-                <BookingPortalLink
-                  baseUrl={directBookingUrl}
-                  city={area.name}
-                  sourcePage={`/cleaning-services-${area.slug}`}
-                  label="Choose a date online"
-                  showIcon={false}
-                  className="home-text-link"
-                />
-              </Suspense>
-            ) : null}
-          </>
-        }
       >
-        <ul className="site-hero-points">
-          {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
-        </ul>
+        <p className="site-price">Standard cleaning from <strong>$165</strong></p>
+        <p className="site-price-help">Deep from $235 · Move-out from $325</p>
+        <div className="site-booking-actions">
+          {directBookingUrl ? <Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} city={area.name} sourcePage={`/cleaning-services-${area.slug}`} ctaLocation="area_hero" label="See your price and book" showIcon={false} className="home-button" /></Suspense> : <a href="#quote" className="home-button">Get a quote</a>}
+          <a href="#quote" className="home-text-link">Rather get a quote by text?</a>
+        </div>
         <div className="site-hero-meta">
-          <GoogleRating onDark />
           <a href={business.phoneHref} className="site-hero-phone" data-phone-location="area_hero"><Icon name="phone" /> {business.phoneDisplay}</a>
+          <span className="site-hero-hours">Mon–Fri 8–6 · Sat 8–5</span>
         </div>
       </SiteHero>
-
-      <TrustStrip />
+      <section className="site-section site-local-intro" aria-label={`About cleaning in ${area.name}`}><p>{area.localContent}</p></section>
 
       <section className="site-section">
         <div className="home-section-heading">
@@ -147,7 +120,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           <Link href="/our-work" className="home-text-link">More of our work <span aria-hidden="true">→</span></Link>
         </div>
         <div className="service-editorial">
-          <p className="se-lead mt-4">{area.localContent}</p>
+
           <div className="site-links">
             <a href={business.phoneHref} className="home-text-link">Call (559) 785-2822</a>
           </div>
@@ -204,6 +177,14 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           ))}
         </div>
       </section>
+
+      <section className="site-muted">
+        <div className="site-section site-quote-layout">
+          <div className="site-copy"><p className="ns-kicker">A quote from us</p><h2>Tell us about your {area.name} home.</h2><p className="site-intro">{area.bookingNote}</p><p className="site-note">Insured, with cleaning supplies included.</p></div>
+          <QuickQuoteForm title={`Get your ${area.name} price`} subtitle="Start with the cleaning you need." source={`organic_${area.slug}_service_area`} defaultCity={area.name} landingCity={area.name} compact />
+        </div>
+      </section>
+      <TrustStrip />
 
       <BreadcrumbSchema items={[
         { name: "Home", url: siteUrl },

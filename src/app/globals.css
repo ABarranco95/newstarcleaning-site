@@ -1,233 +1,72 @@
 @import "tailwindcss";
 
 @theme {
-  /*
-    Approved Route A brand system (active-tokens.json): deep navy anchor
-    #0E2A4D, navy-light facet #1C3F6E as the action color, reverse facet
-    tint #AFC2D9 on navy, cool slate canvas tint, white digital
-    canvas. Ember/orange accents are retired in the brand guide.
-  */
-
-  /* Navy — authoritative, on-brand with the New Star mark. */
   --color-primary: #0e2a4d;
-  --color-primary-light: #1c3f6e;
+  --color-primary-light: #1b3e6a;
   --color-primary-dark: #07182f;
-
-  /* Action blue (approved light-field facet tone); pale reverse tint on navy. */
-  --color-accent: #1c3f6e;
-  --color-accent-hover: #0e2a4d;
-  --color-accent-light: #afc2d9;
-
-  /* Star gold: the faceted-star / uniform accent (same value Apex uses as
-     its primary). Reserved for the one primary action on a screen and the
-     review stars, so the conversion path is never navy-on-navy. */
+  --color-accent: #0e2a4d;
+  --color-accent-hover: #1b3e6a;
+  --color-accent-light: #ebf2fc;
   --color-gold: #ebaf3c;
   --color-gold-hover: #f2c35f;
-  --color-gold-deep: #8a5f11;
-
-  /* Retain the established token names; digital surfaces stay cool white. */
+  --color-gold-deep: #07182f;
   --color-cream: #ffffff;
-  --color-cream-2: #f8fafc;
-  --color-surface: #f2f5f9;
-
-  /* Ink + neutrals. */
-  --color-ink: #0f1b2d;
+  --color-cream-2: #f5f7fa;
+  --color-surface: #eef1f6;
+  --color-selected: #ebf2fc;
+  --color-ink: #0f1c2e;
   --color-ink-soft: #3c4759;
-  --color-mute: #647088;
-  --color-line: #e5eaf1;
-
+  --color-mute: #566276;
+  --color-line: #d3dae3;
+  --color-line-strong: #b7c0cc;
+  --color-field: #7e8ba0;
+  --color-ring: #1d5caf;
+  --color-success: #166440;
+  --color-success-dot: #24895a;
+  --color-warning: #8d4607;
+  --color-warning-dot: #e18409;
+  --color-danger: #ad1a2d;
+  --color-danger-dot: #d3223a;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-
-  --shadow-soft: 0 1px 2px rgba(15, 27, 45, 0.06);
-  --shadow-elev: 0 16px 40px -24px rgba(15, 27, 45, 0.34), 0 2px 6px rgba(15, 27, 45, 0.05);
-  --shadow-ring: 0 0 0 1px rgba(15, 27, 45, 0.06);
+  --font-weight-extrabold: 700;
+  --font-weight-black: 700;
+  --shadow-soft: none;
+  --shadow-elev: none;
+  --shadow-ring: none;
+  --shadow-float: 0 12px 32px -12px rgb(15 28 46 / 20%);
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  body {
-    background-color: var(--color-cream);
-    color: var(--color-ink);
-  }
-
-  :where(a, button, summary, input, select, textarea):focus-visible {
-    outline: 3px solid currentColor;
-    outline-offset: 4px;
-  }
-
+  html { color-scheme: light; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { background-color: var(--color-cream); color: var(--color-ink); }
+  :where(a, button, summary, input, select, textarea):focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+  ::selection { background-color: var(--color-selected); color: var(--color-ink); }
+  h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; }
+  h1 { font-weight: 700; letter-spacing: -.02em; line-height: 1.08; }
+  h2 { font-weight: 700; letter-spacing: -.015em; line-height: 1.15; }
+  h3, h4 { font-weight: 600; letter-spacing: -.01em; line-height: 1.4; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  ::selection {
-    background-color: var(--color-accent);
-    color: #fff;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-family: var(--font-display);
-    letter-spacing: -0.022em;
-    line-height: 1.05;
-    text-wrap: balance;
-  }
-
-  h1 {
-    font-weight: 800;
-  }
-  h2 {
-    font-weight: 800;
-  }
-  h3,
-  h4 {
-    font-weight: 700;
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   }
 }
 
 @layer components {
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-  }
-
-  .eyebrow-dot::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    border-radius: 9999px;
-    background: currentColor;
-    display: inline-block;
-  }
-
-  .ns-section {
-    padding-top: 4.5rem;
-    padding-bottom: 4.5rem;
-  }
-  @media (min-width: 1024px) {
-    .ns-section {
-      padding-top: 6.5rem;
-      padding-bottom: 6.5rem;
-    }
-  }
-
-  .ns-card {
-    background: #fff;
-    border: 1px solid var(--color-line);
-    border-radius: 1.25rem;
-    box-shadow: var(--shadow-soft);
-  }
-
-  /* Buttons — consistent CTA system. */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    min-height: 3.25rem;
-    border-radius: 0.8rem;
-    padding: 0.85rem 1.6rem;
-    font-weight: 700;
-    font-size: 0.95rem;
-    line-height: 1;
-    transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease,
-      transform 0.18s ease, box-shadow 0.18s ease;
-  }
-  .btn:active {
-    transform: translateY(1px);
-  }
-
-  .btn:focus-visible {
-    outline: 3px solid var(--color-accent-light);
-    outline-offset: 3px;
-  }
-
-  .btn-accent {
-    background-color: var(--color-accent);
-    color: #fff;
-    box-shadow: 0 12px 26px -14px rgba(14, 42, 77, 0.55);
-  }
-  .btn-accent:hover {
-    background-color: var(--color-accent-hover);
-    transform: translateY(-1px);
-  }
-
-  /* On navy fields the primary action flips to cool white so it pops while
-     staying inside the approved palette. White cards nested in navy sections
-     restore the light-surface style. */
-  .bg-primary .btn-accent {
-    background-color: var(--color-cream-2);
-    color: var(--color-primary);
-    box-shadow: 0 12px 26px -14px rgba(7, 24, 47, 0.6);
-  }
-  .bg-primary .btn-accent:hover {
-    background-color: #fff;
-  }
-  .bg-primary .bg-white .btn-accent {
-    background-color: var(--color-accent);
-    color: #fff;
-  }
-  .bg-primary .bg-white .btn-accent:hover {
-    background-color: var(--color-accent-hover);
-  }
-
-  .btn-primary {
-    background-color: var(--color-primary);
-    color: #fff;
-  }
-  .btn-primary:hover {
-    background-color: var(--color-primary-light);
-    transform: translateY(-1px);
-  }
-
-  .btn-outline {
-    background-color: #fff;
-    color: var(--color-primary);
-    border: 1px solid var(--color-line);
-  }
-  .btn-outline:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
-
-  .btn-ghost-dark {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-  }
-  .btn-ghost-dark:hover {
-    background-color: rgba(255, 255, 255, 0.16);
-  }
-
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border-radius: 9999px;
-    border: 1px solid var(--color-line);
-    background: #fff;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--color-ink-soft);
-  }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--color-mute); }
+  .eyebrow-dot::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+  .ns-section { padding-block: 64px; }
+  .ns-card { background: var(--color-cream); border: 1px solid var(--color-line); border-radius: 12px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px; border-radius: 10px; padding: 14px 24px; font-weight: 600; font-size: 16px; line-height: 24px; transition: background-color .18s, color .18s, border-color .18s; }
+  .btn-accent, .btn-primary { background-color: var(--color-primary); color: var(--color-cream); }
+  .btn-accent:hover, .btn-primary:hover { background-color: var(--color-primary-light); }
+  .bg-primary .btn-accent { background-color: var(--color-cream); color: var(--color-primary); }
+  .bg-primary .btn-accent:hover { background-color: var(--color-surface); }
+  .bg-primary .bg-white .btn-accent { background-color: var(--color-primary); color: var(--color-cream); }
+  .btn-outline { background-color: var(--color-cream); color: var(--color-primary); border: 1px solid var(--color-line-strong); }
+  .btn-outline:hover { border-color: var(--color-primary); background-color: var(--color-cream-2); }
+  .btn-ghost-dark { background-color: transparent; color: var(--color-cream); border: 1px solid rgb(255 255 255 / 65%); }
+  .btn-ghost-dark:hover { background-color: rgb(255 255 255 / 10%); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; border: 1px solid var(--color-line); background: var(--color-cream); padding: 6px 12px; font-size: 14px; font-weight: 500; color: var(--color-ink-soft); }
+  @media (min-width: 1024px) { .ns-section { padding-block: 96px; } }
 }

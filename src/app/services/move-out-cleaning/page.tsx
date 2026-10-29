@@ -24,7 +24,7 @@ export default function MoveOutCleaningPage() {
   return (
     <ServiceDetailPage
       service={service}
-      h1="Move-Out & Move-In Cleaning in Fresno & Clovis"
+      h1="Move-out & move-in cleaning in Fresno & Clovis."
     />
   );
 }

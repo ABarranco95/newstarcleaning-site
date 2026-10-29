@@ -61,9 +61,9 @@ assert(
 
 assert(
   !footer.includes("ContactForm") &&
-    footer.includes("Tell us about") &&
+    !footer.includes("home-footer-cta") &&
     footer.includes("<HomeQuoteLink") && footer.includes("siteQuoteHref(pathname"),
-  "footer uses a CTA instead of a site-wide form",
+  "footer keeps contextual quote access without a repeating CTA band or site-wide form",
 );
 
 assert(
@@ -74,7 +74,7 @@ assert(
     home.includes("<HomeQuoteLink") &&
     home.includes('href="/book-now"') &&
     home.includes("Get a quote"),
-  "homepage embeds the stepped quote form in the hero and keeps quote-first links",
+  "homepage keeps the stepped quote form and contextual quote access alongside the booking-first hero",
 );
 
 assert(

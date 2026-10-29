@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
-import GoogleRating from "@/components/GoogleRating";
+
 import { Suspense } from "react";
 import { business } from "@/lib/business";
 
@@ -19,17 +19,12 @@ const groups = [
 
 export default function HomeFooter() {
   const pathname = usePathname();
-  const commercial = pathname.includes("commercial") || pathname.includes("post-construction");
-  const compact = pathname === "/our-work";
+
   const quoteHref = siteQuoteHref(pathname, "");
   return (
     <footer className="home-footer">
       <div className="home-footer-inner">
-        {!compact && <div className="home-footer-cta">
-          <h2>Tell us about<br />{commercial ? "your space." : "your home."}</h2>
-          <div><p>{commercial ? "We’ll review the work and prepare a proposal." : "We’ll confirm the price and available times. Nothing is booked until you say so."}</p><Suspense fallback={<Link href={quoteHref} className="home-button home-button-light">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button home-button-light">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><div className="home-footer-contact"><a href={business.phoneHref} data-phone-location="footer">Call {business.phoneDisplay}</a><a href={business.phoneHref.replace("tel:", "sms:")}>Text us</a></div><HomeBookingLink placement="footer" /></div>
-        </div>}
-        {compact && <div className="home-footer-contact"><a href={business.phoneHref} data-phone-location="footer">Call {business.phoneDisplay}</a><a href={business.phoneHref.replace("tel:", "sms:")}>Text us</a></div>}
+
         <div className="home-footer-navigation">
           <div className="home-footer-brand">
             <Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} />
@@ -38,7 +33,7 @@ export default function HomeFooter() {
               <a href={business.phoneHref} data-phone-location="footer_address">{business.phoneDisplay}</a><br />
               Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM
             </address>
-            <div className="mt-3"><GoogleRating onDark /></div>
+            <div className="home-footer-contact"><a href={business.phoneHref.replace("tel:", "sms:")}>Text us</a><HomeBookingLink placement="footer" onDark /><Suspense fallback={<Link href={quoteHref}>Get a quote</Link>}><HomeQuoteLink className="home-text-link home-text-link-light">Get a quote</HomeQuoteLink></Suspense></div>
           </div>
           <nav className="home-footer-nav" aria-label="Footer navigation">
             {groups.map((group) => (

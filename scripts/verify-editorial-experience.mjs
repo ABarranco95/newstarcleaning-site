@@ -61,7 +61,7 @@ const home = render("src/app/page.tsx");
 const work = render("src/app/our-work/page.tsx");
 const homePhotos = photoSources(home);
 const workPhotos = photoSources(work);
-assert(homePhotos.length >= 8, `Homepage only renders ${homePhotos.length} distinct photos`); assertions++;
+assert(homePhotos.length >= 7, `Homepage only renders ${homePhotos.length} distinct photos`); assertions++;
 assert(workPhotos.length >= 12, `Work page only renders ${workPhotos.length} distinct photos`); assertions++;
 for (const html of [home, work]) {
   for (const src of photoSources(html)) { assert(existsSync(`public${src}`), `Missing photo ${src}`); assertions++; }

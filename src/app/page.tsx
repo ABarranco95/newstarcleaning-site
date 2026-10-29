@@ -33,15 +33,9 @@ function resultPhoto(filename: string) {
 
 
 const steps = [
-  { icon: "clipboard" as const, title: "Tell us what needs attention", body: "Share your home size and what you'd like cleaned. Not sure which service you need? We'll help you choose." },
-  { icon: "tag" as const, title: "Know the price first", body: "We'll explain what's included and price any extras before you book." },
-  { icon: "check" as const, title: "Tell us how we did", body: "If we missed something included in your cleaning, tell us within 24 hours. We'll come back and fix it at no charge." },
-];
-
-const heroPoints = [
-  "Price confirmed before you book",
-  "Insured, with cleaning supplies included",
-  "Room-by-room cleaning, not a quick wipe-down",
+  { title: "Choose your cleaning", body: "Enter your home size, choose the work you need and review your price." },
+  { title: "Pick an available date", body: "Choose your arrival window. Nothing is booked until you confirm." },
+  { title: "We handle the cleaning", body: "We’re insured and bring our own cleaning supplies. Clear the surfaces you want us to clean." },
 ];
 
 export default function Home() {
@@ -49,39 +43,24 @@ export default function Home() {
   return (
     <div className="home-reference">
       <section className="hx" aria-labelledby="home-title">
-        <div className="hx-backdrop" aria-hidden="true">
-          <Image src={hero.src} alt="" fill preload fetchPriority="high" sizes="100vw" />
-        </div>
         <div className="hx-inner">
           <div className="hx-copy">
-            <div id="reviews" className="hx-rating"><GoogleRating onDark /></div>
-            <h1 id="home-title">House cleaning in Fresno &amp; Clovis. <span>We get into the details.</span></h1>
-            <p className="hx-intro">I&apos;m Angel, the owner. My crews handle regular cleaning, deep cleans and move-outs. Tell us what needs attention in your home.</p>
-            <ul className="hx-points">
-              {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
-            </ul>
+            <h1 id="home-title">House cleaning in Fresno &amp; Clovis.</h1>
+            <p className="hx-intro">I&apos;m Angel, and my crews handle regular visits, deep cleans and move-outs.</p>
+            <p className="hx-starting-price">Standard cleaning from <strong>$165</strong></p>
+            <p className="hx-price-note">Deep from $235 · Move-out from $325</p>
+            <div className="hx-booking">{directBookingUrl ? <HomeBookingLink /> : <a href="#quote" className="home-button">Get a quote</a>}</div>
+            <a href="#quote" className="hx-quote">Rather get a quote by text?</a>
             <div className="hx-contact">
               <a href={business.phoneHref} className="hx-phone" data-phone-location="home_hero"><Icon name="phone" /> {business.phoneDisplay}</a>
               <span className="hx-hours">Mon–Fri 8–6 · Sat 8–5</span>
             </div>
-            <div className="hx-booking"><HomeBookingLink onDark /></div>
           </div>
-          <div className="hx-form">
-            <QuickQuoteForm
-              title="Get a quote"
-              subtitle="Tell us about your home. We'll text or call with your price."
-              source="organic_home_hero"
-              directBookingUrl={directBookingUrl}
-              compact
-            />
-          </div>
+          <figure className="hx-photo" data-work-photo="hero"><div className="hx-photo-frame"><Image src={hero.src} alt={hero.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, 100vw" /></div><figcaption>{hero.caption} · New Star work</figcaption></figure>
         </div>
       </section>
 
-      <TrustStrip />
-
-
-      <section id="results" className="home-band home-band-dark ns-on-dark" aria-labelledby="home-results-title">
+      <section id="results" className="home-band" aria-labelledby="home-results-title">
         <div className="ns-section">
           <div className="ns-section-head">
             <div>
@@ -89,7 +68,7 @@ export default function Home() {
               <h2 id="home-results-title" className="ns-h2">A closer look at our work.</h2>
               <p className="ns-lead">The same surfaces, before and after our cleaning. Every photo is from a New Star job.</p>
             </div>
-            <Link href="/our-work" className="home-text-link home-text-link-light">See more of our work <span aria-hidden="true">→</span></Link>
+            <Link href="/our-work" className="home-text-link">See more of our work <span aria-hidden="true">→</span></Link>
           </div>
 
           <div className="home-ba-grid">
@@ -116,13 +95,11 @@ export default function Home() {
             </figure>
           </div>
 
-          <div className="mt-8">
-            <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
-          </div>
+
         </div>
       </section>
 
-      <section className="home-band home-band-muted" aria-labelledby="home-reviews-title">
+      <section id="reviews" className="home-band home-band-muted" aria-labelledby="home-reviews-title">
         <div className="ns-section">
           <div className="ns-section-head">
             <div>
@@ -151,29 +128,26 @@ export default function Home() {
           <Link href="/services/standard-cleaning" className="home-text-link">Recurring house cleaning</Link>
         </nav>
         <p className="home-service-notes">Oven and fridge interiors, interior window glass, and reachable window tracks are optional add-ons. Cabinet interiors are optional for standard and deep cleaning.</p>
+        <p className="home-local-business">Need <Link href="/services/commercial-cleaning">office or commercial cleaning</Link>, or <Link href="/services/post-construction-cleaning">post-construction cleaning</Link>? We scope that work separately.</p>
       </section>
 
       <section className="ns-section" aria-labelledby="home-process-title">
         <div className="ns-section-head">
           <div>
             <p className="ns-kicker">How it works</p>
-            <h2 id="home-process-title" className="ns-h2">From quote to clean home.</h2>
+            <h2 id="home-process-title" className="ns-h2">From your price to a clean home.</h2>
           </div>
         </div>
         <ol className="home-steps">
           {steps.map((step, index) => (
             <li key={step.title}>
-              <span className="home-step-icon"><Icon name={step.icon} /></span>
               <span className="home-step-number">Step {index + 1}</span>
               <h3>{step.title}</h3>
               <p>{step.body}</p>
             </li>
           ))}
         </ol>
-        <div className="home-steps-cta">
-          <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
-          <a href={business.phoneHref} className="home-text-link" data-phone-location="home_process"><Icon name="phone" /> Or call {business.phoneDisplay}</a>
-        </div>
+
       </section>
 
       <section className="home-band home-band-muted" aria-labelledby="home-local-title">
@@ -182,12 +156,12 @@ export default function Home() {
             <p className="ns-kicker">Service area</p>
             <h2 id="home-local-title" className="ns-h2">Where we clean.</h2>
             <p className="ns-lead">Based in Fresno. Madera appointments depend on route availability.</p>
-            <p className="home-local-business">Need <Link href="/services/commercial-cleaning">office cleaning</Link> or <Link href="/services/post-construction-cleaning">post-construction cleaning</Link>? Businesses get a walkthrough and a written proposal.</p>
+
           </div>
           <div className="home-local-cards">
-            <Link href="/cleaning-services-fresno" className="home-local-card"><Icon name="pin" /><span><strong>Fresno</strong><span>Our home base, from Tower District to Woodward Park.</span></span></Link>
-            <Link href="/cleaning-services-clovis" className="home-local-card"><Icon name="pin" /><span><strong>Clovis</strong><span>Core service area alongside Fresno.</span></span></Link>
-            <Link href="/cleaning-services-madera" className="home-local-card"><Icon name="pin" /><span><strong>Madera</strong><span>Scheduled by route. Ask and we’ll confirm.</span></span></Link>
+            <Link href="/cleaning-services-fresno" className="home-local-card"><span><strong>Fresno</strong><span>Our home base, from Tower District to Woodward Park.</span></span><span aria-hidden="true">↗</span></Link>
+            <Link href="/cleaning-services-clovis" className="home-local-card"><span><strong>Clovis</strong><span>Core service area alongside Fresno.</span></span><span aria-hidden="true">↗</span></Link>
+            <Link href="/cleaning-services-madera" className="home-local-card"><span><strong>Madera</strong><span>Scheduled by route. Ask and we’ll confirm.</span></span><span aria-hidden="true">↗</span></Link>
             <Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link>
           </div>
         </div>
@@ -202,6 +176,13 @@ export default function Home() {
         </div>
         <div className="home-faq-list">{faqs.map((item) => <details key={item.q}><summary>{item.q}<span aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div>
       </section>
+      <section className="home-band home-band-muted" aria-labelledby="home-quote-title">
+        <div className="site-section site-quote-layout">
+          <div className="site-copy"><p className="ns-kicker">A quote from us</p><h2 id="home-quote-title" className="ns-h2">Want to talk through the cleaning?</h2><p className="ns-lead">Tell us about your home. We&apos;ll text or call with your price and available dates.</p><Suspense fallback={<Link href="/book-now" className="home-text-link">Open the quote form <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-text-link">Open the quote form <span aria-hidden="true">→</span></HomeQuoteLink></Suspense></div>
+          <QuickQuoteForm title="Get a quote" subtitle="Start with the cleaning you need." source="organic_home_hero" directBookingUrl={directBookingUrl} compact />
+        </div>
+      </section>
+      <TrustStrip />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((item) => ({ "@type": "Question", name: item.q, acceptedAnswer: { "@type": "Answer", text: item.a } })) }) }} />
     </div>
   );

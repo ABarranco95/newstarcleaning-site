@@ -42,7 +42,7 @@ export default function BookingPortalLink({
   ctaLocation,
   label = "Start my booking",
   className =
-    "mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-xl bg-accent px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-accent-hover hover:shadow-xl sm:w-auto",
+    "home-button",
   showIcon = true,
 }: BookingPortalLinkProps) {
   const searchParams = useSearchParams();

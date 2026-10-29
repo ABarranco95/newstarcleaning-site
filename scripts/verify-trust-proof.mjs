@@ -136,6 +136,8 @@ assert(!homeServices.includes("{choice.price}") && !homeServices.includes("{sele
 const paid = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
 assert(paid.includes("<GoogleRating") && paid.includes("<ReviewCards") && !paid.includes("5.0★ Google rating"));
 assert(!paid.includes("usually the same day") && !paid.includes("rushing a free re-clean"));
-const terms = read("src/app/terms/page.tsx").replace(/\s+/g, " ");
-assert(terms.includes("If something included in the agreed cleaning scope was missed, contact us within 24 hours of the completed service and we will come back and fix it at no charge.") && terms.includes("Requests for work outside the confirmed scope are not included."), "the scoped 24-hour free-return promise is backed by the published terms");
+// Check the published scoped promise, not an obsolete copy literal. JSX's
+// apostrophe entity and wrapped source lines normalize to the visible wording.
+const terms = read("src/app/terms/page.tsx").replace(/&apos;/g, "'").replace(/\s+/g, " ");
+assert(terms.includes("If something included in the agreed cleaning scope was missed, tell us within 24 hours of the completed service and we'll come back and make it right at no charge.") && terms.includes("Requests for work outside the confirmed scope are not included."), "the scoped 24-hour free-return promise is backed by the published terms");
 console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews (read ${googleRating.checkedOn}), historical rating suppressed in all shared badge variants and TrustStrip, ReviewCards without review links or public counts, prominent homes served line, no self-served rating schema, 24-hour promise backed by terms.`);
