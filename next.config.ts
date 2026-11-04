@@ -23,7 +23,14 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-
+      // /pricing was never a route here, but it is linked from outside the site
+      // (ads, GBP, old bookmarks). Prices live on the homepage hero, so send it
+      // there permanently instead of 404ing. Replace when the pricing page ships.
+      {
+        source: "/pricing",
+        destination: "/",
+        permanent: true,
+      },
       {
         source: "/reviews",
         destination: "/#home-reviews-title",
