@@ -73,6 +73,10 @@ for (const removedBloat of ["PricingGuide", "SectionCard", "scopeBullets", "addo
 // No browser, build, lead submission, or external API is used by this matrix.
 const require = createRequire(import.meta.url);
 const jsx = require("react/jsx-runtime");
+const marketsModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/markets.ts"), "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText, { exports: marketsModule.exports, module: marketsModule, URL, process: { env: {} } });
 const photosModule = { exports: {} };
 vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/realWorkPhotos.ts"), "utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
@@ -109,12 +113,13 @@ vm.runInNewContext(compiled.outputText, {
     if (name === "./usePaidDropOffTracking") return { usePaidDropOffTracking: () => {} };
     if (name === "@/lib/realWorkPhotos") return photosModule.exports;
     if (name === "@/lib/googleReviews") return reviewsModule.exports;
+    if (name === "@/lib/markets") return marketsModule.exports;
     throw new Error(`Unexpected paid dependency: ${name}`);
   },
 });
 const { detectIntent, INTENT_CONFIG } = runtimeModule.exports.routingTest;
-const render = (service, frequency = "", directBookingUrl = "https://booking.example.test/") => {
-  params = new URLSearchParams({ service: service || "", frequency, city: "clovis", gclid: "regression-only" });
+const render = (service, frequency = "", directBookingUrl = "https://booking.example.test/", city = "clovis", pageMarket) => {
+  params = new URLSearchParams({ service: service || "", frequency, city, gclid: "regression-only" });
   const nodes = [];
   const text = [];
   function visit(node) {
@@ -125,14 +130,14 @@ const render = (service, frequency = "", directBookingUrl = "https://booking.exa
     nodes.push(node);
     visit(node.props?.children);
   }
-  visit(runtimeModule.exports.default({ directBookingUrl, service, frequency, city: params.get("city") }));
+  visit(runtimeModule.exports.default({ directBookingUrl, service, frequency, city: params.get("city"), pageMarket }));
   return { nodes, text: text.join(" "), forms: nodes.filter((node) => /QuoteForm$/.test(node.props?.["data-boundary"] || "")) };
 };
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
 const expectedPriceLines = {
-  deep: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
-  move: "Move-in/out cleaning from $325, depending on size and buildup. Total confirmed before you book.",
-  house: "House cleaning from $165, depending on size and buildup. Total confirmed before you book.",
+  deep: "See your deep-cleaning price for your ZIP and home. Total confirmed before you book.",
+  move: "See your move-in/out price for your ZIP and home. Total confirmed before you book.",
+  house: "See your house-cleaning price for your ZIP and home. Total confirmed before you book.",
 };
 const expectedHeadlines = {
   deep: "Deep House Cleaning in Fresno & Clovis",
@@ -141,7 +146,7 @@ const expectedHeadlines = {
 };
 const expectedDecisionReviews = { deep: "daniel", move: "daviana-j", house: "merle-f" };
 for (const intent of Object.keys(INTENT_CONFIG)) {
-  assert(INTENT_CONFIG[intent].priceLine === expectedPriceLines[intent], `${intent}: only approved service-specific starting-price copy`);
+  assert(INTENT_CONFIG[intent].priceLine === expectedPriceLines[intent], `${intent}: service-specific ZIP pricing instructions, never hardcoded prices`);
   const result = render(intent);
   assert(!/\$50|\d+%|\boff your\b|included free|ends Oct|72 hours/i.test(result.text), `${intent}: no money-off, free-add-on or urgency promise`);
   assert(!Object.hasOwn(result.forms[0].props, "offer") && !Object.hasOwn(result.forms[0].props, "recurringOffer"), `${intent}: no incentive props can reach intake`);
@@ -219,7 +224,7 @@ vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/useP
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 }).outputText + "\nexports.testPrice = { buildRequest, fetchPrice, formatPrice };", {
   exports: priceModule.exports, module: priceModule, Intl, process: { env: {} },
-  require: (name) => { if (name === "react") return {}; if (name === "@/lib/paidHomeSize") return sizeModule.exports; throw new Error(name); },
+  require: (name) => { if (name === "react") return {}; if (name === "@/lib/paidHomeSize") return sizeModule.exports; if (name === "@/lib/markets") return marketsModule.exports; throw new Error(name); },
   fetch: async (url, init) => { priceCalls.push({ url, ...init, body: JSON.parse(init.body) }); return { ok: quoteReply.ok, json: async () => quoteReply.body }; },
 });
 const priceTest = priceModule.exports.testPrice;
@@ -250,6 +255,28 @@ for (const reply of [{ ok: false, body: { error: "unavailable" } }, { ok: true, 
   try { await priceTest.fetchPrice(quoteRequest, "normal", priceSignal); } catch { rejected = true; }
   assert(rejected, "bad quote responses cannot render fabricated prices");
 }
+
+// Region isolation extends the existing money-boundary test, not a new probe.
+for (const intent of ["house", "deep", "move"]) {
+  const result = render(intent, "", "https://booking.example.test/", "san-jose", "southbay");
+  const form = result.forms[0];
+  assert(result.nodes.find((node) => node.type === "h1")?.props.children.endsWith("in San Jose") && form.props.pageMarket === "southbay" && form.props.landingCity === "San Jose", `${intent}: South Bay variant renders its own H1 and freezes the form pricing market`);
+  assert(!/\$\d/.test(result.text) && !/Fresno & Clovis/.test(result.text), `${intent}: no hardcoded price or Fresno headline on a South Bay variant`);
+}
+const southBayRequest = priceTest.buildRequest({ ...priceInput, market: "southbay" });
+const zipRequest = priceTest.buildRequest({ ...priceInput, market: "fresno", zip: "95118" });
+assert(southBayRequest.market === "southbay" && zipRequest.zip === "95118" && !("market" in zipRequest), "typed ZIP wins over page/cookie market; only Apex resolves ZIP coverage");
+for (const body of [{ totalPrice: 66000 }, { totalPrice: 66000, market: "fresno" }, { code: "unsupported_area", market: "unsupported" }]) {
+  quoteReply = { ok: true, body };
+  let rejected = false;
+  try { await priceTest.fetchPrice(southBayRequest, "normal", priceSignal); } catch { rejected = true; }
+  assert(rejected, "South Bay never displays a stale Fresno/unattested/unsupported numeric quote");
+}
+quoteReply = { ok: true, body: { totalPrice: 66000, market: "southbay" } };
+assert((await priceTest.fetchPrice(southBayRequest, "normal", priceSignal)).market === "southbay", "attested South Bay engine result is accepted");
+quoteReply = { ok: true, body: { totalPrice: 38600, market: "fresno" } };
+const fresnoZipRequest = priceTest.buildRequest({ ...priceInput, market: "southbay", zip: "93711" });
+assert((await priceTest.fetchPrice(fresnoZipRequest, "normal", priceSignal)).market === "fresno", "typed ZIP result uses Apex's returned market, never the page guess");
 
 if (failures.length) {
   console.error("Paid intent routing verification failed:");

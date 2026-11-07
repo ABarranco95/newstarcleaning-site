@@ -8,16 +8,17 @@ import HomeBookingLink from "@/components/HomeBookingLink";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 
 import { Suspense } from "react";
-import { business } from "@/lib/business";
+import { useMarket } from "@/components/MarketProvider";
 
 const groups = [
   { label: "Home cleaning", links: [["Standard cleaning", "/services/standard-cleaning"], ["Deep cleaning", "/services/deep-cleaning"], ["Move-in / move-out", "/services/move-out-cleaning"], ["All services", "/services"], ["Service checklist", "/checklist"], ["Our work", "/our-work"]] },
-  { label: "Businesses", links: [["Commercial cleaning", "/services/commercial-cleaning"], ["Post-construction", "/services/post-construction-cleaning"], ["Request a walkthrough", "/commercial-quote"]] },
-  { label: "Local areas", links: [["Fresno", "/cleaning-services-fresno"], ["Clovis", "/cleaning-services-clovis"], ["Madera", "/cleaning-services-madera"], ["Tower District", "/cleaning-services-tower-district"], ["Fig Garden", "/cleaning-services-fig-garden"], ["Woodward Park", "/cleaning-services-woodward-park"], ["All service areas", "/service-areas"]] },
-  { label: "New Star", links: [["About", "/about"], ["Contact", "/contact"], ["Cleaning tips", "/blog"]] },
+  { label: "San Jose & South Bay", links: [["San Jose", "/cleaning-services-san-jose"], ["Cupertino", "/cleaning-services-cupertino"], ["Santa Clara", "/cleaning-services-santa-clara"], ["Sunnyvale", "/cleaning-services-sunnyvale"], ["Campbell", "/cleaning-services-campbell"], ["Saratoga", "/cleaning-services-saratoga"], ["Los Gatos", "/cleaning-services-los-gatos"], ["All service areas", "/service-areas"]] },
+  { label: "Also serving", links: [["Fresno", "/cleaning-services-fresno"], ["Clovis", "/cleaning-services-clovis"], ["Madera", "/cleaning-services-madera"], ["Tower District", "/cleaning-services-tower-district"], ["Fig Garden", "/cleaning-services-fig-garden"], ["Woodward Park", "/cleaning-services-woodward-park"]] },
+  { label: "New Star", links: [["About", "/about"], ["Contact", "/contact"], ["Cleaning tips", "/blog"], ["Commercial cleaning", "/services/commercial-cleaning"], ["Post-construction", "/services/post-construction-cleaning"], ["Request a walkthrough", "/commercial-quote"]] },
 ] as const;
 
 export default function HomeFooter() {
+  const business = useMarket();
   const pathname = usePathname();
 
   const quoteHref = siteQuoteHref(pathname, "");
@@ -28,7 +29,7 @@ export default function HomeFooter() {
         <div className="home-footer-navigation">
           <div className="home-footer-brand">
             <Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} />
-            <p>{business.serviceAreaDescription}</p>
+            <p>House cleaning in San Jose &amp; the South Bay.<br />Also serving Fresno, Clovis &amp; Madera.</p>
             <address>
               <a href={business.phoneHref} data-phone-location="footer_address">{business.phoneDisplay}</a><br />
               Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM

@@ -1,4 +1,5 @@
 import { business, businessAreaServed } from "@/lib/business";
+import { markets } from "@/lib/markets";
 
 export default function SchemaMarkup() {
   const localBusinessId = `${business.siteUrl}/#localbusiness`;
@@ -96,9 +97,34 @@ export default function SchemaMarkup() {
             closes: "17:00",
           },
         ],
-        hasMap: business.googleMapsUrl,
-        sameAs: [business.googleMapsUrl, business.facebookUrl],
+        hasMap: markets.fresno.googleMapsUrl || business.googleMapsUrl,
+        sameAs: [markets.fresno.googleMapsUrl || business.googleMapsUrl, business.facebookUrl],
         hasOfferCatalog: offerCatalog,
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": `${business.siteUrl}/#localbusiness-southbay`,
+        name: business.name,
+        legalName: business.legalName,
+        description: "Residential standard, deep, and move-in/move-out cleaning in San Jose and the South Bay.",
+        url: `${business.siteUrl}${markets.southbay.hub}`,
+        logo: `${business.siteUrl}/logo.png`,
+        telephone: markets.southbay.phoneE164,
+        email: business.email,
+        parentOrganization: { "@id": organizationId },
+        areaServed: markets.southbay.cities.map((name) => ({ "@type": "City", name, addressRegion: "CA" })),
+        ...(markets.southbay.googleMapsUrl ? { hasMap: markets.southbay.googleMapsUrl, sameAs: [markets.southbay.googleMapsUrl] } : {}),
+        hasOfferCatalog: {
+          "@type": "OfferCatalog", name: "South Bay house cleaning",
+          itemListElement: ["standard-cleaning", "deep-cleaning", "move-out-cleaning"].map((slug, index) => ({
+            "@type": "Offer", itemOffered: {
+              "@type": "Service", name: cleaningServices[index].name,
+              url: `${business.siteUrl}/${slug}-san-jose`,
+              provider: { "@id": `${business.siteUrl}/#localbusiness-southbay` },
+              areaServed: markets.southbay.cities.map((name) => ({ "@type": "City", name, addressRegion: "CA" })),
+            },
+          })),
+        },
       },
       {
         "@type": "Organization",

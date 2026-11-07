@@ -15,6 +15,7 @@ import { clientPrepChecklist, getFullIncludedList } from "@/lib/services";
 import { business, businessAreaServed } from "@/lib/business";
 import { servicePresentation } from "@/lib/servicePresentation";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+import MarketPriceExample from "@/components/MarketPriceExample";
 
 import "./service-editorial.css";
 
@@ -25,11 +26,6 @@ const illustrations = {
   "move-out-cleaning": "cleaning-empty-home",
 };
 
-const startingPrices = {
-  "standard-cleaning": "$165",
-  "deep-cleaning": "$235",
-  "move-out-cleaning": "$325",
-};
 
 const heroDescriptions = {
   "standard-cleaning": "We handle the kitchen, bathrooms, dusting and floors so you can keep up between visits.",
@@ -102,7 +98,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
         photo={presentation.photo}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
       >
-        <p className="site-price">{service.shortName} from <strong>{startingPrices[service.slug]}</strong></p>
+        <p className="site-price">A price for your home and ZIP.</p>
         <p className="site-price-help">Your price depends on size, condition and extras.</p>
         <div className="site-booking-actions">
           {directBookingUrl ? <Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} service={quoteFormService(service)} sourcePage={`/services/${service.slug}`} ctaLocation="service_hero" label="See your price and book" showIcon={false} className="home-button" /></Suspense> : <a href="#quote" className="home-button">Get a quote</a>}
@@ -113,6 +109,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
           <span className="site-hero-hours">Mon–Fri 8–6 · Sat 8–5</span>
         </div>
       </SiteHero>
+      <section className="site-section site-split site-rule"><div className="site-copy"><h2>See a current price example.</h2><p className="site-intro">Enter your ZIP to price the right service market. Your final total depends on the home, condition, and requested extras.</p></div><MarketPriceExample service={quoteFormService(service)} /></section>
 
       <div className="service-editorial">
         <section className="se-section">

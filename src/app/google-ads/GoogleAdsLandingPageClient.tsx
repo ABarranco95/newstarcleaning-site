@@ -14,6 +14,7 @@ import { trackFunnelEvent } from "@/lib/conversionTracking";
 import { reviewsFor } from "@/lib/googleReviews";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
 import { usePaidDropOffTracking } from "./usePaidDropOffTracking";
+import { markets, marketForCity, type MarketId } from "@/lib/markets";
 
 const PAID_HERO_PHOTOS = {
   deep: bathroomResultPhotos.find((photo) => photo.src.endsWith("/glass-shower-freestanding-tub-new-star.webp")),
@@ -31,6 +32,7 @@ type CityKey =
   | "fig-garden"
   | "tower-district"
   | "near-me";
+type SouthBayCityKey = "san-jose" | "cupertino" | "santa-clara" | "sunnyvale" | "campbell" | "saratoga" | "los-gatos" | "monte-sereno" | "milpitas" | "mountain-view" | "los-altos";
 
 type ProofPairKey = "shower" | "tub" | "oven" | "refrigerator" | "refrigeratorDetail" | "vent";
 
@@ -59,7 +61,9 @@ type PaidIntentConfig = {
   faqs: Array<{ question: string; answer: string }>;
 };
 
-const CITY_LABELS: Record<CityKey, string> = {
+const CITY_LABELS: Record<CityKey | SouthBayCityKey, string> = {
+  "san-jose": "San Jose", cupertino: "Cupertino", "santa-clara": "Santa Clara", sunnyvale: "Sunnyvale", campbell: "Campbell", saratoga: "Saratoga", "los-gatos": "Los Gatos",
+  "monte-sereno": "Monte Sereno", milpitas: "Milpitas", "mountain-view": "Mountain View", "los-altos": "Los Altos",
   fresno: "Fresno",
   clovis: "Clovis",
   madera: "Madera",
@@ -149,7 +153,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "Kitchen, bathrooms, dusting and floors, once or on a schedule.",
     serviceDefault: "Not sure yet",
     formTitle: "Get a quote",
-    priceLine: "House cleaning from $165, depending on size and buildup. Total confirmed before you book.",
+    priceLine: "See your house-cleaning price for your ZIP and home. Total confirmed before you book.",
 
     proofOrder: ["tub", "shower", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
@@ -169,7 +173,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "Empty cabinet, drawer and closet interiors included.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Get a quote",
-    priceLine: "Move-in/out cleaning from $325, depending on size and buildup. Total confirmed before you book.",
+    priceLine: "See your move-in/out price for your ZIP and home. Total confirmed before you book.",
     scope: {
       included: "Kitchen, bathrooms, floors and baseboards, plus empty cabinet, drawer and closet interiors.",
       addOns: "Inside the oven and refrigerator, interior window glass, and reachable window tracks.",
@@ -192,7 +196,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "Baseboards, fixtures and the buildup a regular clean skips.",
     serviceDefault: "Deep cleaning",
     formTitle: "Get a quote",
-    priceLine: "Deep cleaning from $235, depending on size and buildup. Total confirmed before you book.",
+    priceLine: "See your deep-cleaning price for your ZIP and home. Total confirmed before you book.",
 
     scope: {
       included: "Kitchen, bathrooms, dusting and floors, plus baseboards, fixtures and reachable detail areas, with extra time for buildup.",
@@ -266,10 +270,10 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
 };
 
-function normalizeCity(value: string | null): { key: CityKey; label: string; formValue: string } {
-  const normalized = (value || "near-me").trim().toLowerCase().replace(/_/g, "-");
+function normalizeCity(value: string | null): { key: CityKey | SouthBayCityKey; label: string; formValue: string } {
+  const normalized = (value || "near-me").trim().toLowerCase().replace(/[ _]+/g, "-");
   const key = Object.prototype.hasOwnProperty.call(CITY_LABELS, normalized)
-    ? (normalized as CityKey)
+    ? (normalized as CityKey | SouthBayCityKey)
     : "near-me";
   const label = CITY_LABELS[key];
   return {
@@ -311,11 +315,11 @@ function PaidBrand() {
   );
 }
 
-function TrustLine({ commercial = false, onDark = false }: { commercial?: boolean; onDark?: boolean }) {
+function TrustLine({ commercial = false, onDark = false, southbay = false }: { commercial?: boolean; onDark?: boolean; southbay?: boolean }) {
   return (
     <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${onDark ? "text-white/85" : "text-ink-soft"}`}>
       <GoogleRating />
-      <span className="text-xs">{commercial ? "Locally owned · Written proposal before scheduling" : "Hundreds of local homes cleaned since 2020"}</span>
+      <span className="text-xs">{southbay ? "Owner-run · Insured · Supplies included" : commercial ? "Locally owned · Written proposal before scheduling" : "Hundreds of local homes cleaned since 2020"}</span>
     </div>
   );
 }
@@ -445,14 +449,15 @@ const BUSINESS_POINTS = [
 
 // Verbatim Google reviews (src/lib/googleReviews.ts), led by the ones about
 // the service this ad promised.
-function ReviewStrip({ intent, excludeReviewId }: { intent: PaidIntent; excludeReviewId?: string }) {
+function ReviewStrip({ intent, excludeReviewId, southbay = false }: { intent: PaidIntent; excludeReviewId?: string; southbay?: boolean }) {
   return (
     <section className="border-b border-line bg-surface" aria-labelledby="paid-reviews-title">
       <div className="site-section">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <h2 id="paid-reviews-title" className="text-primary">What customers say on Google.</h2>
-          <GoogleRating prominent />
+          <GoogleRating prominent market={southbay ? "southbay" : "fresno"} />
         </div>
+        {southbay ? <p className="mt-3 text-sm text-ink-soft">These reviews are from our Central Valley customers. San Jose is our newest area.</p> : null}
         <div className="mt-8">
           <ReviewCards showRating={false} reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} />
         </div>
@@ -518,8 +523,9 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   );
 }
 
-function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false }: { onQuoteClick: () => void; onCallClick: () => void; commercial?: boolean }) {
+function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false, market = "fresno" }: { onQuoteClick: () => void; onCallClick: () => void; commercial?: boolean; market?: MarketId }) {
   const [visible, setVisible] = useState(false);
+  const phone = markets[market];
 
   useEffect(() => {
     const form = document.getElementById("booking-form");
@@ -554,10 +560,10 @@ function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false }: { on
   return (
     <div className="paid-sticky-cta fixed inset-x-0 bottom-0 z-50 border-t border-line bg-white md:hidden">
       <div className="mx-auto flex max-w-md gap-3">
-        <a href={"tel:+1" + "559" + "785" + "2822"} onClick={onCallClick} className="home-text-link flex-1 justify-center">
+        <a href={phone.phoneHref} onClick={onCallClick} className="home-text-link flex-1 justify-center">
           Call
         </a>
-        <a href={"sms:+1" + "559" + "785" + "2822"} data-phone-location="paid_mobile_text" className="home-text-link flex-1 justify-center">Text</a>
+        <a href={phone.phoneHref.replace("tel:", "sms:")} data-phone-location="paid_mobile_text" className="home-text-link flex-1 justify-center">Text</a>
         <a href="#booking-form" onClick={onQuoteClick} className="home-button flex-1">
           {commercial ? "Request a proposal" : "Get a quote"}
         </a>
@@ -571,11 +577,13 @@ export default function GoogleAdsLandingPageClient({
   service = null,
   city: cityParam = null,
   frequency = null,
+  pageMarket,
 }: {
   directBookingUrl?: string | null;
   service?: string | null;
   city?: string | null;
   frequency?: string | null;
+  pageMarket?: MarketId;
 }) {
   const hasTrackedLandingView = useRef(false);
   const city = useMemo(() => normalizeCity(cityParam), [cityParam]);
@@ -584,6 +592,10 @@ export default function GoogleAdsLandingPageClient({
     [service, frequency]
   );
   const intent = INTENT_CONFIG[intentKey];
+  const marketConfig = markets[pageMarket || marketForCity(city.formValue) || "fresno"];
+  const headline = marketConfig.id === "southbay" && ["deep", "move", "house", "recurring"].includes(intentKey)
+    ? intentKey === "recurring" ? `Recurring house cleaning in ${city.label}.` : `${intentKey === "deep" ? "Deep House Cleaning" : intentKey === "move" ? "Move-Out & Move-In Cleaning" : "House Cleaning"} in ${city.label}`
+    : intent.h1(city.label);
   const decisionReview = reviewsFor(REVIEW_TOPIC[intentKey]).find((review) => review.id === DECISION_REVIEW_ID[intentKey]);
   const isProjectRequest = intentKey === "postConstruction";
   const isCommercialRequest = intentKey === "commercial";
@@ -593,6 +605,11 @@ export default function GoogleAdsLandingPageClient({
   const requestedFrequency = frequency?.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
   const bookingFrequency = intentKey === "recurring" && (requestedFrequency === "weekly" || requestedFrequency === "biweekly" || requestedFrequency === "monthly") ? requestedFrequency : undefined;
   const heroPhoto = isBusinessRequest ? null : intentKey === "deep" ? PAID_HERO_PHOTOS.deep : intentKey === "move" ? PAID_HERO_PHOTOS.move : PAID_HERO_PHOTOS.house;
+  const proofPoints = marketConfig.id === "southbay"
+    ? isBusinessRequest
+      ? [...BUSINESS_POINTS.slice(0, 2), "Angel Barranco owns and runs New Star Cleaning"]
+      : ["See your price and the room-by-room checklist before you book", "Insured, and we bring the supplies", HOME_POINTS[2]]
+    : isBusinessRequest ? BUSINESS_POINTS : HOME_POINTS;
 
   useEffect(() => {
     captureFirstPaidTouch({
@@ -643,11 +660,11 @@ export default function GoogleAdsLandingPageClient({
         <div className="home-wrap flex h-16 items-center justify-between gap-4">
           <PaidBrand />
           <a
-            href={"tel:+1" + "559" + "785" + "2822"}
-            className="home-header-quote"
+            href={marketConfig.phoneHref}
+            className="home-header-quote shrink-0 whitespace-nowrap"
           >
             <Icon name="phone" />
-            <span>(559) 785-2822</span>
+            <span>{marketConfig.phoneDisplay}</span>
           </a>
         </div>
       </header>
@@ -659,19 +676,19 @@ export default function GoogleAdsLandingPageClient({
             <div className="paid-hero-copy min-w-0">
               <p className={compactResidentialHero ? "hidden text-xs text-ink-soft md:block" : "text-xs text-ink-soft"}>{intent.eyebrow}</p>
               <h1 id="paid-title" className={compactResidentialHero ? "max-w-2xl break-words text-[2rem] leading-[1.15] text-primary md:mt-3 md:text-5xl lg:text-[3.25rem]" : "mt-2 max-w-2xl break-words text-[2rem] leading-[1.09] text-primary sm:text-5xl lg:text-[3.25rem]"}>
-                {intent.h1(city.label)}
+                {headline}
               </h1>
               <p className={compactResidentialHero ? "mt-2 max-w-xl text-base leading-6 text-ink-soft md:mt-4 md:leading-7" : "mt-4 max-w-xl text-base leading-7 text-ink-soft"}>
                 {intent.subhead}
               </p>
               {intent.scope && !compactResidentialHero ? <ScopeNote scope={intent.scope} /> : null}
               <ul className={compactResidentialHero ? "hidden" : "site-form-points paid-hero-points"}>
-                {(isBusinessRequest ? BUSINESS_POINTS : HOME_POINTS).map((point) => (
+                {proofPoints.map((point) => (
                   <li key={point}><Icon name="check" />{point}</li>
                 ))}
               </ul>
               <div className={compactResidentialHero ? "mt-3 hidden md:block" : "mt-3"}>
-                <TrustLine commercial={isBusinessRequest} />
+                <TrustLine commercial={isBusinessRequest} southbay={marketConfig.id === "southbay"} />
               </div>
             </div>
 
@@ -703,6 +720,7 @@ export default function GoogleAdsLandingPageClient({
                   title={intent.formTitle}
                   subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : intent.priceLine || "We’ll follow up with your price and available dates."}
                   landingCity={city.formValue || city.label}
+                  pageMarket={marketConfig.id}
                   defaultService={intent.serviceDefault}
                   directBookingUrl={residentialBookingUrl}
                   extended
@@ -715,11 +733,11 @@ export default function GoogleAdsLandingPageClient({
 
                   submitAlternative={intent.priceLine ? (
                     <a
-                      href={"tel:+1" + "559" + "785" + "2822"}
+                      href={marketConfig.phoneHref}
                       data-phone-location="paid_quote_submit"
                       className="mt-1 flex min-h-11 items-center justify-center text-center text-sm text-primary underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     >
-                      Prefer to call? (559) 785-2822
+                      Prefer to call? {marketConfig.phoneDisplay}
                     </a>
                   ) : null}
                   decisionProof={decisionReview ? (
@@ -728,7 +746,7 @@ export default function GoogleAdsLandingPageClient({
                         <p>&ldquo;{decisionReview.excerpt.join(" … ")}&rdquo;</p>
                       </blockquote>
                       <figcaption className="mt-2 text-xs leading-5 text-ink-soft">
-                        Google review · {decisionReview.author} · {decisionReview.label}
+                        Google review · {decisionReview.author} · {decisionReview.label}{marketConfig.id === "southbay" ? " · Central Valley customer" : ""}
                       </figcaption>
                     </figure>
                   ) : null}
@@ -736,7 +754,7 @@ export default function GoogleAdsLandingPageClient({
                 />
               )}
               <p className="mt-4 text-center text-sm">
-                <a href={"sms:+1" + "559" + "785" + "2822"} data-phone-location="paid_under_form" className="home-text-link min-h-11">Prefer to text? Text us</a>
+                <a href={marketConfig.phoneHref.replace("tel:", "sms:")} data-phone-location="paid_under_form" className="home-text-link min-h-11">Prefer to text? Text us</a>
               </p>
 
             </div>
@@ -746,8 +764,8 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
-      {!isBusinessRequest ? <TrustStrip links={false} /> : null}
-      <ReviewStrip intent={intentKey} excludeReviewId={decisionReview?.id} />
+      {!isBusinessRequest ? <TrustStrip links={false} market={marketConfig.id} /> : null}
+      <ReviewStrip intent={intentKey} excludeReviewId={decisionReview?.id} southbay={marketConfig.id === "southbay"} />
       {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
       <ProcessStrip commercial={isBusinessRequest} />
 
@@ -771,7 +789,7 @@ export default function GoogleAdsLandingPageClient({
                 {isBusinessRequest ? "Request a proposal" : "Get a quote"}
                 <span aria-hidden="true">↗</span>
               </a>
-              <a href={"tel:+1" + "559" + "785" + "2822"} className="home-text-link">
+              <a href={marketConfig.phoneHref} className="home-text-link">
                 Call us
               </a>
             </div>
@@ -779,6 +797,7 @@ export default function GoogleAdsLandingPageClient({
               <p className="mt-2 text-xs text-ink-soft">
                 <BookingPortalLink
                   baseUrl={residentialBookingUrl}
+                  market={marketConfig.id}
                   sourcePage="/google-ads"
                   ctaLocation="paid_closing"
                   service={intent.serviceDefault}
@@ -794,7 +813,7 @@ export default function GoogleAdsLandingPageClient({
         </div>
       </section>
 
-      {!compactResidentialHero ? <StickyMobileCTA commercial={isBusinessRequest} onQuoteClick={() => trackStickyCta("sticky_mobile")} onCallClick={() => trackStickyCta("sticky_mobile_call", false)} /> : null}
+      {!compactResidentialHero ? <StickyMobileCTA market={marketConfig.id} commercial={isBusinessRequest} onQuoteClick={() => trackStickyCta("sticky_mobile")} onCallClick={() => trackStickyCta("sticky_mobile_call", false)} /> : null}
     </div>
   );
 }

@@ -71,13 +71,13 @@ const { default: GoogleRating } = load("src/components/GoogleRating.tsx", {
   "@/lib/googleRating": ratingModule,
   "@/components/Icon": StarRowModule,
 });
-for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }]) {
+for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { market: "southbay", prominent: true }, { market: "southbay", onDark: true, prominent: true }]) {
   const html = renderToStaticMarkup(createElement(GoogleRating, props));
   assertReviewPresentation(html, "GoogleRating");
   const visible = html.replace(/<[^>]*>/g, "");
   assert(!/on Google|5\.0|ns-rating-score|<svg/i.test(html), "shared proof renders no unverifiable Google score, mark or rating stars");
-  assert.equal(visible.includes(homesServedLine), Boolean(props.prominent), "only prominent placements retain the recorded homes served line");
-  if (!props.prominent) assert.equal(html, "", "ordinary badge placements render nothing");
+  assert.equal(visible.includes(homesServedLine), Boolean(props.prominent) && props.market !== "southbay", "only prominent Fresno placements retain the recorded local homes served line");
+  if (!props.prominent || props.market === "southbay") assert.equal(html, "", "ordinary and South Bay badge placements render no historical or false-local proof");
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
 }
 const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
@@ -87,6 +87,9 @@ const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
 const stripHtml = renderToStaticMarkup(createElement(TrustStrip));
 assertReviewPresentation(stripHtml, "TrustStrip");
 assert(!/on Google|5\.0/.test(stripHtml) && stripHtml.includes("Locally owned"), "shared trust strip replaces the unverifiable rating with local ownership");
+const southBayStripHtml = renderToStaticMarkup(createElement(TrustStrip, { market: "southbay" }));
+assertReviewPresentation(southBayStripHtml, "South Bay TrustStrip");
+assert(southBayStripHtml.includes("Owner-run") && !southBayStripHtml.includes("Locally owned") && southBayStripHtml.includes("within 24 hours") && southBayStripHtml.includes("no charge"), "South Bay trust proof uses owner identity and the scoped make-it-right promise, not Fresno locality");
 
 const { default: ReviewCards } = load("src/components/ReviewCards.tsx", {
   "@/lib/googleReviews": reviewsModule,

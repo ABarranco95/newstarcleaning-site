@@ -11,7 +11,8 @@ import BookingPrefillLink from "@/components/BookingPrefillLink";
 import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
 import PaidPriceBookingButton from "@/components/PaidPriceBookingButton";
 import { acceptedPrefillSnapshot, bookingAttributionSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
-import { business as BUSINESS } from "@/lib/business";
+import { useMarket } from "@/components/MarketProvider";
+import { isMarket, marketForCity, normalizedZip, type MarketId } from "@/lib/markets";
 import usePaidPriceRange from "@/lib/usePaidPriceRange";
 import { PAID_HOME_SIZES, paidHomeSize, paidLeadHomeSize } from "@/lib/paidHomeSize";
 
@@ -21,6 +22,7 @@ type QuickQuoteFormProps = {
   source?: string;
   defaultCity?: string;
   landingCity?: string;
+  pageMarket?: MarketId;
   defaultService?: string;
   compact?: boolean;
   extended?: boolean;
@@ -39,6 +41,7 @@ type FormState = {
   phone: string;
   email: string;
   city: string;
+  zip: string;
   service: string;
   message: string;
   frequency: string;
@@ -205,6 +208,7 @@ function initialForm(defaultCity?: string, defaultService?: string, paidSearch =
     phone: "",
     email: "",
     city: paidSearch ? "" : defaultCity || "",
+    zip: "",
     service: normalizeServiceParam(defaultService || null),
     message: "",
     frequency: "",
@@ -273,6 +277,7 @@ export default function QuickQuoteForm({
   source = "organic_website",
   defaultCity,
   landingCity,
+  pageMarket,
   defaultService,
   compact = false,
   extended = false,
@@ -287,6 +292,9 @@ export default function QuickQuoteForm({
   directBookingUrl = null,
 }: QuickQuoteFormProps & { directBookingUrl?: string | null }) {
   const [formData, setFormData] = useState<FormState>(() => initialForm(defaultCity, defaultService, paidSearch));
+  const [queryMarket, setQueryMarket] = useState<MarketId | undefined>(undefined);
+  const [knownService, setKnownService] = useState(Boolean(normalizeServiceParam(defaultService || null)));
+  const BUSINESS = useMarket(pageMarket || marketForCity(defaultCity || landingCity) || queryMarket);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [smsOptIn, setSmsOptIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -321,6 +329,10 @@ export default function QuickQuoteForm({
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const requestedMarket = params.get("market") || params.get("nsc_market");
+    if (isMarket(requestedMarket)) setQueryMarket(requestedMarket);
+    const zip = normalizedZip(params.get("zip") || params.get("nsc_zip"));
+    if (zip) setFormData((current) => ({ ...current, zip: current.zip || zip }));
     const capture: Record<string, string> = {};
     [
       "utm_source",
@@ -342,6 +354,7 @@ export default function QuickQuoteForm({
 
     const city = normalizeCityParam(params.get("city"));
     const service = normalizeServiceParam(params.get("service"));
+    if (service) setKnownService(true);
     const frequency = normalizeFrequencyParam(params.get("frequency"));
     if (!paidSearch && city) {
       setFormData((current) => ({
@@ -436,6 +449,8 @@ export default function QuickQuoteForm({
     bedrooms: formData.bedrooms,
     bathrooms: formData.bathrooms,
     sqft: formData.sqft,
+    zip: formData.zip || normalizedZip(formData.city),
+    market: BUSINESS.id,
   });
   const paidSize = quickPaid ? paidHomeSize(formData.sqft) : undefined;
   const priceLowCents = paidPrice.status === "ready" ? paidPrice.priceLowCents : undefined;
@@ -510,7 +525,8 @@ export default function QuickQuoteForm({
       });
     }
     // Freeze the submitted customer values, not edits made during the request.
-    const prefill = acceptedPrefillSnapshot(formData, true, customerCityRef.current);
+    const location = { zip: normalizedZip(formData.zip) || normalizedZip(formData.city), market: paidPrice.status === "ready" ? paidPrice.market : BUSINESS.id };
+    const prefill = acceptedPrefillSnapshot({ ...formData, ...location }, true, customerCityRef.current);
     const submittedSnapshot = prefill ? Object.freeze({ ...prefill, ...bookingAttributionSnapshot(tracking), funnelSessionId: paidSessionId() }) : null;
     trackFunnelEvent("quote_submit_attempt", {
       source,
@@ -557,6 +573,7 @@ export default function QuickQuoteForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          ...location,
           ...(quickPaid ? { sqft: paidLeadHomeSize(formData.sqft) } : {}),
           timeline: paidMoveTimingChoice?.timeline || formData.timeline,
           message: [
@@ -643,6 +660,7 @@ export default function QuickQuoteForm({
       stepMoved.current = false;
       submissionIdRef.current = "";
       setFormData(initialForm(defaultCity, defaultService, paidSearch));
+      setKnownService(Boolean(normalizeServiceParam(defaultService || null)));
       customerCityRef.current = false;
       setSmsOptIn(false);
     } catch (submitError) {
@@ -739,7 +757,7 @@ export default function QuickQuoteForm({
         value={formData.city}
         onChange={(event) => updateField("city", event.target.value)}
         autoComplete="address-level2"
-        placeholder="e.g. Fresno"
+        placeholder={BUSINESS.id === "southbay" ? "e.g. San Jose" : "e.g. Fresno"}
         className={fieldClass}
       />
     </div>
@@ -762,6 +780,14 @@ export default function QuickQuoteForm({
         <option value="specific-deadline">Specific deadline (walkthrough or lease date)</option>
         <option value="flexible">Flexible</option>
       </select>
+    </div>
+  );
+
+  const renderZipField = () => (
+    <div>
+      <FieldLabel htmlFor="quote-zip" optional>Home ZIP</FieldLabel>
+      <input id="quote-zip" name="zip" type="text" inputMode="numeric" autoComplete="postal-code" pattern="[0-9]{5}(-[0-9]{4})?" maxLength={10} title="Enter a 5-digit ZIP or ZIP+4" value={formData.zip} onChange={(event) => updateField("zip", event.target.value)} placeholder="5-digit ZIP" className={fieldClass} />
+      <p className="qf-help">Your ZIP confirms coverage and the right market price.</p>
     </div>
   );
 
@@ -935,6 +961,7 @@ export default function QuickQuoteForm({
       {stagedPaid && paidPrice.status === "hidden" ? <p className="text-sm text-ink-soft">{formData.bedrooms && formData.bathrooms ? "We’ll confirm your price personally. You can still request a quote." : "Choose bedrooms and bathrooms to see a starting price. Add home size for a range."}</p> : null}
       {paidPrice.status === "loading" ? <p className="text-xs text-ink-soft">Checking price...</p> : null}
       {paidPrice.status === "custom" ? <p className="font-semibold text-primary">This size needs a custom quote. Send the form and we&apos;ll price it.</p> : null}
+      {paidPrice.status === "zip-required" ? <p className="font-semibold text-primary">{normalizedZip(formData.zip) || normalizedZip(formData.city) ? "We couldn’t price this ZIP online. Request a quote and we’ll confirm coverage and your price personally." : "Enter your ZIP above to check pricing. If an instant price is unavailable, request a quote and we’ll confirm it personally."}</p> : null}
       {paidPrice.status === "ready" ? (
         <>
           {stagedPaid ? (
@@ -959,6 +986,8 @@ export default function QuickQuoteForm({
               bedrooms={formData.bedrooms}
               bathrooms={formData.bathrooms}
               squareFeet={paidPrice.bookableSqft}
+              zip={normalizedZip(formData.zip) || normalizedZip(formData.city)}
+              market={paidPrice.market}
               primary={stagedPaid}
             />
           ) : null}
@@ -1084,7 +1113,7 @@ export default function QuickQuoteForm({
           onChange={(event) => updateField("phone", event.target.value)}
           autoComplete="tel"
           inputMode="tel"
-          placeholder={stickyPaid ? "559-555-0123" : paidSearch ? "559-000-0000" : "(559) 000-0000"}
+          placeholder="Your 10-digit number"
           className={fieldClass}
         />
       </div>
@@ -1151,10 +1180,10 @@ export default function QuickQuoteForm({
       <p>{error}</p>
       {needsPaidFallback ? (
         <div className="mt-3 flex flex-wrap gap-2">
-          <a href={"tel:+1" + "559" + "785" + "2822"} className="qf-error-action min-h-11" data-phone-location="paid_quote_error">
+          <a href={BUSINESS.phoneHref} className="qf-error-action min-h-11" data-phone-location="paid_quote_error">
             Call {BUSINESS.phoneDisplay}
           </a>
-          <a href={"sms:+1" + "559" + "785" + "2822"} className="qf-error-action min-h-11">
+          <a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action min-h-11">
             Text us
           </a>
         </div>
@@ -1312,6 +1341,7 @@ export default function QuickQuoteForm({
       <div className="qf-stack">
         <p className="qf-help">We can work out the home details with you. Nothing is booked with this request.</p>
         {renderCityField()}
+        {renderZipField()}
         {renderRequestedDate()}
         {renderNameAndPhone()}
         {renderContactChips()}
@@ -1333,6 +1363,7 @@ export default function QuickQuoteForm({
           {stagedPaid && isMoveOutRequest ? renderPaidMoveTiming() : null}
           {compactPaid ? renderBedBathFields() : renderBedBathChips()}
           {renderSqftField(false)}
+          {renderZipField()}
           {renderPaidPrice()}
           {isRecurringRequest && !showPaidDetails ? renderRequiredFrequency() : null}
         </div>
@@ -1389,9 +1420,10 @@ export default function QuickQuoteForm({
       <div data-quote-step="1" hidden={step !== 1}>
         {renderStepTitle(1)}
         <div className="qf-stack">
-          {!paidSearch ? renderServiceTiles() : !paidServicePrefilled ? renderServiceField() : null}
+          {!paidSearch ? knownService ? <><input type="hidden" name="service" value={formData.service} readOnly /><p className="qf-help">{formData.service} selected. <button type="button" className="underline underline-offset-4" onClick={() => setKnownService(false)}>Change service</button></p></> : renderServiceTiles() : !paidServicePrefilled ? renderServiceField() : null}
           {paidSearch && paidServicePrefilled ? <input type="hidden" name="service" value={formData.service} readOnly /> : null}
           {renderCityField()}
+          {renderZipField()}
           {renderTimelineField()}
           {renderRequestedDate()}
         </div>

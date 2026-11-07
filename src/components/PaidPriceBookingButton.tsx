@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { allowedPrefillPair, bookingAttributionSnapshot, startBookingPrefill, type BookingPrefillPayload, type PrefillSendStatus } from "@/lib/bookingPrefill";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { completedHome, paidSessionId, trackFunnelEvent } from "@/lib/conversionTracking";
+import type { MarketId } from "@/lib/markets";
 
 const messages: Record<PrefillSendStatus, string> = {
   waiting: "Booking opened in a new tab. Waiting to transfer your home details.",
@@ -17,20 +18,22 @@ const messages: Record<PrefillSendStatus, string> = {
   cancelled: "Home-detail transfer stopped. Nothing was booked or submitted.",
 };
 
-export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, primary = false }: {
+export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, zip, market, primary = false }: {
   baseUrl: string;
   service: "Deep cleaning" | "Standard recurring cleaning" | "Move-in / move-out cleaning";
   bedrooms: string;
   bathrooms: string;
   squareFeet: string;
+  zip?: string;
+  market: MarketId;
   primary?: boolean;
 }) {
   const [destination] = useState<string | null>(() => {
     try {
       const url = new URL(baseUrl);
       if (allowedPrefillPair(window.location.origin, url.origin) && ["/book", "/book/"].includes(url.pathname) && !url.username && !url.password) {
-        // Discard configured query values. Attribution travels privately; only
-        // the internal flag and transport nonce belong on the destination URL.
+        // Discard configured query values. Attribution travels privately;
+        // only ZIP/market hints, the internal flag, and nonce travel in the URL.
         return `${url.origin}/book`;
       }
     } catch { /* Unsupported destinations fail closed. */ }
@@ -58,12 +61,14 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           try { internal ||= window.localStorage.getItem("ns_internal") === "1"; } catch { /* URL flag still works without storage. */ }
           const attribution = bookingAttributionSnapshot({ ...captureFirstPaidTouch(), funnelSessionId: paidSessionId(), ...(internal ? { nsinternal: "1" } : {}) });
           const snapshot: BookingPrefillPayload = Object.freeze({
-            service, bedrooms, bathrooms, squareFeet,
+            service, bedrooms, bathrooms, squareFeet, ...(zip ? { zip } : {}), market,
             frequency: "one-time", condition: "normal",
             ...(service === "Move-in / move-out cleaning" ? { moveOutAddons: Object.freeze([]) } : {}),
             ...attribution,
           });
           const url = new URL(destination);
+          if (zip) url.searchParams.set("zip", zip);
+          url.searchParams.set("market", market);
           if (internal) url.searchParams.set("nsinternal", "1");
           cancelRef.current = startBookingPrefill(window, url.toString(), snapshot, setStatus);
           try {

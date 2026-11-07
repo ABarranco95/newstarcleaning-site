@@ -5,6 +5,7 @@ import BookingPortalLink from "@/components/BookingPortalLink";
 import { bookingServiceName, isBusinessCleaning } from "@/lib/homeQuoteContext";
 
 import { siteQuoteParams } from "@/lib/siteQuoteContext";
+import { isMarket } from "@/lib/markets";
 
 type HomeBookingContextLinkProps = { baseUrl: string; onDark: boolean; placement: "hero" | "footer" | "header" | "mobile" };
 
@@ -14,5 +15,6 @@ export default function HomeBookingContextLink({ baseUrl, onDark, placement }: H
   if (isBusinessCleaning(query.get("service"))) return null;
   const label = placement === "hero" ? "See your price and book" : "Book online";
   const className = placement === "hero" ? "home-button" : placement === "header" ? "home-header-booking" : placement === "mobile" ? "mobile-contact-link" : `home-text-link${onDark ? " home-text-link-light" : ""}`;
-  return <BookingPortalLink baseUrl={baseUrl} service={bookingServiceName(query.get("service"))} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation={`home-${placement}`} label={label} showIcon={false} className={className} />;
+  const market = query.get("market");
+  return <BookingPortalLink baseUrl={baseUrl} market={isMarket(market) && pathname !== "/" ? market : undefined} zip={query.get("zip") || undefined} service={bookingServiceName(query.get("service"))} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation={`home-${placement}`} label={label} showIcon={false} className={className} />;
 }

@@ -57,7 +57,7 @@ assert(area.includes("defaultCity={area.name}") && area.includes("bookingNote") 
 assert(combo.includes("getFullIncludedList(service.slug)") && combo.includes("service.availableAddOns.map") && combo.includes("service.notIncluded.map"));
 assert(combo.includes("new URLSearchParams({ service: quoteFormService(service), city: cityName })"));
 assert(!combo.includes('href="/book-now"') && !combo.includes('params.set("utm_source"'), "every combo quote retains known service/city without replacing acquisition attribution");
-assert(/robots:\s*{\s*index:\s*false,\s*follow:\s*true/.test(combo));
+assert(/robots:\s*{\s*index:\s*citySlug === "san-jose",\s*follow:\s*true\s*}/.test(combo), "only the substantive San Jose combos are indexable; Fresno combos stay noindex, follow");
 console.log("Photo-led checks passed: nine rendered photo variants, real local assets, unchanged floors, full scope, preserved quote context, shared layouts and noindex boundary.");
 
 const { default: SiteHero } = load("src/components/SiteHero.tsx");

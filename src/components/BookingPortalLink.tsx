@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { readFirstPaidTouch, type FirstPaidTouchRecord } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
+import { useMarket } from "@/components/MarketProvider";
+import { normalizedZip, type MarketId } from "@/lib/markets";
 
 const TRACKING_PARAMS = [
   "utm_source",
@@ -24,6 +26,8 @@ type BookingPortalLinkProps = {
   service?: string;
   city?: string;
   frequency?: string;
+  zip?: string;
+  market?: MarketId;
   sourcePage?: string;
   ctaLocation?: string;
   label?: string;
@@ -38,6 +42,8 @@ export default function BookingPortalLink({
   service,
   city,
   frequency,
+  zip,
+  market,
   sourcePage,
   ctaLocation,
   label = "Start my booking",
@@ -46,6 +52,7 @@ export default function BookingPortalLink({
   showIcon = true,
 }: BookingPortalLinkProps) {
   const searchParams = useSearchParams();
+  const config = useMarket(market);
 
   const href = useMemo(() => {
     const url = new URL(baseUrl);
@@ -59,12 +66,17 @@ export default function BookingPortalLink({
     if (service) url.searchParams.set("nsc_service", service);
     if (city) url.searchParams.set("nsc_city", city);
     if (frequency) url.searchParams.set("nsc_frequency", frequency);
+    const postal = normalizedZip(zip || searchParams.get("zip") || searchParams.get("nsc_zip"));
+    for (const key of ["zip", "nsc_zip", "market", "nsc_market"]) url.searchParams.delete(key);
+    if (postal) { url.searchParams.set("zip", postal); url.searchParams.set("nsc_zip", postal); }
+    url.searchParams.set("market", config.id);
+    url.searchParams.set("nsc_market", config.id);
     url.searchParams.set(
       "utm_source_page",
       sourcePage ? `newstarcleaning.com${sourcePage}` : "newstarcleaning.com"
     );
     return url.toString();
-  }, [baseUrl, searchParams, service, city, frequency, sourcePage]);
+  }, [baseUrl, searchParams, service, city, frequency, sourcePage, zip, config.id]);
 
   // The correlation ID is minted at click time and stamped onto the anchor
   // before navigation, so the analytics event and the booking URL carry

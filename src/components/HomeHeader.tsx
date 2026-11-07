@@ -8,7 +8,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import Icon from "@/components/Icon";
-import { business } from "@/lib/business";
+import { useMarket } from "@/components/MarketProvider";
 
 type NavLink = { label: string; href: string };
 
@@ -38,6 +38,7 @@ const mobileGroups: { title: string; links: NavLink[] }[] = [
 ];
 
 export default function HomeHeader() {
+  const business = useMarket();
   const pathname = usePathname();
   const quoteHref = siteQuoteHref(pathname, "");
   const routeService = siteQuoteParams(pathname, "").get("service");

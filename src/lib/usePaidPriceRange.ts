@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { paidHomeSize } from "@/lib/paidHomeSize";
+import { isMarket, normalizedZip, type MarketId } from "@/lib/markets";
 
 type PriceInputs = {
   enabled: boolean;
@@ -9,6 +10,9 @@ type PriceInputs = {
   bedrooms: string;
   bathrooms: string;
   sqft: string;
+  exactSqft?: number;
+  zip?: string;
+  market?: MarketId;
 };
 
 type QuoteRequest = {
@@ -21,12 +25,14 @@ type QuoteRequest = {
   propertyType: "house";
   addons: string[];
   hasPets: false;
+  zip?: string;
+  market?: MarketId;
 };
 
-type QuotePrice = { total: number; biweekly?: number };
+type QuotePrice = { total: number; biweekly?: number; market: MarketId };
 type PriceResult =
-  | { status: "hidden" | "custom" }
-  | { status: "ready"; low: number; high?: number; biweekly?: number };
+  | { status: "hidden" | "custom" | "zip-required" }
+  | { status: "ready"; low: number; high?: number; biweekly?: number; market: MarketId };
 
 type PriceState = PriceResult & { key: string };
 
@@ -40,7 +46,7 @@ function formatPrice(cents: number, rounding: "low" | "high" | "nearest" = "low"
   return currency.format(rounding === "low" ? Math.floor(dollars) : rounding === "high" ? Math.ceil(dollars) : Math.round(dollars));
 }
 
-function buildRequest({ enabled, service, bedrooms, bathrooms, sqft }: PriceInputs, endpoint: "low" | "high" = "low"): QuoteRequest | null {
+function buildRequest({ enabled, service, bedrooms, bathrooms, sqft, exactSqft, zip, market = "fresno" }: PriceInputs, endpoint: "low" | "high" = "low"): QuoteRequest | null {
   if (!enabled || !/^\d+$/.test(bedrooms) || !/^\d+(\.5)?$/.test(bathrooms)) return null;
   const serviceType = service === "Deep cleaning" ? "DEEP"
     : service === "Move-in / move-out cleaning" ? "MOVE_OUT"
@@ -48,14 +54,16 @@ function buildRequest({ enabled, service, bedrooms, bathrooms, sqft }: PriceInpu
   const beds = Number(bedrooms);
   const baths = Math.floor(Number(bathrooms));
   const band = paidHomeSize(sqft);
-  const size = band ? endpoint === "high" ? band.max : band.min : undefined;
+  const size = exactSqft ?? (band ? endpoint === "high" ? band.max : band.min : undefined);
+  const postal = normalizedZip(zip);
   // Open-ended 6+/4+ selections and an unfinished size cannot promise an exact
   // engine range. Keep intake available and leave those homes to the office.
-  if (!serviceType || beds > 10 || baths > 10 || (sqft && !band) || size === null) return null;
+  if (!serviceType || beds > 10 || baths > 10 || (sqft && !band) || size === null || (zip && !postal)) return null;
   return {
     serviceType, beds, baths, halfBaths: Number(bathrooms) % 1 === 0 ? 0 : 1,
     ...(size === undefined ? {} : { sqft: size }),
     frequency: "ONE_TIME", propertyType: "house", addons: [], hasPets: false,
+    ...(postal ? { zip: postal } : { market }),
   };
 }
 
@@ -82,17 +90,21 @@ async function fetchPrice(request: QuoteRequest, condition: "normal" | "dusty", 
   const data: unknown = await response.json();
   if (isRecord(data) && data.code === "CUSTOM_QUOTE_REQUIRED") return "custom";
   if (!response.ok || !isRecord(data)) throw new Error("Price unavailable");
+  // Older Apex builds silently price Fresno. They must never supply a South
+  // Bay number: require an attested market, and let Apex alone resolve ZIPs.
+  if ((request.zip && !isMarket(data.market)) || (!request.zip && request.market === "southbay" && data.market !== "southbay") ||
+      (!request.zip && isMarket(data.market) && data.market !== request.market)) throw new Error("Market price unavailable");
   const total = request.serviceType === "MOVE_OUT" && isRecord(data.moveOutPackages) && data.moveOutPackages.essentials != null
     ? data.moveOutPackages.essentials : data.totalPrice;
   if (!isPrice(total)) throw new Error("Invalid price");
   const biweekly = isRecord(data.frequencyTotals) ? data.frequencyTotals.BIWEEKLY : undefined;
-  return { total, ...(isPrice(biweekly) ? { biweekly } : {}) };
+  return { total, market: isMarket(data.market) ? data.market : "fresno", ...(isPrice(biweekly) ? { biweekly } : {}) };
 }
 
 export default function usePaidPriceRange(inputs: PriceInputs) {
   const request = buildRequest(inputs);
   const band = paidHomeSize(inputs.sqft);
-  const highRequest = band ? buildRequest(inputs, "high") : null;
+  const highRequest = band && inputs.exactSqft === undefined ? buildRequest(inputs, "high") : null;
   const key = request && band?.max !== null ? JSON.stringify({ low: request, high: highRequest }) : "";
   const [result, setResult] = useState<PriceState | null>(null);
 
@@ -112,16 +124,16 @@ export default function usePaidPriceRange(inputs: PriceInputs) {
         if (!active || controller.signal.aborted) return;
         if (normal === "custom" || dusty === "custom") {
           setResult({ key, status: "custom" });
-        } else if (!dusty || dusty.total >= normal.total) {
-          setResult({ key, status: "ready", low: normal.total, ...(dusty ? { high: dusty.total } : {}),
+        } else if (!dusty || (dusty.total >= normal.total && dusty.market === normal.market)) {
+          setResult({ key, status: "ready", market: normal.market, low: normal.total, ...(dusty ? { high: dusty.total } : {}),
             ...(body.high && body.low.serviceType === "STANDARD" && normal.biweekly !== undefined && normal.biweekly < normal.total
               ? { biweekly: normal.biweekly } : {}),
           });
         } else {
-          setResult({ key, status: "hidden" });
+          setResult({ key, status: "zip-required" });
         }
       } catch {
-        if (active) setResult({ key, status: "hidden" });
+        if (active) setResult({ key, status: "zip-required" });
       } finally {
         clearTimeout(timeout);
         controller.abort();
@@ -144,12 +156,13 @@ export default function usePaidPriceRange(inputs: PriceInputs) {
   const service = request?.serviceType === "STANDARD" ? "Standard" : inputs.service;
   return {
     status: "ready" as const,
+    market: result.market,
     low,
     range,
     priceLowCents: Math.floor(result.low / 100) * 100,
     priceHighCents: result.high === undefined ? undefined : Math.ceil(result.high / 100) * 100,
     bookableSqft: band && range ? String(band.min) : undefined,
     biweekly: result.biweekly === undefined ? undefined : formatPrice(result.biweekly, "nearest"),
-    note: `Range shown on page: ${range || `From ${low}`} (${range ? "normal at size minimum–dusty at size maximum" : "normal, no size given"}, ${inputs.bedrooms} bed / ${inputs.bathrooms} bath${band ? `, ${band.label} sqft` : ""}, ${service}).`,
+    note: `Range shown on page: ${range || `From ${low}`} (${range ? "normal at size minimum–dusty at size maximum" : "normal condition"}, ${inputs.bedrooms} bed / ${inputs.bathrooms} bath${inputs.exactSqft ? `, ${inputs.exactSqft} sqft` : band ? `, ${band.label} sqft` : ""}, ${service}; ${result.market}).`,
   };
 }

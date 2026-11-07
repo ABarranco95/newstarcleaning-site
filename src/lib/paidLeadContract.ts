@@ -74,6 +74,8 @@ export function buildPaidLeadForward(body: Record<string, unknown>): PaidLeadFor
     phone: phone || "",
     email: optionalText(body.email),
     city,
+    zip: optionalText(body.zip),
+    market: body.market === "southbay" || body.market === "fresno" ? body.market : undefined,
     service: optionalText(body.service),
     message: optionalText(body.message),
     source: "google_ads",

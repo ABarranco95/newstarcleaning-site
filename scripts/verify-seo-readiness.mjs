@@ -17,7 +17,7 @@ function assert(condition, message) {
   }
 }
 
-const serviceAreas = read("src/lib/serviceAreas.ts");
+const serviceAreas = read("src/lib/serviceAreas.ts") + read("src/lib/southBayServiceAreas.ts");
 const sitemap = read("src/app/sitemap.ts");
 const serviceCityPage = read("src/app/[serviceCity]/page.tsx");
 const schemaMarkup = read("src/components/SchemaMarkup.tsx");
@@ -33,6 +33,8 @@ const serviceAreasHub = read("src/app/service-areas/page.tsx");
 const header = read("src/components/Header.tsx") + read("src/components/HomeHeader.tsx");
 const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const robots = read("src/app/robots.ts");
+const neighborhoodData = read("src/lib/sanJoseNeighborhoods.ts");
+const neighborhoodPage = read("src/app/cleaning-services-san-jose/[neighborhood]/page.tsx");
 
 const areaSlugs = [
   ...serviceAreas.matchAll(/slug:\s*"([^"]+)"/g),
@@ -40,17 +42,17 @@ const areaSlugs = [
 const uniqueAreaSlugs = new Set(areaSlugs);
 
 assert(
-  areaSlugs.length === uniqueAreaSlugs.size && areaSlugs.length === 6,
+  areaSlugs.length === uniqueAreaSlugs.size && areaSlugs.length === 13,
   `service area data has exactly ${areaSlugs.length} honest local pages`,
 );
 
-const expectedAreaSlugs = ["fresno", "clovis", "madera", "tower-district", "fig-garden", "woodward-park"];
+const expectedAreaSlugs = ["fresno", "clovis", "madera", "tower-district", "fig-garden", "woodward-park", "san-jose", "cupertino", "santa-clara", "sunnyvale", "campbell", "saratoga", "los-gatos"];
 const removedAreaSlugs = ["sanger", "selma", "kingsburg", "reedley", "visalia", "tulare", "hanford", "lemoore"];
 
 assert(
   expectedAreaSlugs.every((slug) => uniqueAreaSlugs.has(slug)) &&
     areaSlugs.every((slug) => expectedAreaSlugs.includes(slug)),
-  "service area data is restricted to Fresno, Clovis, Madera, and close-in Fresno neighborhoods",
+  "service area data preserves six Fresno pages and adds the seven approved South Bay pages",
 );
 
 for (const slug of removedAreaSlugs) {
@@ -89,15 +91,24 @@ assert(
 );
 
 assert(
-  /robots:\s*{[\s\S]*index:\s*false[\s\S]*follow:\s*true[\s\S]*}/.test(
-    serviceCityPage,
-  ),
-  "service-city combo pages are noindex, follow",
+  serviceCityPage.includes('robots: { index: citySlug === "san-jose", follow: true }') &&
+    serviceCityPage.includes("sanJoseServiceContent[service.slug]") &&
+    sitemap.includes("...sanJoseServices") && sitemap.includes("${service.slug}-san-jose"),
+  "only substantive San Jose service pages are indexed and in the sitemap; existing Fresno combos stay noindex, follow",
 );
 
 assert(
   !schemaMarkup.includes("aggregateRating"),
   "LocalBusiness JSON-LD does not use self-serving aggregateRating markup",
+);
+
+assert(
+  ["cambrian", "almaden-valley", "west-san-jose"].every((slug) => neighborhoodData.includes(`slug: "${slug}"`)) &&
+    neighborhoodPage.includes("generateStaticParams") && neighborhoodPage.includes("canonical: path") &&
+    neighborhoodPage.includes("FAQPage") && neighborhoodPage.includes("BreadcrumbSchema") &&
+    neighborhoodPage.includes('market="southbay"') && neighborhoodPage.includes('defaultCity="San Jose"') &&
+    serviceAreaPage.includes("sanJoseNeighborhoods.map") && sitemap.includes("...neighborhoodPages"),
+  "three substantive San Jose neighborhood guides have canonicals, scoped pricing/intake, hub links, schema and sitemap entries",
 );
 
 // Service-area address only, per the owner's address-removal request.

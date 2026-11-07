@@ -107,11 +107,16 @@ for (const file of [
   "src/app/[serviceCity]/page.tsx",
 ]) {
   const contents = read(file);
+  // The indexed San Jose service pages are full pages, not thin combos: they may
+  // embed only the compact South Bay form the area template already requires.
+  const forms = contents.match(/<QuickQuoteForm\b[^>]*\/>/g) || [];
+  const southBayCompactOnly = file === "src/app/[serviceCity]/page.tsx" && forms.length > 0 &&
+    forms.every((tag) => tag.includes("compact") && tag.includes('pageMarket="southbay"'));
   assert(
     contents.includes("/book-now") &&
       (contents.includes('href="/book-now"') || contents.includes("href={quoteHref}")) &&
       !contents.includes("QuotePathPanel") &&
-      !contents.includes("QuickQuoteForm") &&
+      (!contents.includes("QuickQuoteForm") || southBayCompactOnly) &&
       !contents.includes("ContactForm"),
     `${file} links directly to the quote page without explanation panels or embedded forms`,
   );

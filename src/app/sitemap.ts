@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services } from "@/lib/services";
 import { blogPosts } from "@/lib/blogPosts";
+import { sanJoseNeighborhoods } from "@/lib/sanJoseNeighborhoods";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://newstarcleaning.com";
@@ -79,6 +80,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const sanJoseServices: MetadataRoute.Sitemap = services.map((service) => ({
+    url: `${baseUrl}/${service.slug}-san-jose`,
+    changeFrequency: "monthly",
+    priority: 0.85,
+  }));
+
   const blogIndexPosts: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.publishedAt),
@@ -86,10 +93,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  const neighborhoodPages: MetadataRoute.Sitemap = sanJoseNeighborhoods.map((neighborhood) => ({
+    url: `${baseUrl}/cleaning-services-san-jose/${neighborhood.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
   return [
     ...top,
     ...cityPages,
     ...servicePages,
+    ...sanJoseServices,
+    ...neighborhoodPages,
     ...blogIndexPosts,
   ];
 }

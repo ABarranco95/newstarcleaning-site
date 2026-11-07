@@ -5,9 +5,10 @@ import HomeBookingLink from "@/components/HomeBookingLink";
 import GoogleRating from "@/components/GoogleRating";
 import Icon from "@/components/Icon";
 import { StarRow } from "@/components/Icon";
-import { business } from "@/lib/business";
+
 import { googleReviews } from "@/lib/googleReviews";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+import MarketPhone from "@/components/MarketPhone";
 
 const directBookingUrl = resolveDirectBookingUrl();
 const featuredReview = googleReviews.find((review) => review.id === "joseph-b") ?? googleReviews[0];
@@ -34,7 +35,7 @@ const bookNowFaqs = [
 export const metadata: Metadata = {
   title: "Request Cleaning Pricing & Availability",
   description:
-    "Request residential or commercial cleaning pricing and availability from New Star Cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
+    "Request cleaning pricing and availability for San Jose and the South Bay, or Fresno, Clovis, and Madera. Your ZIP confirms the right service market.",
   alternates: { canonical: "/book-now" },
   openGraph: {
     title: "Request Cleaning Pricing & Availability | New Star Cleaning",
@@ -61,7 +62,7 @@ export default function BookNow() {
             <li><Icon name="check" />One-time or recurring: weekly, every other week or monthly</li>
             <li><Icon name="check" />If we miss something included in your cleaning, tell us within 24 hours. We&apos;ll make it right.</li>
           </ul>
-          <div className="site-links"><a href={business.phoneHref} data-phone-location="book_now_hero">Call {business.phoneDisplay}</a><HomeBookingLink onDark={false} placement="footer" /></div>
+          <div className="site-links"><MarketPhone location="book_now_hero" /><HomeBookingLink onDark={false} placement="footer" /></div>
           <figure className="site-form-review">
             <StarRow />
             <blockquote><p>&ldquo;{featuredReview.excerpt.join(" … ")}&rdquo;</p></blockquote>
@@ -69,7 +70,7 @@ export default function BookNow() {
           </figure>
         </div>
       </section>
-      <section className="site-section site-split site-rule"><div><h2>Before you send.</h2><p className="site-intro">Fresno, Clovis, and close-in neighborhoods. Madera appointments depend on route availability.</p></div><div className="site-disclosures">{bookNowFaqs.map((faq) => <details key={faq.q}><summary>{faq.q}</summary><p>{faq.a}</p></details>)}</div></section>
+      <section className="site-section site-split site-rule"><div><h2>Before you send.</h2><p className="site-intro">San Jose and the South Bay. Also serving Fresno, Clovis, and Madera. Enter your ZIP so we can confirm coverage and price the right market.</p></div><div className="site-disclosures">{bookNowFaqs.map((faq) => <details key={faq.q}><summary>{faq.q}</summary><p>{faq.a}</p></details>)}</div></section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

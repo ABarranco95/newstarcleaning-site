@@ -12,6 +12,7 @@ import PageViewTracker from "@/components/PageViewTracker";
 import WebsiteCallTracker from "@/components/WebsiteCallTracker";
 import PaidAttributionTracker from "@/components/PaidAttributionTracker";
 import MobileContactActions from "@/components/MobileContactActions";
+import MarketProvider from "@/components/MarketProvider";
 import { Suspense } from "react";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -94,10 +95,12 @@ export default function RootLayout({
         <PaidAttributionTracker />
         <WebsiteCallTracker />
         <SchemaMarkup />
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <Suspense fallback={null}><MobileContactActions /></Suspense>
+        <MarketProvider>
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <Suspense fallback={null}><MobileContactActions /></Suspense>
+        </MarketProvider>
       </body>
     </html>
   );

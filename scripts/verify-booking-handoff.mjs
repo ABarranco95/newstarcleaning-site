@@ -13,6 +13,10 @@ let params = new URLSearchParams();
 let stored = {};
 let sequence = 0;
 const events = [];
+const marketsModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync("src/lib/markets.ts", "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText, { module: marketsModule, exports: marketsModule.exports, URL, process: { env: {} } });
 vm.runInNewContext(emitted, {
   module: runtimeModule,
   exports: runtimeModule.exports,
@@ -25,6 +29,8 @@ vm.runInNewContext(emitted, {
     if (name === "@/lib/attribution") return { readFirstPaidTouch: () => stored };
     if (name === "@/lib/conversionTracking") return { trackFunnelEvent: (event, payload) => events.push({ event, payload }) };
     if (name === "@/lib/submissionId") return { createSubmissionId: () => `handoff-test-${++sequence}` };
+    if (name === "@/lib/markets") return marketsModule.exports;
+    if (name === "@/components/MarketProvider") return { useMarket: (id) => marketsModule.exports.markets[id || "fresno"] };
     throw new Error(`Unexpected booking-link dependency: ${name}`);
   },
 });
@@ -56,6 +62,10 @@ for (const [service, city, frequency] of [
   check(clicked.searchParams.get("nsc_service") === (service || null) && clicked.searchParams.get("gclid") === "current-test", "click-time stamping preserves known context and attribution");
 }
 const portalModule = { exports: {} };
+params = new URLSearchParams("zip=93711&market=fresno");
+const regionalLink = render({ baseUrl: "https://booking.example.test/book?zip=93711", service: "Deep cleaning", zip: "95118", market: "southbay" });
+const regionalUrl = new URL(regionalLink.props.href);
+check(["zip", "nsc_zip"].every(key => regionalUrl.searchParams.get(key) === "95118") && ["market", "nsc_market"].every(key => regionalUrl.searchParams.get(key) === "southbay"), "explicit ZIP and page market reach ordinary booking URLs in canonical and legacy hint fields");
 const bookingEnv = { NEXT_PUBLIC_DIRECT_BOOKING_URL: "" };
 vm.runInNewContext(ts.transpileModule(readFileSync("src/lib/bookingPortal.ts", "utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
@@ -101,12 +111,14 @@ for (const frequency of ["weekly", "bi-weekly", "monthly"]) {
   check(snapshot.frequency === frequency, "later form edits cannot change accepted recurring frequency");
   check(prefillModule.exports.acceptedPrefillSnapshot(submitted, false, true) === null, "unaccepted request cannot yield a carryover snapshot");
 }
-check(form.includes("acceptedPrefillSnapshot(formData, true, customerCityRef.current)") && form.includes("setAcceptedSnapshot(apexAccepted ? submittedSnapshot : null)"), "success snapshot comes from the submitted customer closure and is acceptance-gated");
+check(form.includes("acceptedPrefillSnapshot({ ...formData, ...location }, true, customerCityRef.current)") && form.includes("setAcceptedSnapshot(apexAccepted ? submittedSnapshot : null)"), "success snapshot comes from the submitted customer/location closure and is acceptance-gated");
 check(form.includes("<BookingPrefillLink baseUrl={directBookingUrl} snapshot={acceptedSnapshot}") && form.includes("onRelease={() => setAcceptedSnapshot(null)}"), "success card passes frequency privately and releases the snapshot after transfer");
 check(form.includes('"Get a quote"') && !form.includes('"Get my price"'), "paid lead submit describes a quote request, not instant pricing");
 check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
 
 const prefill = prefillModule.exports;
+const regionalSnapshot = prefill.acceptedPrefillSnapshot({ service: "Deep cleaning", zip: "95118", market: "southbay", city: "San Jose" }, true, false);
+check(regionalSnapshot.zip === "95118" && regionalSnapshot.market === "southbay" && !regionalSnapshot.city && prefill.validPayload(regionalSnapshot), "ZIP/market survive privately without promoting a campaign city to the customer's address");
 const emptyMove = prefill.acceptedPrefillSnapshot({ service: "Move-in / move-out cleaning", moveOutAddons: [] }, true, true);
 check(Array.isArray(emptyMove.moveOutAddons) && emptyMove.moveOutAddons.length === 0 && Object.isFrozen(emptyMove.moveOutAddons), "explicit empty Move extras survive as a frozen Essentials selection");
 check(!Object.hasOwn(prefill.acceptedPrefillSnapshot({ service: "Move-in / move-out cleaning" }, true, true), "moveOutAddons"), "omitted Move extras remain omitted, not silently changed to Essentials");
@@ -144,16 +156,17 @@ for (const service of ["Deep cleaning", "Standard recurring cleaning", "Move-in 
     paidInternal = mode === "url" || mode === "blocked-storage";
     storageInternal = mode === "storage";
     storageBlocked = mode === "blocked-storage";
-    const tree = paidModule.exports.default({ baseUrl: "https://book.newstarcleaning.com/book?name=excluded&gclid=excluded", service, bedrooms: "3", bathrooms: "2", squareFeet: "1500", primary: true });
+    const tree = paidModule.exports.default({ baseUrl: "https://book.newstarcleaning.com/book?name=excluded&gclid=excluded", service, bedrooms: "3", bathrooms: "2", squareFeet: "1500", zip: "95118", market: "southbay", primary: true });
     const button = tree.props.children[0];
     const count = transfers.length;
     check(button.props.type === "button" && button.props.className.includes("qf-submit") && transfers.length === count, "priced booking is the primary non-submit action; rendering does not open booking");
     button.props.onClick();
     const { destination, snapshot } = transfers.at(-1);
     const url = new URL(destination);
-    check(transfers.length === count + 1 && url.searchParams.get("nsinternal") === (mode === "external" ? null : "1") && [...url.searchParams.keys()].every(key => key === "nsinternal"), "explicit click carries internal exclusion on the URL, not identity or attribution IDs");
+    check(transfers.length === count + 1 && url.searchParams.get("nsinternal") === (mode === "external" ? null : "1") && url.searchParams.get("zip") === "95118" && url.searchParams.get("market") === "southbay" && [...url.searchParams.keys()].every(key => ["nsinternal", "zip", "market"].includes(key)), "explicit click carries ZIP/market and internal exclusion, never identity or attribution IDs in the URL");
     check(snapshot.service === service && snapshot.squareFeet === "1500" && snapshot.frequency === "one-time" && snapshot.condition === "normal" && snapshot.gclid === "gclid-fixture" && !snapshot.name && !snapshot.fbclid && !snapshot.smsConsent, "paid prefill keeps home pricing defaults and allowlisted attribution only");
     check(snapshot.funnelSessionId === "11111111-1111-4111-8111-111111111111", "paid prefill carries the originating journey session");
+    check(snapshot.zip === "95118" && snapshot.market === "southbay" && prefill.validPayload(snapshot), "paid private prefill carries the priced ZIP/market in an accepted wire shape");
     check(service === "Move-in / move-out cleaning" ? Array.isArray(snapshot.moveOutAddons) && snapshot.moveOutAddons.length === 0 : !Object.hasOwn(snapshot, "moveOutAddons"), "Move alone explicitly requests Essentials with empty extras");
     check(events.at(-1).event === "booking_cta_click" && events.at(-1).payload.ctaLocation === "paid_live_price", "paid click retains the diagnostic funnel event, not a lead conversion");
   }

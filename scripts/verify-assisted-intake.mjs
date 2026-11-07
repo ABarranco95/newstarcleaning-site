@@ -239,7 +239,7 @@ function mountForm(props = {}) {
   const Component = loadTs(site, "src/components/QuickQuoteForm.tsx", {
     globals: {
       window: {
-        location: { pathname: props.paidSearch ? "/google-ads" : "/services/deep-cleaning", search: "?gclid=synthetic-gclid&utm_campaign=synthetic-assisted", href: "https://site.example.invalid/" },
+        location: { pathname: props.paidSearch ? "/google-ads" : "/services/deep-cleaning", search: props.testSearch || "?gclid=synthetic-gclid&utm_campaign=synthetic-assisted", href: "https://site.example.invalid/" },
         localStorage: { getItem: (key) => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value), removeItem: (key) => storage.delete(key) },
       },
       document: { referrer: "https://www.google.com/" },
@@ -258,6 +258,7 @@ function mountForm(props = {}) {
       // paid UX checks. Keep this intake handler harness inert on that import.
       "@/components/PaidQuoteStickyCTA": { default: () => null },
       "@/components/PaidPriceBookingButton": { default: () => null },
+      "@/components/MarketProvider": { useMarket: (id) => loadTs(site, "src/lib/markets.ts").markets[id || "fresno"] },
       // Price failures/loading must not affect intake. Quote transport is
       // exercised separately; this boundary only supplies the displayed note.
       "@/lib/usePaidPriceRange": { default: () => props.testPrice || { status: "hidden" } },
@@ -313,6 +314,20 @@ function mountForm(props = {}) {
   }
   return { nodes, fields, field, change, openDetails, contactFirst, submit, conversions, submissions, events, setReply(value) { reply = value; } };
 }
+
+// A known service is not re-asked; a fresh request must not inherit a hidden,
+// empty service after the accepted form resets.
+const seededService = mountForm({ compact: true, testSearch: "?service=deep-cleaning&market=southbay&zip=95118" });
+assert.equal(seededService.field("service").props.type, "hidden");
+assert.equal(seededService.field("service").props.value, "Deep cleaning");
+seededService.contactFirst();
+seededService.change("city", "San Jose"); seededService.change("name", "Intake Fixture"); seededService.change("phone", "408-555-0142");
+seededService.setReply({ ok: true, status: 201, body: { metadata: { apex: { success: true } } } });
+await seededService.submit();
+assert.equal(seededService.submissions[0].body.zip, "95118");
+assert.equal(seededService.submissions[0].body.market, "southbay");
+seededService.nodes().find(node => node.type === "button" && String(node.props.children).includes("Send another request")).props.onClick();
+assert(seededService.fields("service").every(node => node.props.type === "radio"), "fresh request exposes valid service choices rather than a hidden empty value");
 
 // Pricing never gates the actual submit handler or changes its lead contract.
 for (const status of ["hidden", "loading", "custom", "ready"]) {
