@@ -69,14 +69,7 @@ export const homeResultPhotos: RealWorkPhoto[] = [
     alt: "Bedroom with a bed and wood-look floors",
     caption: "Bedroom",
   },
-  // Watermarked Aug 2026 source — do not wire on any surface. Kept in place
-  // because other modules index this array positionally; remove only together
-  // with every index reference.
-  {
-    src: "/photos/real-work/living-room-vacuumed-new-star.webp",
-    alt: "Living room with vacuum lines in the carpet, sofa, and large grid window",
-    caption: "Living room carpet",
-  },
+
 ];
 
 // Unfurnished spaces and empty interiors; these do not establish a move package.
@@ -111,22 +104,11 @@ export const emptyHomeResultPhotos: RealWorkPhoto[] = [
     alt: "Empty closet with shelving, hanging rods, and tile floor",
     caption: "Closet detail",
   },
-  // Watermarked Aug 2026 sources — do not wire on any surface. Kept in place
-  // because other modules index this array positionally; remove only together
-  // with every index reference.
-  {
-    src: "/photos/real-work/den-built-ins-clean-new-star.webp",
-    alt: "Empty den with full-wall wood built-in bookcases and a bay window",
-    caption: "Den built-ins",
-  },
-  {
-    src: "/photos/real-work/walk-in-pantry-clean-new-star.webp",
-    alt: "Empty walk-in corner pantry with shelves and a tile floor",
-    caption: "Walk-in pantry",
-  },
+
 ];
 
-// Same oven, same angle: verified before/after pair.
+// The five pairs/* exports are watermarked, never render (INVENTORY §1c).
+// Kept for the existing service-context verifier's scope/caveat contract.
 export const ovenBuildupPair: RealWorkPair = {
   before: {
     src: "/photos/real-work/pairs/oven-buildup-before.webp",
@@ -257,6 +239,18 @@ export const ovenInteriorPair: RealWorkPair = {
 };
 
 // Curated homepage set: varied rooms, no repeats of one surface.
+export const showerDetailPair: RealWorkPair = {
+  before: { src: "/photos/real-work/paid/shower-detail-before.webp", alt: "Shower corner and black caddies with deposits before cleaning", caption: "Shower caddies before" },
+  after: { src: "/photos/real-work/paid/shower-detail-after.webp", alt: "The same shower corner and caddies after cleaning", caption: "Shower caddies after" },
+  label: "Shower corner and caddies from our work. Some spotting can remain.",
+};
+
+export const refrigeratorDetailPair: RealWorkPair = {
+  before: { src: "/photos/real-work/paid/refrigerator-detail-before.webp", alt: "Refrigerator interior detail before cleaning", caption: "Refrigerator detail before" },
+  after: { src: "/photos/real-work/paid/refrigerator-detail-after.webp", alt: "The same refrigerator interior detail after cleaning", caption: "Refrigerator detail after" },
+  label: "Refrigerator interior detail from our work. Appliance interiors are optional add-ons; wear and staining can remain.",
+};
+
 export const realWorkPhotos: RealWorkPhoto[] = [
   homeResultPhotos[0],
   homeResultPhotos[1],

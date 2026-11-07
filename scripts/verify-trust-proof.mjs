@@ -8,8 +8,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 // Review-proof contract: every quote traces to the recorded profile read.
-// The historical rating stays recorded, not public: the reinstated listing
-// does not display it. Public proof has no rating claims, counts or links.
+// The current score is public after the review-carrying CID correction.
+// Public proof never exposes counts or links, or implies South Bay job history.
 const require = createRequire(import.meta.url);
 const read = (file) => readFileSync(file, "utf8");
 function load(file, imports = {}) {
@@ -71,13 +71,14 @@ const { default: GoogleRating } = load("src/components/GoogleRating.tsx", {
   "@/lib/googleRating": ratingModule,
   "@/components/Icon": StarRowModule,
 });
-for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { market: "southbay", prominent: true }, { market: "southbay", onDark: true, prominent: true }]) {
+assert.equal(business.googleMapsUrl, "https://www.google.com/maps?cid=13545152036473270457", "rating is backed by the current review-carrying profile");
+for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { market: "southbay" }, { market: "southbay", onDark: true }, { market: "southbay", prominent: true }, { market: "southbay", onDark: true, prominent: true }]) {
   const html = renderToStaticMarkup(createElement(GoogleRating, props));
   assertReviewPresentation(html, "GoogleRating");
   const visible = html.replace(/<[^>]*>/g, "");
-  assert(!/on Google|5\.0|ns-rating-score|<svg/i.test(html), "shared proof renders no unverifiable Google score, mark or rating stars");
+  assert(visible.includes(`${googleRating.score} on Google`), "shared proof renders the verified current Google score from its single source");
   assert.equal(visible.includes(homesServedLine), Boolean(props.prominent) && props.market !== "southbay", "only prominent Fresno placements retain the recorded local homes served line");
-  if (!props.prominent || props.market === "southbay") assert.equal(html, "", "ordinary and South Bay badge placements render no historical or false-local proof");
+  if (props.market === "southbay") assert(visible.includes("Central Valley customers"), "every South Bay rating placement labels the source market");
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
 }
 const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
@@ -109,8 +110,7 @@ for (const props of [{}, { reviews: googleReviews }, ...["home", "standard", "de
   }
 }
 
-// Reject numerical public review counts, and nothing may add review markup
-// that implies a first-party rating Google does not display. Ordinary Maps
+// Reject numerical public review counts and self-served rating schema. Ordinary Maps
 // navigation elsewhere is not a review CTA; link checks stay on proof surfaces.
 function sourceFiles(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -125,7 +125,10 @@ for (const file of sourceFiles("src")) {
     assert.fail(`${file}: "${match[0]}" is a public numerical review-count claim`);
   }
   assert(!/aggregateRating|reviewCount"\s*:/.test(source), `${file}: no self-served review schema`);
-  if (file.endsWith(".tsx")) assert(!/googleRating\.score|5\.0\s*(?:on Google|★)/.test(source), `${file}: no public historical rating claim`);
+  if (file.endsWith(".tsx")) {
+    assert(!/5\.0\s*(?:on Google|★)/.test(source), `${file}: no typed Google rating claims`);
+    if (file.replaceAll("\\", "/") !== "src/components/GoogleRating.tsx") assert(!/googleRating\.score/.test(source), `${file}: only GoogleRating reads the score`);
+  }
 }
 
 const home = read("src/app/page.tsx");
@@ -143,4 +146,4 @@ assert(!paid.includes("usually the same day") && !paid.includes("rushing a free 
 // apostrophe entity and wrapped source lines normalize to the visible wording.
 const terms = read("src/app/terms/page.tsx").replace(/&apos;/g, "'").replace(/\s+/g, " ");
 assert(terms.includes("If something included in the agreed cleaning scope was missed, tell us within 24 hours of the completed service and we'll come back and make it right at no charge.") && terms.includes("Requests for work outside the confirmed scope are not included."), "the scoped 24-hour free-return promise is backed by the published terms");
-console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews (read ${googleRating.checkedOn}), historical rating suppressed in all shared badge variants and TrustStrip, ReviewCards without review links or public counts, prominent homes served line, no self-served rating schema, 24-hour promise backed by terms.`);
+console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews (read ${googleRating.checkedOn}), verified score in every badge variant with Central Valley labels for South Bay, no score in TrustStrip, no review links/counts or self-served rating schema, scoped 24-hour promise backed by terms.`);

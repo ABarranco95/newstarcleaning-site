@@ -16,12 +16,18 @@ export default function MobileContactActions() {
   const [quoteInView, setQuoteInView] = useState<string | null>(null);
 
   useEffect(() => {
-    const quote = document.querySelector("#quote");
-    if (!quote) return;
-    // The form is already the next action. Never cover its choices with a
-    // second quote action, even before a visitor focuses an input.
-    const observer = new IntersectionObserver(([entry]) => setQuoteInView(entry.isIntersecting ? pathname : null));
-    observer.observe(quote);
+    const quote = document.querySelector("#quote, #quote-form");
+    const pickers = document.querySelectorAll("[data-price-picker]");
+    const visible = new Set<Element>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+      setQuoteInView(visible.size ? pathname : null);
+    });
+    if (quote) observer.observe(quote);
+    pickers.forEach((picker) => observer.observe(picker));
     return () => observer.disconnect();
   }, [pathname]);
 

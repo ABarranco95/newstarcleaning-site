@@ -19,22 +19,30 @@ const residentialLinks: NavLink[] = [
 ];
 
 const businessLinks: NavLink[] = [
-  { label: "Commercial", href: "/services/commercial-cleaning" },
+  { label: "Office & commercial", href: "/services/commercial-cleaning" },
   { label: "Post-construction", href: "/services/post-construction-cleaning" },
 ];
 
 const navigation: (NavLink & { panel?: "services" })[] = [
   { label: "Services", href: "/services", panel: "services" },
   { label: "Our work", href: "/our-work" },
-  { label: "Areas", href: "/service-areas" },
+
   { label: "About", href: "/about" },
 ];
 
+const sanJoseLinks: NavLink[] = [
+  { label: "Regular cleaning in San Jose", href: "/standard-cleaning-san-jose" },
+  { label: "Deep cleaning in San Jose", href: "/deep-cleaning-san-jose" },
+  { label: "Move-out cleaning in San Jose", href: "/move-out-cleaning-san-jose" },
+];
+const southBayLinks: NavLink[] = ["San Jose", "Santa Clara", "Sunnyvale", "Cupertino", "Campbell", "Saratoga", "Los Gatos"].map((label) => ({ label, href: `/cleaning-services-${label.toLowerCase().replaceAll(" ", "-")}` }));
+const centralValleyLinks: NavLink[] = ["Fresno", "Clovis", "Madera"].map((label) => ({ label, href: `/cleaning-services-${label.toLowerCase()}` }));
 const mobileGroups: { title: string; links: NavLink[] }[] = [
   { title: "Home cleaning", links: residentialLinks },
-  { title: "For businesses", links: [...businessLinks, { label: "All services", href: "/services" }] },
-  { title: "Our work", links: [{ label: "Photo gallery & before/after", href: "/our-work" }] },
-  { title: "Local areas", links: [{ label: "Service areas", href: "/service-areas" }] },
+  { title: "In San Jose", links: sanJoseLinks },
+  { title: "Areas", links: [...southBayLinks, ...centralValleyLinks, { label: "All service areas →", href: "/service-areas" }] },
+  { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Our work", href: "/our-work" }, { label: "Service checklist", href: "/checklist" }, { label: "Contact", href: "/contact" }, { label: "Cleaning tips", href: "/blog" }] },
+  { title: "Fresno-area businesses", links: [...businessLinks, { label: "Request a walkthrough", href: "/commercial-quote" }] },
 ];
 
 export default function HomeHeader() {
@@ -52,30 +60,35 @@ export default function HomeHeader() {
   };
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [areasOpen, setAreasOpen] = useState(false);
   const menu = useRef<HTMLButtonElement>(null);
   const servicesTrigger = useRef<HTMLButtonElement>(null);
+  const areasTrigger = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
+  const areasPanel = useRef<HTMLDivElement>(null);
   const header = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 1280px)");
-    const reset = () => { setOpen(false); setServicesOpen(false); };
+    const reset = () => { setOpen(false); setServicesOpen(false); setAreasOpen(false); };
     desktop.addEventListener("change", reset);
     return () => desktop.removeEventListener("change", reset);
   }, []);
   useEffect(() => {
-    if (!open && !servicesOpen) return;
+    if (!open && !servicesOpen && !areasOpen) return;
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
         setServicesOpen(false);
-        (open ? menu : servicesTrigger).current?.focus();
+        setAreasOpen(false);
+        (open ? menu : servicesOpen ? servicesTrigger : areasTrigger).current?.focus();
       }
     };
     const outside = (event: PointerEvent) => {
       const target = event.target as Node;
       if (open && !header.current?.contains(target)) setOpen(false);
       if (servicesOpen && !panel.current?.contains(target)) setServicesOpen(false);
+      if (areasOpen && !areasPanel.current?.contains(target)) setAreasOpen(false);
     };
     document.addEventListener("keydown", close);
     document.addEventListener("pointerdown", outside);
@@ -83,12 +96,12 @@ export default function HomeHeader() {
       document.removeEventListener("keydown", close);
       document.removeEventListener("pointerdown", outside);
     };
-  }, [open, servicesOpen]);
+  }, [open, servicesOpen, areasOpen]);
 
   return (
-    <header ref={header} key={pathname} className="home-header" data-open={open} onClickCapture={(event) => { if ((event.target as Element).closest("a")) { setOpen(false); setServicesOpen(false); } }} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setServicesOpen(false); } }}>
+    <header ref={header} key={pathname} className="home-header ns-on-dark" data-open={open} onClickCapture={(event) => { if ((event.target as Element).closest("a")) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }}>
       <div className="home-header-inner">
-        <Link href="/" aria-label="New Star Cleaning home" className="home-wordmark"><Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} sizes="(min-width: 1024px) 190px, 156px" /></Link>
+        <Link href="/" aria-label="New Star Cleaning home" className="home-wordmark"><Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} sizes="(min-width: 1024px) 176px, 156px" /></Link>
         <nav className="home-desktop-nav" aria-label="Main navigation">
           <div ref={panel} className={`home-nav-item home-nav-panel${servicesOpen ? " is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setServicesOpen(false); }}>
             <button
@@ -98,7 +111,7 @@ export default function HomeHeader() {
               aria-expanded={servicesOpen}
               aria-controls="home-services-panel"
               aria-current={servicesCurrent ? "location" : undefined}
-              onClick={() => setServicesOpen(!servicesOpen)}
+              onClick={() => { setServicesOpen(!servicesOpen); setAreasOpen(false); }}
             >
               Services <span aria-hidden="true" className="home-nav-caret">▾</span>
             </button>
@@ -111,11 +124,20 @@ export default function HomeHeader() {
                 {residentialLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
               </div>
               <div className="home-services-panel-group">
-                <p className="home-services-panel-label">For businesses &amp; job sites</p>
+                <p className="home-services-panel-label">In San Jose</p>
+                {sanJoseLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
+              </div>
+              <div className="home-services-panel-group">
+                <p className="home-services-panel-label">Fresno-area businesses</p>
                 {businessLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
                 <Link href="/services" aria-current={currentLocation("/services")} className="home-services-panel-more">All services <span aria-hidden="true">→</span></Link>
+                <Link href="/checklist" className="home-services-panel-more">Service checklist →</Link>
               </div>
             </div>
+          </div>
+          <div ref={areasPanel} className={`home-nav-panel${areasOpen ? " is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setAreasOpen(false); }}>
+            <button type="button" ref={areasTrigger} className="home-nav-trigger" aria-expanded={areasOpen} aria-controls="home-areas-panel" aria-current={currentLocation("/service-areas")} onClick={() => { setAreasOpen(!areasOpen); setServicesOpen(false); }}>Areas <span aria-hidden="true">▾</span></button>
+            <div id="home-areas-panel" className="home-services-panel home-areas-panel"><div><p className="home-services-panel-label">San Jose &amp; South Bay</p>{southBayLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}</div><div><p className="home-services-panel-label">Also serving</p>{centralValleyLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}<Link href="/service-areas" className="home-services-panel-more">All service areas →</Link></div></div>
           </div>
           {navigation.filter((link) => !link.panel).map((link) => (
             <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className={currentLocation(link.href) ? "is-active" : undefined}>{link.label}</Link>
@@ -131,21 +153,14 @@ export default function HomeHeader() {
         </div>
       </div>
       {open ? <nav id="home-mobile-menu" className="home-mobile-menu" aria-label="Mobile navigation">
+        <div className="home-mobile-contact"><HomeBookingLink /><div className="home-mobile-contact-row"><a href={business.phoneHref} data-phone-location="header_mobile">Call</a><a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_menu">Text</a></div></div>
         {mobileGroups.map((group) => (
-          <div key={group.title} className="home-mobile-group">
+          <div key={group.title} className={`home-mobile-group${group.title === "Areas" ? " home-mobile-areas" : ""}`}>
             <p className="home-mobile-group-title">{group.title}</p>
-            {group.links.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} onClick={() => setOpen(false)}>{link.label}<span aria-hidden="true">→</span></Link>)}
+            <div>{group.links.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} onClick={() => setOpen(false)}>{link.label}</Link>)}</div>
           </div>
         ))}
-        <div className="home-mobile-group">
-          <p className="home-mobile-group-title">Company</p>
-          <Link href="/about" aria-current={currentLocation("/about")} onClick={() => setOpen(false)}>About New Star<span aria-hidden="true">→</span></Link>
-          <Link href="/checklist" aria-current={currentLocation("/checklist")} onClick={() => setOpen(false)}>Service checklist<span aria-hidden="true">→</span></Link>
-        </div>
-        <div className="home-mobile-contact">
-          <a href={business.phoneHref} data-phone-location="header_mobile">Call {business.phoneDisplay}</a>
-          <a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_menu">Text us</a>
-          <HomeBookingLink placement="footer" onDark={false} />
+        <div>
           <Suspense fallback={<Link href={quoteHref}>Get a quote</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
         </div>
       </nav> : null}

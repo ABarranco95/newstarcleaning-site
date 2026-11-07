@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHero from "@/components/SiteHero";
-import GoogleRating from "@/components/GoogleRating";
+import ProofRow from "@/components/ProofRow";
+import MarketPhone from "@/components/MarketPhone";
 import Icon from "@/components/Icon";
 import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
@@ -116,16 +117,16 @@ export default function PostConstructionCleaningPage() {
         description="The build is nearly finished. Get the space ready for handoff with final interior cleaning for new homes, remodels, and tenant improvements. Scope and deadline confirmed before scheduling."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
         tone="dark"
+        proof={<ProofRow market="fresno" tone="dark" />}
       >
-        <ul className="site-hero-points">
+        <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
         <div className="site-actions">
-          <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">→</span></a>
-          <a href={business.phoneHref} className="home-text-link">Call {business.phoneDisplay}</a>
+          <Link href={quoteHref} className="home-button">Request a walkthrough <span aria-hidden="true">→</span></Link>
+          <MarketPhone className="site-hero-phone" location="construction_service_hero">Call </MarketPhone>
         </div>
-        <div className="site-proof-row"><GoogleRating /></div>
-        <p className="site-note">Fresno &amp; Clovis. Madera appointments depend on route availability.</p>
+        <p className="site-note text-on-dark-mute">Fresno &amp; Clovis. Madera appointments depend on route availability.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="construction-request-title">

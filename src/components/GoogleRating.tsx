@@ -1,27 +1,22 @@
-import { homesServedLine } from "@/lib/googleRating";
+import { StarRow } from "@/components/Icon";
+import { googleRating, homesServedLine } from "@/lib/googleRating";
 import type { MarketId } from "@/lib/markets";
 
-// The reinstated listing does not display the historical rating. Suppress
-// the shared badge everywhere; keep only the independently confirmed homes
-// served line in prominent Fresno placements. It is not South Bay job history.
-// Recorded review quotes remain separate.
-export default function GoogleRating({
-  onDark = false,
-  prominent = false,
-  market = "fresno",
-}: {
+interface GoogleRatingProps {
   onDark?: boolean;
   prominent?: boolean;
   market?: MarketId;
-}) {
-  if (!prominent || market === "southbay") return null;
+}
 
+export default function GoogleRating({ onDark = false, prominent = false, market = "fresno" }: GoogleRatingProps) {
   return (
-    <span
-      data-review-proof
-      className={`ns-rating${onDark ? " ns-rating-dark" : ""}${prominent ? " ns-rating-lg" : ""}`}
-    >
-      <span className="ns-rating-date">{homesServedLine}</span>
+    <span data-review-proof className={`ns-rating${onDark ? " ns-rating-dark" : ""}${prominent ? " ns-rating-lg" : ""}`}>
+      <span className="ns-sr">Rated {googleRating.score} out of {googleRating.scale} on Google. </span>
+      <span className="ns-rating-main" aria-hidden="true">
+        <StarRow />
+        <span className="ns-rating-score"><span className="ns-rating-number">{googleRating.score}</span> on Google</span>
+      </span>
+      {market === "southbay" ? <span className="ns-rating-date">Central Valley customers</span> : prominent ? <span className="ns-rating-date">{homesServedLine}</span> : null}
     </span>
   );
 }

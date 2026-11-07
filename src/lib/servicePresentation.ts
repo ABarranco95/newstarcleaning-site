@@ -6,6 +6,11 @@ import {
   kitchenSurfacesPhoto,
   ovenInteriorPair,
   tubSurroundPair,
+  showerDetailPair,
+  ventDetailPair,
+  refrigeratorFullPair,
+  refrigeratorDetailPair,
+  vanityDetailPhoto,
   type RealWorkPair,
   type RealWorkPhoto,
 } from "@/lib/realWorkPhotos";
@@ -26,6 +31,7 @@ type ServicePresentation = {
   proofPhotoTags?: Record<number, string>;
   /** Verified same-surface before/after pair; only set where one exists. */
   proofPair?: RealWorkPair;
+  proofPairs?: RealWorkPair[];
   pairNote?: string;
 };
 
@@ -37,10 +43,10 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
     lead: "For a home that needs regular upkeep. We scrub the sinks, clean the bathrooms, wipe the kitchen surfaces and take care of the floors. Even the inside of the microwave is included when it's empty and accessible.",
     proofLayout: "cadence",
     proofPhotos: [
-      kitchenSurfacesPhoto,
       homeResultPhotos[0],
-      homeResultPhotos[1],
       bathroomResultPhotos[1],
+      kitchenSurfacesPhoto,
+      vanityDetailPhoto,
     ],
   },
   "deep-cleaning": {
@@ -55,10 +61,11 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
       emptyHomeResultPhotos[3],
     ],
     proofPair: tubSurroundPair,
+    proofPairs: [tubSurroundPair, showerDetailPair, ventDetailPair],
     pairNote: "Tub and tile surround before and after cleaning. Surface condition affects the result; wear and staining can remain.",
   },
   "move-out-cleaning": {
-    photo: emptyHomeResultPhotos[1],
+    photo: emptyHomeResultPhotos[5],
     summary: "For an empty home. Deep-cleaning work plus empty cabinet, drawer, and closet interiors.",
     boundary: "Oven and refrigerator interiors, interior window glass, and reachable window tracks are optional add-ons. Deposit returns are not guaranteed.",
     lead: "Moving out or getting the keys? We clean the empty home's kitchen, bathrooms and floors, down to the baseboards. Empty cabinet, drawer and closet interiors are included, not extra.",
@@ -70,6 +77,7 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
     ],
     proofPhotoTags: { 2: "Add-on" },
     proofPair: ovenInteriorPair,
+    proofPairs: [refrigeratorFullPair, ovenInteriorPair, refrigeratorDetailPair],
     pairNote: "An oven interior from our work. Appliance exteriors are included in move-out cleaning; oven and refrigerator interiors are optional add-ons.",
   },
 };

@@ -18,7 +18,7 @@ const messages: Record<PrefillSendStatus, string> = {
   cancelled: "Home-detail transfer stopped. Nothing was booked or submitted.",
 };
 
-export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, zip, market, primary = false }: {
+export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, zip, market, primary = false, source = "google-ads", ctaLocation = "paid_live_price" }: {
   baseUrl: string;
   service: "Deep cleaning" | "Standard recurring cleaning" | "Move-in / move-out cleaning";
   bedrooms: string;
@@ -27,6 +27,8 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
   zip?: string;
   market: MarketId;
   primary?: boolean;
+  source?: string;
+  ctaLocation?: string;
 }) {
   const [destination] = useState<string | null>(() => {
     try {
@@ -73,8 +75,8 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           cancelRef.current = startBookingPrefill(window, url.toString(), snapshot, setStatus);
           try {
             trackFunnelEvent("booking_cta_click", {
-              source: "google-ads", service, page: window.location.pathname,
-              ctaLocation: "paid_live_price",
+              source, service, page: window.location.pathname,
+              ctaLocation,
               home: completedHome({ service, bedrooms, bathrooms, sqft: squareFeet }),
             });
           } catch { /* Analytics must not interrupt the synchronous handoff. */ }

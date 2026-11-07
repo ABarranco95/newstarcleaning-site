@@ -7,13 +7,17 @@ import SiteHero from "@/components/SiteHero";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import ServiceContextLink from "@/components/ServiceContextLink";
 import GoogleRating from "@/components/GoogleRating";
-import TrustStrip from "@/components/TrustStrip";
+import HomeBookingLink from "@/components/HomeBookingLink";
+import HowItWorks from "@/components/HowItWorks";
+import MarketPhone from "@/components/MarketPhone";
+import ProofRow from "@/components/ProofRow";
 import ReviewCards from "@/components/ReviewCards";
 import Icon, { type IconName } from "@/components/Icon";
-import { homeResultPhotos, bathroomResultPhotos, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
+import { homeResultPhotos, cleanBathroomPhoto, emptyHomeResultPhotos } from "@/lib/realWorkPhotos";
+import { googleReviews } from "@/lib/googleReviews";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services } from "@/lib/services";
-import { business } from "@/lib/business";
+
 import "@/components/service-editorial.css";
 
 const siteUrl = "https://newstarcleaning.com";
@@ -42,7 +46,7 @@ const guides = [
     slug: "standard-cleaning",
     short: "Standard",
     name: "Standard cleaning",
-    photo: homeResultPhotos[1],
+    photo: homeResultPhotos[2],
     fit: "Keep up with the rooms you use every day. We clean the kitchen and bathrooms, dust accessible surfaces, and vacuum or mop the floors.",
     pick: "For an already-maintained home, once or on a weekly, bi-weekly, or monthly schedule. If there's heavy buildup, start with a deep clean.",
   },
@@ -50,7 +54,7 @@ const guides = [
     slug: "deep-cleaning",
     short: "Deep",
     name: "Deep cleaning",
-    photo: bathroomResultPhotos[1],
+    photo: cleanBathroomPhoto,
     fit: "The kitchen, bathrooms and floors, with more time for shower buildup, baseboards, door frames and reachable fixtures.",
     pick: "Choose this when a regular clean won't be enough. Oven, fridge, cabinet interiors, and interior windows stay optional add-ons.",
   },
@@ -58,7 +62,7 @@ const guides = [
     slug: "move-out-cleaning",
     short: "Move-out",
     name: "Move-in / move-out",
-    photo: emptyHomeResultPhotos[1],
+    photo: emptyHomeResultPhotos[5],
     fit: "An empty home cleaned for the move. Kitchens, bathrooms, floors and deep-cleaning details, including inside empty cabinets, drawers and closets.",
     pick: "For moving out or moving in. Inside oven and fridge, interior glass, and tracks are optional add-ons. We can't promise a deposit return.",
   },
@@ -94,35 +98,25 @@ const primaryAreas = serviceAreas.filter((area) =>
   ["fresno", "clovis", "madera"].includes(area.slug),
 );
 
-const heroPoints = [
-  "One-time or recurring cleaning",
-  "Price confirmed before anything is booked",
-  "We bring our own cleaning supplies",
-];
+const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.find((review) => review.id === id)!);
 
 export default function ServicesPage() {
   return (
     <div className="site-reference">
-      <SiteHero tone="dark" eyebrow="Services" title="House cleaning services in Fresno & Clovis." description="Need help keeping up, or is there buildup that needs a closer look? Here's what we clean with each service. If you're not sure which fits, we'll help you choose." photo={homeResultPhotos[1]} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <ul className="site-hero-points">
-          {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
-        </ul>
-        <div className="site-actions"><Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense><a href="#compare" className="home-text-link">Compare services</a></div>
-        <div className="site-hero-meta"><GoogleRating /><a href={business.phoneHref} className="site-hero-phone" data-phone-location="services_hero"><Icon name="phone" /> {business.phoneDisplay}</a></div>
+      <SiteHero eyebrow="Services" title="House cleaning services in Fresno & Clovis." description="Here's what each cleaning covers. Not sure which one fits? Text us and we'll help you pick." photo={homeResultPhotos[0]} proof={<ProofRow market="fresno" tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote by text</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
       </SiteHero>
-
-      <TrustStrip />
 
       <section id="compare" className="ns-section scroll-mt-24" aria-labelledby="services-compare-title">
         <div className="ns-section-head">
           <div><p className="ns-kicker">Compare</p><h2 id="services-compare-title" className="ns-h2">Which cleaning do you need?</h2></div>
           <Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">→</span></Link>
         </div>
-        <div className="service-editorial">
+        <div className="service-editorial [&_.se-guide]:gap-6 [&_.se-guide-body_p]:text-base">
           <div className="se-guide">
             {guides.map((guide) => (
               <article key={guide.slug} className="se-guide-card">
-                <div className="se-guide-photo"><Image src={guide.photo.src} alt={guide.photo.alt} fill sizes="(min-width: 1024px) 400px, (min-width: 640px) 33vw, 90vw" /></div>
+                <figure><div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)]"><Image src={guide.photo.src} alt={guide.photo.alt} fill sizes="(min-width: 1024px) 400px, (min-width: 640px) 45vw, 100vw" className="object-cover" /></div><figcaption className="mt-2 text-[13px] text-mute">{guide.photo.caption} · New Star job</figcaption></figure>
                 <div className="se-guide-body">
                   <h3>{guide.name}</h3>
                   <p>{guide.fit}</p>
@@ -141,15 +135,8 @@ export default function ServicesPage() {
         <p className="home-service-notes">Oven and fridge interiors, interior window glass, and reachable window tracks are optional. Cabinet interiors are optional for standard and deep cleaning. Price depends on size, condition, frequency, and requested work. Laundry, dishes, bed making, organizing, and packing are not included.</p>
       </section>
 
-      <section className="site-muted" aria-labelledby="services-reviews-title">
-        <div className="ns-section">
-          <div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="services-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div>
-          <ReviewCards topic="home" />
-        </div>
-      </section>
-
-      <section className="ns-section" aria-labelledby="services-business-title">
-        <div className="ns-section-head"><div><p className="ns-kicker">For businesses</p><h2 id="services-business-title" className="ns-h2">Workplaces &amp; projects.</h2><p className="ns-lead">A walkthrough or photo review, followed by a written proposal.</p></div></div>
+      <section className="site-muted"><div className="ns-section" aria-labelledby="services-business-title">
+        <div className="ns-section-head"><div><p className="ns-kicker">Fresno-area businesses</p><h2 id="services-business-title" className="ns-h2">Workplaces &amp; projects.</h2><p className="ns-lead">A walkthrough or photo review, followed by a written proposal.</p></div></div>
         <div className="site-directory site-directory-cards site-directory-two">
           {projectServices.map((service) => (
             <article key={service.href}>
@@ -161,17 +148,19 @@ export default function ServicesPage() {
             </article>
           ))}
         </div>
-      </section>
-
-      <section className="site-muted" aria-labelledby="services-areas-title">
+      </div></section>
+      <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks priceHref="/book-now#price" /></div>
+      <section className="site-muted" aria-labelledby="services-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="services-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards reviews={reviews} lead /></div></section>
+      <section aria-labelledby="services-areas-title">
         <div className="ns-section">
           <div className="ns-section-head"><div><p className="ns-kicker">Service area</p><h2 id="services-areas-title" className="ns-h2">Near you.</h2><p className="ns-lead">We&apos;re based in Fresno and clean in Clovis too. For Madera, send your address and preferred date so we can check the schedule.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
-          <div className="home-local-cards home-local-cards-row">
-            {primaryAreas.map((area) => <Link key={area.slug} href={`/cleaning-services-${area.slug}`} className="home-local-card"><Icon name="pin" /><span><strong>{area.name}</strong><span>{area.county}</span></span></Link>)}
+          <div className="grid gap-6 sm:grid-cols-3">
+            {primaryAreas.map((area) => <Link key={area.slug} href={`/cleaning-services-${area.slug}`} className="flex min-h-20 flex-col justify-center gap-2 border-t border-line py-4 text-primary"><strong className="text-xl">{area.name} →</strong><span className="text-sm text-mute">{area.county}</span></Link>)}
           </div>
         </div>
       </section>
 
+      <section className="site-muted"><div className="site-section site-split"><h2>See your price.</h2><div><p className="site-intro">Pick the cleaning and your home size, then book a time online.</p><div className="site-actions"><HomeBookingLink placement="footer" /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div></div></div></section>
       <BreadcrumbSchema items={[{ name: "Home", url: siteUrl }, { name: "Services", url: `${siteUrl}/services` }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org", "@type": "ItemList", name: "New Star Cleaning services",

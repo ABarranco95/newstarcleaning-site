@@ -13,10 +13,10 @@ export default function WorkPhoto({ photo, caption, hero = false, variant = "det
   return (
     <figure className="min-w-0" data-work-photo={hero ? "hero" : "detail"}>
       <div className={hero
-        ? "relative aspect-[8/5] overflow-hidden rounded-xl sm:aspect-[4/3] lg:aspect-[4/5]"
+        ? "relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] lg:aspect-[4/5]"
         : variant === "choice"
-          ? "relative aspect-[2/1] overflow-hidden rounded-lg sm:aspect-[4/3]"
-          : "relative aspect-[4/3] overflow-hidden rounded-lg"}>
+          ? "relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)]"
+          : "relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)]"}>
         <Image
           src={photo.src}
           alt={photo.alt}
@@ -30,7 +30,7 @@ export default function WorkPhoto({ photo, caption, hero = false, variant = "det
           className="object-cover"
         />
       </div>
-      <figcaption className={`mt-2 text-xs leading-5 ${onDark ? "text-white/70" : "text-mute"}`}>
+      <figcaption className={`mt-2 text-[13px] leading-5 ${onDark ? "text-white/70" : "text-mute"}`}>
         {caption ?? photo.caption}
       </figcaption>
     </figure>

@@ -7,7 +7,7 @@ import HomeQuoteLink from "@/components/HomeQuoteLink";
 import SiteHero from "@/components/SiteHero";
 import ReviewCards from "@/components/ReviewCards";
 import Icon from "@/components/Icon";
-import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, ovenBuildupPair, refrigeratorFullPair, tubSurroundPair, vanityDetailPhoto, ventDetailPair } from "@/lib/realWorkPhotos";
+import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, ovenInteriorPair, refrigeratorFullPair, tubSurroundPair, vanityDetailPhoto, ventDetailPair } from "@/lib/realWorkPhotos";
 import { business } from "@/lib/business";
 import "./our-work.css";
 
@@ -50,7 +50,7 @@ const emptyHomes: { src: string; alt: string; label: string; note: string }[] = 
 
 const pairs = [
   { pair: { before: { src: "/photos/before1.jpg", alt: "Shower before cleaning", caption: "Before" }, after: { src: "/photos/after1.jpg", alt: "The same shower after cleaning", caption: "After" }, label: "A shower before and after a New Star cleaning." }, title: "Shower detail" },
-  { pair: ovenBuildupPair, title: "Inside the oven" },
+  { pair: ovenInteriorPair, title: "Inside the oven" },
   { pair: tubSurroundPair, title: "Tub and tile surround" },
   { pair: refrigeratorFullPair, title: "Refrigerator interior" },
   { pair: ventDetailPair, title: "Vent cover" },
@@ -72,9 +72,9 @@ export default function OurWorkPage() {
   return (
     <div className="home-reference work-page">
       <SiteHero tone="dark" eyebrow="Our work" title="Real photos from our cleaning jobs." description="Look at the shower surfaces and the buildup inside the oven. These are real New Star jobs, with the before and after shown together so you can see the work." breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-proof-row"><GoogleRating /></div>
+        <div className="site-proof-row"><GoogleRating onDark /></div>
         <nav className="work-category-nav" aria-label="Gallery categories">
-          {categories.map((category) => <a key={category.id} href={`#${category.id}`}>{category.label}</a>)}
+          {categories.map((category) => <a key={category.id} href={`#${category.id}`} className="border-on-dark-line text-on-dark hover:border-white">{category.label}</a>)}
         </nav>
       </SiteHero>
 
@@ -104,7 +104,7 @@ export default function OurWorkPage() {
                     </a>
                   </figure>
                 </div>
-                <figcaption className="work-pair-label"><strong>{title}</strong><span>{pair.label}</span></figcaption>
+                <figcaption className="work-pair-label"><strong>{title}{pair.label.includes("optional add-ons") ? <span className="ml-3 inline-flex rounded-full border border-line bg-white px-3 py-1 text-[13px] font-semibold text-primary">Add-on</span> : null}</strong><span>{pair.label}</span></figcaption>
               </figure>
             ))}
           </div>

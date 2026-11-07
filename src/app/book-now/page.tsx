@@ -1,46 +1,54 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import HomeBookingLink from "@/components/HomeBookingLink";
-import GoogleRating from "@/components/GoogleRating";
-import Icon from "@/components/Icon";
-import { StarRow } from "@/components/Icon";
+import FaqList from "@/components/FaqList";
+import HowItWorks from "@/components/HowItWorks";
+import PricePicker from "@/components/PricePicker";
+import ProofRow from "@/components/ProofRow";
+import ReviewCards from "@/components/ReviewCards";
+import SiteHero from "@/components/SiteHero";
+import { bathroomResultPhotos } from "@/lib/realWorkPhotos";
 
 import { googleReviews } from "@/lib/googleReviews";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import MarketPhone from "@/components/MarketPhone";
 
 const directBookingUrl = resolveDirectBookingUrl();
-const featuredReview = googleReviews.find((review) => review.id === "joseph-b") ?? googleReviews[0];
+const featuredReview = googleReviews.find((review) => review.id === "merle-f")!;
 
 const bookNowFaqs = [
   {
-    q: "How fast do quotes come back?",
-    a: "We review the home details and contact you about pricing and available times. If your timing is urgent, call (559) 785-2822 to check availability. A quote request does not reserve an appointment.",
+    q: "How do I get a price?",
+    a: "Pick the cleaning, bedrooms, bathrooms, home size and ZIP at the top of this page. If your ZIP has an online price, you'll see it and can book a time. If it doesn't, text us the address and we'll check.",
   },
   {
-    q: "Do I pay anything when I request a quote?",
-    a: "No. There's no payment with this form. We'll explain what we'll clean and the price, then you decide whether to book.",
+    q: "When am I charged?",
+    a: "Nothing is charged when you book. Within 24 hours before the cleaning we place a hold for the visit total, and it becomes the charge after the cleaning is finished.",
   },
   {
-    q: "Can I skip the quote and book directly?",
-    a: directBookingUrl ? "Yes. Choose a date online opens our booking form, where you review the service, price and available times before confirming. For heavy buildup or unusual scope, request a quote so we can review the home first." : "Online booking is not currently available. Request a quote or call us to review pricing and appointment times.",
+    q: "Can I cancel?",
+    a: "Yes, free until 24 hours before your arrival window. Inside 24 hours, 50% of that visit is charged.",
   },
   {
-    q: "What if I'm not sure which cleaning service I need?",
-    a: "Pick 'Not sure yet' on the form and describe the home. We will recommend standard recurring, deep, or move-in/move-out cleaning based on the size, condition, and what you want done, before you commit to anything.",
+    q: "What happens after I send the form?",
+    a: "We look over the home details and get back to you with a price and open times. If it's urgent, call us. A quote request doesn't reserve a time.",
+  },
+  {
+    q: "What if I'm not sure which cleaning I need?",
+    a: "Pick \"Not sure yet\" on the form and describe the home. We'll recommend standard, deep or move-out cleaning based on the size, condition and what you want done, before you commit to anything.",
   },
 ];
 
 export const metadata: Metadata = {
-  title: "Request Cleaning Pricing & Availability",
+  title: "Book House Cleaning Online",
   description:
-    "Request cleaning pricing and availability for San Jose and the South Bay, or Fresno, Clovis, and Madera. Your ZIP confirms the right service market.",
+    "See your price for standard, deep or move-out cleaning, then pick a time online. San Jose and the South Bay, plus Fresno, Clovis and Madera.",
   alternates: { canonical: "/book-now" },
   openGraph: {
-    title: "Request Cleaning Pricing & Availability | New Star Cleaning",
+    title: "Book House Cleaning Online | New Star Cleaning",
     description:
-      "Get clear residential or commercial cleaning pricing and availability before confirming service.",
+      "See your price for standard, deep or move-out cleaning, then pick a time online. San Jose and the South Bay, plus Fresno, Clovis and Madera.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
@@ -48,29 +56,12 @@ export const metadata: Metadata = {
 export default function BookNow() {
   return (
     <div className="site-reference">
-      <section className="site-form-layout">
-        <div className="site-form-heading">
-          <nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav>
-          <GoogleRating />
-          <h1 className="mt-2">Get a quote.</h1>
-          <p>Tell us about your home. We’ll text or call with your price and available times. No payment, and nothing is booked with this form.</p>
-        </div>
-        <div id="quote-form" className="site-form-panel"><QuickQuoteForm title="Your cleaning quote" subtitle="Start with the basics. We'll help with anything you're unsure about." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div>
-        <div className="site-form-aside">
-          <ul className="site-form-points">
-            <li><Icon name="check" />Price confirmed before anything is booked</li>
-            <li><Icon name="check" />One-time or recurring: weekly, every other week or monthly</li>
-            <li><Icon name="check" />If we miss something included in your cleaning, tell us within 24 hours. We&apos;ll make it right.</li>
-          </ul>
-          <div className="site-links"><MarketPhone location="book_now_hero" /><HomeBookingLink onDark={false} placement="footer" /></div>
-          <figure className="site-form-review">
-            <StarRow />
-            <blockquote><p>&ldquo;{featuredReview.excerpt.join(" … ")}&rdquo;</p></blockquote>
-            <figcaption>{featuredReview.author} · {featuredReview.label} · Google review</figcaption>
-          </figure>
-        </div>
-      </section>
-      <section className="site-section site-split site-rule"><div><h2>Before you send.</h2><p className="site-intro">San Jose and the South Bay. Also serving Fresno, Clovis, and Madera. Enter your ZIP so we can confirm coverage and price the right market.</p></div><div className="site-disclosures">{bookNowFaqs.map((faq) => <details key={faq.q}><summary>{faq.q}</summary><p>{faq.a}</p></details>)}</div></section>
+      <SiteHero eyebrow="Book online" title="See your price and book." description="Pick the cleaning and your home size. You'll see the price before you choose a time, and nothing is charged when you book." photo={bathroomResultPhotos[0]} proof={<ProofRow market="southbay" tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <PricePicker id="price" source="organic_book_now_price" quoteHref="#quote-form" />
+      </SiteHero>
+      <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>
+      <section id="quote-form" className="site-muted"><div className="site-section site-quote-layout"><div className="site-copy"><p className="ns-kicker">Quote by text</p><h2>Rather get a quote by text?</h2><p className="site-intro">Tell us about your home and we&apos;ll text or call with your price and open times. Nothing is booked with this form.</p><ul className="site-list"><li>One-time or recurring: weekly, every other week or monthly.</li><li>Missed something in the agreed scope? Tell us within 24 hours and we come back at no charge.</li></ul><div className="site-links"><MarketPhone location="book_now_hero" /><HomeBookingLink placement="footer" /></div><div className="mt-8 [&_.ns-reviews]:grid-cols-1"><ReviewCards reviews={[featuredReview]} market="southbay" /></div></div><QuickQuoteForm title="Your cleaning quote" subtitle="Start with the basics. We'll help with anything you're unsure about." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div></section>
+      <section className="site-section site-split"><div><p className="ns-kicker">Questions</p><h2 className="mt-3">Before you book.</h2><p className="site-intro">We serve San Jose and the South Bay, plus Fresno, Clovis and Madera. Your ZIP sets the market and the price.</p></div><FaqList faqs={bookNowFaqs.map((faq) => ({ question: faq.q, answer: faq.a }))} /></section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

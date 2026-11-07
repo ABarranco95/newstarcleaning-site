@@ -309,7 +309,7 @@ function PaidBrand() {
         width={640}
         height={150}
         className="paid-wordmark"
-        priority
+
       />
     </div>
   );
@@ -318,7 +318,7 @@ function PaidBrand() {
 function TrustLine({ commercial = false, onDark = false, southbay = false }: { commercial?: boolean; onDark?: boolean; southbay?: boolean }) {
   return (
     <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${onDark ? "text-white/85" : "text-ink-soft"}`}>
-      <GoogleRating />
+      <GoogleRating onDark={onDark} market={southbay ? "southbay" : "fresno"} />
       <span className="text-xs">{southbay ? "Owner-run · Insured · Supplies included" : commercial ? "Locally owned · Written proposal before scheduling" : "Hundreds of local homes cleaned since 2020"}</span>
     </div>
   );
@@ -339,7 +339,7 @@ function ScopeNote({ scope }: { scope: NonNullable<PaidIntentConfig["scope"]> })
   );
 }
 
-function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
+function BeforeAfterGallery({ order, southbay = false }: { order: ProofPairKey[]; southbay?: boolean }) {
   const pairs = order.map((key) => ({ key, ...PROOF_PAIRS[key] }));
   const galleryRef = useRef<HTMLDivElement>(null);
   const scrollGallery = (direction: number) => {
@@ -358,7 +358,7 @@ function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
               Six real before-and-after results.
             </h2>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-ink-soft">Photographed from New Star jobs. No stock photography.</p>
+          <p className="max-w-sm text-sm leading-6 text-ink-soft">{southbay ? "Photos from New Star jobs in the Central Valley." : "Photographed from New Star jobs. No stock photography."}</p>
         </div>
 
         <div
@@ -430,8 +430,8 @@ const REVIEW_TOPIC: Record<PaidIntent, "home" | "standard" | "deep" | "move"> = 
 };
 
 const DECISION_REVIEW_ID: Partial<Record<PaidIntent, string>> = {
-  deep: "daniel",
-  move: "daviana-j",
+  deep: "daumdatta",
+  move: "merle-f",
   house: "merle-f",
 };
 
@@ -457,9 +457,9 @@ function ReviewStrip({ intent, excludeReviewId, southbay = false }: { intent: Pa
           <h2 id="paid-reviews-title" className="text-primary">What customers say on Google.</h2>
           <GoogleRating prominent market={southbay ? "southbay" : "fresno"} />
         </div>
-        {southbay ? <p className="mt-3 text-sm text-ink-soft">These reviews are from our Central Valley customers. San Jose is our newest area.</p> : null}
+        {southbay ? <p className="mt-3 text-sm text-ink-soft">These reviews are from our Central Valley customers.</p> : null}
         <div className="mt-8">
-          <ReviewCards showRating={false} reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} />
+          <ReviewCards showRating={false} reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} market={southbay ? "southbay" : "fresno"} />
         </div>
       </div>
     </section>
@@ -688,7 +688,7 @@ export default function GoogleAdsLandingPageClient({
                 ))}
               </ul>
               <div className={compactResidentialHero ? "mt-3 hidden md:block" : "mt-3"}>
-                <TrustLine commercial={isBusinessRequest} southbay={marketConfig.id === "southbay"} />
+                <TrustLine onDark commercial={isBusinessRequest} southbay={marketConfig.id === "southbay"} />
               </div>
             </div>
 
@@ -697,9 +697,9 @@ export default function GoogleAdsLandingPageClient({
                 {heroPhoto ? (
                   <figure className="paid-job-photo">
                     <div className="paid-job-photo-frame">
-                      <Image src={heroPhoto.src} alt={heroPhoto.alt} fill sizes="(min-width: 1024px) 44vw, 100vw" className="object-cover" />
+                      <Image src={heroPhoto.src} alt={heroPhoto.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 44vw, 100vw" className="object-cover" />
                     </div>
-                    <figcaption>New Star work · {heroPhoto.caption}</figcaption>
+                    <figcaption>{heroPhoto.caption} · {marketConfig.id === "southbay" ? "Central Valley job" : "New Star job"}</figcaption>
                   </figure>
                 ) : null}
               </div>
@@ -766,7 +766,7 @@ export default function GoogleAdsLandingPageClient({
 
       {!isBusinessRequest ? <TrustStrip links={false} market={marketConfig.id} /> : null}
       <ReviewStrip intent={intentKey} excludeReviewId={decisionReview?.id} southbay={marketConfig.id === "southbay"} />
-      {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
+      {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} southbay={marketConfig.id === "southbay"} /> : null}
       <ProcessStrip commercial={isBusinessRequest} />
 
       <section className="bg-white">

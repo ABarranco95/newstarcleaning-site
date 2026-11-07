@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import HomeServices from "@/components/HomeServices";
+import HomeBookingLink from "@/components/HomeBookingLink";
+import ProofRow from "@/components/ProofRow";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import SiteHero from "@/components/SiteHero";
-import GoogleRating from "@/components/GoogleRating";
-import TrustStrip from "@/components/TrustStrip";
+
 import { Suspense } from "react";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import { kitchenSurfacesPhoto } from "@/lib/realWorkPhotos";
 import {
   clientPrepChecklist,
   getFullIncludedList,
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     title:
       "Service Checklist: Included, Add-Ons, Not Included | New Star Cleaning",
     description:
-      "Clear room-by-room cleaning scope for Fresno, Clovis, and Madera homes, including what is not part of our cleaning service.",
+      "Room-by-room scope for standard, deep and move-out cleaning, the add-ons, and what isn't part of the job.",
     url: `${siteUrl}/checklist`,
   },
 };
@@ -101,18 +102,17 @@ const comparisonRows = [
 export default function ChecklistPage() {
   return (
     <div className="site-reference">
-      <SiteHero tone="dark" eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="Compare the three services, then open the room-by-room list. We confirm the work and price before your appointment." breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><a href="#services" className="home-button">See the full checklists <span aria-hidden="true">↓</span></a><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote</Link>}><HomeQuoteLink className="home-text-link">Get a quote</HomeQuoteLink></Suspense></div>
-        <div className="site-proof-row"><GoogleRating /></div>
+      <SiteHero eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="What each cleaning includes, what costs extra and what we don't do. It's the list we clean from." photo={kitchenSurfacesPhoto} proof={<ProofRow market="southbay" tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div><a href="#services" className="home-text-link mt-4">Jump to the lists ↓</a>
       </SiteHero>
-      <TrustStrip />
-      <section className="site-section" aria-label="Compare cleaning services"><Suspense fallback={<div className="site-section"><Link href="/services" className="home-text-link">Compare cleaning services ↗</Link></div>}><HomeServices /></Suspense></section>
-      <section id="services" className="site-section site-rule"><div className="site-split"><h2>The full scope.</h2><p className="site-intro">Oven and refrigerator interiors, interior window glass, and tracks are optional. Empty cabinet, drawer, and closet interiors are included in move-out cleaning.</p></div><div className="site-disclosures">
-        <details><summary>Compare all three services</summary><div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Service comparison table"><table className="site-comparison"><caption>Included in the base cleaning scope</caption><thead><tr><th scope="col">Work</th><th scope="col">Standard</th><th scope="col">Deep</th><th scope="col">Move-out</th></tr></thead><tbody>{comparisonRows.map(row => <tr key={row.label}><th scope="row">{row.label}</th><td>{row.standard ? "Included" : "—"}</td><td>{row.deep ? "Included" : "—"}</td><td>{row.moveOut ? "Included" : "—"}</td></tr>)}</tbody></table></div></details>
-        {services.map(service => <details key={service.slug}><summary>{service.name}</summary><p>{service.description}</p><ul className="site-list">{service.scopeNotes.map(note => <li key={note}>{note}</li>)}</ul>{getFullIncludedList(service.slug).map(group => <div key={group.title}><h3>{group.title}</h3><ul className="site-list">{group.items.map(item => <li key={item}>{item}</li>)}</ul></div>)}<h3>Optional additions</h3>{service.availableAddOns.map(addOn => <p key={addOn.title}><strong>{addOn.title}.</strong> {addOn.description}</p>)}<Link href={serviceLinks[service.slug]} className="home-text-link">{service.shortName} details ↗</Link></details>)}
-        <details><summary>Not included</summary><p>We clean accessible rooms, surfaces, fixtures, and floors. Laundry, dishes, bed making, organizing, packing, moving furniture, and restoration are not part of our work.</p><ul className="site-list">{serviceLimitations.map(item => <li key={item}>{item}</li>)}</ul></details>
-        <details><summary>Before the cleaner arrives</summary><ul className="site-list">{clientPrepChecklist.map(item => <li key={item}>{item}</li>)}</ul></details>
+      <section id="services" className="site-section scroll-mt-24"><div className="ns-section-head"><div><p className="ns-kicker">Included</p><h2>What&apos;s included, room by room.</h2><p className="site-intro">Standard keeps a home up. Deep adds the detail work. Move-out adds the inside of every empty cabinet, drawer and closet.</p></div></div><div className="site-disclosures">
+        {services.map((service, index) => <details key={service.slug} open={index === 0}><summary><h3>{service.name}</h3></summary><p>{service.description}</p><ul className="site-list">{service.scopeNotes.map((note) => <li key={note}>{note}</li>)}</ul><div className="my-8 grid gap-6 sm:grid-cols-2">{getFullIncludedList(service.slug).map((group) => <div key={group.title} className="rounded-[var(--radius-card)] border border-line p-6 last:sm:col-span-2"><h4 className="text-lg font-bold text-primary">{group.title}</h4><ul className="site-list">{group.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)}</div><Link href={serviceLinks[service.slug]} className="home-text-link">{service.shortName} details ↗</Link></details>)}
       </div></section>
+      <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">Optional</p><h2>Add-ons, priced before the visit.</h2><p className="site-intro">An add-on is part of your cleaning only when you pick it before the appointment and it&apos;s in your confirmed price.</p></div></div><div className="grid gap-8 lg:grid-cols-3">{services.map((service) => <article key={service.slug}><h3>{service.name}</h3><dl className="mt-6 space-y-6">{service.availableAddOns.map((addOn) => <div key={addOn.title}><dt className="font-semibold">{addOn.title}</dt><dd className="mt-2 leading-relaxed">{addOn.description}</dd></div>)}</dl></article>)}</div></div></section>
+      <section className="site-section site-split"><div><p className="ns-kicker">Not included</p><h2 className="mt-3">Not part of the job.</h2><p className="site-intro">We clean rooms, surfaces, fixtures and floors. Laundry, dishes, bed making, organizing, packing, moving furniture, and restoration aren&apos;t part of it.</p></div><div className="site-disclosures"><details open><summary>Not included</summary><ul className="site-list">{serviceLimitations.map((item) => <li key={item}>{item}</li>)}</ul></details></div></section>
+      <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">Compare</p><h2>Standard, deep and move-out, side by side.</h2></div></div><div className="overflow-x-auto rounded-[var(--radius-card)] border border-line bg-white" tabIndex={0} role="region" aria-label="Service comparison table"><table className="site-comparison"><caption>Included in the base cleaning scope</caption><thead><tr><th scope="col">Work</th><th scope="col">Standard</th><th scope="col">Deep</th><th scope="col">Move-out</th></tr></thead><tbody>{comparisonRows.map((row) => <tr key={row.label}><th scope="row">{row.label}</th><td>{row.standard ? "Included" : "—"}</td><td>{row.deep ? "Included" : "—"}</td><td>{row.moveOut ? "Included" : "—"}</td></tr>)}</tbody></table></div></div></section>
+      <section className="site-section site-split"><h2>Before we arrive.</h2><ul className="site-list">{clientPrepChecklist.map((item) => <li key={item}>{item}</li>)}</ul></section>
+      <section className="site-muted"><div className="site-section site-split"><h2>Know what you need?</h2><Link href="/book-now" className="home-button justify-self-start">See your price →</Link></div></section>
       <section className="site-section site-split site-rule"><h2>Scope questions.</h2><div className="site-disclosures">{faqs.map(faq => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div></section>
       <BreadcrumbSchema
         items={[

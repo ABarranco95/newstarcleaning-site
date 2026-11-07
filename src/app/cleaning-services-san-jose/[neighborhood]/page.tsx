@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import BookingPortalLink from "@/components/BookingPortalLink";
+
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import GoogleRating from "@/components/GoogleRating";
 import MarketPhone from "@/components/MarketPhone";
-import MarketPriceExample from "@/components/MarketPriceExample";
+import FaqList from "@/components/FaqList";
+import PhotoStrip from "@/components/PhotoStrip";
+import PricePicker from "@/components/PricePicker";
+import ProofRow from "@/components/ProofRow";
+import ReviewCards from "@/components/ReviewCards";
+import WorkPhoto from "@/components/WorkPhoto";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import SiteHero from "@/components/SiteHero";
-import TrustStrip from "@/components/TrustStrip";
+
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
-import { homeResultPhotos } from "@/lib/realWorkPhotos";
+import { bathroomResultPhotos, cleanBathroomPhoto, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, vanityDetailPhoto } from "@/lib/realWorkPhotos";
+import { googleReviews } from "@/lib/googleReviews";
 import { sanJoseNeighborhoods } from "@/lib/sanJoseNeighborhoods";
 
 interface RouteProps {
@@ -45,42 +50,33 @@ export default async function SanJoseNeighborhoodPage({ params }: RouteProps) {
   if (!neighborhood) notFound();
   const path = `/cleaning-services-san-jose/${slug}`;
   const directBookingUrl = resolveDirectBookingUrl();
+  const heroPhoto = slug === "cambrian" ? kitchenSurfacesPhoto : slug === "almaden-valley" ? bathroomResultPhotos[1] : homeResultPhotos[2];
+  const servicePhotos = [homeResultPhotos[0], cleanBathroomPhoto, emptyHomeResultPhotos[5]];
+  const used = [heroPhoto.src, ...servicePhotos.map((photo) => photo.src)];
+  const rooms = [homeResultPhotos[0], homeResultPhotos[2], bathroomResultPhotos[1], kitchenSurfacesPhoto, cleanBathroomPhoto, bathroomResultPhotos[0], vanityDetailPhoto].filter((photo) => !used.includes(photo.src)).slice(0, 4);
+  const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.find((review) => review.id === id)!);
+  const h1 = slug === "west-san-jose" ? "House cleaning in West San Jose." : `House cleaning in ${neighborhood.name}, San Jose.`;
 
   return (
     <div className="site-reference">
-      <SiteHero title={`House cleaning in ${neighborhood.name}.`} eyebrow={`San Jose · ${neighborhood.zipLabels.join(" · ")}`} description={neighborhood.description} photo={homeResultPhotos[0]} breadcrumbs={[{ label: "Home", href: "/" }, { label: "San Jose cleaning", href: "/cleaning-services-san-jose" }]}>
-        <p className="site-price">See your price before you book. No walkthrough needed.</p>
-        <div className="site-booking-actions">
-          {directBookingUrl ? <Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} market="southbay" city="San Jose" sourcePage={path} ctaLocation="neighborhood_hero" label="See your price and book" showIcon={false} className="home-button" /></Suspense> : <a href="#quote" className="home-button">Get a quote</a>}
-          <a href="#quote" className="home-text-link">Rather get a quote by text?</a>
-        </div>
-        <MarketPhone market="southbay" className="home-text-link" location="neighborhood_hero" />
-        <p className="site-note">Photos from New Star jobs in the Central Valley.</p>
+      <SiteHero title={h1} eyebrow={`San Jose · ${neighborhood.zipLabels.join(" · ")}`} description={neighborhood.description} photo={heroPhoto} market="southbay" proof={<ProofRow market="southbay" tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }, { label: "San Jose cleaning", href: "/cleaning-services-san-jose" }]}>
+        <PricePicker id="price" source={`organic_${slug}_price`} market="southbay" quoteHref="#quote" />
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="neighborhood-home-title">
         <div className="site-copy"><p className="ns-kicker">Your home</p><h2 id="neighborhood-home-title">Cleaning {neighborhood.slug === "almaden-valley" ? "an" : "a"} {neighborhood.name} home.</h2></div>
-        <div className="space-y-5">{neighborhood.intro.map((paragraph) => <p key={paragraph} className="site-intro">{paragraph}</p>)}</div>
+        <div className="space-y-6">{neighborhood.intro.map((paragraph) => <p key={paragraph} className="leading-relaxed">{paragraph}</p>)}<h3>A little planning helps.</h3><dl className="space-y-6">{neighborhood.planning.map((item) => <div key={item.title}><dt className="text-lg font-bold text-primary">{item.title}</dt><dd className="mt-3 leading-relaxed">{item.body}</dd></div>)}</dl></div>
       </section>
 
-      <section className="site-section site-split site-rule" aria-labelledby="neighborhood-price-title">
-        <div className="site-copy"><p className="ns-kicker">Pricing</p><h2 id="neighborhood-price-title">What a 3 bed, 2 bath costs.</h2><p className="site-intro">The example is a 3 bed, 2 bath, 1,430 sq ft home in normal condition, one visit, no add-ons. Put in your ZIP and your home&apos;s details for your own price.</p><p className="site-note">Tell us within 24 hours if something on your checklist was missed and we come back at no charge.</p></div>
-        <MarketPriceExample market="southbay" />
-      </section>
-
-      <section className="site-section site-rule" aria-labelledby="neighborhood-services-title">
+      <section className="site-muted"><div className="site-section" aria-labelledby="neighborhood-services-title">
         <p className="ns-kicker">Services</p><h2 id="neighborhood-services-title">Pick the cleaning that fits.</h2>
-        <div className="mt-8 grid gap-8 lg:grid-cols-3">{neighborhood.serviceNotes.map((service) => <article key={service.slug} className="min-w-0 border-t border-line pt-5"><h3 className="text-xl font-semibold text-primary">{service.title}</h3><p className="mt-4 text-base leading-7 text-ink-soft">{service.body}</p><Link href={`/${service.slug}-san-jose#whats-included`} className="home-text-link mt-4">Full room-by-room scope →</Link></article>)}</div>
-      </section>
-
-      <section className="site-muted" aria-labelledby="neighborhood-plan-title"><div className="site-section site-split"><div className="site-copy"><p className="ns-kicker">Before the visit</p><h2 id="neighborhood-plan-title">A little planning helps.</h2></div><dl className="space-y-7">{neighborhood.planning.map((item) => <div key={item.title}><dt className="text-lg font-semibold text-primary">{item.title}</dt><dd className="mt-2 text-base leading-7 text-ink-soft">{item.body}</dd></div>)}</dl></div></section>
-
-      <section className="site-section site-split site-rule" aria-labelledby="neighborhood-faq-title"><div className="site-copy"><h2 id="neighborhood-faq-title">Before your {neighborhood.name} clean.</h2><div className="site-proof-row"><GoogleRating /></div><p className="site-note">Our Google reviews are from Central Valley customers. San Jose is our newest area.</p></div><div className="site-disclosures">{neighborhood.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div></section>
-
-      <section className="site-muted"><div className="site-section site-quote-layout"><div className="site-copy"><p className="ns-kicker">A quote from us</p><h2>Tell us about your {neighborhood.name} home.</h2><p className="site-intro">Put in the property&apos;s ZIP, home size and the date you want. We&apos;ll text or call with your price and open dates.</p><p className="site-note">Insured, and we bring the supplies.</p></div><QuickQuoteForm defaultCity="San Jose" landingCity="San Jose" pageMarket="southbay" source={`organic_san-jose_${slug}`} title={`Get your ${neighborhood.name} price`} directBookingUrl={directBookingUrl} compact /></div></section>
-
-      <nav className="site-section site-links" aria-label="More San Jose cleaning areas"><Link href="/cleaning-services-san-jose" className="home-text-link">All San Jose cleaning →</Link>{sanJoseNeighborhoods.filter((item) => item.slug !== slug).map((item) => <Link key={item.slug} href={`/cleaning-services-san-jose/${item.slug}`} className="home-text-link">{item.name} →</Link>)}<Link href="/service-areas" className="home-text-link">South Bay cities →</Link></nav>
-      <TrustStrip market="southbay" />
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">{neighborhood.serviceNotes.map((service, index) => <article key={service.slug} className="flex min-w-0 flex-col rounded-[var(--radius-card)] border border-line bg-white p-6"><WorkPhoto photo={servicePhotos[index]} variant="choice" /><h3 className="mt-6">{service.title}</h3><p className="mt-4 leading-relaxed">{service.body}</p><Link href={`/${service.slug}-san-jose#whats-included`} className="home-text-link mt-auto pt-4">Full room-by-room scope →</Link></article>)}</div><p className="ns-photo-provenance">Photos from New Star jobs in the Central Valley.</p>
+      </div></section>
+      <section className="ns-section"><div className="ns-section-head"><h2 className="ns-h2">Rooms we&apos;ve cleaned.</h2></div><PhotoStrip photos={rooms} market="southbay" /></section>
+      <section className="site-muted"><div className="ns-section"><div className="ns-section-head"><h2 className="ns-h2">What customers say.</h2><GoogleRating prominent market="southbay" /></div><ReviewCards reviews={reviews} market="southbay" lead /></div></section>
+      <section className="site-section site-split" aria-labelledby="neighborhood-faq-title"><h2 id="neighborhood-faq-title">Before your {neighborhood.name} clean.</h2><FaqList faqs={neighborhood.faqs} /></section>
+      <section className="site-muted"><div className="site-section"><p className="ns-kicker">San Jose</p><h2 className="mt-3">More of San Jose.</h2><nav className="site-links" aria-label="More San Jose cleaning areas"><Link href="/cleaning-services-san-jose">House cleaning in San Jose, CA</Link>{sanJoseNeighborhoods.filter((item) => item.slug !== slug).map((item) => <Link key={item.slug} href={`/cleaning-services-san-jose/${item.slug}`}>House cleaning in {item.name}</Link>)}<Link href="/service-areas">South Bay cities →</Link></nav></div></section>
+      <section><div className="site-section site-quote-layout"><div className="site-copy"><p className="ns-kicker">Quote by text</p><h2>Rather get a quote by text?</h2><p className="site-intro">Send the basics and we&apos;ll text you a price. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone market="southbay" location="neighborhood_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div><QuickQuoteForm defaultCity="San Jose" landingCity="San Jose" pageMarket="southbay" source={`organic_san-jose_${slug}`} title={`Get your ${neighborhood.name} price`} directBookingUrl={directBookingUrl} compact /></div></section>
       <BreadcrumbSchema items={[{ name: "Home", url: siteUrl }, { name: "San Jose house cleaning", url: `${siteUrl}/cleaning-services-san-jose` }, { name: neighborhood.name, url: `${siteUrl}${path}` }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Service", "@id": `${siteUrl}${path}#service`, url: `${siteUrl}${path}`, name: `House cleaning in ${neighborhood.name}, San Jose`, description: neighborhood.description, provider: { "@id": `${siteUrl}/#localbusiness-southbay` }, areaServed: { "@type": "Place", name: `${neighborhood.name}, San Jose`, containedInPlace: { "@type": "City", name: "San Jose", addressRegion: "CA" } } }) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: neighborhood.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) }) }} />

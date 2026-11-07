@@ -29,8 +29,14 @@
   --color-danger-dot: #d3223a;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
-  --font-weight-extrabold: 700;
-  --font-weight-black: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 800;
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: rgb(255 255 255 / 80%);
+  --color-on-dark-mute: rgb(255 255 255 / 66%);
+  --color-on-dark-line: rgb(255 255 255 / 16%);
+  --radius-card: 16px;
+  --radius-control: 12px;
   --shadow-soft: none;
   --shadow-elev: none;
   --shadow-ring: none;
@@ -39,13 +45,15 @@
 
 @layer base {
   html { color-scheme: light; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-  body { background-color: var(--color-cream); color: var(--color-ink); }
+  body { background-color: var(--color-cream); color: var(--color-ink); font-size: 16px; line-height: 1.65; }
   :where(a, button, summary, input, select, textarea):focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
   ::selection { background-color: var(--color-selected); color: var(--color-ink); }
   h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; }
-  h1 { font-weight: 700; letter-spacing: -.02em; line-height: 1.08; }
-  h2 { font-weight: 700; letter-spacing: -.015em; line-height: 1.15; }
-  h3, h4 { font-weight: 600; letter-spacing: -.01em; line-height: 1.4; }
+  h1 { font-weight: 800; letter-spacing: -.035em; line-height: 1.03; }
+  h2 { font-weight: 800; letter-spacing: -.025em; line-height: 1.08; }
+  h3, h4 { font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+  p { text-wrap: pretty; }
+  @media (max-width: 639px) { :root { --radius-card: 12px; } }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

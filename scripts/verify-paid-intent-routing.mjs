@@ -144,7 +144,7 @@ const expectedHeadlines = {
   move: "Move-Out & Move-In Cleaning in Fresno & Clovis",
   house: "House Cleaning in Fresno & Clovis",
 };
-const expectedDecisionReviews = { deep: "daniel", move: "daviana-j", house: "merle-f" };
+const expectedDecisionReviews = { deep: "daumdatta", move: "merle-f", house: "merle-f" };
 for (const intent of Object.keys(INTENT_CONFIG)) {
   assert(INTENT_CONFIG[intent].priceLine === expectedPriceLines[intent], `${intent}: service-specific ZIP pricing instructions, never hardcoded prices`);
   const result = render(intent);

@@ -52,11 +52,11 @@ export const southBayServiceAreas: ServiceArea[] = [
     faqs: [
       {
         question: "Do you clean all of San Jose?",
-        answer: "We take homes across the city, including Cambrian, Almaden Valley, Willow Glen, Rose Garden, West San Jose, Blossom Valley, Evergreen, Berryessa and downtown. Put in your ZIP when you check your price and you'll know right away whether your address is in our area."
+        answer: "We take homes across the city, including Cambrian, Almaden Valley, Willow Glen, Rose Garden, West San Jose, Blossom Valley, Evergreen, Berryessa and downtown. Put in your ZIP when you check your price. Service depends on the address, and we confirm it before you book."
       },
       {
         question: "How do you figure the price?",
-        answer: "Your ZIP sets the market. After that it's bedrooms, bathrooms, square footage, condition, how often we come and any add-ons. The example on this page is a 3 bed, 2 bath, 1,430 sq ft home in normal condition, one visit, no add-ons."
+        answer: "Your ZIP sets the market. The price at the top of this page covers the cleaning type, bedrooms, bathrooms and home size. Condition, how often we come and any add-ons are set when you book, and you see your exact price before you confirm."
       },
       {
         question: "Can you clean a downtown condo with building rules?",
@@ -67,8 +67,8 @@ export const southBayServiceAreas: ServiceArea[] = [
         answer: "It takes off normal mineral buildup on glass, tile and fixtures. Spots that have been there for years can etch the glass, and etching doesn't come off with cleaning. Not sure which you have? Text us a photo before you book."
       },
       {
-        question: "Do I have to be home?",
-        answer: "No. Tell us how to get in and how to lock up when you book, and we'll let you know when it's done."
+        question: "Is there a contract?",
+        answer: "No. You pay cleaning to cleaning, and nothing is charged when you book. Recurring visits are month to month; pause or stop with 24 hours' notice before the next visit."
       },
       {
         question: "What if something gets missed?",
@@ -590,7 +590,7 @@ export const sanJoseServiceContent = {
       },
       {
         question: "How long does a deep clean take?",
-        answer: "It depends on size and condition. A 3 bed, 2 bath home usually takes several hours. You'll pick an arrival window when you book."
+        answer: "It depends on the size and condition of the home. You'll pick an arrival window when you book."
       },
       {
         question: "Should I start with a deep clean before regular visits?",

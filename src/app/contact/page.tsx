@@ -1,60 +1,36 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import GoogleRating from "@/components/GoogleRating";
-import { business, businessAreaServed } from "@/lib/business";
+import MarketPhone from "@/components/MarketPhone";
+import ProofRow from "@/components/ProofRow";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
+import SiteHero from "@/components/SiteHero";
+import { business, businessAreaServed } from "@/lib/business";
+import { homeResultPhotos } from "@/lib/realWorkPhotos";
 
+const description = "Call, text or email Angel, the owner. Mon–Fri 8–6, Sat 8–5. House cleaning in San Jose and the South Bay, plus Fresno, Clovis and Madera.";
 export const metadata: Metadata = {
-  title: "Contact Fresno House Cleaners",
-  description:
-    "Contact New Star Cleaning in Fresno, CA. Call, text, or request pricing and availability online. Serving Fresno, Clovis, Madera and nearby Fresno neighborhoods.",
+  title: "Contact Us", description,
   alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Contact Fresno House Cleaners | New Star Cleaning",
-    description:
-      "Reach New Star Cleaning. Serving Fresno, Clovis, Madera and nearby Fresno neighborhoods.",
-    url: "https://newstarcleaning.com/contact",
-  },
+  openGraph: { title: "Contact New Star Cleaning", description, url: "https://newstarcleaning.com/contact" },
 };
 
 export default function ContactPage() {
   return (
     <div className="site-reference">
-      <section className="site-form-layout">
-        <div className="site-form-heading">
-          <nav className="site-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link></nav>
-          <h1>Talk to your Fresno cleaners.</h1>
-          <p>Have a question before you book? Call or text us about your home. You can also email me directly. I&apos;m Angel, the owner.</p>
-          <div className="site-links">
-            <a href={business.phoneHref} data-phone-location="contact_hero">Call {business.phoneDisplay}</a>
-            <a href={business.phoneHref.replace("tel:", "sms:")}>Text us</a>
-            <a href="mailto:angel@newstarcleaning.com">Email Angel</a>
-          </div>
-          <div className="site-proof-row"><GoogleRating /></div>
+      <SiteHero title="Call, text or email." description="Have a question before you book? Call or text us about your home. You can also email me directly. I'm Angel, the owner." photo={homeResultPhotos[0]} proof={<ProofRow market="southbay" tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="grid divide-y divide-on-dark-line text-lg font-semibold">
+          <MarketPhone className="flex min-h-14 items-center gap-2 text-white" location="contact_hero">Call </MarketPhone>
+          <MarketPhone text className="flex min-h-14 items-center gap-2 text-white" location="contact_hero_text">Text </MarketPhone>
+          <a href="mailto:angel@newstarcleaning.com" className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-1 py-4 text-white"><span>Email Angel</span><span className="break-all text-[15px] font-normal text-on-dark-soft">angel@newstarcleaning.com</span></a>
+          <p className="py-4 text-sm font-medium leading-relaxed text-on-dark-soft">Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM · Sun closed</p>
         </div>
-        <div className="site-form-panel"><QuickQuoteForm title="Tell us about your home" subtitle="We'll help with the cleaning and the price. This form doesn't book an appointment." source="contact_page" compact /></div>
-      </section>
-      <section className="site-section site-split site-rule"><h2>Local, and easy to reach.</h2><div><p className="site-intro">{business.serviceAreaDescription}. Madera dates depend on route availability.</p><div className="site-links"><Link href="/service-areas">Check your area ↗</Link></div><div className="site-disclosures"><details><summary>Office hours</summary><p>Monday–Friday: 8 AM–6 PM. Saturday: 8 AM–5 PM. Sunday: closed.</p></details><details><summary>Commercial or construction work?</summary><p>We review the property and task list before providing a written proposal.</p><Link href="/commercial-quote" className="home-text-link">Request a walkthrough ↗</Link></details></div></div></section>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ContactPage",
-            url: "https://newstarcleaning.com/contact",
-            name: "Contact New Star Cleaning",
-            mainEntity: {
-              "@type": "LocalBusiness",
-              name: "New Star Cleaning",
-              areaServed: businessAreaServed,
-              address: {
-                "@type": "PostalAddress",
-                ...business.address,
-              },
-            },
-          }),
-        }}
-      />
+      </SiteHero>
+      <section className="site-muted"><div className="site-section site-quote-layout"><div><p className="ns-kicker">Quote by text</p><h2 className="mt-3">Tell us about your home.</h2></div><QuickQuoteForm title="Tell us about your home" subtitle="We'll help with the cleaning and the price. This form doesn't book an appointment." source="contact_page" compact /></div></section>
+      <section className="site-section site-split"><div><p className="ns-kicker">Areas</p><h2 className="mt-3">Where we clean.</h2></div><div><p className="site-intro">San Jose and the South Bay, plus Fresno, Clovis and Madera. Madera dates depend on route availability.</p><Link href="/service-areas" className="home-text-link mt-4">Check your area →</Link><div className="site-disclosures mt-8"><details><summary>Office or construction cleaning in the Fresno area?</summary><p>We look at the property and the task list, then send a written proposal.</p><Link href="/commercial-quote" className="home-text-link">Request a walkthrough →</Link></details></div></div></section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org", "@type": "ContactPage", url: "https://newstarcleaning.com/contact", name: "Contact New Star Cleaning",
+        mainEntity: { "@type": "LocalBusiness", name: "New Star Cleaning", areaServed: businessAreaServed, address: { "@type": "PostalAddress", ...business.address } },
+      }) }} />
     </div>
   );
 }

@@ -13,12 +13,12 @@
     .paid-mobile-trust .ns-rating,
     .paid-mobile-trust .ns-rating-count { color: #fff; }
   }
-  .paid-job-photo-frame { position: relative; aspect-ratio: 16 / 11; overflow: hidden; background: #f8fafc; }
+  .paid-job-photo-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-primary-dark); }
   .paid-job-photo-frame img { object-position: 50% 65%; }
-  .paid-job-photo figcaption { padding-block: 10px; color: var(--color-ink-soft); font-size: 12px; line-height: 1.5; }
+  .paid-job-photo figcaption { padding-block: 8px; color: var(--color-on-dark-mute); font-size: 13px; line-height: 1.45; }
   .paid-proof-gallery:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 6px; }
   .paid-proof-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; }
-  .paid-proof-controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--color-line); color: var(--color-primary); background: #fff; cursor: pointer; }
+  .paid-proof-controls button { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--color-line); border-radius: var(--radius-control); color: var(--color-primary); background: #fff; cursor: pointer; }
   .paid-proof-controls button:hover { border-color: var(--color-primary); }
   .paid-proof-controls button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
   .paid-sticky-cta { padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px)); }
@@ -26,7 +26,7 @@
     .paid-reference .paid-wordmark { width: 190px; }
     .paid-hero-grid { display: grid; grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr); align-items: start; gap: 48px; }
     .paid-hero-story { display: grid; gap: 24px; min-width: 0; }
-    .paid-job-photo-frame { aspect-ratio: 16 / 10; }
+    .paid-job-photo-frame { aspect-ratio: 4 / 5; }
   }
   .site-form-points.paid-hero-points { display: none; }
   @media (min-width: 640px) {
@@ -37,7 +37,7 @@
 /* Dark paid hero (2026-09-22). Unlayered on purpose: it must recolor the
    Tailwind utilities used in the hero copy (utilities outrank the components
    layer). Scoped to the story column so the white quote card keeps its colors. */
-.paid-hero-dark { background: var(--color-primary-dark); color: #fff; }
+.paid-hero-dark { background: var(--color-primary); color: var(--color-on-dark); }
 .paid-hero-dark .paid-hero-story .text-primary { color: #fff; }
 .paid-hero-dark .paid-hero-story .text-ink-soft { color: #ffffffcc; }
 .paid-hero-dark .paid-hero-story .border-line { border-color: #ffffff2e; }
@@ -45,7 +45,7 @@
 .paid-hero-dark .paid-hero-story .ns-rating-count { color: #ffffffe0; text-decoration-color: #ffffff66; }
 .paid-hero-dark .paid-hero-story .site-form-points li { color: #fff; }
 .paid-hero-dark .paid-hero-story .site-form-points .ns-icon { background: var(--color-gold); color: var(--color-primary-dark); }
-.paid-hero-dark .paid-job-photo-frame { border-radius: 14px; }
+.paid-hero-dark .paid-job-photo-frame { border-radius: var(--radius-card); }
 .paid-hero-dark .paid-job-photo figcaption { color: #ffffffb3; }
 .paid-hero-dark .paid-hero-form > p { color: #ffffffcc; }
 .paid-hero-dark .paid-hero-form > p .home-text-link { color: #fff; text-decoration-color: #ffffff80; }
@@ -54,19 +54,18 @@
   .paid-hero-dark .paid-hero-form { position: sticky; top: 24px; align-self: start; }
 }
 
-/* The price-first residential flow is an open page, not a compressed form
-   floating inside a dark panel. Non-residential and organic forms stay intact. */
-.paid-flow .paid-hero-dark { background: #fff; color: var(--color-ink); }
-.paid-flow .paid-hero-story .text-primary { color: var(--color-primary); }
-.paid-flow .paid-hero-story .text-ink-soft { color: var(--color-ink-soft); }
+/* The form stays light; the story shares the site's navy hero. */
+.paid-flow .paid-hero-dark { background: var(--color-primary); color: var(--color-on-dark); }
+.paid-flow .paid-hero-story .text-primary { color: var(--color-on-dark); }
+.paid-flow .paid-hero-story .text-ink-soft { color: var(--color-on-dark-soft); }
 .paid-flow .paid-hero-grid { gap: 32px; }
 .paid-flow .home-header-quote { background: transparent; color: #fff; padding-inline: 0; }
 .paid-flow .home-header-quote:hover { text-decoration: underline; text-underline-offset: 4px; }
-.paid-flow .paid-job-photo figcaption { color: var(--color-ink-soft); }
-.paid-flow .paid-job-photo-frame { border-radius: 8px; }
-.paid-flow .paid-hero-form > p .home-text-link { color: var(--color-primary); text-decoration-color: currentColor; }
-.paid-flow .paid-flow-form { padding: 24px; border: 1px solid var(--color-line); border-radius: 12px; background: #f8fafc; box-shadow: none; }
-.paid-flow-form .qf-head h2 { font-size: 26px; line-height: 1.2; }
+.paid-flow .paid-job-photo figcaption { color: var(--color-on-dark-mute); }
+.paid-flow .paid-job-photo-frame { border-radius: var(--radius-card); }
+.paid-flow .paid-hero-form > p .home-text-link { color: var(--color-on-dark); text-decoration-color: currentColor; }
+.paid-flow .paid-flow-form { padding: 24px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); box-shadow: none; color: var(--color-ink); }
+.paid-flow-form .qf-head h2 { font-size: 30px; line-height: 1.2; }
 .paid-flow-form .qf-head p { margin-top: 12px; font-size: 16px; line-height: 1.5; }
 .paid-flow-form .qf-stack, .paid-flow-form .qf-row { gap: 20px; }
 .paid-flow-form .qf-head .qf-step-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0; font-size: 16px; }
@@ -79,19 +78,19 @@
 .paid-flow-form .qf-disclosure { margin-top: 24px; padding-top: 12px; }
 .paid-flow-form .paid-flow-price { padding-top: 20px; border-top: 1px solid var(--color-line); }
 .paid-flow-form .paid-flow-price > p { font-size: 16px; line-height: 1.5; }
-.paid-flow-form .paid-flow-price .paid-flow-range { font-size: 40px; line-height: 1.1; letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+.paid-flow-form .paid-flow-price .paid-flow-range { font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); line-height: 1; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .paid-flow-form .paid-flow-price [data-paid-booking] { margin-top: 16px; }
 .paid-flow-form .paid-decision-proof { margin-top: 24px; padding-top: 24px; }
 .paid-flow-form .paid-decision-proof blockquote { font-size: 14px; line-height: 1.6; }
 
 @media (max-width: 639px) {
   .paid-flow .paid-hero-grid { gap: 16px; }
-  .paid-flow .paid-flow-form { padding: 16px; }
+  .paid-flow .paid-flow-form { padding: 20px; }
   .paid-flow-form > form { margin-top: 12px; }
   .paid-flow-form .qf-head p { margin-top: 8px; }
   .paid-flow-form .qf-stack, .paid-flow-form .qf-row { gap: 12px; }
   .paid-flow-form .qf-actions { margin-top: 16px; }
-  .paid-flow-form .qf-input { min-height: 48px; padding-block: 10px; }
+  .paid-flow-form .qf-input { min-height: 56px; padding-block: 12px; }
   .paid-flow-form .qf-chips:has(input[name="timeline"]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 640px) {
@@ -103,3 +102,20 @@
   .paid-flow .paid-flow-form { padding: 32px; }
   .paid-flow .paid-hero-form { position: static; }
 }
+
+.paid-reference h1 { font-size: clamp(2.375rem, 1.6rem + 3.2vw, 4rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.03; }
+.paid-reference h2 { font-weight: 800; }
+.paid-reference .ns-trust { background: var(--color-cream); }
+.paid-reference .ns-trust-item strong { color: var(--color-primary); }
+.paid-reference .ns-trust-item p { color: var(--color-ink); }
+.paid-reference .text-xs { font-size: 13px; }
+.paid-reference .paid-hero-copy > p:first-child { color: var(--color-gold); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.paid-reference .paid-hero-copy .text-primary { color: var(--color-on-dark); }
+.paid-reference .paid-hero-copy .text-ink-soft { color: var(--color-on-dark-soft); }
+.paid-reference .paid-proof-gallery figure { aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-card); }
+.paid-reference .paid-proof-gallery figcaption { inset: 8px auto auto 8px; border-radius: 999px; text-transform: capitalize; font-weight: 600; }
+.paid-reference #paid-footer { border: 0; border-radius: var(--radius-card); background: var(--color-primary); padding: 24px; color: var(--color-on-dark); }
+.paid-reference #paid-footer .text-primary, .paid-reference #paid-footer .home-text-link { color: var(--color-on-dark); }
+.paid-reference #paid-footer .text-ink-soft { color: var(--color-on-dark-soft); }
+.paid-reference :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+.paid-reference .paid-hero-story :focus-visible, .paid-reference #paid-footer :focus-visible, .paid-reference header :focus-visible, .paid-flow .paid-hero-form > p :focus-visible { outline-color: var(--color-on-dark); }

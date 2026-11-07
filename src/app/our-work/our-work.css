@@ -1,5 +1,6 @@
 @layer components {
   .work-page { background: #fff; }
+  .work-page .site-hero h1 { font-size: clamp(2.375rem, 1.6rem + 3.2vw, 4rem); }
   .work-category-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
   .work-category-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 16px; border: 1px solid var(--color-line); border-radius: 999px; font-size: 14px; font-weight: 700; color: var(--color-primary); }
   .work-category-nav a:hover { border-color: var(--color-primary); }
