@@ -17,7 +17,7 @@ interface SiteHeroProps {
   tone?: "light" | "dark";
 }
 
-export default function SiteHero({ title, description, eyebrow, photo, breadcrumbs, children, aside, proof, market = "fresno" }: SiteHeroProps) {
+export default function SiteHero({ title, description, eyebrow, photo, breadcrumbs, children, aside, proof }: SiteHeroProps) {
   return (
     <section className="site-hero-band ns-on-dark">
       <div className={`site-hero${photo ? " site-hero-visual" : ""}`}>
@@ -29,7 +29,7 @@ export default function SiteHero({ title, description, eyebrow, photo, breadcrum
           {description && <p className="site-hero-description">{description}</p>}
         </div>
         {children ? <div className="site-hero-action">{children}</div> : null}
-        {photo ? <figure className="site-hero-photo" data-work-photo="hero"><div className="site-hero-photo-frame"><Image src={photo.src} alt={photo.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 100vw" /></div><figcaption>{photo.caption} · {market === "southbay" ? "Central Valley job" : "New Star job"}</figcaption></figure> : null}
+        {photo ? <figure className="site-hero-photo" data-work-photo="hero"><div className="site-hero-photo-frame"><Image src={photo.src} alt={photo.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 100vw" /></div><figcaption>{photo.caption} · New Star job</figcaption></figure> : null}
         {aside ? <div className="site-hero-aside">{aside}</div> : null}
       </div>
     </section>

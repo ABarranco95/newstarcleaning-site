@@ -9,8 +9,8 @@ interface ProofRowProps {
 export default function ProofRow({ market, tone }: ProofRowProps) {
   return (
     <div className={`ns-proof-row${tone === "dark" ? " ns-proof-row-dark" : ""}`}>
-      <GoogleRating market={market} onDark={tone === "dark"} />
-      <span>Cleaning homes since 2020</span>
+      <GoogleRating market={market} onDark={tone === "dark"} rated />
+      <span>100+ happy homeowners</span>
       <span>Insured</span>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { ServiceArea } from "@/lib/serviceAreas";
+import { bathroomResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
 
 export const southBayServiceAreas: ServiceArea[] = [
   {
@@ -29,6 +30,11 @@ export const southBayServiceAreas: ServiceArea[] = [
     ],
     localContent: "San Jose homes take different kinds of work. A Cambrian ranch from the '50s or '60s is usually one floor, so the time goes into the kitchen, bathrooms and floors. A 1920s bungalow in Willow Glen often still has its original wood floors and trim. Almaden Valley homes run bigger, with more bathrooms, and bathrooms are where a lot of the cleaning time goes.\n\nSo the price comes from your home: bedrooms, bathrooms, square footage, condition and how often we come. Put those in and you'll see the price and a room-by-room checklist of what's included. If something needs special care, like stone counters, original wood floors or a building with elevator rules, put it in your booking notes.",
     localProof: "Regular cleaning, deep cleaning and move-outs for San Jose homes, from Cambrian ranches and Willow Glen bungalows to downtown condos.",
+    planCards: [
+      { title: "Cambrian and West San Jose ranches", body: "Mostly one-story homes from the '50s and '60s. No stairs, so the time goes into the kitchen, bathrooms and floors.", photo: homeResultPhotos[1] },
+      { title: "Hard water", body: "Much of San Jose's tap water is hard, so mineral spots on shower glass and fixtures are common. A deep clean takes care of that. Spots left on glass for years can etch it.", photo: bathroomResultPhotos[2] },
+      { title: "Willow Glen and Almaden Valley", body: "Willow Glen bungalows often still have their original wood floors and trim. Almaden Valley homes run bigger, with more bathrooms, so count every bathroom when you price it.", photo: bathroomResultPhotos[1] },
+    ],
     homeProfiles: [
       "One-story ranch homes in Cambrian and West San Jose",
       "1920s bungalows and revival cottages in Willow Glen and Rose Garden",
@@ -547,7 +553,8 @@ export const sanJoseServiceContent = {
     h1: "Regular house cleaning in San Jose",
     intro: "Kitchen, bathrooms, dusting and floors for a San Jose home that's kept up. One visit, or weekly, every two weeks or monthly. No contract.",
     localHeading: "Regular cleaning for San Jose homes.",
-    local: "A regular visit keeps a lived-in home in shape: counters, stovetop and sink, bathrooms top to bottom, dusting in every room you book, and floors vacuumed and mopped. In a Cambrian ranch that's one level of kitchen, bathrooms and floors. In a townhome, add the stairs and the parking situation to your notes. If pets shed a lot, ask for extra pet hair detail when you book so the visit has time for it.\n\nIf it's been a while since the home had a real cleaning, start with a deep clean and move to regular visits after. You'll see both prices before you choose.",
+    lead: "A regular visit keeps a lived-in home in shape: counters, stovetop and sink, bathrooms top to bottom, dusting in every room you book, and floors vacuumed and mopped.",
+    local: "In a Cambrian ranch that's one level of kitchen, bathrooms and floors. In a townhome, add the stairs and the parking situation to your notes. If pets shed a lot, ask for extra pet hair detail when you book so the visit has time for it.\n\nIf it's been a while since the home had a real cleaning, start with a deep clean and move to regular visits after. You'll see both prices before you choose.",
     faqs: [
       {
         question: "Is a regular clean enough for a first visit?",
@@ -574,7 +581,8 @@ export const sanJoseServiceContent = {
     h1: "Deep cleaning in San Jose",
     intro: "Everything in a regular clean, plus the baseboards, door frames, vents, fan blades and bathroom buildup a regular visit doesn't get to.",
     localHeading: "Deep cleaning for San Jose homes.",
-    local: "Much of San Jose's tap water is hard, so the shower is usually where a lot of the time goes: mineral spots on the glass and buildup on the tile and around the fixtures. Then it's the detail list, room by room: baseboards, door frames and trim, switch plates, vent covers, reachable fan blades and light fixtures, window sills, and the edges and corners of every floor.\n\nHow long that takes depends on the house. A Willow Glen bungalow may still have its original tile and trim. A bigger Almaden Valley home has more bathrooms. A downtown condo has less floor but the same kitchen and bathroom work. Pick the condition that matches your home and the price accounts for it.",
+    lead: "Much of San Jose's tap water is hard, so the shower is usually where a lot of the time goes: mineral spots on the glass and buildup on the tile and around the fixtures.",
+    local: "Then it's the detail list, room by room: baseboards, door frames and trim, switch plates, vent covers, reachable fan blades and light fixtures, window sills, and the edges and corners of every floor.\n\nHow long that takes depends on the house. A Willow Glen bungalow may still have its original tile and trim. A bigger Almaden Valley home has more bathrooms. A downtown condo has less floor but the same kitchen and bathroom work. Pick the condition that matches your home and the price accounts for it.",
     faqs: [
       {
         question: "What does a deep clean include beyond a regular one?",
@@ -605,7 +613,8 @@ export const sanJoseServiceContent = {
     h1: "Move-out and move-in cleaning in San Jose",
     intro: "Empty-home cleaning before you hand over the keys or move your furniture in. The inside of every empty cabinet, drawer and closet is included.",
     localHeading: "Move-out cleaning for San Jose homes.",
-    local: "A move-out clean covers the whole empty home: the full deep-clean list, plus the inside of every cabinet, drawer and closet, closet shelves and rods, and blinds where they're safe to dust. Inside the oven and fridge, interior window glass and tracks, and garage or patio sweeping are add-ons. Pick them when you book and they're in the price, not added on the day.\n\nTiming is the main thing to get right. Book it after the movers are done, with the water and power still on, and before the walkthrough or the new furniture. For a downtown or North San Jose apartment, reserve the elevator and sort out parking before the appointment. For a house, put in every bathroom and the full square footage, not just the rooms in the listing photos.",
+    lead: "A move-out clean covers the whole empty home: the full deep-clean list, plus the inside of every cabinet, drawer and closet, closet shelves and rods, and blinds where they're safe to dust.",
+    local: "Inside the oven and fridge, interior window glass and tracks, and garage or patio sweeping are add-ons. Pick them when you book and they're in the price, not added on the day.\n\nTiming is the main thing to get right. Book it after the movers are done, with the water and power still on, and before the walkthrough or the new furniture. For a downtown or North San Jose apartment, reserve the elevator and sort out parking before the appointment. For a house, put in every bathroom and the full square footage, not just the rooms in the listing photos.",
     faqs: [
       {
         question: "When should I schedule it?",

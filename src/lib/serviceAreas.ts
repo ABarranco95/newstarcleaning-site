@@ -1,4 +1,5 @@
 import type { MarketId } from "@/lib/markets";
+import type { RealWorkPhoto } from "@/lib/realWorkPhotos";
 import { southBayServiceAreas } from "@/lib/southBayServiceAreas";
 
 export interface ServiceArea {
@@ -12,6 +13,7 @@ export interface ServiceArea {
   neighborhoods: string[];
   nearbyAreas: string[];
   neighborhoodNotes?: { title: string; body: string }[];
+  planCards?: { title: string; body: string; photo: RealWorkPhoto }[];
   localContent: string;
   localProof: string;
   homeProfiles: string[];

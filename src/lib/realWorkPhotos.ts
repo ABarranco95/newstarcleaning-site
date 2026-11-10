@@ -257,3 +257,21 @@ export const realWorkPhotos: RealWorkPhoto[] = [
   bathroomResultPhotos[0],
   emptyHomeResultPhotos[0],
 ];
+
+export const legacyShowerPair: RealWorkPair = {
+  before: { src: "/photos/before1.jpg", alt: "Shower before a New Star deep cleaning", caption: "Shower before" },
+  after: { src: "/photos/after1.jpg", alt: "The same shower after a New Star deep cleaning", caption: "Shower stall" },
+  label: "Shower stall from a New Star cleaning appointment.",
+};
+
+// The glass-shower photo and cleanBathroomPhoto are the same frame of the same bathroom,
+// so a page that shows one never shows the other.
+const frameOf = (photo: RealWorkPhoto) => (photo.src === cleanBathroomPhoto.src ? bathroomResultPhotos[0].src : photo.src);
+
+/** First candidate whose frame is not on the page yet. */
+export function pickUnusedPhoto(candidates: RealWorkPhoto[], used: RealWorkPhoto[]): RealWorkPhoto {
+  const taken = new Set(used.map(frameOf));
+  const photo = candidates.find((candidate) => !taken.has(frameOf(candidate)));
+  if (!photo) throw new Error("No unused real-work photo is left for this slot.");
+  return photo;
+}

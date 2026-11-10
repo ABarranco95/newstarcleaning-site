@@ -77,14 +77,22 @@ for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, 
   assertReviewPresentation(html, "GoogleRating");
   const visible = html.replace(/<[^>]*>/g, "");
   assert(visible.includes(`${googleRating.score} on Google`), "shared proof renders the verified current Google score from its single source");
-  assert.equal(visible.includes(homesServedLine), Boolean(props.prominent) && props.market !== "southbay", "only prominent Fresno placements retain the recorded local homes served line");
-  if (props.market === "southbay") assert(visible.includes("Central Valley customers"), "every South Bay rating placement labels the source market");
+  assert(!visible.includes(homesServedLine), "rating placements do not imply local job history in either market");
+  assert(!visible.includes("Central Valley"), "Angel's 2026-11-09 override removes region labels from rating proof in every market");
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
 }
 const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
   "@/lib/googleRating": ratingModule,
   "@/components/Icon": StarRowModule,
 });
+const { default: ProofRow } = load("src/components/ProofRow.tsx", { "@/components/GoogleRating": { default: GoogleRating } });
+for (const market of ["fresno", "southbay"]) {
+  const html = renderToStaticMarkup(createElement(ProofRow, { market, tone: "dark" }));
+  assertReviewPresentation(html, `${market} hero proof`);
+  const visible = html.replace(/<[^>]*>/g, "");
+  assert(visible.includes(`Rated ${googleRating.score} on Google`) && visible.includes("100+ happy homeowners") && visible.includes("Insured"), "both markets lead with the owner-approved rating, homeowner count and insurance proof");
+  assert(!/Central Valley|local homes/i.test(visible), "hero proof makes no regional job-history claim");
+}
 const stripHtml = renderToStaticMarkup(createElement(TrustStrip));
 assertReviewPresentation(stripHtml, "TrustStrip");
 assert(!/on Google|5\.0/.test(stripHtml) && stripHtml.includes("Locally owned"), "shared trust strip replaces the unverifiable rating with local ownership");
@@ -146,4 +154,4 @@ assert(!paid.includes("usually the same day") && !paid.includes("rushing a free 
 // apostrophe entity and wrapped source lines normalize to the visible wording.
 const terms = read("src/app/terms/page.tsx").replace(/&apos;/g, "'").replace(/\s+/g, " ");
 assert(terms.includes("If something included in the agreed cleaning scope was missed, tell us within 24 hours of the completed service and we'll come back and make it right at no charge.") && terms.includes("Requests for work outside the confirmed scope are not included."), "the scoped 24-hour free-return promise is backed by the published terms");
-console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews (read ${googleRating.checkedOn}), verified score in every badge variant with Central Valley labels for South Bay, no score in TrustStrip, no review links/counts or self-served rating schema, scoped 24-hour promise backed by terms.`);
+console.log(`Trust proof checks passed: ${googleReviews.length} recorded verbatim reviews (read ${googleRating.checkedOn}), verified score without region labels, owner-approved hero proof in both markets, no score in TrustStrip, no review links/counts or self-served rating schema, scoped 24-hour promise backed by terms.`);

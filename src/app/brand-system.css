@@ -18,6 +18,7 @@
   .ns-rating-lg .ns-stars svg { width: 20px; height: 20px; }
   .ns-proof-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 24px; font-size: 14px; font-weight: 600; line-height: 1.5; }
   .ns-proof-row > span { border-left: 1px solid var(--color-line); padding-left: 16px; }
+  .ns-proof-row > span:first-child { border-left: 0; padding-left: 0; }
   .ns-proof-row-dark { color: var(--color-on-dark-soft); }
   .ns-proof-row-dark > span { border-color: var(--color-on-dark-line); }
   .ns-market-chip { min-height: 1lh; margin-bottom: 16px; font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--color-gold); }
@@ -59,7 +60,7 @@
   .ns-city-links a span { flex-shrink: 0; }
   .ns-process-note { max-width: 100ch; margin-top: 32px; font-size: 13px; line-height: 1.5; color: var(--color-mute); }
 
-  .ns-price-picker { padding: 20px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); color: var(--color-ink); scroll-margin-top: 88px; }
+  .ns-price-picker { padding: 16px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); color: var(--color-ink); scroll-margin-top: 88px; }
   .ns-price-picker :focus-visible { outline-color: var(--color-ring); }
   .ns-price-services { min-width: 0; border: 0; padding: 0; }
   .ns-price-services legend, .ns-price-fields label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; line-height: 1.5; }
@@ -69,11 +70,20 @@
   .ns-price-segments span { display: flex; align-items: center; justify-content: center; min-height: 48px; border-radius: var(--radius-control); background: var(--color-cream-2); font-size: 14px; font-weight: 600; }
   .ns-price-segments input:checked + span { background: var(--color-primary); color: var(--color-on-dark); }
   .ns-price-segments input:focus-visible + span { outline: 2px solid var(--color-ring); outline-offset: 2px; }
-  .ns-price-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .ns-price-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 12px; }
   .ns-price-fields > div { min-width: 0; }
+  .ns-price-home { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-bottom: 12px; }
+  .ns-price-home > div { min-width: 0; }
+  .ns-price-home > div:last-child { grid-column: 1 / -1; }
+  .ns-price-home[data-collapsed], .ns-price-action[hidden] { display: none; }
+  .ns-price-home-summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; line-height: 1.5; }
+  .ns-price-home-summary button { flex-shrink: 0; min-height: 44px; padding-inline: 4px; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
   .ns-price-fields input, .ns-price-fields select { display: block; width: 100%; min-width: 0; min-height: 52px; padding: 8px 12px; border: 1.5px solid var(--color-line-strong); border-radius: var(--radius-control); background: var(--color-cream-2); color: var(--color-ink); font-size: 16px; }
   .ns-price-help, .ns-price-caption { margin-top: 8px; color: var(--color-mute); font-size: 13px; line-height: 1.5; }
-  .ns-price-output { min-height: 11rem; display: flex; flex-direction: column; justify-content: center; padding-block: 16px; }
+  .ns-price-output { display: flex; flex-direction: column; justify-content: center; padding-block: 4px; }
+  .ns-price-picker[data-has-zip] .ns-price-output { min-height: 11rem; padding-block: 16px; }
+  .ns-price-picker:not([data-has-zip]) .ns-price-prompt { font-size: 14px; }
+  .ns-price-picker:not([data-has-zip]) > .ns-price-help { font-size: 12px; }
   .ns-price-label { font-size: 14px; font-weight: 600; }
   .ns-price-value { margin-top: 8px; color: var(--color-primary); font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); font-weight: 800; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
   .ns-price-recurring { margin-top: 8px; font-size: 14px; }
@@ -81,11 +91,13 @@
   .ns-price-loading { display: grid; gap: 12px; }
   .ns-price-loading span { width: 70%; height: 40px; border-radius: 4px; background: var(--color-cream-2); }
   .ns-price-loading span + span { width: 90%; height: 16px; }
-  .ns-price-action { display: flow-root; min-height: 120px; }
+  .ns-price-action { display: flow-root; }
+  .ns-price-picker[data-has-zip] .ns-price-action { min-height: 120px; }
   .ns-price-action .home-button, .ns-price-action .home-button-secondary { width: 100%; }
   .ns-price-contact { display: flex; gap: 12px; }
   .ns-price-picker .home-text-link { color: var(--color-primary); }
   .ns-price-quote { margin-top: 8px; font-size: 14px; }
+  .ns-price-start { width: 100%; margin-top: 8px; cursor: pointer; }
   .ns-price-picker [data-paid-booking] > p { font-size: 13px; line-height: 1.5; }
 
   /* Quote form */
@@ -179,6 +191,10 @@
     .ns-section { padding: 72px 24px; }
     .ns-trust-list { padding: 72px 24px; }
     .ns-price-picker { padding: 24px; }
+    .ns-price-fields { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr) minmax(0, .85fr) minmax(0, 1.65fr); gap: 8px; margin-top: 16px; }
+    .ns-price-home-summary { display: none; }
+    .ns-price-home, .ns-price-home[data-collapsed] { display: contents; }
+    .ns-price-home > div:last-child { grid-column: auto; }
     .ns-reviews { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (min-width: 1024px) {
@@ -191,7 +207,28 @@
     .ns-review-lead blockquote { font-size: 20px; line-height: 1.55; }
     .ns-photo-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
     .ns-city-links { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .ns-price-fields { grid-template-columns: minmax(0, .8fr) minmax(0, .85fr) minmax(0, 1.65fr) minmax(0, 1fr); gap: 8px; }
+
     .qf-head h2 { font-size: 24px; }
+  }
+
+  /* Organic compact pass. Paid-page spacing and review geometry stay unchanged. */
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-section-head .ns-h2:first-child { margin-top: 0; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-trust-list { padding-block: 32px; gap: 24px; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-trust-item strong { font-size: 24px; line-height: 1.15; letter-spacing: -.02em; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-trust-item p { margin-top: 8px; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-reviews { position: relative; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-review { flex: 0 0 88%; scroll-snap-align: start; gap: 20px; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .ns-review-brief blockquote { font-size: 24px; font-weight: 600; line-height: 1.4; letter-spacing: -.015em; }
+  :is(.home-reference, .site-reference:not(.paid-reference)) .site-disclosures summary::after { line-height: 1; }
+  @media (max-width: 639px) {
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-section-head { gap: 12px; margin-bottom: 24px; }
+  }
+  @media (min-width: 1024px) {
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-trust-list { padding-block: 48px; }
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-trust-item strong { font-size: 32px; }
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-reviews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; overflow: visible; padding-bottom: 0; }
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-review-lead { grid-column: auto; }
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-review-lead blockquote { font-size: 16px; line-height: 1.65; }
+    :is(.home-reference, .site-reference:not(.paid-reference)) .ns-city-links-nearby { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 }

@@ -36,6 +36,7 @@ export default function PricePicker({ id, source, service, market, quoteHref }: 
   const [bedrooms, setBedrooms] = useState("3");
   const [bathrooms, setBathrooms] = useState("2");
   const [size, setSize] = useState("1500-1999");
+  const [homeExpanded, setHomeExpanded] = useState(false);
   const queryZip = useSyncExternalStore(subscribe, readZip, serverZip);
   const [zipInput, setZipInput] = useState<string | null>(null);
   const zip = zipInput ?? queryZip;
@@ -46,6 +47,7 @@ export default function PricePicker({ id, source, service, market, quoteHref }: 
   const ready = postal && price.status === "ready" ? price : null;
   const readyKey = ready ? JSON.stringify([source, selectedService, bedrooms, bathrooms, size, postal, ready.market, ready.priceLowCents, ready.priceHighCents]) : "";
   const seenPrices = useRef(new Set<string>());
+  const zipField = useRef<HTMLInputElement>(null);
   const priceLowCents = ready?.priceLowCents;
   const priceHighCents = ready?.priceHighCents;
 
@@ -56,36 +58,39 @@ export default function PricePicker({ id, source, service, market, quoteHref }: 
   }, [readyKey, source, selectedService, priceLowCents, priceHighCents]);
 
   return (
-    <div className="ns-price-picker" id={id} data-price-picker data-market-price={ready?.market ?? config.id}>
+    <div className="ns-price-picker" id={id} data-price-picker data-has-zip={postal ? "" : undefined} data-market-price={ready?.market ?? config.id}>
       <fieldset className="ns-price-services">
-        <legend>Cleaning type</legend>
+        <legend className="ns-sr">Cleaning type</legend>
         <div className="ns-price-segments">
           {services.map((item) => <label key={item.value}><input type="radio" name={`${fieldId}-service`} value={item.value} checked={selectedService === item.value} onChange={() => setService(item.value)} /><span>{item.label}</span></label>)}
         </div>
       </fieldset>
       <div className="ns-price-fields">
-        <div><label htmlFor={`${fieldId}-beds`}>Bedrooms</label><select id={`${fieldId}-beds`} value={bedrooms} onChange={(event) => setBedrooms(event.target.value)}>{bedroomsOptions.map((value) => <option key={value}>{value}</option>)}</select></div>
-        <div><label htmlFor={`${fieldId}-baths`}>Bathrooms</label><select id={`${fieldId}-baths`} value={bathrooms} onChange={(event) => setBathrooms(event.target.value)}>{bathroomsOptions.map((value) => <option key={value}>{value}</option>)}</select></div>
-        <div><label htmlFor={`${fieldId}-size`}>Home size</label><select id={`${fieldId}-size`} aria-label="Home size in square feet" value={size} onChange={(event) => setSize(event.target.value)}>{PAID_HOME_SIZES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
-        <div><label htmlFor={`${fieldId}-zip`}>ZIP</label><input id={`${fieldId}-zip`} name="zip" inputMode="numeric" autoComplete="postal-code" maxLength={10} value={zip} onChange={(event) => setZipInput(event.target.value)} placeholder="5-digit ZIP" aria-describedby={`${fieldId}-zip-help`} /></div>
+        <div><label htmlFor={`${fieldId}-zip`}>ZIP</label><input ref={zipField} id={`${fieldId}-zip`} name="zip" inputMode="numeric" autoComplete="postal-code" maxLength={10} value={zip} onChange={(event) => setZipInput(event.target.value)} placeholder="5-digit ZIP" aria-describedby={`${fieldId}-output`} /></div>
+        <div className="ns-price-home-summary"><span id={`${fieldId}-summary`}>{bedrooms} bed · {bathrooms} bath · {sizeLabel} sq ft</span><button type="button" aria-expanded={homeExpanded} aria-controls={`${fieldId}-home`} aria-describedby={`${fieldId}-summary`} onClick={() => setHomeExpanded(!homeExpanded)}>Change</button></div>
+        <div id={`${fieldId}-home`} className="ns-price-home" data-collapsed={homeExpanded ? undefined : ""}>
+          <div><label htmlFor={`${fieldId}-beds`}>Bedrooms</label><select id={`${fieldId}-beds`} value={bedrooms} onChange={(event) => setBedrooms(event.target.value)}>{bedroomsOptions.map((value) => <option key={value}>{value}</option>)}</select></div>
+          <div><label htmlFor={`${fieldId}-baths`}>Bathrooms</label><select id={`${fieldId}-baths`} value={bathrooms} onChange={(event) => setBathrooms(event.target.value)}>{bathroomsOptions.map((value) => <option key={value}>{value}</option>)}</select></div>
+          <div><label htmlFor={`${fieldId}-size`}>Home size</label><select id={`${fieldId}-size`} aria-label="Home size in square feet" value={size} onChange={(event) => setSize(event.target.value)}>{PAID_HOME_SIZES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
+        </div>
       </div>
-      <p id={`${fieldId}-zip-help`} className="ns-price-help">Your ZIP sets the price for your area.</p>
-      <div className="ns-price-output" role="status" aria-live="polite" aria-atomic="true">
+      <div id={`${fieldId}-output`} className="ns-price-output" role="status" aria-live="polite" aria-atomic="true">
         {price.status === "custom" || openEnded ? <p className="ns-price-prompt">{openEnded ? "This home needs a direct quote. Call or text and we'll price it with you." : "Homes over 5,500 sq ft get a direct quote. Call or text and we'll price it with you."}</p>
           : ready ? <><p className="ns-price-label">Your price</p><p className="ns-price-value">{ready.range ?? ready.low}</p><p className="ns-price-caption">{bedrooms} bed · {bathrooms} bath · {sizeLabel} sq ft</p>{ready.biweekly ? <p className="ns-price-recurring">Every other week: <strong>{ready.biweekly}</strong> a visit</p> : null}</>
             : postal && price.status === "loading" ? <div className="ns-price-loading" aria-label="Checking your price"><span /><span /></div>
               : <p className="ns-price-prompt">{postal ? "We don't have an online price for that ZIP yet. Text us the address and we'll check." : "Enter your ZIP to see your price."}</p>}
       </div>
-      <div className="ns-price-action">
+      {!postal && !openEnded && price.status !== "custom" ? <button type="button" className="home-button ns-price-start" onClick={() => zipField.current?.focus()}>See your price <span aria-hidden="true">→</span></button> : null}
+      <div className="ns-price-action" hidden={!postal && !openEnded && price.status !== "custom"}>
         {ready && ready.bookableSqft && directBookingUrl ? <PaidPriceBookingButton key={`${selectedService}-${bedrooms}-${bathrooms}-${size}-${postal}-${ready.market}`} primary baseUrl={directBookingUrl} service={selectedService} bedrooms={bedrooms} bathrooms={bathrooms} squareFeet={ready.bookableSqft} zip={postal} market={ready.market} source={source} ctaLocation="organic_live_price" />
           : ready ? <a href={quoteHref} className="home-button">Get a quote by text <span aria-hidden="true">→</span></a>
             : price.status === "custom" || openEnded ? <div className="ns-price-contact"><a href={config.phoneHref} className="home-button-secondary" data-phone-location="organic_price">Call</a><a href={config.phoneHref.replace("tel:", "sms:")} className="home-button-secondary">Text</a></div>
               : postal && price.status === "loading" ? null
                 : <a href={config.phoneHref.replace("tel:", "sms:")} className="home-button-secondary">Text us</a>}
       </div>
-      <p className={`ns-price-help${ready?.range ? "" : " invisible"}`} aria-hidden={ready?.range ? undefined : true}>The range covers your size band and how much buildup there is. Your exact price shows before you confirm.</p>
+      {postal ? <p className={`ns-price-help${ready?.range ? "" : " invisible"}`} aria-hidden={ready?.range ? undefined : true}>The range covers your size band and how much buildup there is. Your exact price shows before you confirm.</p> : null}
       <p className="ns-price-help">No contract. Nothing is charged when you book.</p>
-      <a href={quoteHref} className="home-text-link ns-price-quote">Rather get a quote by text?</a>
+      {postal || openEnded ? <a href={quoteHref} className="home-text-link ns-price-quote">Rather get a quote by text?</a> : null}
     </div>
   );
 }

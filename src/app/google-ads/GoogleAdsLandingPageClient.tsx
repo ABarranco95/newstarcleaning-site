@@ -339,7 +339,7 @@ function ScopeNote({ scope }: { scope: NonNullable<PaidIntentConfig["scope"]> })
   );
 }
 
-function BeforeAfterGallery({ order, southbay = false }: { order: ProofPairKey[]; southbay?: boolean }) {
+function BeforeAfterGallery({ order }: { order: ProofPairKey[] }) {
   const pairs = order.map((key) => ({ key, ...PROOF_PAIRS[key] }));
   const galleryRef = useRef<HTMLDivElement>(null);
   const scrollGallery = (direction: number) => {
@@ -358,7 +358,7 @@ function BeforeAfterGallery({ order, southbay = false }: { order: ProofPairKey[]
               Six real before-and-after results.
             </h2>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-ink-soft">{southbay ? "Photos from New Star jobs in the Central Valley." : "Photographed from New Star jobs. No stock photography."}</p>
+          <p className="max-w-sm text-sm leading-6 text-ink-soft">Photographed from New Star jobs. No stock photography.</p>
         </div>
 
         <div
@@ -457,7 +457,6 @@ function ReviewStrip({ intent, excludeReviewId, southbay = false }: { intent: Pa
           <h2 id="paid-reviews-title" className="text-primary">What customers say on Google.</h2>
           <GoogleRating prominent market={southbay ? "southbay" : "fresno"} />
         </div>
-        {southbay ? <p className="mt-3 text-sm text-ink-soft">These reviews are from our Central Valley customers.</p> : null}
         <div className="mt-8">
           <ReviewCards showRating={false} reviews={reviewsFor(REVIEW_TOPIC[intent]).filter((review) => review.id !== excludeReviewId)} market={southbay ? "southbay" : "fresno"} />
         </div>
@@ -699,7 +698,7 @@ export default function GoogleAdsLandingPageClient({
                     <div className="paid-job-photo-frame">
                       <Image src={heroPhoto.src} alt={heroPhoto.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 44vw, 100vw" className="object-cover" />
                     </div>
-                    <figcaption>{heroPhoto.caption} · {marketConfig.id === "southbay" ? "Central Valley job" : "New Star job"}</figcaption>
+                    <figcaption>{heroPhoto.caption} · New Star job</figcaption>
                   </figure>
                 ) : null}
               </div>
@@ -746,7 +745,7 @@ export default function GoogleAdsLandingPageClient({
                         <p>&ldquo;{decisionReview.excerpt.join(" … ")}&rdquo;</p>
                       </blockquote>
                       <figcaption className="mt-2 text-xs leading-5 text-ink-soft">
-                        Google review · {decisionReview.author} · {decisionReview.label}{marketConfig.id === "southbay" ? " · Central Valley customer" : ""}
+                        Google review · {decisionReview.author} · {decisionReview.label}
                       </figcaption>
                     </figure>
                   ) : null}
@@ -766,7 +765,7 @@ export default function GoogleAdsLandingPageClient({
 
       {!isBusinessRequest ? <TrustStrip links={false} market={marketConfig.id} /> : null}
       <ReviewStrip intent={intentKey} excludeReviewId={decisionReview?.id} southbay={marketConfig.id === "southbay"} />
-      {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} southbay={marketConfig.id === "southbay"} /> : null}
+      {!isBusinessRequest ? <BeforeAfterGallery order={intent.proofOrder} /> : null}
       <ProcessStrip commercial={isBusinessRequest} />
 
       <section className="bg-white">

@@ -11,18 +11,18 @@ interface ReviewCardsProps {
   lead?: boolean;
 }
 
-export default function ReviewCards({ reviews, topic = "home", count = 3, showRating = true, market = "fresno", lead = false }: ReviewCardsProps) {
+export default function ReviewCards({ reviews, topic = "home", count = 3, showRating = true, lead = false }: ReviewCardsProps) {
   const list = reviews ?? reviewsFor(topic, count);
   return (
-    <div className={`ns-reviews${lead ? " ns-reviews-lead" : ""}`}>
+    <div className={`ns-reviews${lead ? " ns-reviews-lead" : ""}`} role="region" aria-label="Customer reviews" tabIndex={0}>
       {list.map((review, index) => (
-        <figure key={review.id} className={`ns-review${lead && index === 0 ? " ns-review-lead" : ""}`} data-review-id={review.id}>
+        <figure key={review.id} className={`ns-review${lead && index === 0 ? " ns-review-lead" : ""}${review.id === "joel-s" ? " ns-review-brief" : ""}`} data-review-id={review.id}>
           {showRating ? <StarRow /> : null}
           <blockquote><p>&ldquo;{review.excerpt.join(" … ")}&rdquo;</p></blockquote>
           <figcaption>
             <strong>{review.author}</strong>
             <span>Google review · {review.label}</span>
-            {market === "southbay" ? <span>Central Valley customer</span> : null}
+
             {showRating ? <span className="ns-sr">Rated 5 out of 5</span> : null}
           </figcaption>
         </figure>

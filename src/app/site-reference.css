@@ -6,7 +6,7 @@
   .site-reference p { text-wrap: pretty; }
   .site-hero-band { background: var(--color-primary); }
   .site-hero { max-width: 1280px; margin-inline: auto; display: grid; grid-template-areas: "copy" "action"; gap: 32px; padding: 32px 16px; }
-  .site-hero-visual { grid-template-areas: "photo" "copy" "action"; padding-top: 0; }
+  .site-hero-visual { grid-template-areas: "copy" "action" "photo"; }
   .site-hero-copy { grid-area: copy; min-width: 0; }
   .site-hero h1 { max-width: 640px; color: var(--color-on-dark); }
   .site-hero-action { grid-area: action; min-width: 0; }
@@ -129,6 +129,42 @@
   .site-service-details { display: grid; gap: 32px; margin-top: 32px; }
   .site-service-details p { max-width: 62ch; margin-top: 16px; font-size: 16px; line-height: 1.65; }
   .site-reference .home-ba-pair-label h3 { font-size: 16px; }
+  .site-price-band { background: var(--color-primary); }
+  .site-price-band-inner { display: grid; gap: 32px; align-items: center; }
+  .site-price-band-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-card); }
+  .site-price-band-frame img { object-fit: cover; }
+  .site-price-band figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--color-on-dark-mute); }
+  .site-reference .site-price-band h2 { color: var(--color-on-dark); }
+  .site-price-band-copy > p { margin-top: 16px; max-width: 50ch; color: var(--color-on-dark-soft); font-size: 16px; line-height: 1.55; }
+  .site-price-band .home-text-link { color: var(--color-on-dark); }
+  .site-local-notes { margin-top: 32px; }
+  .site-local-notes > h3 { margin-bottom: 16px; }
+  .site-local-notes details { scroll-margin-top: 88px; }
+  .site-local-notes details p + p { margin-top: 16px; }
+  .site-plan-cards { display: grid; gap: 24px; }
+  .site-plan-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 16px; align-items: start; }
+  .site-plan-card h3 { font-size: 18px; line-height: 1.3; }
+  .site-plan-card p { margin-top: 12px; font-size: 14px; line-height: 1.5; }
+  .site-plan-card .site-plan-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-card); }
+  .site-plan-frame img { object-fit: cover; }
+  .site-local-plan { display: grid; gap: 24px; }
+  .site-local-plan p { max-width: 55ch; margin-top: 16px; font-size: 16px; line-height: 1.55; }
+  .site-room-grid { display: grid; gap: 16px; margin-top: 24px; }
+  .site-room-card { min-width: 0; padding: 24px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); }
+  .site-room-card > h3 { font-size: 20px; }
+  .site-room-card .site-disclosures { margin-top: 16px; }
+  .site-scope-disclosures { display: grid; gap: 16px; margin-top: 24px; }
+  @media (max-width: 639px) {
+    .home-reference .ns-section, .site-reference .ns-section, .site-reference .site-section { padding-block: 32px; }
+    .site-hero { gap: 24px; }
+    .ns-proof-row { gap: 8px 12px; margin-top: 16px; font-size: 13px; }
+    .ns-proof-row > span { padding-left: 12px; }
+    .ns-proof-row > span:first-child { flex-basis: 100%; padding-left: 0; border-left: 0; }
+    .ns-proof-row > span:nth-child(2) { padding-left: 0; border-left: 0; }
+    .ns-proof-row .ns-rating { font-size: 13px; }
+    .site-local-plan { grid-template-columns: 1fr; }
+    .site-local-plan > figure { max-width: 280px; }
+  }
   @media (min-width: 640px) {
     .site-hero { padding-inline: 24px; }
     .site-hero-photo { margin-inline: -24px; }
@@ -140,10 +176,12 @@
     .site-form-layout { padding: 48px 32px 64px; }
     .site-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
     .home-local-cards-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .site-local-plan { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+    .site-scope-disclosures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (min-width: 1024px) {
     .site-hero { padding: 64px 32px 72px; }
-    .site-hero-visual { grid-template-columns: minmax(0, 46fr) minmax(0, 54fr); grid-template-areas: "copy photo" "action photo"; gap: 32px 48px; align-items: start; }
+    .site-hero-visual { grid-template-columns: minmax(0, 46fr) minmax(0, 54fr); grid-template-rows: auto 1fr; grid-template-areas: "copy photo" "action photo"; gap: 32px 48px; align-items: start; }
     .site-hero-photo { width: 100%; max-width: 560px; margin: 0; justify-self: end; }
     .site-hero-photo-frame { aspect-ratio: 4 / 5; border-radius: var(--radius-card); }
     .site-hero-photo figcaption { padding: 0; }
@@ -151,8 +189,14 @@
     .site-hero-photo img[src*="primary-bathroom"] { object-position: 50% 58%; }
     .site-section { padding: 96px 32px; }
     .site-split, .site-quote-layout { grid-template-columns: .9fr 1.1fr; gap: 64px; }
+    .site-quote-layout { column-gap: 48px; padding-block: 64px; }
+    .site-quote-layout > .site-copy { align-self: center; }
     .site-form-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-areas: "head form" "aside form"; grid-template-rows: auto 1fr; gap: 24px 64px; padding-block: 64px 96px; align-items: start; }
     .site-directory { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .site-directory-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .site-price-band-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; }
+    .site-plan-cards, .site-room-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .site-plan-card { display: block; }
+    .site-plan-card h3 { margin-top: 24px; font-size: 20px; }
   }
 }

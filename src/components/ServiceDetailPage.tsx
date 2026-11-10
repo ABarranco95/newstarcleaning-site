@@ -10,10 +10,11 @@ import ServiceProof from "@/components/ServiceProof";
 import HowItWorks from "@/components/HowItWorks";
 import MarketPhone from "@/components/MarketPhone";
 import PricePicker from "@/components/PricePicker";
+import PriceCtaBand from "@/components/PriceCtaBand";
 import ProofRow from "@/components/ProofRow";
 import ReviewCards from "@/components/ReviewCards";
 import WorkPhoto from "@/components/WorkPhoto";
-import { bathroomResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
+import { bathroomResultPhotos, homeResultPhotos, pickUnusedPhoto } from "@/lib/realWorkPhotos";
 
 import type { ServiceDefinition } from "@/lib/services";
 import { clientPrepChecklist, getFullIncludedList } from "@/lib/services";
@@ -79,7 +80,7 @@ const handoffRows = [
   },
 ];
 
-export default function ServiceDetailPage({ service, h1, intro }: {
+export default function ServiceDetailPage({ service, h1 }: {
   service: ServiceDefinition;
   h1: string;
   intro?: string;
@@ -91,6 +92,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
   const isDeep = service.slug === "deep-cleaning";
   const directBookingUrl = resolveDirectBookingUrl();
   const contextPhoto = isStandard ? homeResultPhotos[1] : isDeep ? bathroomResultPhotos[1] : homeResultPhotos[0];
+  const bandPhoto = pickUnusedPhoto([bathroomResultPhotos[0], bathroomResultPhotos[2], homeResultPhotos[2]], [presentation.photo, contextPhoto, ...(isStandard ? presentation.proofPhotos : [])]);
 
   return (
     <div className="site-reference">
@@ -103,6 +105,8 @@ export default function ServiceDetailPage({ service, h1, intro }: {
       >
         <PricePicker id="price" source={`organic_${service.slug}_service_price`} service={quoteFormService(service)} quoteHref="#quote" />
       </SiteHero>
+
+      <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">{isStandard ? "Our work" : "Real jobs"}</p><h2>{isStandard ? "Rooms we've cleaned." : isMoveOut ? "Move-out add-ons, before and after." : "Deep cleaning, before and after."}</h2></div></div><ServiceProof service={service} /></div></section>
 
       <div className="service-editorial [&_.se-kicker]:text-[13px] [&_.se-kicker]:font-bold [&_.se-kicker]:uppercase [&_.se-kicker]:tracking-[.08em] [&_.se-kicker]:text-primary-light [&_.se-cadence-note]:text-base [&_.se-cadence-term]:text-base [&_.se-handoff_.se-tag]:text-[13px]">
         <section className="site-section">
@@ -175,11 +179,12 @@ export default function ServiceDetailPage({ service, h1, intro }: {
             <Link href="/checklist" className="home-text-link">Compare full checklists <span aria-hidden="true">→</span></Link>
           </div>
           <div className="service-editorial">
-            <div className="se-scope-grid">
+            <div className="site-room-grid">
               {fullIncluded.map((group) => (
                 <div key={group.title} className="se-room rounded-[var(--radius-card)] border border-line bg-white p-6">
                   <h3>{group.title}</h3>
-                  <ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul>
+                  <ul>{group.items.slice(0, 5).map((item) => <li key={item}>{item}</li>)}</ul>
+                  {group.items.length > 5 ? <div className="site-disclosures mt-4"><details><summary>Show {group.items.length - 5} more</summary><ul>{group.items.slice(5).map((item) => <li key={item}>{item}</li>)}</ul></details></div> : null}
                 </div>
               ))}
             </div>
@@ -204,34 +209,26 @@ export default function ServiceDetailPage({ service, h1, intro }: {
                 <summary>Not included<span aria-hidden="true">+</span></summary>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.notIncluded.map((item) => <li key={item}>{item}</li>)}</ul>
               </details>
-              <details>
-                <summary>Is this the right cleaning for my home?<span aria-hidden="true">+</span></summary>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.bestFor.map((item) => <li key={item}>{item}</li>)}</ul>
-              </details>
+
               <details>
                 <summary>Before your appointment<span aria-hidden="true">+</span></summary>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{service.scopeNotes.map((note) => <li key={note}>{note}</li>)}</ul>
                 <h3 className="mt-5 text-base font-semibold">Prepare your home</h3>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-ink-soft">{clientPrepChecklist.map((item) => <li key={item}>{item}</li>)}</ul>
-                {service.processSteps && service.processSteps.length > 0 && (
-                  <ol className="mt-5 space-y-4 text-sm leading-6">
-                    {service.processSteps.map((step) => <li key={step.title}><h3 className="font-semibold">{step.title}</h3><p>{step.description}</p></li>)}
-                  </ol>
-                )}
+
               </details>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">{isStandard ? "Our work" : "Real jobs"}</p><h2>{isStandard ? "Rooms we've cleaned." : isMoveOut ? "Move-out add-ons, before and after." : "Deep cleaning, before and after."}</h2></div></div><ServiceProof service={service} /></section>
-      <HowItWorks />
-      <section aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
+      <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks market="fresno" /></div>
+      <section className="site-muted" aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
+      <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." market="fresno" phoneLocation="service_price_band" />
       <section className="site-muted"><div className="site-section site-split">
         <div className="site-copy">
           <h2>Good to know before you book.</h2>
-          {service.localNotes && <p className="site-intro">{service.localNotes}</p>}
-          <p className="site-note">{intro ?? service.tagline}</p>
+
           <div className="site-links">
             {["Fresno", "Clovis", "Madera"].map((city) => (
               <Link key={city} href={`/cleaning-services-${city.toLowerCase()}${isDeep ? "#deep-cleaning" : isMoveOut ? "#move-out-cleaning" : ""}`} className="home-text-link">
@@ -240,6 +237,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
             ))}
           </div>
           <Link href={service.slug === "deep-cleaning" ? "/services/standard-cleaning" : "/services/deep-cleaning"} className="home-text-link">Compare {service.slug === "deep-cleaning" ? "standard" : "deep"} cleaning <span aria-hidden="true">→</span></Link>
+          <div className="site-links"><Link href={`/${service.slug}-san-jose`} className="home-text-link">{isStandard ? "Regular house cleaning" : isDeep ? "Deep cleaning" : "Move-out cleaning"} in San Jose →</Link></div>
           {isMoveOut && <Link href="/blog/move-out-cleaning-checklist-before-inspection" className="home-text-link">Fresno rental turnover guide <span aria-hidden="true">↗</span></Link>}
           {directBookingUrl ? <div className="site-actions"><Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} service={quoteFormService(service)} sourcePage={`/services/${service.slug}`} ctaLocation="service_details" label="Book online" showIcon={false} className="home-button" /></Suspense></div> : null}
         </div>
