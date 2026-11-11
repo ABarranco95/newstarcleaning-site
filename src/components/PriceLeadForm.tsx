@@ -349,7 +349,8 @@ function PriceLeadFormContent({
     const card = containerRef.current;
     if (card) {
       const box = card.getBoundingClientRect();
-      if (box.top < 0 || box.bottom > window.innerHeight) card.scrollIntoView({ block: "start" });
+      const scrollMarginTop = parseFloat(window.getComputedStyle(card).scrollMarginTop) || 0;
+      if (box.top < scrollMarginTop || box.bottom > window.innerHeight) card.scrollIntoView({ block: "start" });
     }
     titleRef.current?.focus({ preventScroll: true });
   };
@@ -635,7 +636,12 @@ function PriceLeadFormContent({
     if (!walkthrough && step === "price") {
       if (ready || askState || directQuote) openContact();
       else {
-        containerRef.current?.scrollIntoView({ block: "start" });
+        const card = containerRef.current;
+        if (card) {
+          const box = card.getBoundingClientRect();
+          const scrollMarginTop = parseFloat(window.getComputedStyle(card).scrollMarginTop) || 0;
+          if (box.top < scrollMarginTop || box.bottom > window.innerHeight) card.scrollIntoView({ block: "start" });
+        }
         zipRef.current?.focus({ preventScroll: true });
       }
       return;
