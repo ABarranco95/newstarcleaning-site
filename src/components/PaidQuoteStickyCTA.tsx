@@ -4,7 +4,7 @@ import { useEffect, useState, type RefObject } from "react";
 import { business } from "@/lib/business";
 
 type PaidQuoteStickyCTAProps = {
-  formRef: RefObject<HTMLFormElement | null>;
+  formRef: RefObject<HTMLElement | null>;
   isSubmitting: boolean;
   label: string;
   onClick: () => void;
@@ -18,7 +18,7 @@ export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onCli
   useEffect(() => {
     const form = formRef.current;
     const scope = activeStep ? form?.querySelector(`[data-quote-step="${activeStep}"]`) : form;
-    const actions = scope?.querySelectorAll<HTMLButtonElement>('button[type="submit"], [data-paid-booking] button');
+    const actions = scope?.querySelectorAll<HTMLButtonElement>('button[type="submit"], [data-paid-booking] button, [data-quote-next]');
     if (!actions?.length) return;
     const visibility = new Map<Element, boolean>();
     const observer = new IntersectionObserver((entries) => {

@@ -84,7 +84,7 @@ for (const [configured, expected] of [
   check(portalModule.exports.resolveDirectBookingUrl() === expected, "known Apex wizard uses verified branded host; other configuration and safety guards remain intact");
 }
 
-const form = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
+const form = readFileSync("src/components/PriceLeadForm.tsx", "utf8");
 const organicPage = ts.createSourceFile("book-now/page.tsx", readFileSync("src/app/book-now/page.tsx", "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 const organicForms = [];
 function collectOrganicForms(node) {
@@ -111,10 +111,10 @@ for (const frequency of ["weekly", "bi-weekly", "monthly"]) {
   check(snapshot.frequency === frequency, "later form edits cannot change accepted recurring frequency");
   check(prefillModule.exports.acceptedPrefillSnapshot(submitted, false, true) === null, "unaccepted request cannot yield a carryover snapshot");
 }
-check(form.includes("acceptedPrefillSnapshot({ ...formData, ...location }, true, customerCityRef.current)") && form.includes("setAcceptedSnapshot(apexAccepted ? submittedSnapshot : null)"), "success snapshot comes from the submitted customer/location closure and is acceptance-gated");
-check(form.includes("<BookingPrefillLink baseUrl={directBookingUrl} snapshot={acceptedSnapshot}") && form.includes("onRelease={() => setAcceptedSnapshot(null)}"), "success card passes frequency privately and releases the snapshot after transfer");
-check(form.includes('"Get a quote"') && !form.includes('"Get my price"'), "paid lead submit describes a quote request, not instant pricing");
-check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, formData.contactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
+check(form.includes("acceptedPrefillSnapshot({ ...formForSnapshot, ...location }, true, false)") && form.includes("acceptedSnapshot: apexAccepted ? submittedSnapshot : null"), "success snapshot comes from the submitted customer/location closure and is acceptance-gated");
+check(form.includes("<BookingPrefillLink baseUrl={resolvedBookingUrl} snapshot={sent.acceptedSnapshot}") && form.includes("onRelease={() => setSent((current) => current ? { ...current, acceptedSnapshot: null } : current)}"), "success card passes frequency privately and releases the snapshot after transfer");
+check(form.includes("Request a walkthrough") && form.includes("Text me my price") && !form.includes("Get my price"), "the lead submit describes a quote request, not instant pricing");
+check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, postedContactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
 
 const prefill = prefillModule.exports;
 const regionalSnapshot = prefill.acceptedPrefillSnapshot({ service: "Deep cleaning", zip: "95118", market: "southbay", city: "San Jose" }, true, false);
@@ -171,5 +171,5 @@ for (const service of ["Deep cleaning", "Standard recurring cleaning", "Move-in 
     check(events.at(-1).event === "booking_cta_click" && events.at(-1).payload.ctaLocation === "paid_live_price", "paid click retains the diagnostic funnel event, not a lead conversion");
   }
 }
-check(form.includes("Rather we text you a price?") && form.includes("primary={stagedPaid}"), "priced paid flow makes booking primary and leaves the quote path quiet");
+check(form.includes("Text me this price") && form.includes("primary={false}"), "the lead step is the gold action and paid booking stays the outline action");
 console.log(`Booking continuity: ${checks}/${checks} checks passed (inert module tests; no network or live booking).`);

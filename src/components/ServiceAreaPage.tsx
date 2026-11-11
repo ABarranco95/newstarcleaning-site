@@ -66,7 +66,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   return (
     <div className="site-reference">
       <SiteHero title={`House cleaning in ${area.name}, CA.`} description={area.description} photo={heroPhoto} market={area.market} proof={<ProofRow market={area.market} tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}>
-        <PricePicker id="price" source={`organic_${area.slug}_price`} market={area.market} quoteHref="#quote" />
+        <PricePicker id="price" source={`organic_${area.slug}_price`} leadSource={`organic_${area.slug}_service_area`} defaultCity={area.name} market={area.market} quoteHref="#quote" />
       </SiteHero>
 
       {!isSouthBay ? <section aria-labelledby="area-reviews-title"><div className="ns-section"><div className="ns-section-head"><h2 id="area-reviews-title" className="ns-h2">What customers say.</h2><GoogleRating prominent market={area.market} /></div><ReviewCards topic="home" reviews={reviews} market={area.market} lead /></div></section> : null}
@@ -110,7 +110,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       ]} /></div></div></section>
 
       <section><div className="site-section site-quote-layout">
-        <div className="site-copy">{isSouthBay ? <><p className="ns-kicker">Quote by text</p><h2>Rather get a quote by text?</h2><p className="site-intro">Send the basics and we&apos;ll text you a price. If the house needs more than a standard visit, we&apos;ll say so up front.</p><MarketPhone market={area.market} location="area_quote" className="home-text-link" /></> : <><p className="ns-kicker">A quote from us</p><h2>Tell us about your {area.name} home.</h2><p className="site-intro">{area.bookingNote}</p><p className="site-note">Insured, with cleaning supplies included.</p><MarketPhone market={area.market} className="home-text-link" /></>}</div>
+        <div className="site-copy"><p className="ns-kicker">Your price</p><h2>{isSouthBay ? "See your price. We'll text you the rest." : `See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p>{!isSouthBay ? <p className="site-note">{area.bookingNote}</p> : null}<p className="site-note">Or call or text <MarketPhone market={area.market} location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
         <QuickQuoteForm title={`Get your ${area.name} price`} subtitle="Start with the cleaning you need." source={`organic_${area.slug}_service_area`} defaultCity={area.name} landingCity={area.name} pageMarket={area.market} directBookingUrl={directBookingUrl} compact />
       </div></section>
 

@@ -21,7 +21,7 @@ const layout = read("src/app/layout.tsx");
 const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const home = read("src/app/page.tsx");
 const quickQuoteForm = read("src/components/QuickQuoteForm.tsx");
-const contactForm = read("src/components/ContactForm.tsx");
+const priceForm = read("src/components/PriceLeadForm.tsx");
 const quotePathPanel = read("src/components/QuotePathPanel.tsx");
 const bookNow = read("src/app/book-now/page.tsx");
 const contact = read("src/app/contact/page.tsx");
@@ -78,11 +78,11 @@ assert(
 );
 
 assert(
-  quickQuoteForm.includes("noValidate") &&
-    quickQuoteForm.includes('data-quote-step="3"') &&
-    quickQuoteForm.includes("reportValidity()") &&
-    quickQuoteForm.includes("firstInvalidControl(formElement.querySelector"),
-  "organic quote form validates each visible step and rechecks earlier steps before sending",
+  priceForm.includes("noValidate") &&
+    priceForm.includes('data-quote-step="2"') &&
+    priceForm.includes("firstInvalidControl(formElement)") &&
+    priceForm.includes("nq-field-error"),
+  "the price-first form validates its visible contact step with native constraints and shows the first invalid message in place",
 );
 
 // Service and area templates embed the compact prefilled form directly:
@@ -131,26 +131,28 @@ assert(
 
 assert(
   quickQuoteForm.includes("normalizeServiceParam") &&
-    quickQuoteForm.includes("normalizeFrequencyParam") &&
-    quickQuoteForm.includes('params.get("city")') &&
-    quickQuoteForm.includes('params.get("service")') &&
-    quickQuoteForm.includes('params.get("frequency")') &&
-    quickQuoteForm.includes('homeSize: quickPaid ? paidLeadHomeSize(formData.sqft) : formData.sqft'),
-  "quote form supports city, service, and recurring-frequency prefill and forwards the home-size signal",
+    priceForm.includes("normalizeFrequencyParam") &&
+    priceForm.includes('params.get("service")') &&
+    priceForm.includes('params.get("frequency")') &&
+    priceForm.includes("homeSize: leadHomeSize"),
+  "the form supports service and recurring-frequency prefill, and forwards the home-size signal",
 );
 
 assert(
-  quickQuoteForm.includes('id="quote-city"') &&
-    quickQuoteForm.includes('id="quote-service"') &&
-    quickQuoteForm.includes('id="quote-timeline"') &&
-    quickQuoteForm.includes('id="quote-sqft"') &&
-    quickQuoteForm.includes('id="quote-bedrooms"') &&
-    quickQuoteForm.includes('id="quote-bathrooms"') &&
-    quickQuoteForm.includes('id="quote-condition"') &&
-    quickQuoteForm.includes("renderBedBathFields") &&
-    quickQuoteForm.includes("renderConditionField") &&
-    quickQuoteForm.includes("buildQuoteSmsConsent") && quickQuoteForm.includes("QUOTE_SMS_DISCLOSURE"),
-  "quote form captures routing fields plus bedrooms, bathrooms, and condition so first-touch is not a cold call",
+  priceForm.includes('name="name"') &&
+    priceForm.includes('name="phone"') &&
+    priceForm.includes('name="zip"') &&
+    priceForm.includes('name="service"') &&
+    priceForm.includes('name="bedrooms"') &&
+    priceForm.includes('name="bathrooms"') &&
+    priceForm.includes('name="sqft"') &&
+    priceForm.includes("bedroomsOptions.map") && priceForm.includes("bathroomsOptions.map") &&
+    priceForm.includes("PAID_HOME_SIZES.map") &&
+    priceForm.includes('name="timeline"') &&
+    priceForm.includes('name="condition"') &&
+    priceForm.includes('name="frequency"') &&
+    priceForm.includes("buildQuoteSmsConsent") && priceForm.includes("QUOTE_SMS_DISCLOSURE"),
+  "the form captures the contact, ZIP and optional-variable fields so first-touch is not a cold call",
 );
 
 assert(
@@ -170,28 +172,25 @@ assert(
 );
 
 assert(
-  quickQuoteForm.includes("showPaidDetails") &&
-    quickQuoteForm.includes("Add home details (optional)") &&
-    quickQuoteForm.includes("home like right now") &&
-    quickQuoteForm.includes("Get a quote") &&
-    quickQuoteForm.includes('data-clarity-mask="true"') &&
-    quickQuoteForm.includes("paidSearch={paidSearch}") &&
-    quickQuoteForm.includes("landingCity?: string;") &&
-    /data-quote-step=\{stagedPaid \? "2" : undefined\}[\s\S]{0,600}\{renderCityField\(\)\}/.test(quickQuoteForm) &&
-    !quickQuoteForm.includes('<input type="hidden" name="city"') &&
-    quickQuoteForm.includes("paidServicePrefilled") &&
-    quickQuoteForm.includes("isPaidHouseRequest"),
-  "paid quote form requires location, bedrooms, bathrooms, and condition; optional extras stay behind progressive disclosure",
+  priceForm.includes("showDetails") &&
+    priceForm.includes("Add details (optional)") &&
+    priceForm.includes("home like right now") &&
+    priceForm.includes('data-clarity-mask="true"') &&
+    priceForm.includes("landingCity?: string;") &&
+    priceForm.includes("marketForCity(defaultCity) === ready.market ? defaultCity : postal") &&
+    !priceForm.includes('<input type="hidden" name="city"') &&
+    priceForm.includes("pinnedService"),
+  "the form keeps optional extras behind one disclosure and never hides a campaign-prefilled customer city",
 );
 assert(
-  !quickQuoteForm.includes("Prefer to talk? Call") &&
-    quickQuoteForm.includes("renderExtendedDetails(true)"),
-  "paid quote card removes the competing call box and suppresses low-value extended fields",
+  !priceForm.includes("Prefer to talk? Call") &&
+    priceForm.includes("quote_details_open"),
+  "the card removes the competing call box and measures an explicit optional-details open",
 );
 
 assert(
-  contactForm.includes("QuickQuoteForm") && !contactForm.includes('fetch("/api/lead"'),
-  "legacy ContactForm delegates to the shared quote form instead of maintaining a second payload shape",
+  !existsSync(path.join(root, "src/components/ContactForm.tsx")),
+  "legacy ContactForm is deleted instead of maintaining a second payload shape",
 );
 
 assert(
@@ -200,8 +199,8 @@ assert(
 );
 
 assert(
-  bookNow.split("</section>")[0]?.includes("QuickQuoteForm"),
-  "book-now keeps the quote form in the hero before the first section ends",
+  bookNow.split("</section>")[0]?.includes("PricePicker") && bookNow.includes("QuickQuoteForm"),
+  "book-now keeps the price-first form in the hero and the page placement below it",
 );
 
 if (failures.length) {

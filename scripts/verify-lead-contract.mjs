@@ -196,7 +196,7 @@ const bookNow = readFileSync("src/app/book-now/page.tsx", "utf8");
 assert(bookNow.includes("resolveDirectBookingUrl"), "book-now must resolve booking URL through the shared explicit resolver");
 assert(!bookNow.includes("APEX_CRM_BASE_URL"), "book-now must not derive public URLs from server integration settings");
 
-const quoteForm = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
+const quoteForm = readFileSync("src/components/PriceLeadForm.tsx", "utf8");
 assert(quoteForm.includes("submissionId: submissionIdRef.current"), "quote form must send a stable submissionId");
 assert(quoteForm.includes('"fbclid"'), "quote form must capture fbclid");
 

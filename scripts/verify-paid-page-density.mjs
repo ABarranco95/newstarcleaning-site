@@ -5,7 +5,7 @@ const root = process.cwd();
 const page = readFileSync(path.join(root, "src/app/google-ads/GoogleAdsLandingPageClient.tsx"), "utf8");
 const marker = readFileSync(path.join(root, "src/app/google-ads/page.tsx"), "utf8");
 const css = readFileSync(path.join(root, "src/app/google-ads/paid-reference.css"), "utf8");
-const form = readFileSync(path.join(root, "src/components/QuickQuoteForm.tsx"), "utf8");
+const form = readFileSync(path.join(root, "src/components/PriceLeadForm.tsx"), "utf8");
 const failures = [];
 const passes = [];
 
@@ -60,8 +60,8 @@ for (const rejected of [
 assert(!form.includes("Prefer to talk?"), "paid form contains no competing call box");
 assert(page.includes('<div id="booking-form"'), "paid hero wrapper owns the quote anchor and sticky-observer target");
 assert(!form.includes('id="booking-form"'), "paid form does not duplicate the hero quote anchor ID");
-assert(form.includes("Add home details (optional)"), "paid form keeps optional details quiet and explicit");
-assert(form.includes("renderExtendedDetails(true)"), "paid form uses its reduced optional-detail surface");
+assert(form.includes("Add details (optional)"), "form keeps optional details quiet and explicit");
+assert(form.includes("quote_details_open"), "optional details are disclosed only on an explicit open");
 
 if (failures.length) {
   console.error("Paid page density verification failed:");

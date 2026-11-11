@@ -103,7 +103,7 @@ export default function ServiceDetailPage({ service, h1 }: {
         proof={<ProofRow market="fresno" tone="dark" />}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
       >
-        <PricePicker id="price" source={`organic_${service.slug}_service_price`} service={quoteFormService(service)} quoteHref="#quote" />
+        <PricePicker id="price" source={`organic_${service.slug}_service_price`} leadSource={`organic_${service.slug}_service`} service={quoteFormService(service)} quoteHref="#quote" />
       </SiteHero>
 
       <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">{isStandard ? "Our work" : "Real jobs"}</p><h2>{isStandard ? "Rooms we've cleaned." : isMoveOut ? "Move-out add-ons, before and after." : "Deep cleaning, before and after."}</h2></div></div><ServiceProof service={service} /></div></section>
@@ -258,7 +258,7 @@ export default function ServiceDetailPage({ service, h1 }: {
 
       <section>
         <div className="site-section site-quote-layout">
-          <div className="site-copy"><p className="ns-kicker">A quote from us</p><h2>Want us to review your home first?</h2><p className="site-intro">Tell us what needs attention. We&apos;ll confirm the work and your price by text or phone.</p><p className="site-note">Insured, with cleaning supplies included.</p><MarketPhone location="service_quote" className="home-text-link mt-4" /></div>
+          <div className="site-copy"><p className="ns-kicker">Your price</p><h2>Price your {service.shortName.toLowerCase()}.</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="service_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
           <QuickQuoteForm title={`Price your ${service.shortName.toLowerCase()}`} subtitle="Your service is selected. Start with your city and timing." source={`organic_${service.slug}_service`} defaultService={quoteFormService(service)} compact />
         </div>
       </section>

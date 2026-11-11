@@ -4,7 +4,7 @@ import vm from "node:vm";
 import ts from "typescript";
 
 const page = readFileSync("src/app/google-ads/GoogleAdsLandingPageClient.tsx", "utf8");
-const form = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
+const form = readFileSync("src/components/PriceLeadForm.tsx", "utf8");
 const route = readFileSync("src/app/api/google-ads-lead/route.ts", "utf8");
 const apex = readFileSync("src/lib/apexCrm.ts", "utf8");
 const contractPath = "src/lib/paidLeadContract.ts";
@@ -12,14 +12,16 @@ const contractPath = "src/lib/paidLeadContract.ts";
 assert(page.includes('landingCity={city.formValue || city.label}'), "Paid landing must pass campaign city as landingCity context");
 assert(!page.includes('defaultCity={city.formValue}'), "Paid landing must not prefill campaign city as customer location");
 assert(form.includes("landingCity?: string;"), "Paid quote form must type landingCity separately");
-assert(form.includes('city: paidSearch ? "" : defaultCity || ""'), "Paid form state must start with an empty customer location");
-assert(form.includes("if (!paidSearch && city)"), "Paid form must ignore campaign URL city when filling customer location");
-const paidSteps = form.slice(form.indexOf(") : quickPaid ? ("), form.indexOf("      {decisionProof}"));
-const paidStep2 = paidSteps.indexOf('data-quote-step={stagedPaid ? "2" : undefined}');
-assert(paidStep2 > 0 && !paidSteps.slice(0, paidStep2).includes("renderCityField()"), "Paid price step must not block on customer location");
-assert(/\{renderCityField\(\)\}\s*\{renderNameAndPhone\(\)\}/.test(paidSteps.slice(paidStep2)), "Paid contact step requires editable customer location above name and phone");
-assert(paidSteps.includes("renderSqftField(false)") && /id="quote-city"[\s\S]{0,100}\brequired\b/.test(form), "Paid size and final customer location remain required");
-assert(!form.includes('<input type="hidden" name="city"'), "Paid form must never hide a campaign-prefilled customer location");
+assert(form.includes("marketForCity(defaultCity) === ready.market ? defaultCity : postal || \"\"") && !form.includes("landingCity ||"), "Customer city comes from the page default or the typed ZIP, never from the campaign city");
+assert(!form.includes('params.get("city")') && !form.includes("landingCity ||"), "Paid form must ignore campaign URL city when filling customer location");
+assert(form.includes('data-quote-step="1"') && form.includes('data-quote-step="2"'), "Price and contact screens exist in one card");
+assert(!form.includes('id="quote-city"') && !form.includes('<input type="hidden" name="city"'), "Customer location is never a typed or hidden city field on the residential form");
+assert(form.includes("PAID_HOME_SIZES.map") && form.includes('name="sqft"') && form.includes('name="zip"'), "Home size and ZIP are collected on the price screen");
+assert(form.includes('const postal = normalizedZip(draft.zip)') &&
+  form.includes('if (!walkthrough && !postal)') &&
+  form.indexOf('if (!walkthrough && !postal)') < form.indexOf('await fetch(endpoint'),
+  "Paid residential cannot post without a valid customer ZIP, even if the shared draft changed on the contact screen");
+assert(/name="city"[^>]*\brequired\b/.test(form), "Walkthrough still requires customer-entered city or ZIP");
 assert(form.includes("landingCity,"), "Paid submission must merge campaign landingCity independently from form city");
 
 assert(route.includes("normalizePaidLeadSubmission"), "Paid endpoint must use the typed paid lead contract");

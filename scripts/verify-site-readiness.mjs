@@ -29,10 +29,11 @@ for (const preference of ["", "text", "call", "email", "either"]) {
 }
 assert.equal(buildPaidLeadForward({ smsConsent: false }).smsConsent, false);
 assert.equal(buildPaidLeadForward({}).smsConsent, undefined, "missing consent is never synthesized as granted");
-const form = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
+const form = readFileSync("src/components/PriceLeadForm.tsx", "utf8");
+const quoteMount = readFileSync("src/components/QuickQuoteForm.tsx", "utf8");
 assert(!form.includes('value="3500+"'), "unsupported broad size answer must not be offered");
-assert(form.includes('value="3500-4999"') && form.includes('value="5000-9999"'));
-assert(form.includes('service: normalizeServiceParam(defaultService || null)'), "defaults share the URL service normalizer");
+assert(form.includes("PAID_HOME_SIZES") && !form.includes('value="5000-9999"'));
+assert(quoteMount.includes("normalizeServiceParam(defaultService || null)"), "defaults share the URL service normalizer");
 for (const file of ["src/app/api/lead/route.ts", "src/lib/apexCrm.ts"]) {
   const source = readFileSync(file, "utf8");
   assert(source.includes('redirect: "error"') && source.includes("AbortSignal.timeout(15000)"));

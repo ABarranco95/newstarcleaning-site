@@ -20,7 +20,7 @@ function assert(condition, message) {
 
 const tracking = read("src/lib/conversionTracking.ts");
 const paidPage = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
-const form = read("src/components/QuickQuoteForm.tsx");
+const form = read("src/components/PriceLeadForm.tsx");
 const callTracker = read("src/components/WebsiteCallTracker.tsx");
 const layout = read("src/app/layout.tsx");
 const readiness = read("src/app/api/ad-readiness/route.ts");

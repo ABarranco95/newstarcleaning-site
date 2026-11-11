@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
@@ -22,8 +22,8 @@ const checklist = read("src/app/checklist/page.tsx");
 const serviceDetailPage = read("src/components/ServiceDetailPage.tsx");
 const serviceCityPage = read("src/app/[serviceCity]/page.tsx");
 const servicesHub = read("src/app/services/page.tsx");
-const quickQuoteForm = read("src/components/QuickQuoteForm.tsx");
-const contactForm = read("src/components/ContactForm.tsx");
+const quickQuoteForm = read("src/components/PriceLeadForm.tsx");
+const contactForm = "";
 const layout = read("src/app/layout.tsx");
 const home = read("src/app/page.tsx");
 const googleAds = read("src/app/google-ads/GoogleAdsLandingPageClient.tsx");
@@ -97,10 +97,8 @@ assert(
 );
 
 assert(
-  !contactForm.includes("Post-construction cleaning") &&
-    !contactForm.includes("Vacation rental / Airbnb cleaning") &&
-    !contactForm.includes("Commercial Cleaning"),
-  "ContactForm avoids unsupported service options",
+  !existsSync(path.join(root, "src/components/ContactForm.tsx")),
+  "the retired ContactForm no longer exists to carry unsupported options",
 );
 
 assert(

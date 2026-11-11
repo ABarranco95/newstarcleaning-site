@@ -49,8 +49,8 @@ export default function Home() {
     <div className="home-reference">
       <section className="hx ns-on-dark" aria-labelledby="home-title">
         <div className="hx-inner">
-          <div className="hx-copy"><h1 id="home-title">House cleaning in <span className="whitespace-nowrap">San Jose</span> &amp; the South Bay.</h1><ProofRow market="southbay" tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. See your price, then book online.</p></div>
-          <div className="hx-action"><PricePicker id="price" source="organic_home_price" quoteHref="#quote" /></div>
+          <div className="hx-copy"><h1 id="home-title">House cleaning in <span className="whitespace-nowrap">San Jose</span> &amp; the South Bay.</h1><ProofRow market="southbay" tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. Put in your ZIP and see your price.</p></div>
+          <div className="hx-action"><PricePicker id="price" source="organic_home_price" leadSource="organic_home_hero" quoteHref="#quote" /></div>
           <figure className="hx-photo" data-work-photo="hero"><div className="hx-photo-frame"><Image src={hero.src} alt={hero.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, 100vw" /></div><figcaption>Glass shower and freestanding tub · New Star job</figcaption></figure>
         </div>
       </section>
@@ -87,7 +87,7 @@ export default function Home() {
       <section className="site-muted" aria-labelledby="home-faq-title"><div className="ns-section home-faq"><div><h2 id="home-faq-title" className="ns-h2">Before the visit.</h2><Link href="/checklist" className="home-text-link">See the full checklist <span aria-hidden="true">→</span></Link></div><FaqList faqs={faqs} /></div></section>
 
       <section aria-labelledby="home-quote-title"><div className="site-section site-quote-layout">
-        <div className="site-copy"><p className="ns-kicker">Quote by text</p><h2 id="home-quote-title" className="ns-h2">Rather get a quote by text?</h2><p className="ns-lead">Send the basics and we&apos;ll text you a price. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="home_quote" />. Mon–Fri 8–6, Sat 8–5.</p><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote →</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense></div>
+        <div className="site-copy"><p className="ns-kicker">Your price</p><h2 id="home-quote-title" className="ns-h2">See your price. We&apos;ll text you the rest.</h2><p className="ns-lead">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="home_quote" />. Mon–Fri 8–6, Sat 8–5.</p><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote →</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense></div>
         <QuickQuoteForm title="Get a quote" subtitle="Start with the cleaning you need." source="organic_home_hero" directBookingUrl={directBookingUrl} compact />
       </div></section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })) }) }} />
