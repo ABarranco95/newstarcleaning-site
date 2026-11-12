@@ -14,7 +14,8 @@ import { trackFunnelEvent } from "@/lib/conversionTracking";
 import { reviewsFor } from "@/lib/googleReviews";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos } from "@/lib/realWorkPhotos";
 import { usePaidDropOffTracking } from "./usePaidDropOffTracking";
-import { markets, marketForCity, type MarketId } from "@/lib/markets";
+import { marketForCity, type MarketId } from "@/lib/markets";
+import { useMarket } from "@/components/MarketProvider";
 
 const PAID_HERO_PHOTOS = {
   deep: bathroomResultPhotos.find((photo) => photo.src.endsWith("/glass-shower-freestanding-tub-new-star.webp")),
@@ -522,9 +523,9 @@ function FAQAccordion({ faqs }: { faqs: PaidIntentConfig["faqs"] }) {
   );
 }
 
-function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false, market = "fresno" }: { onQuoteClick: () => void; onCallClick: () => void; commercial?: boolean; market?: MarketId }) {
+function StickyMobileCTA({ onQuoteClick, onCallClick, commercial = false, market }: { onQuoteClick: () => void; onCallClick: () => void; commercial?: boolean; market?: MarketId }) {
   const [visible, setVisible] = useState(false);
-  const phone = markets[market];
+  const phone = useMarket(market);
 
   useEffect(() => {
     const form = document.getElementById("booking-form");
@@ -591,10 +592,11 @@ export default function GoogleAdsLandingPageClient({
     [service, frequency]
   );
   const intent = INTENT_CONFIG[intentKey];
-  const marketConfig = markets[pageMarket || marketForCity(city.formValue) || "fresno"];
+  const marketConfig = useMarket(pageMarket || marketForCity(city.formValue));
+  const displayedCity = city.formValue ? city.label : marketConfig.id ? marketConfig.name : "your area";
   const headline = marketConfig.id === "southbay" && ["deep", "move", "house", "recurring"].includes(intentKey)
-    ? intentKey === "recurring" ? `Recurring house cleaning in ${city.label}.` : `${intentKey === "deep" ? "Deep House Cleaning" : intentKey === "move" ? "Move-Out & Move-In Cleaning" : "House Cleaning"} in ${city.label}`
-    : intent.h1(city.label);
+    ? intentKey === "recurring" ? `Recurring house cleaning in ${displayedCity}.` : `${intentKey === "deep" ? "Deep House Cleaning" : intentKey === "move" ? "Move-Out & Move-In Cleaning" : "House Cleaning"} in ${displayedCity}`
+    : marketConfig.id === "fresno" ? intent.h1(city.label) : intent.h1(displayedCity).replace(" in Fresno & Clovis", "");
   const decisionReview = reviewsFor(REVIEW_TOPIC[intentKey]).find((review) => review.id === DECISION_REVIEW_ID[intentKey]);
   const isProjectRequest = intentKey === "postConstruction";
   const isCommercialRequest = intentKey === "commercial";

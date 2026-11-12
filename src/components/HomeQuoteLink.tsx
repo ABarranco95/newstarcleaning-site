@@ -12,7 +12,7 @@ export default function HomeQuoteLink({ className, children }: HomeQuoteLinkProp
   const pathname = usePathname();
   const params = new URLSearchParams(useSearchParams().toString());
   const market = useMarket();
-  if (pathname === "/") params.set("market", market.id);
+  if (market.id) params.set("market", market.id);
   const href = siteQuoteHref(pathname, params.toString());
   return <Link href={href} className={className}>{children}</Link>;
 }

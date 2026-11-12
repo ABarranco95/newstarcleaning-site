@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import BeforeAfterPairs from "@/components/BeforeAfterPairs";
-import CityLinks from "@/components/CityLinks";
+import MarketAreas from "@/components/MarketAreas";
 import FaqList from "@/components/FaqList";
 import GoogleRating from "@/components/GoogleRating";
 import HomeServices from "@/components/HomeServices";
@@ -23,11 +23,11 @@ import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 const directBookingUrl = resolveDirectBookingUrl();
 
 export const metadata: Metadata = {
-  title: { absolute: "San Jose & South Bay House Cleaning | New Star Cleaning" },
-  description: "House cleaning in San Jose, Cupertino, Saratoga, Los Gatos, Campbell, Santa Clara and Sunnyvale. See your price before you book. Also serving Fresno.",
+  title: { absolute: "House Cleaning | New Star Cleaning" },
+  description: "Standard, deep and move-out house cleaning. Enter your ZIP to see your price before you book.",
   alternates: { canonical: "/" },
-  openGraph: { title: "San Jose & South Bay House Cleaning | New Star Cleaning", description: "Regular, deep and move-out cleaning across San Jose and the South Bay. See your price before you book. Also serving Fresno, Clovis and Madera.", url: "https://newstarcleaning.com" },
-  twitter: { title: "San Jose & South Bay House Cleaning | New Star Cleaning", description: "Regular, deep and move-out cleaning across San Jose and the South Bay. See your price before you book. Also serving Fresno, Clovis and Madera." },
+  openGraph: { title: "House Cleaning | New Star Cleaning", description: "Standard, deep and move-out house cleaning. Enter your ZIP to see your price before you book.", url: "https://newstarcleaning.com" },
+  twitter: { title: "House Cleaning | New Star Cleaning", description: "Standard, deep and move-out house cleaning. Enter your ZIP to see your price before you book." },
 };
 
 const faqs = [
@@ -49,7 +49,7 @@ export default function Home() {
     <div className="home-reference">
       <section className="hx ns-on-dark" aria-labelledby="home-title">
         <div className="hx-inner">
-          <div className="hx-copy"><h1 id="home-title">House cleaning in <span className="whitespace-nowrap">San Jose</span> &amp; the South Bay.</h1><ProofRow market="southbay" tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. Put in your ZIP and see your price.</p></div>
+          <div className="hx-copy"><h1 id="home-title">House cleaning. See your price before you book.</h1><ProofRow market="southbay" tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. Put in your ZIP and see your price.</p></div>
           <div className="hx-action"><PricePicker id="price" source="organic_home_price" leadSource="organic_home_hero" quoteHref="#quote" /></div>
           <figure className="hx-photo" data-work-photo="hero"><div className="hx-photo-frame"><Image src={hero.src} alt={hero.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, 100vw" /></div><figcaption>Glass shower and freestanding tub · New Star job</figcaption></figure>
         </div>
@@ -70,19 +70,16 @@ export default function Home() {
         </HomeServices></Suspense>
       </section>
 
-      <TrustStrip market="southbay" />
+      <TrustStrip />
 
       <section id="reviews" className="ns-section" aria-labelledby="home-reviews-title">
         <div className="ns-section-head"><h2 id="home-reviews-title" className="ns-h2">What customers say.</h2><GoogleRating prominent market="southbay" /></div>
         <ReviewCards reviews={reviews} market="southbay" lead />
       </section>
 
-      <HowItWorks market="southbay" />
+      <HowItWorks />
 
-      <section id="areas" className="ns-section" aria-labelledby="home-local-title">
-        <div className="ns-section-head"><div><h2 id="home-local-title" className="ns-h2">San Jose and the South Bay.</h2><p className="ns-lead">Serving San Jose, Santa Clara, Sunnyvale, Cupertino, Campbell, Saratoga and Los Gatos. We confirm your address before you book.</p></div></div><CityLinks allAreas />
-        <div className="home-also-serving"><h3>Also serving Fresno, Clovis and Madera.</h3><nav className="site-links" aria-label="Central Valley cleaning"><Link href="/cleaning-services-fresno" className="home-text-link">House cleaning in Fresno →</Link><Link href="/cleaning-services-clovis" className="home-text-link">Clovis →</Link><Link href="/cleaning-services-madera" className="home-text-link">Madera →</Link></nav><p className="site-note">Madera appointments depend on route availability.</p></div>
-      </section>
+      <MarketAreas home />
 
       <section className="site-muted" aria-labelledby="home-faq-title"><div className="ns-section home-faq"><div><h2 id="home-faq-title" className="ns-h2">Before the visit.</h2><Link href="/checklist" className="home-text-link">See the full checklist <span aria-hidden="true">→</span></Link></div><FaqList faqs={faqs} /></div></section>
 

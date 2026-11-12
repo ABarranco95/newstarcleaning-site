@@ -51,7 +51,7 @@ for (const component of ["Header", "Footer"]) {
 }
 const routes = ["about", "book-now", "contact", "commercial-quote", "services", "service-areas", "blog", "blog/[slug]", "checklist", "privacy", "terms", "sms-opt-in", "[serviceCity]"];
 for (const path of routes) {
-  const source = read(`src/app/${path}/page.tsx`);
+  const source = read(path === "[serviceCity]" ? "src/components/ServiceCityPage.tsx" : `src/app/${path}/page.tsx`);
   assert(source.includes('className="site-reference"'), `${path}: active reference layout`);
   assert(!/blur-3xl|line-clamp|shadow-elev|shadow-soft/.test(source), `${path}: no old decorative/text-hiding stack`);
 }

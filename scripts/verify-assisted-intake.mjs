@@ -283,7 +283,7 @@ function mountForm(props = {}) {
       "@/components/BookingPrefillLink": { default: (childProps) => jsx("booking-prefill", childProps) },
       "@/components/PaidQuoteStickyCTA": { default: (childProps) => jsx("paid-sticky", childProps) },
       "@/components/PaidPriceBookingButton": { default: (childProps) => jsx("paid-booking", childProps) },
-      "@/components/MarketProvider": { useMarket: (id) => loadTs(site, "src/lib/markets.ts").markets[id || "fresno"] },
+      "@/components/MarketProvider": { useMarket: (id) => loadTs(site, "src/lib/markets.ts").markets[id || "fresno"], setMarketCookie: () => {} },
       "@/lib/usePaidPriceRange": { default: () => props.testPrice || readyPrice },
       "@/lib/bookingPortal": { resolveDirectBookingUrl: () => "https://book.newstarcleaning.com/book" },
       "@/lib/conversionTracking": {
@@ -772,11 +772,11 @@ async function capturePayload(label, props, setup = () => {}) {
 }
 
 // Read the real combo-page function's props, not copied fixture assumptions.
-const comboSource = readFileSync(path.join(site, "src/app/[serviceCity]/page.tsx"), "utf8");
+const comboSource = readFileSync(path.join(site, "src/components/ServiceCityPage.tsx"), "utf8");
 const componentStubs = Object.fromEntries([...comboSource.matchAll(/import (\w+) from "(@\/components\/[^\"]+)"/g)]
   .map(([, name, module]) => [module, { default: name }]));
 const element = (type, props) => ({ type, props: props || {} });
-const comboPage = loadTs(site, "src/app/[serviceCity]/page.tsx", { modules: {
+const comboPage = loadTs(site, "src/components/ServiceCityPage.tsx", { modules: {
   ...componentStubs, react: { Suspense: "suspense" }, "next/link": { default: "a" },
   "react/jsx-runtime": { jsx: element, jsxs: element, Fragment: "fragment" },
   "next/navigation": { notFound: unexpected("unknown combo route") },
@@ -888,7 +888,7 @@ assert(formSource.includes("const pathname = usePathname()") && formSource.inclu
 // F9: actual sticky click handler advances the price screen instead of submitting it.
 const sticky = mountForm({ paidSearch: true, defaultService: "Deep cleaning", stickyPaidCta: true });
 const stickyNode = sticky.nodes().find((node) => node.type === "paid-sticky");
-assert.equal(stickyNode.props.formRef, sticky.nodes().find((node) => node.props.className === "nq-form").props.ref, "observer receives the whole card");
+assert.equal(stickyNode.props.formRef, sticky.nodes().find((node) => node.props.className?.split(/\s+/).includes("nq-form")).props.ref, "observer receives the whole card");
 stickyNode.props.onClick();
 assert.equal(sticky.nodes().find((node) => node.type === "form").props.hidden, false);
 assert.equal(sticky.submissions.length, 0, "first sticky click opens contact; it does not post");

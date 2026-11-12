@@ -69,8 +69,10 @@ export default function BookingPortalLink({
     const postal = normalizedZip(zip || searchParams.get("zip") || searchParams.get("nsc_zip"));
     for (const key of ["zip", "nsc_zip", "market", "nsc_market"]) url.searchParams.delete(key);
     if (postal) { url.searchParams.set("zip", postal); url.searchParams.set("nsc_zip", postal); }
-    url.searchParams.set("market", config.id);
-    url.searchParams.set("nsc_market", config.id);
+    if (config.id) {
+      url.searchParams.set("market", config.id);
+      url.searchParams.set("nsc_market", config.id);
+    }
     url.searchParams.set(
       "utm_source_page",
       sourcePage ? `newstarcleaning.com${sourcePage}` : "newstarcleaning.com"

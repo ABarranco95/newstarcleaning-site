@@ -41,7 +41,7 @@ for (const service of services) {
   }
 }
 const read = (file) => readFileSync(file, "utf8");
-for (const file of ["src/components/ServiceDetailPage.tsx", "src/components/ServiceAreaPage.tsx", "src/app/services/page.tsx", "src/app/service-areas/page.tsx", "src/app/[serviceCity]/page.tsx"]) {
+for (const file of ["src/components/ServiceDetailPage.tsx", "src/components/ServiceAreaPage.tsx", "src/app/services/page.tsx", "src/app/service-areas/page.tsx", "src/components/ServiceCityPage.tsx"]) {
   const source = read(file);
   assert(source.includes("SiteHero"), `${file} uses the approved shared photo treatment`);
   assert(!source.includes('id="quote"'), `${file} leaves the quote anchor to the shared form`);
@@ -49,7 +49,7 @@ for (const file of ["src/components/ServiceDetailPage.tsx", "src/components/Serv
 }
 const detail = read("src/components/ServiceDetailPage.tsx");
 const area = read("src/components/ServiceAreaPage.tsx");
-const combo = read("src/app/[serviceCity]/page.tsx");
+const combo = read("src/components/ServiceCityPage.tsx");
 assert(detail.includes("getFullIncludedList(service.slug)") && detail.includes("<details"));
 assert(detail.includes("defaultService={quoteFormService(service)}") && detail.includes("sourcePage={`/services/${service.slug}`}"));
 assert(area.includes("<HomeServices defaultCity={area.name}"), "service choices preserve the known city through the shared selector");

@@ -26,7 +26,6 @@ export function siteQuoteParams(pathname: string, search: string) {
   if (pathname === "/commercial-quote" && !isBusinessCleaning(params.get("service"))) set("service", "Office / commercial cleaning");
   const pageMarket = marketForPath(pathname);
   if (pageMarket) set("market", pageMarket);
-  else if (pathname === "/" && !params.has("market")) set("market", "southbay");
   return params;
 }
 

@@ -82,6 +82,7 @@ for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, 
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
 }
 const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
+  "@/components/MarketProvider": { useMarket: (id) => ({ id }) },
   "@/lib/googleRating": ratingModule,
   "@/components/Icon": StarRowModule,
 });
@@ -93,7 +94,7 @@ for (const market of ["fresno", "southbay"]) {
   assert(visible.includes(`Rated ${googleRating.score} on Google`) && visible.includes("100+ happy homeowners") && visible.includes("Insured"), "both markets lead with the owner-approved rating, homeowner count and insurance proof");
   assert(!/Central Valley|local homes/i.test(visible), "hero proof makes no regional job-history claim");
 }
-const stripHtml = renderToStaticMarkup(createElement(TrustStrip));
+const stripHtml = renderToStaticMarkup(createElement(TrustStrip, { market: "fresno" }));
 assertReviewPresentation(stripHtml, "TrustStrip");
 assert(!/on Google|5\.0/.test(stripHtml) && stripHtml.includes("Locally owned"), "shared trust strip replaces the unverifiable rating with local ownership");
 const southBayStripHtml = renderToStaticMarkup(createElement(TrustStrip, { market: "southbay" }));

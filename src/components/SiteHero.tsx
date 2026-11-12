@@ -6,7 +6,7 @@ import type { RealWorkPhoto } from "@/lib/realWorkPhotos";
 
 interface SiteHeroProps {
   title: string;
-  description?: string;
+  description?: ReactNode;
   eyebrow?: string;
   photo?: RealWorkPhoto;
   breadcrumbs?: { label: string; href: string }[];

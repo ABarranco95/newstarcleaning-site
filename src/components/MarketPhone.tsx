@@ -13,5 +13,7 @@ export default function MarketPhone({ market, className, location, text = false,
   children?: ReactNode;
 }) {
   const config = useMarket(market);
-  return <a href={text ? config.phoneHref.replace("tel:", "sms:") : config.phoneHref} className={className} data-phone-location={location}>{children}{label || config.phoneDisplay}</a>;
+  const fallback = config.phoneDisplay === "Call us";
+  const prefixOnly = typeof children === "string" && /^\s*(call|text)\s*$/i.test(children);
+  return <a href={text ? config.phoneHref.replace("tel:", "sms:") : config.phoneHref} className={className} data-phone-location={location}>{fallback && prefixOnly ? null : children}{label || (fallback && text ? "Text us" : config.phoneDisplay)}</a>;
 }

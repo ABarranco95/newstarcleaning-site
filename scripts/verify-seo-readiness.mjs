@@ -19,7 +19,7 @@ function assert(condition, message) {
 
 const serviceAreas = read("src/lib/serviceAreas.ts") + read("src/lib/southBayServiceAreas.ts");
 const sitemap = read("src/app/sitemap.ts");
-const serviceCityPage = read("src/app/[serviceCity]/page.tsx");
+const serviceCityPage = read("src/components/ServiceCityPage.tsx");
 const schemaMarkup = read("src/components/SchemaMarkup.tsx");
 const serviceAreaPage = read("src/components/ServiceAreaPage.tsx");
 const serviceDetailPage = read("src/components/ServiceDetailPage.tsx");
@@ -30,6 +30,7 @@ const commercialCleaningPage = read("src/app/services/commercial-cleaning/page.t
 const business = read("src/lib/business.ts");
 const contactPage = read("src/app/contact/page.tsx");
 const serviceAreasHub = read("src/app/service-areas/page.tsx");
+const marketAreas = read("src/components/MarketAreas.tsx");
 const header = read("src/components/Header.tsx") + read("src/components/HomeHeader.tsx");
 const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const robots = read("src/app/robots.ts");
@@ -119,9 +120,12 @@ assert(
       (source) => !/streetAddress|postalCode|GeoCoordinates/.test(source),
     ) &&
     schemaMarkup.includes('...business.address') &&
-    contactPage.includes('...business.address') &&
+    contactPage.includes('<ContactSchema />') &&
     schemaMarkup.includes('areaServed: businessAreaServed') &&
-    contactPage.includes('areaServed: businessAreaServed'),
+    schemaMarkup.includes('...marketBusinessDetails(config)') &&
+    schemaMarkup.includes('if (config.id === "fresno")') &&
+    schemaMarkup.includes('if (config.id === "southbay")') &&
+    !schemaMarkup.split('if (config.id === "southbay")')[1].split('return {};')[0].includes('address:'),
   "structured data uses Fresno, CA and service areas without a street address, ZIP or location pin",
 );
 
@@ -168,10 +172,13 @@ assert(
 );
 
 assert(
-  serviceAreasHub.includes("Cities we serve") &&
-    serviceAreasHub.includes("Fresno neighborhoods") &&
-    serviceAreasHub.includes("ItemList") &&
-    serviceAreasHub.includes("/cleaning-services-"),
+  serviceAreasHub.includes("<MarketAreas directory />") &&
+    serviceAreasHub.includes("<ServiceAreasSchema />") &&
+    marketAreas.includes("Tower District") && marketAreas.includes("Fig Garden") && marketAreas.includes("Woodward Park") &&
+    marketAreas.includes("sanJoseNeighborhoods.map") &&
+    marketAreas.includes("ItemList") &&
+    marketAreas.includes("/cleaning-services-") &&
+    marketAreas.includes("area.market === market.id"),
   "service-area hub links local city and neighborhood pages",
 );
 

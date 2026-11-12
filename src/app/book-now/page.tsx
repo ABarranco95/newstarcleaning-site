@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MarketCoverage } from "@/components/MarketAreas";
 
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import HomeBookingLink from "@/components/HomeBookingLink";
@@ -43,12 +44,12 @@ const bookNowFaqs = [
 export const metadata: Metadata = {
   title: "Book House Cleaning Online",
   description:
-    "See your price for standard, deep or move-out cleaning, then pick a time online. San Jose and the South Bay, plus Fresno, Clovis and Madera.",
+    "See your price for standard, deep or move-out cleaning, then pick a time online.",
   alternates: { canonical: "/book-now" },
   openGraph: {
     title: "Book House Cleaning Online | New Star Cleaning",
     description:
-      "See your price for standard, deep or move-out cleaning, then pick a time online. San Jose and the South Bay, plus Fresno, Clovis and Madera.",
+      "See your price for standard, deep or move-out cleaning, then pick a time online.",
     url: "https://newstarcleaning.com/book-now",
   },
 };
@@ -61,7 +62,7 @@ export default function BookNow() {
       </SiteHero>
       <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>
       <section id="quote-form" className="site-muted"><div className="site-section site-quote-layout"><div className="site-copy"><p className="ns-kicker">Your price</p><h2>See your price. We&apos;ll text you the rest.</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><ul className="site-list"><li>One-time or recurring: weekly, every other week or monthly.</li><li>Missed something in the agreed scope? Tell us within 24 hours and we come back and make it right at no charge.</li></ul><div className="site-links"><MarketPhone location="book_now_hero" /><HomeBookingLink placement="footer" /></div><div className="mt-8 [&_.ns-reviews]:grid-cols-1"><ReviewCards reviews={[featuredReview]} market="southbay" /></div></div><QuickQuoteForm title="Your cleaning quote" subtitle="Start with the basics. We'll help with anything you're unsure about." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div></section>
-      <section className="site-section site-split"><div><p className="ns-kicker">Questions</p><h2 className="mt-3">Before you book.</h2><p className="site-intro">We serve San Jose and the South Bay, plus Fresno, Clovis and Madera. Your ZIP sets the market and the price.</p></div><FaqList faqs={bookNowFaqs.map((faq) => ({ question: faq.q, answer: faq.a }))} /></section>
+      <section className="site-section site-split"><div><p className="ns-kicker">Questions</p><h2 className="mt-3">Before you book.</h2><p className="site-intro"><MarketCoverage booking /></p></div><FaqList faqs={bookNowFaqs.map((faq) => ({ question: faq.q, answer: faq.a }))} /></section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

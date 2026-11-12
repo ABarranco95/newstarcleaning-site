@@ -12,7 +12,7 @@ import BookingPrefillLink from "@/components/BookingPrefillLink";
 import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
 import PaidPriceBookingButton from "@/components/PaidPriceBookingButton";
 import { acceptedPrefillSnapshot, allowedPrefillPair, bookingAttributionSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
-import { useMarket } from "@/components/MarketProvider";
+import { setMarketCookie, useMarket } from "@/components/MarketProvider";
 import { marketForCity, normalizedZip, type MarketId } from "@/lib/markets";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import usePaidPriceRange from "@/lib/usePaidPriceRange";
@@ -291,7 +291,9 @@ function PriceLeadFormContent({
   const directQuote = Boolean(postal) && (price.status === "custom" || openEnded);
   const askState = !directQuote && !ready && Boolean(postal) && price.status === "zip-required";
   const loading = Boolean(postal) && price.status === "loading" && !directQuote;
-  const marketId = ready?.market ?? BUSINESS.id;
+  // Preserve the existing intake fallback for an unresolved/custom-price home;
+  // neutral display context must not change the protected submission payload.
+  const marketId = ready?.market ?? BUSINESS.id ?? (pathname === "/" ? "southbay" : "fresno");
   const resolvedBookingUrl = directBookingUrl === undefined ? resolveDirectBookingUrl() : directBookingUrl;
   const bookableService: ResidentialService =
     draft.service === "Deep cleaning" || draft.service === "Move-in / move-out cleaning" ? draft.service : "Standard recurring cleaning";
@@ -327,6 +329,9 @@ function PriceLeadFormContent({
   const priceLowCents = ready?.priceLowCents;
   const priceHighCents = ready?.priceHighCents;
   const readyMarket = ready?.market;
+  useEffect(() => {
+    if (postal && readyMarket) setMarketCookie(readyMarket);
+  }, [postal, readyMarket]);
   useEffect(() => {
     if (!readyMarket || priceLowCents === undefined) return;
     const key = JSON.stringify([draft.service, draft.bedrooms, draft.bathrooms, draft.size, postal, readyMarket, priceLowCents, priceHighCents]);
@@ -488,7 +493,7 @@ function PriceLeadFormContent({
       page: page(),
       ctaLocation: walkthrough ? "step_1" : "step_2",
     });
-    const location = { zip: postedZip, market: ready ? ready.market : BUSINESS.id };
+    const location = { zip: postedZip, market: marketId };
     const prefill = acceptedPrefillSnapshot({ ...formForSnapshot, ...location }, true, false);
     const submittedSnapshot = prefill ? Object.freeze({ ...prefill, ...bookingAttributionSnapshot(tracking), funnelSessionId: paidSessionId() }) : null;
     trackFunnelEvent("quote_submit_attempt", { source, service: leadService, city: postal || contact.city, page: page() });
@@ -720,7 +725,7 @@ function PriceLeadFormContent({
             <p className="nq-note">{ready ? "We'll confirm your exact price and the days we have open. Nothing is booked until you say so." : "Leave a name and number and we'll get back to you during the day."}</p>
           </div>
           <div className="ns-price-contact">
-            <a href={BUSINESS.phoneHref} className="home-button-secondary" data-phone-location="organic_price">Call {BUSINESS.phoneDisplay}</a>
+            <a href={BUSINESS.phoneHref} className="home-button-secondary" data-phone-location="organic_price">{BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a>
             <a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="home-button-secondary">Text us</a>
           </div>
         </div>
@@ -775,7 +780,7 @@ function PriceLeadFormContent({
             {sent.commercial
               ? "We'll be in touch during the day about your property or project."
               : sent.smsOptIn
-                ? `We'll text ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. The text comes from ${BUSINESS.phoneDisplay}. We reply during the day, Mon–Fri 8–6 and Sat 8–5.`
+                ? `We'll text ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. ${BUSINESS.phoneDisplay === "Call us" ? "" : `The text comes from ${BUSINESS.phoneDisplay}. `} We reply during the day, Mon–Fri 8–6 and Sat 8–5.`
                 : `We'll reach you at ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. We reply during the day, Mon–Fri 8–6 and Sat 8–5.`}
           </p>
           {resolvedBookingUrl && sent.accepted && !sent.commercial && sent.ready ? (
@@ -785,7 +790,7 @@ function PriceLeadFormContent({
               {sent.market === "southbay" ? <p className="nq-note">Online booking needs two days&apos; notice.</p> : null}
             </div>
           ) : null}
-          <a href={BUSINESS.phoneHref} className="qf-success-call" data-phone-location="quote_success">Questions? Call {BUSINESS.phoneDisplay}</a>
+          <a href={BUSINESS.phoneHref} className="qf-success-call" data-phone-location="quote_success">Questions? {BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a>
           <button
             type="button"
             className="qf-reset"
@@ -857,7 +862,7 @@ function PriceLeadFormContent({
             </label>
           </div>
           <div role="alert" className="qf-error" hidden={!error}>
-            {error ? <><p>{error}</p><div className="nq-error-actions"><a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">Call {BUSINESS.phoneDisplay}</a><a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action">Text us</a></div></> : null}
+            {error ? <><p>{error}</p><div className="nq-error-actions"><a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">{BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a><a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action">Text us</a></div></> : null}
           </div>
         </div>
       ) : (
@@ -895,7 +900,7 @@ function PriceLeadFormContent({
                 <>
                   <p>{error}</p>
                   <div className="nq-error-actions">
-                    <a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">Call {BUSINESS.phoneDisplay}</a>
+                    <a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">{BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a>
                     <a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action">Text us</a>
                   </div>
                 </>
@@ -1051,7 +1056,7 @@ function PriceLeadFormContent({
       id={placement === "hero" ? id : undefined}
       data-price-picker={placement === "hero" ? true : undefined}
       data-has-zip={postal ? "" : undefined}
-      data-market-price={marketId}
+      data-market-price={ready?.market ?? BUSINESS.id}
     >
       {walkthrough ? null : <div data-quote-step="1" hidden={step !== "price"}>
         <fieldset className="ns-price-services">

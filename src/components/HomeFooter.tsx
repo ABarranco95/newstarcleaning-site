@@ -20,6 +20,11 @@ const groups = [
 export default function HomeFooter() {
   const business = useMarket();
   const pathname = usePathname();
+  const visibleGroups = [
+    { ...groups[0], links: groups[0].links.map(([label, href]) => [label, business.id === "southbay" ? href === "/services" ? business.hub : href.startsWith("/services/") ? `/${href.slice("/services/".length)}-san-jose` : href : href] as const) },
+    ...(business.id ? [{ ...groups[business.id === "southbay" ? 1 : 2], label: business.name }] : [{ label: "Areas", links: [["Service areas", "/service-areas"]] as const }]),
+    { ...groups[3], links: groups[3].links.filter(([, href]) => business.id === "fresno" || !["/blog", "/services/commercial-cleaning", "/services/post-construction-cleaning", "/commercial-quote"].includes(href)) },
+  ];
 
   const quoteHref = siteQuoteHref(pathname, "");
   return (
@@ -29,7 +34,7 @@ export default function HomeFooter() {
         <div className="home-footer-navigation">
           <div className="home-footer-brand">
             <Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} />
-            <p>House cleaning in San Jose &amp; the South Bay.<br />Also serving Fresno, Clovis &amp; Madera.</p>
+            <p>{business.id ? business.chip : "House cleaning. See your price before you book."}</p>
             <p className="home-footer-proof">Cleaning homes since 2020 · Insured</p>
             <address>
               <a href={business.phoneHref} data-phone-location="footer_address">{business.phoneDisplay}</a><br />
@@ -38,7 +43,7 @@ export default function HomeFooter() {
             <div className="home-footer-contact"><a href={business.phoneHref.replace("tel:", "sms:")}>Text us</a><HomeBookingLink placement="footer" onDark /><Suspense fallback={<Link href={quoteHref}>Get a quote</Link>}><HomeQuoteLink className="home-text-link home-text-link-light">Get a quote</HomeQuoteLink></Suspense></div>
           </div>
           <nav className="home-footer-nav" aria-label="Footer navigation">
-            {groups.map((group) => (
+            {visibleGroups.map((group) => (
               <div key={group.label} className="home-footer-column">
                 <p className="home-footer-column-label">{group.label}</p>
                 <ul>{group.links.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul>
@@ -46,10 +51,10 @@ export default function HomeFooter() {
             ))}
           </nav>
           <nav className="home-footer-nav-mobile" aria-label="Footer navigation">
-            {groups.map((group) => <details key={group.label} className="home-footer-group"><summary>{group.label}<span aria-hidden="true">+</span></summary><ul>{group.links.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul></details>)}
+            {visibleGroups.map((group) => <details key={group.label} className="home-footer-group"><summary>{group.label}<span aria-hidden="true">+</span></summary><ul>{group.links.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul></details>)}
           </nav>
         </div>
-        <div className="home-footer-legal"><span>© New Star Cleaning LLC · Madera appointments depend on route availability.</span><div><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div></div>
+        <div className="home-footer-legal"><span>© New Star Cleaning LLC{business.id === "fresno" ? " · Madera appointments depend on route availability." : ""}</span><div><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div></div>
       </div>
     </footer>
   );

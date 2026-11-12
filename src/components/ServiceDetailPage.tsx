@@ -237,7 +237,7 @@ export default function ServiceDetailPage({ service, h1 }: {
             ))}
           </div>
           <Link href={service.slug === "deep-cleaning" ? "/services/standard-cleaning" : "/services/deep-cleaning"} className="home-text-link">Compare {service.slug === "deep-cleaning" ? "standard" : "deep"} cleaning <span aria-hidden="true">→</span></Link>
-          <div className="site-links"><Link href={`/${service.slug}-san-jose`} className="home-text-link">{isStandard ? "Regular house cleaning" : isDeep ? "Deep cleaning" : "Move-out cleaning"} in San Jose →</Link></div>
+
           {isMoveOut && <Link href="/blog/move-out-cleaning-checklist-before-inspection" className="home-text-link">Fresno rental turnover guide <span aria-hidden="true">↗</span></Link>}
           {directBookingUrl ? <div className="site-actions"><Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} service={quoteFormService(service)} sourcePage={`/services/${service.slug}`} ctaLocation="service_details" label="Book online" showIcon={false} className="home-button" /></Suspense></div> : null}
         </div>

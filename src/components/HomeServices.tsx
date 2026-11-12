@@ -8,8 +8,8 @@ import BookingPortalLink from "@/components/BookingPortalLink";
 import { bookingServiceName, homeQuoteParams } from "@/lib/homeQuoteContext";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import { useMarket } from "@/components/MarketProvider";
-import { isMarket, marketForCity, type MarketId } from "@/lib/markets";
-import { siteQuoteParams } from "@/lib/siteQuoteContext";
+import { marketForCity, type MarketId } from "@/lib/markets";
+
 
 const directBookingUrl = resolveDirectBookingUrl();
 const choices = [
@@ -23,15 +23,15 @@ type ServiceSlug = (typeof choices)[number]["slug"];
 export default function HomeServices({ defaultCity, market, photos, children }: { defaultCity?: string; market?: MarketId; photos?: Partial<Record<ServiceSlug, { src: string; alt: string }>>; children?: ReactNode }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const pageMarket = siteQuoteParams(pathname, searchParams.toString()).get("market");
-  const config = useMarket(market || marketForCity(defaultCity) || (isMarket(pageMarket) ? pageMarket : undefined));
-  const linkMarket = market || marketForCity(defaultCity) || (pathname === "/" ? "southbay" : "fresno");
+  const config = useMarket(market || marketForCity(defaultCity));
+  const linkMarket = config.id;
   return (
     <div className="home-service-rows">
       {choices.map((choice) => {
         const query = homeQuoteParams(searchParams.toString());
         query.set("service", choice.slug);
-        query.set("market", config.id);
+        query.delete("market"); query.delete("nsc_market");
+        if (config.id) query.set("market", config.id);
         query.delete("nsc_service");
         if (defaultCity) { query.set("city", defaultCity); query.delete("nsc_city"); }
         const photo = photos?.[choice.slug] ?? { src: `/photos/real-work/${choice.photo}`, alt: choice.alt };

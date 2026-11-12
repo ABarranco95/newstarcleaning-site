@@ -106,6 +106,7 @@ vm.runInNewContext(compiled.outputText, {
     };
     if (name === "next/navigation") return { useSearchParams: () => params };
     if (name === "next/image") return boundary("Image");
+    if (name === "@/components/MarketProvider") return { useMarket: (id) => id ? marketsModule.exports.markets[id] : marketsModule.exports.neutralMarket };
     if (name.startsWith("@/components/")) return boundary(name.split("/").at(-1));
     if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => {} };
     if (name === "@/lib/conversionTracking") return { trackFunnelEvent: () => {} };

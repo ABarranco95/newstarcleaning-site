@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import MarketPhone from "@/components/MarketPhone";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -8,13 +9,13 @@ import SiteHero from "@/components/SiteHero";
 import ReviewCards from "@/components/ReviewCards";
 import Icon from "@/components/Icon";
 import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, ovenInteriorPair, refrigeratorFullPair, tubSurroundPair, vanityDetailPhoto, ventDetailPair } from "@/lib/realWorkPhotos";
-import { business } from "@/lib/business";
+
 import "./our-work.css";
 
 export const metadata: Metadata = {
   title: "Our Work: Real Cleaning Photos, Before & After",
   description:
-    "See New Star Cleaning’s work: kitchens, bathrooms, living areas, empty homes, and before-and-after cleaning photos. Serving Fresno, Clovis, and Madera.",
+    "See New Star Cleaning’s work: kitchens, bathrooms, living areas, empty homes, and before-and-after cleaning photos.",
   alternates: { canonical: "/our-work" },
 };
 
@@ -145,7 +146,7 @@ export default function OurWorkPage() {
         <p>Tell us what needs attention. We&apos;ll explain what we can clean and give you a price before you book.</p>
         <div className="work-cta-actions">
           <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
-          <a href={business.phoneHref} className="home-text-link" data-phone-location="our_work_cta"><Icon name="phone" /> {business.phoneDisplay}</a>
+          <MarketPhone className="home-text-link" location="our_work_cta"><Icon name="phone" /> </MarketPhone>
         </div>
         <div className="work-cta-links">
           <Link href="/checklist" className="home-text-link">See what’s included <span aria-hidden="true">→</span></Link>

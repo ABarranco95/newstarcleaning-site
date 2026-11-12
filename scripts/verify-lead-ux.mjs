@@ -33,7 +33,7 @@ for (const file of [
   "src/app/contact/page.tsx",
   "src/app/google-ads/GoogleAdsLandingPageClient.tsx",
   "src/app/sms-opt-in/page.tsx",
-  "src/app/[serviceCity]/page.tsx",
+  "src/components/ServiceCityPage.tsx",
   "src/components/Header.tsx",
   "src/components/Footer.tsx",
   "src/components/QuickQuoteForm.tsx",
@@ -104,13 +104,13 @@ for (const file of [
 for (const file of [
   "src/app/services/page.tsx",
   "src/app/service-areas/page.tsx",
-  "src/app/[serviceCity]/page.tsx",
+  "src/components/ServiceCityPage.tsx",
 ]) {
   const contents = read(file);
   // The indexed San Jose service pages are full pages, not thin combos: they may
   // embed only the compact South Bay form the area template already requires.
   const forms = contents.match(/<QuickQuoteForm\b[^>]*\/>/g) || [];
-  const southBayCompactOnly = file === "src/app/[serviceCity]/page.tsx" && forms.length > 0 &&
+  const southBayCompactOnly = file === "src/components/ServiceCityPage.tsx" && forms.length > 0 &&
     forms.every((tag) => tag.includes("compact") && tag.includes('pageMarket="southbay"'));
   assert(
     contents.includes("/book-now") &&

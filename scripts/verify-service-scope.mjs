@@ -20,7 +20,7 @@ function assert(condition, message) {
 const services = read("src/lib/services.ts");
 const checklist = read("src/app/checklist/page.tsx");
 const serviceDetailPage = read("src/components/ServiceDetailPage.tsx");
-const serviceCityPage = read("src/app/[serviceCity]/page.tsx");
+const serviceCityPage = read("src/components/ServiceCityPage.tsx");
 const servicesHub = read("src/app/services/page.tsx");
 const quickQuoteForm = read("src/components/PriceLeadForm.tsx");
 const contactForm = "";
