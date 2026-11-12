@@ -9,7 +9,7 @@ import GoogleRating from "@/components/GoogleRating";
 import HomeServices from "@/components/HomeServices";
 import HowItWorks from "@/components/HowItWorks";
 import LocalNotes from "@/components/LocalNotes";
-import MarketPhone from "@/components/MarketPhone";
+import { MarketCallOrText } from "@/components/MarketPhone";
 import PriceCtaBand from "@/components/PriceCtaBand";
 import PricePicker from "@/components/PricePicker";
 import ProofRow from "@/components/ProofRow";
@@ -110,7 +110,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       ]} /></div></div></section>
 
       <section><div className="site-section site-quote-layout">
-        <div className="site-copy"><p className="ns-kicker">Your price</p><h2>{isSouthBay ? "See your price. We'll text you the rest." : `See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p>{!isSouthBay ? <p className="site-note">{area.bookingNote}</p> : null}<p className="site-note">Or call or text <MarketPhone market={area.market} location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
+        <div className="site-copy"><p className="ns-kicker">Your price</p><h2>{isSouthBay ? "See your price. We'll text you the rest." : `See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p>{!isSouthBay ? <p className="site-note">{area.bookingNote}</p> : null}<p className="site-note"><MarketCallOrText prefix="Or " market={area.market} location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
         <QuickQuoteForm title={`Get your ${area.name} price`} subtitle="Start with the cleaning you need." source={`organic_${area.slug}_service_area`} defaultCity={area.name} landingCity={area.name} pageMarket={area.market} directBookingUrl={directBookingUrl} compact />
       </div></section>
 

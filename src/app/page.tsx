@@ -9,7 +9,7 @@ import GoogleRating from "@/components/GoogleRating";
 import HomeServices from "@/components/HomeServices";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import HowItWorks from "@/components/HowItWorks";
-import MarketPhone from "@/components/MarketPhone";
+import { MarketCallOrText } from "@/components/MarketPhone";
 
 import PricePicker from "@/components/PricePicker";
 import ProofRow from "@/components/ProofRow";
@@ -84,7 +84,7 @@ export default function Home() {
       <section className="site-muted" aria-labelledby="home-faq-title"><div className="ns-section home-faq"><div><h2 id="home-faq-title" className="ns-h2">Before the visit.</h2><Link href="/checklist" className="home-text-link">See the full checklist <span aria-hidden="true">→</span></Link></div><FaqList faqs={faqs} /></div></section>
 
       <section aria-labelledby="home-quote-title"><div className="site-section site-quote-layout">
-        <div className="site-copy"><p className="ns-kicker">Your price</p><h2 id="home-quote-title" className="ns-h2">See your price. We&apos;ll text you the rest.</h2><p className="ns-lead">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="home_quote" />. Mon–Fri 8–6, Sat 8–5.</p><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote →</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense></div>
+        <div className="site-copy"><p className="ns-kicker">Your price</p><h2 id="home-quote-title" className="ns-h2">See your price. We&apos;ll text you the rest.</h2><p className="ns-lead">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note"><MarketCallOrText prefix="Or " location="home_quote" />. Mon–Fri 8–6, Sat 8–5.</p><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote →</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense></div>
         <QuickQuoteForm title="Get a quote" subtitle="Start with the cleaning you need." source="organic_home_hero" directBookingUrl={directBookingUrl} compact />
       </div></section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })) }) }} />
