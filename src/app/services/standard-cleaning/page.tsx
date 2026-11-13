@@ -24,7 +24,7 @@ export default function StandardCleaningPage() {
     <ServiceDetailPage
       service={service}
       h1="Recurring house cleaning in Fresno, Clovis & Madera."
-      intro="This is our standard cleaning: the same checklist every visit, weekly, every two weeks or monthly. You can also book it once for a home that's already kept up."
+      intro="This is our standard cleaning: kitchen, bathrooms, dusting and floors, the same checklist every visit. Book it weekly, every two weeks or monthly, or once for a home that's already kept up."
     />
   );
 }

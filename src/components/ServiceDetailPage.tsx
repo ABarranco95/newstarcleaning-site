@@ -98,7 +98,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
     <div className="site-reference">
       <SiteHero
         title={h1}
-        description={intro ? `${intro} ${heroDescriptions[service.slug]}` : heroDescriptions[service.slug]}
+        description={intro ?? heroDescriptions[service.slug]}
         descriptionBeforeProof={Boolean(intro)}
         photo={presentation.photo}
         proof={<ProofRow tone="dark" />}
