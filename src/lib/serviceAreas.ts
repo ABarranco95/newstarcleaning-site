@@ -24,6 +24,17 @@ export interface ServiceArea {
   faqs?: { question: string; answer: string }[];
 }
 
+export function getServiceAreaSchema(area: Pick<ServiceArea, "slug" | "name">) {
+  if (["fig-garden", "tower-district", "woodward-park"].includes(area.slug)) {
+    return {
+      "@type": "Place",
+      name: area.name,
+      containedInPlace: { "@type": "City", name: "Fresno", addressRegion: "CA" },
+    };
+  }
+  return { "@type": "City", name: area.name, addressRegion: "CA" };
+}
+
 export const serviceAreas: ServiceArea[] = [
   {
     slug: "fresno",

@@ -80,7 +80,7 @@ const handoffRows = [
   },
 ];
 
-export default function ServiceDetailPage({ service, h1 }: {
+export default function ServiceDetailPage({ service, h1, intro }: {
   service: ServiceDefinition;
   h1: string;
   intro?: string;
@@ -98,7 +98,8 @@ export default function ServiceDetailPage({ service, h1 }: {
     <div className="site-reference">
       <SiteHero
         title={h1}
-        description={heroDescriptions[service.slug]}
+        description={intro ? `${intro} ${heroDescriptions[service.slug]}` : heroDescriptions[service.slug]}
+        descriptionBeforeProof={Boolean(intro)}
         photo={presentation.photo}
         proof={<ProofRow tone="dark" />}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
@@ -222,6 +223,19 @@ export default function ServiceDetailPage({ service, h1 }: {
         </div>
       </section>
 
+      {(isStandard || isMoveOut) && (
+        <section id="apartments" className="site-section scroll-mt-24">
+          <div className="site-copy">
+            <h2>{isStandard ? "Apartment cleaning" : "Apartment move-out cleaning"}</h2>
+            {isStandard ? (
+              <p className="site-intro">We clean apartments, condos and duplexes on the same checklist as a house, priced by size and condition. When you send the address, tell us the floor, where to park and any gate or door code. Moving out of the apartment? That&apos;s a <Link href="/services/move-out-cleaning#apartments" className="home-text-link">move-out clean</Link>.</p>
+            ) : (
+              <p className="site-intro">An empty apartment gets the full move-out clean: inside empty cabinets, drawers and closets, the kitchen, bathrooms and floors. Oven and fridge interiors and window cleaning can be added. Send the walkthrough date and how we get in.</p>
+            )}
+          </div>
+        </section>
+      )}
+
       <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>
       <section className="site-muted" aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
       <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." phoneLocation="service_price_band" />
@@ -232,7 +246,7 @@ export default function ServiceDetailPage({ service, h1 }: {
           <div className="site-links">
             {["Fresno", "Clovis", "Madera"].map((city) => (
               <Link key={city} href={`/cleaning-services-${city.toLowerCase()}${isDeep ? "#deep-cleaning" : isMoveOut ? "#move-out-cleaning" : ""}`} className="home-text-link">
-                {isDeep ? `Deep cleaning in ${city}` : isMoveOut ? `Move-in and move-out cleaning in ${city}` : city}
+                {isDeep ? `Deep cleaning in ${city}` : isMoveOut ? `Move-in and move-out cleaning in ${city}` : `Recurring house cleaning in ${city}`}
               </Link>
             ))}
           </div>

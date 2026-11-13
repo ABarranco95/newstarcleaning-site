@@ -23,12 +23,12 @@ import "@/components/service-editorial.css";
 const siteUrl = "https://newstarcleaning.com";
 
 export const metadata: Metadata = {
-  title: "Cleaning Services in Fresno & Clovis",
+  title: "House Cleaning Services in Fresno, Clovis & Madera",
   description:
     "Compare residential, post-construction, office, and commercial cleaning services for Fresno, Clovis, Madera, and close-in Fresno routes.",
   alternates: { canonical: "/services" },
   openGraph: {
-    title: "Cleaning Services in Fresno & Clovis | New Star Cleaning",
+    title: "House Cleaning Services in Fresno, Clovis & Madera | New Star Cleaning",
     description:
       "Compare local house cleaning services, what is included, and where New Star Cleaning serves across Fresno, Clovis, and Madera.",
     url: `${siteUrl}/services`,
@@ -103,7 +103,7 @@ const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.fin
 export default function ServicesPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Services" title="House cleaning services in Fresno & Clovis." description="Here's what each cleaning covers. Not sure which one fits? Text us and we'll help you pick." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero eyebrow="Services" title="House cleaning services in Fresno, Clovis & Madera." description="Here's what each cleaning covers. Not sure which one fits? Text us and we'll help you pick." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote by text</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
       </SiteHero>
 

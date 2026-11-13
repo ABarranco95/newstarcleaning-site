@@ -17,6 +17,7 @@ import SiteHero from "@/components/SiteHero";
 import TrustStrip from "@/components/TrustStrip";
 import WorkPhoto from "@/components/WorkPhoto";
 import type { ServiceArea } from "@/lib/serviceAreas";
+import { getServiceAreaSchema } from "@/lib/serviceAreas";
 import { bathroomResultPhotos, cleanBathroomPhoto, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, vanityDetailPhoto, legacyShowerPair, ovenInteriorPair, refrigeratorFullPair, showerDetailPair, tubSurroundPair, ventDetailPair, pickUnusedPhoto, type RealWorkPhoto } from "@/lib/realWorkPhotos";
 import { googleReviews } from "@/lib/googleReviews";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
@@ -34,6 +35,7 @@ const proofPairs = [tubSurroundPair, showerDetailPair, ventDetailPair, refrigera
 const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.find((review) => review.id === id)!);
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
+  const isCity = ["fresno", "clovis", "madera"].includes(area.slug);
   const directBookingUrl = resolveDirectBookingUrl();
   const heroPhoto = areaHeroPhotos[area.slug] ?? homeResultPhotos[0];
   const usedPhotos = [heroPhoto, ...(area.planCards?.map((card) => card.photo) ?? [])];
@@ -66,6 +68,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         <Suspense fallback={null}><HomeServices defaultCity={area.name} photos={servicePhotos}>
           <p className="home-service-notes">Oven and fridge interiors, interior window glass, and cabinet interiors on standard or deep cleans are optional add-ons. Move-in / move-out includes empty cabinet, drawer, and closet interiors.</p>
         </HomeServices></Suspense>
+        {isCity && <Link href="/services/standard-cleaning" className="home-text-link mt-6">Recurring house cleaning</Link>}
 
       </section>
 
@@ -89,7 +92,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
           { id: "deep-cleaning", summary: `Deep cleaning in ${area.name}`, children: <><p>{area.serviceDetails.deep}</p><Link href="/services/deep-cleaning" className="home-text-link">See the full deep-cleaning scope →</Link></> },
           { id: "move-out-cleaning", summary: `Move-out cleaning in ${area.name}`, children: <><p>{area.serviceDetails.move}</p><Link href="/services/move-out-cleaning" className="home-text-link">See the full move-in/move-out scope →</Link></> },
         ] : []),
-        { summary: "Homes we clean and the jobs we see most", children: <><h4>Homes we clean in {area.name}</h4><ul>{area.homeProfiles.map((item) => <li key={item}>{item}</li>)}</ul><h4 className="mt-4">Common local requests</h4><ul>{area.commonJobs.map((item) => <li key={item}>{item}</li>)}</ul><h4 className="mt-4">Office or building-project cleaning</h4><p>Offices, small commercial spaces, and construction or renovation final cleans in {area.name} are scoped from a walkthrough or photo review before any proposal.</p><div className="site-links"><Link href="/services/commercial-cleaning" className="home-text-link">Office &amp; commercial cleaning ↗</Link><Link href="/services/post-construction-cleaning" className="home-text-link">Post-construction cleaning ↗</Link></div></> },
+        { summary: "Homes we clean and the jobs we see most", children: <><h4>Homes we clean in {area.name}</h4><ul>{area.homeProfiles.map((item) => <li key={item}>{item}</li>)}</ul>{isCity && <Link href="/services/standard-cleaning#apartments" className="home-text-link">Apartment cleaning: what&apos;s included</Link>}<h4 className="mt-4">Common local requests</h4><ul>{area.commonJobs.map((item) => <li key={item}>{item}</li>)}</ul><h4 className="mt-4">Office or building-project cleaning</h4><p>Offices, small commercial spaces, and construction or renovation final cleans in {area.name} are scoped from a walkthrough or photo review before any proposal.</p><div className="site-links"><Link href="/services/commercial-cleaning" className="home-text-link">Office &amp; commercial cleaning ↗</Link><Link href="/services/post-construction-cleaning" className="home-text-link">Post-construction cleaning ↗</Link></div></> },
       ]} /></div></div></section>
 
       <section><div className="site-section site-quote-layout">
@@ -108,7 +111,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         url: `${siteUrl}/cleaning-services-${area.slug}`,
         name: `House Cleaning Service in ${area.name}, CA`, description: area.description,
         provider: { "@id": `${siteUrl}/#localbusiness` },
-        areaServed: { "@type": "City", name: area.name, addressRegion: "CA" },
+        areaServed: getServiceAreaSchema(area),
         hasOfferCatalog: { "@type": "OfferCatalog", name: "Cleaning Services", itemListElement: [
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning", url: `${siteUrl}/services/standard-cleaning` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning", url: `${siteUrl}/services/deep-cleaning` } },

@@ -143,9 +143,9 @@ export const services: ServiceDefinition[] = [
     ],
     faqs: [
       {
-        question: "Is standard cleaning the same as maid service?",
+        question: "Is this the same as maid service?",
         answer:
-          "No. New Star Cleaning provides cleaning service, not maid or household helper service. We clean accessible surfaces, bathrooms, kitchens, floors, and dusting areas. We do not do laundry, dishes, organizing, bed making, packing, or personal household tasks.",
+          "Yes, if you mean house cleaning. Maid service, housekeeping and house cleaning are different names for the same visit: kitchens, bathrooms, floors, dusting and the surfaces we can reach. What we don't do is household help: laundry, dishes, making beds, organizing, packing or personal household tasks.",
       },
       {
         question: "Do you wash dishes, do laundry, or make beds?",

@@ -5,16 +5,16 @@ import { getService } from "@/lib/services";
 const service = getService("standard-cleaning")!;
 
 export const metadata: Metadata = {
-  title: "Standard House Cleaning in Fresno, CA",
+  title: "Recurring House Cleaning in Fresno & Clovis",
   description:
-    "Standard weekly, bi-weekly, and monthly house cleaning for maintained Fresno, Clovis, and Madera homes. Review the included rooms and request a confirmed quote.",
+    "Recurring house cleaning in Fresno, Clovis and Madera: weekly, every two weeks or monthly, plus one-time standard cleans. See what's included and get your price.",
   alternates: {
     canonical: "/services/standard-cleaning",
   },
   openGraph: {
-    title: "Standard House Cleaning in Fresno, CA | New Star Cleaning",
+    title: "Recurring House Cleaning in Fresno & Clovis | New Star Cleaning",
     description:
-      "Weekly, bi-weekly, and monthly standard house cleaning for maintained Fresno-area homes.",
+      "Recurring house cleaning in Fresno, Clovis and Madera: weekly, every two weeks or monthly, plus one-time standard cleans. See what's included and get your price.",
     url: "https://newstarcleaning.com/services/standard-cleaning",
   },
 };
@@ -23,7 +23,8 @@ export default function StandardCleaningPage() {
   return (
     <ServiceDetailPage
       service={service}
-      h1="Standard house cleaning in Fresno, CA."
+      h1="Recurring house cleaning in Fresno, Clovis & Madera."
+      intro="This is our standard cleaning: the same checklist every visit, weekly, every two weeks or monthly. You can also book it once for a home that's already kept up."
     />
   );
 }

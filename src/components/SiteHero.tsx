@@ -6,6 +6,7 @@ import type { RealWorkPhoto } from "@/lib/realWorkPhotos";
 interface SiteHeroProps {
   title: string;
   description?: ReactNode;
+  descriptionBeforeProof?: boolean;
   eyebrow?: string;
   photo?: RealWorkPhoto;
   breadcrumbs?: { label: string; href: string }[];
@@ -15,7 +16,7 @@ interface SiteHeroProps {
   tone?: "light" | "dark";
 }
 
-export default function SiteHero({ title, description, eyebrow, photo, breadcrumbs, children, aside, proof }: SiteHeroProps) {
+export default function SiteHero({ title, description, descriptionBeforeProof = false, eyebrow, photo, breadcrumbs, children, aside, proof }: SiteHeroProps) {
   return (
     <section className="site-hero-band ns-on-dark">
       <div className={`site-hero${photo ? " site-hero-visual" : ""}`}>
@@ -23,8 +24,9 @@ export default function SiteHero({ title, description, eyebrow, photo, breadcrum
           {breadcrumbs && <nav className="site-breadcrumbs" aria-label="Breadcrumb">{breadcrumbs.map((crumb) => <Link href={crumb.href} key={crumb.href}>{crumb.label}</Link>)}</nav>}
           {eyebrow && <p className="site-eyebrow">{eyebrow}</p>}
           <h1>{title}</h1>
+          {descriptionBeforeProof && description && <p className="site-hero-description">{description}</p>}
           {proof}
-          {description && <p className="site-hero-description">{description}</p>}
+          {!descriptionBeforeProof && description && <p className="site-hero-description">{description}</p>}
         </div>
         {children ? <div className="site-hero-action">{children}</div> : null}
         {photo ? <figure className="site-hero-photo" data-work-photo="hero"><div className="site-hero-photo-frame"><Image src={photo.src} alt={photo.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 100vw" /></div><figcaption>{photo.caption} · New Star job</figcaption></figure> : null}

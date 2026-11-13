@@ -13,7 +13,7 @@ import GoogleRating from "@/components/GoogleRating";
 import { servicePresentation } from "@/lib/servicePresentation";
 import ServiceProof from "@/components/ServiceProof";
 
-import { serviceAreas } from "@/lib/serviceAreas";
+import { getServiceAreaSchema, serviceAreas } from "@/lib/serviceAreas";
 import { services, getFullIncludedList, type ServiceDefinition } from "@/lib/services";
 
 
@@ -132,7 +132,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
         "@context": "https://schema.org", "@type": "Service", name: `${service.name} in ${cityName}, CA`,
         serviceType: service.schemaServiceType, description: `${service.description} Available across ${cityName}, CA.`,
         provider: { "@id": "https://newstarcleaning.com/#localbusiness" },
-        areaServed: { "@type": "City", name: cityName, addressRegion: "CA" },
+        areaServed: getServiceAreaSchema({ slug: citySlug, name: cityName }),
       }) }} />
     </div>
   );
