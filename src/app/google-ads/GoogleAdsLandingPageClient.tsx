@@ -261,7 +261,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
       },
       {
         question: "Can I choose biweekly instead of weekly?",
-        answer: "Yes. Weekly, biweekly, and monthly options depend on the home, expectations, and local route availability.",
+        answer: "Yes. Weekly, biweekly, and monthly options depend on the home, expectations, and available appointment times.",
       },
     ],
   },

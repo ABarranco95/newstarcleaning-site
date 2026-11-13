@@ -146,7 +146,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
               )}
               {isDeep && (
                 <>
-                  <p className="se-lead">We provide deep cleaning in Fresno and Clovis. Madera visits depend on the address and route availability. Tell us about the rooms and buildup that need the most attention.</p>
+                  <p className="se-lead">We provide deep cleaning in Fresno, Clovis and Madera. Tell us about the rooms and buildup that need the most attention.</p>
                   <ul className="home-scope-includes mt-6">
                     {deepTargets.map((item) => <li key={item}>{item}</li>)}
                   </ul>

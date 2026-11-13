@@ -47,7 +47,7 @@ export default function HomeFooter() {
             {groups.map((group) => <details key={group.label} className="home-footer-group"><summary>{group.label}<span aria-hidden="true">+</span></summary><ul>{group.links.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul></details>)}
           </nav>
         </div>
-        <div className="home-footer-legal"><span>© New Star Cleaning LLC · Madera appointments depend on route availability.</span><div><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div></div>
+        <div className="home-footer-legal"><span>© New Star Cleaning LLC</span><div><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div></div>
       </div>
     </footer>
   );

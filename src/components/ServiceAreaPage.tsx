@@ -48,7 +48,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const planPhoto = area.planCards ? null : pickUnusedPhoto([bathroomResultPhotos[1], vanityDetailPhoto, homeResultPhotos[1], homeResultPhotos[2]], [...usedPhotos, bandPhoto, ...Object.values(servicePhotos)]);
   const areaFaqs = area.faqs || [
     { question: `Do you provide house cleaning in ${area.name}, CA?`, answer: `Yes. New Star Cleaning serves ${area.name}, CA with standard recurring cleaning, deep cleaning, and move-in/move-out cleaning. ${area.localProof}` },
-    { question: `Which ${area.name} neighborhoods do you serve?`, answer: `We serve ${area.neighborhoods.slice(0, 4).join(", ")} and nearby parts of ${area.county}. If your exact neighborhood is not listed, request a quote and we will confirm route availability.` },
+    { question: `Which ${area.name} neighborhoods do you serve?`, answer: `We serve ${area.neighborhoods.slice(0, 4).join(", ")} and nearby parts of ${area.county}. If your exact neighborhood is not listed, request a quote and we will confirm coverage.` },
     { question: `What cleaning services are available in ${area.name}?`, answer: `${area.name} clients can request recurring standard cleaning, one-time deep cleaning, and move-in/move-out cleaning. Common local requests include ${area.commonJobs.slice(0, 2).join(" and ")}.` },
     { question: `How quickly can I book a cleaner in ${area.name}?`, answer: area.bookingNote },
   ];
@@ -86,7 +86,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
       <section className="site-muted"><div className="site-section site-split"><div className="site-copy"><p className="ns-kicker">Questions</p><h2>Questions about cleaning in {area.name}.</h2></div><div><FaqList faqs={areaFaqs} /><LocalNotes title={`More about cleaning in ${area.name}.`} notes={[
         { summary: `How we price a ${area.name} home`, children: <p>{area.localContent}</p> },
-        { summary: `${area.name} neighborhoods`, children: <><p>{area.neighborhoods.join(", ")}</p>{area.neighborhoodNotes ? <dl>{area.neighborhoodNotes.map((note) => <div key={note.title}><dt>{note.title}</dt><dd>{note.body}</dd></div>)}</dl> : null}<p>When the address fits the route. If your exact area is not shown, send the address and we will confirm coverage before quoting.</p></> },
+        { summary: `${area.name} neighborhoods`, children: <><p>{area.neighborhoods.join(", ")}</p>{area.neighborhoodNotes ? <dl>{area.neighborhoodNotes.map((note) => <div key={note.title}><dt>{note.title}</dt><dd>{note.body}</dd></div>)}</dl> : null}<p>If your exact area is not shown, send the address and we will confirm coverage before quoting.</p></> },
         ...(area.serviceDetails?.standard ? [{ id: "standard-cleaning", summary: `Regular cleaning in ${area.name}`, children: <p>{area.serviceDetails.standard}</p> }] : []),
         ...(area.serviceDetails ? [
           { id: "deep-cleaning", summary: `Deep cleaning in ${area.name}`, children: <><p>{area.serviceDetails.deep}</p><Link href="/services/deep-cleaning" className="home-text-link">See the full deep-cleaning scope →</Link></> },

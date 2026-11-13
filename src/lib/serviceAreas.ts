@@ -109,7 +109,7 @@ export const serviceAreas: ServiceArea[] = [
       "Move-in and move-out cleaning for empty properties",
     ],
     bookingNote:
-      "Share the Clovis address and preferred timing with the quote request. We confirm route availability before booking.",
+      "Share the Clovis address and preferred timing with the quote request. We confirm the available window before booking.",
     serviceDetails: {
       deep: "Old Town homes and newer Harlan Ranch and Loma Vista floor plans differ. Share the room count and shower, baseboard or fixture buildup so we can quote the right work.",
       move: "Tell us when the home will be empty, the handoff date and which cabinets and closets will be cleared. We confirm the cleaning window before booking.",
@@ -119,10 +119,10 @@ export const serviceAreas: ServiceArea[] = [
     slug: "madera",
     name: "Madera",
     county: "Madera County",
-    areaType: "Planned route",
-    isPrimary: false,
+    areaType: "Core route",
+    isPrimary: true,
     description:
-      "New Star Cleaning serves homes in Madera with recurring, deep, and move-in/move-out cleaning when the address fits an available route.",
+      "We clean homes across Madera, from downtown to Parkwood. Regular house cleaning, deep cleans for buildup, or an empty home before a move.",
     neighborhoods: [
       "Downtown Madera",
       "Parkwood",
@@ -131,9 +131,9 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Fresno", "Clovis", "Woodward Park"],
     localContent:
-      "Madera appointments require more travel from our Fresno base, so the address and requested date matter when we build the route. We confirm that timing before a customer commits.",
+      "Homes near downtown Madera and the newer neighborhoods around it don't clean the same. Tell us the size of the home, the floors and the rooms that need the most work, and we'll price it from that.",
     localProof:
-      "We have fewer appointment options in Madera than in Fresno or Clovis. Send your address and preferred date so we can check.",
+      "Madera is one of our main service areas. We offer regular visits, deep cleaning and empty-home cleaning. Tell us your address and we'll check available dates.",
     homeProfiles: [
       "Apartments, townhomes, and single-family homes within Madera",
       "Homes needing a one-time detailed reset",
@@ -141,14 +141,14 @@ export const serviceAreas: ServiceArea[] = [
     ],
     commonJobs: [
       "Deep cleaning for kitchens, bathrooms, floors, and detail areas",
-      "Recurring cleaning when a compatible route is available",
+      "Weekly, every-two-weeks and monthly recurring cleaning",
       "Move-in and move-out cleaning for empty homes",
     ],
     bookingNote:
-      "Madera availability depends on route capacity and the exact address. We confirm travel and timing before booking.",
+      "Share the Madera address and preferred timing with the quote request. We confirm the available window before booking.",
     serviceDetails: {
-      deep: "Appointments depend on the exact address and route capacity. Share the home's size, buildup areas and preferred date so we can confirm timing.",
-      move: "Tell us when the home will be empty and your deadline. Empty cabinet, drawer and closet interiors are included; route timing must be confirmed.",
+      deep: "Share the home's size, the buildup areas and your preferred date so we can quote the right work and confirm timing.",
+      move: "Tell us when the home will be empty and your deadline. Empty cabinet, drawer and closet interiors are included. We confirm the cleaning window before booking.",
     },
   },
   {
@@ -170,7 +170,7 @@ export const serviceAreas: ServiceArea[] = [
     localContent:
       "Tower District properties often have older tile, hardwood, trim, built-ins, compact kitchens, and tighter access. We ask about the surfaces, parking, stairs, and current condition before pricing the visit.",
     localProof:
-      "Tower District is inside our Fresno route area. Its older housing stock makes accurate home and condition details especially useful before a deep or move-out clean.",
+      "Tower District is in our Fresno service area. Its older housing stock makes accurate home and condition details especially useful before a deep or move-out clean.",
     homeProfiles: [
       "Historic bungalows with original floors, tile, and built-ins",
       "Duplexes, walk-ups, apartments, and compact homes",
@@ -202,7 +202,7 @@ export const serviceAreas: ServiceArea[] = [
     localContent:
       "Fig Garden includes older homes and larger floor plans where room count, flooring, pets, and detail areas can change the workload substantially. Those details are confirmed before pricing.",
     localProof:
-      "Fig Garden is part of our Fresno route area. Quotes are based on the actual home rather than a neighborhood label or a one-size package.",
+      "Fig Garden is part of our Fresno service area. Quotes are based on the actual home rather than a neighborhood label or a one-size package.",
     homeProfiles: [
       "Older homes with detailed trim and varied flooring",
       "Larger homes with additional bathrooms and living areas",
@@ -214,7 +214,7 @@ export const serviceAreas: ServiceArea[] = [
       "Pre-event, move-in, and move-out cleaning",
     ],
     bookingNote:
-      "Share square footage, bathrooms, pets, and priority areas so we can confirm pricing and route availability accurately.",
+      "Share square footage, bathrooms, pets, and priority areas so we can confirm pricing and timing accurately.",
   },
   {
     slug: "woodward-park",
@@ -235,7 +235,7 @@ export const serviceAreas: ServiceArea[] = [
     localContent:
       "Woodward Park and north Fresno include condos, townhomes, and larger single-family homes. Square footage, bathrooms, pets, stairs, and requested detail work are the main pricing variables.",
     localProof:
-      "Woodward Park is within our north Fresno route area. We confirm the address and appointment options before booking.",
+      "Woodward Park is in our north Fresno service area. We confirm the address and appointment options before booking.",
     homeProfiles: [
       "Condos and townhomes near Woodward Park and River Park",
       "Larger single-family homes with more bathrooms and floor area",
@@ -247,6 +247,6 @@ export const serviceAreas: ServiceArea[] = [
       "Move-in cleaning for empty north Fresno homes",
     ],
     bookingNote:
-      "Include the address, home size, service type, and preferred date so we can confirm a north Fresno route window.",
+      "Include the address, home size, service type, and preferred date so we can confirm a window.",
   },
 ];

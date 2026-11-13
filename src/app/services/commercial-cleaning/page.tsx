@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Office & Commercial Cleaning in Fresno, CA | New Star Cleaning",
     description:
-      "Walkthrough-based office cleaning proposals for Fresno, Clovis, Madera, and close-in Fresno routes.",
+      "Walkthrough-based office cleaning proposals for Fresno, Clovis and Madera.",
     url: "https://newstarcleaning.com/services/commercial-cleaning",
   },
 };
@@ -66,7 +66,7 @@ const faqs = [
   {
     question: "Which commercial properties do you clean?",
     answer:
-      "We evaluate offices, professional suites, retail spaces, small commercial facilities, property-management spaces, and similar workplaces within the approved route area. Medical, dental, and other specialized facilities are welcome to reach out: the walkthrough is where we confirm what the space needs and whether we are the right fit. Industrial, food-production, and hazardous environments may need work outside our scope, and we will say so directly.",
+      "We evaluate offices, professional suites, retail spaces, small commercial facilities, property-management spaces, and similar workplaces within our service area. Medical, dental, and other specialized facilities are welcome to reach out: the walkthrough is where we confirm what the space needs and whether we are the right fit. Industrial, food-production, and hazardous environments may need work outside our scope, and we will say so directly.",
   },
   {
     question: "Do you provide nightly janitorial service?",
@@ -126,7 +126,7 @@ export default function CommercialCleaningPage() {
           <Link href={quoteHref} className="home-button">Request a walkthrough <span aria-hidden="true">→</span></Link>
           <MarketPhone className="site-hero-phone" location="commercial_service_hero">Call </MarketPhone>
         </div>
-        <p className="site-note text-on-dark-mute">Fresno &amp; Clovis. Madera appointments depend on route availability.</p>
+        <p className="site-note text-on-dark-mute">Fresno, Clovis &amp; Madera.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="commercial-request-title">

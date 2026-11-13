@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "House Cleaning in Fig Garden, Fresno | New Star Cleaning",
     description:
-      "House cleaning in Old Fig Garden and nearby approved Fresno routes. Request pricing and current availability.",
+      "House cleaning in Old Fig Garden and nearby Fresno neighborhoods. Request pricing and current availability.",
     url: "https://newstarcleaning.com/cleaning-services-fig-garden",
   },
 };

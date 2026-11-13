@@ -25,7 +25,7 @@ const siteUrl = "https://newstarcleaning.com";
 export const metadata: Metadata = {
   title: "House Cleaning Services in Fresno, Clovis & Madera",
   description:
-    "Compare residential, post-construction, office, and commercial cleaning services for Fresno, Clovis, Madera, and close-in Fresno routes.",
+    "Compare residential, post-construction, office, and commercial cleaning services for Fresno, Clovis and Madera.",
   alternates: { canonical: "/services" },
   openGraph: {
     title: "House Cleaning Services in Fresno, Clovis & Madera | New Star Cleaning",

@@ -15,7 +15,7 @@ export function MarketAboutIntro() {
 }
 
 export function MarketCoverage({ booking = false }: { booking?: boolean }) {
-  return <>{business.serviceAreaDescription}. {booking ? "Enter your ZIP to check your price." : "Service depends on the address, and we confirm it before you book."} Madera appointments depend on route availability.</>;
+  return <>{business.serviceAreaDescription}. {booking ? "Enter your ZIP to check your price." : "Service depends on the address, and we confirm it before you book."}</>;
 }
 
 export function MarketBusinessNote() {

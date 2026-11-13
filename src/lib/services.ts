@@ -174,7 +174,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning provides recurring house cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Route availability depends on the address, frequency, home size, and requested work, so we confirm timing before booking.",
+      "New Star Cleaning provides recurring house cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. We confirm the day and time before booking.",
   },
   {
     slug: "deep-cleaning",
@@ -315,7 +315,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning provides deep cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Availability depends on the home, requested details, and local route capacity; we confirm the options before booking.",
+      "New Star Cleaning provides deep cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. We confirm the day and time before booking.",
   },
   {
     slug: "move-out-cleaning",
@@ -475,7 +475,7 @@ export const services: ServiceDefinition[] = [
       },
     ],
     localNotes:
-      "New Star Cleaning provides move-out cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Timing depends on the deadline, home size, condition, requested extras, and route capacity; we confirm availability before booking.",
+      "New Star Cleaning provides move-out cleaning in Fresno, Clovis, Madera, and close-in Fresno neighborhoods. Timing depends on your deadline, the home's size and condition, and the extras you add. We confirm the day before booking.",
   },
 ];
 

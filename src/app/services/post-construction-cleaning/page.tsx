@@ -126,7 +126,7 @@ export default function PostConstructionCleaningPage() {
           <Link href={quoteHref} className="home-button">Request a walkthrough <span aria-hidden="true">→</span></Link>
           <MarketPhone className="site-hero-phone" location="construction_service_hero">Call </MarketPhone>
         </div>
-        <p className="site-note text-on-dark-mute">Fresno &amp; Clovis. Madera appointments depend on route availability.</p>
+        <p className="site-note text-on-dark-mute">Fresno, Clovis &amp; Madera.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="construction-request-title">
