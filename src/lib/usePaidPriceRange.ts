@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { paidHomeSize } from "@/lib/paidHomeSize";
-import { isMarket, normalizedZip, type MarketId } from "@/lib/markets";
+import { isServiceZip, normalizedZip } from "@/lib/markets";
 
 type PriceInputs = {
   enabled: boolean;
@@ -12,7 +12,6 @@ type PriceInputs = {
   sqft: string;
   exactSqft?: number;
   zip?: string;
-  market?: MarketId;
 };
 
 type QuoteRequest = {
@@ -26,13 +25,13 @@ type QuoteRequest = {
   addons: string[];
   hasPets: false;
   zip?: string;
-  market?: MarketId;
+  market?: "fresno";
 };
 
-type QuotePrice = { total: number; biweekly?: number; market: MarketId };
+type QuotePrice = { total: number; biweekly?: number; market: "fresno" };
 type PriceResult =
-  | { status: "hidden" | "custom" | "zip-required" }
-  | { status: "ready"; low: number; high?: number; biweekly?: number; market: MarketId };
+  | { status: "hidden" | "custom" | "zip-required" | "out-of-area" }
+  | { status: "ready"; low: number; high?: number; biweekly?: number; market: "fresno" };
 
 type PriceState = PriceResult & { key: string };
 
@@ -46,7 +45,7 @@ function formatPrice(cents: number, rounding: "low" | "high" | "nearest" = "low"
   return currency.format(rounding === "low" ? Math.floor(dollars) : rounding === "high" ? Math.ceil(dollars) : Math.round(dollars));
 }
 
-function buildRequest({ enabled, service, bedrooms, bathrooms, sqft, exactSqft, zip, market = "fresno" }: PriceInputs, endpoint: "low" | "high" = "low"): QuoteRequest | null {
+function buildRequest({ enabled, service, bedrooms, bathrooms, sqft, exactSqft, zip }: PriceInputs, endpoint: "low" | "high" = "low"): QuoteRequest | null {
   if (!enabled || !/^\d+$/.test(bedrooms) || !/^\d+(\.5)?$/.test(bathrooms)) return null;
   const serviceType = service === "Deep cleaning" ? "DEEP"
     : service === "Move-in / move-out cleaning" ? "MOVE_OUT"
@@ -58,12 +57,12 @@ function buildRequest({ enabled, service, bedrooms, bathrooms, sqft, exactSqft, 
   const postal = normalizedZip(zip);
   // Open-ended 6+/4+ selections and an unfinished size cannot promise an exact
   // engine range. Keep intake available and leave those homes to the office.
-  if (!serviceType || beds > 10 || baths > 10 || (sqft && !band) || size === null || (zip && !postal)) return null;
+  if (!serviceType || beds > 10 || baths > 10 || (sqft && !band) || size === null || (zip && (!postal || !isServiceZip(postal)))) return null;
   return {
     serviceType, beds, baths, halfBaths: Number(bathrooms) % 1 === 0 ? 0 : 1,
     ...(size === undefined ? {} : { sqft: size }),
     frequency: "ONE_TIME", propertyType: "house", addons: [], hasPets: false,
-    ...(postal ? { zip: postal } : { market }),
+    ...(postal ? { zip: postal } : { market: "fresno" }),
   };
 }
 
@@ -90,15 +89,14 @@ async function fetchPrice(request: QuoteRequest, condition: "normal" | "dusty", 
   const data: unknown = await response.json();
   if (isRecord(data) && data.code === "CUSTOM_QUOTE_REQUIRED") return "custom";
   if (!response.ok || !isRecord(data)) throw new Error("Price unavailable");
-  // Older Apex builds silently price Fresno. They must never supply a South
-  // Bay number: require an attested market, and let Apex alone resolve ZIPs.
-  if ((request.zip && !isMarket(data.market)) || (!request.zip && request.market === "southbay" && data.market !== "southbay") ||
-      (!request.zip && isMarket(data.market) && data.market !== request.market)) throw new Error("Market price unavailable");
+  // A ZIP lookup must attest to this region; never display another region's price.
+  if ((request.zip && data.market !== "fresno") ||
+      (data.market !== undefined && data.market !== "fresno")) throw new Error("Local price unavailable");
   const total = request.serviceType === "MOVE_OUT" && isRecord(data.moveOutPackages) && data.moveOutPackages.essentials != null
     ? data.moveOutPackages.essentials : data.totalPrice;
   if (!isPrice(total)) throw new Error("Invalid price");
   const biweekly = isRecord(data.frequencyTotals) ? data.frequencyTotals.BIWEEKLY : undefined;
-  return { total, market: isMarket(data.market) ? data.market : "fresno", ...(isPrice(biweekly) ? { biweekly } : {}) };
+  return { total, market: "fresno", ...(isPrice(biweekly) ? { biweekly } : {}) };
 }
 
 export default function usePaidPriceRange(inputs: PriceInputs) {
@@ -147,6 +145,7 @@ export default function usePaidPriceRange(inputs: PriceInputs) {
     };
   }, [key]);
 
+  if (inputs.enabled && normalizedZip(inputs.zip) && !isServiceZip(inputs.zip)) return { status: "out-of-area" as const };
   if (inputs.enabled && band?.max === null) return { status: "custom" as const };
   if (!key) return { status: "hidden" as const };
   if (result?.key !== key) return { status: "loading" as const };

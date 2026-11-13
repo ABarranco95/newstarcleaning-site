@@ -1,9 +1,6 @@
-import type { MarketId } from "@/lib/markets";
 import type { RealWorkPhoto } from "@/lib/realWorkPhotos";
-import { southBayServiceAreas } from "@/lib/southBayServiceAreas";
 
 export interface ServiceArea {
-  market: MarketId;
   slug: string;
   name: string;
   county: string;
@@ -29,7 +26,6 @@ export interface ServiceArea {
 
 export const serviceAreas: ServiceArea[] = [
   {
-    market: "fresno",
     slug: "fresno",
     name: "Fresno",
     county: "Fresno County",
@@ -70,7 +66,6 @@ export const serviceAreas: ServiceArea[] = [
     },
   },
   {
-    market: "fresno",
     slug: "clovis",
     name: "Clovis",
     county: "Fresno County",
@@ -110,7 +105,6 @@ export const serviceAreas: ServiceArea[] = [
     },
   },
   {
-    market: "fresno",
     slug: "madera",
     name: "Madera",
     county: "Madera County",
@@ -147,7 +141,6 @@ export const serviceAreas: ServiceArea[] = [
     },
   },
   {
-    market: "fresno",
     slug: "tower-district",
     name: "Tower District",
     county: "Fresno County",
@@ -181,7 +174,6 @@ export const serviceAreas: ServiceArea[] = [
       "Include parking, stairs, gate access, and the preferred date in the quote request so we can confirm the right arrival window.",
   },
   {
-    market: "fresno",
     slug: "fig-garden",
     name: "Fig Garden",
     county: "Fresno County",
@@ -214,7 +206,6 @@ export const serviceAreas: ServiceArea[] = [
       "Share square footage, bathrooms, pets, and priority areas so we can confirm pricing and route availability accurately.",
   },
   {
-    market: "fresno",
     slug: "woodward-park",
     name: "Woodward Park",
     county: "Fresno County",
@@ -247,5 +238,4 @@ export const serviceAreas: ServiceArea[] = [
     bookingNote:
       "Include the address, home size, service type, and preferred date so we can confirm a north Fresno route window.",
   },
-  ...southBayServiceAreas,
 ];

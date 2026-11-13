@@ -5,12 +5,11 @@ import { usePathname } from "next/navigation";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
-import { useMarket } from "@/components/MarketProvider";
+import { business } from "@/lib/business";
 
 const directBookingUrl = resolveDirectBookingUrl();
 
 export default function MobileContactActions() {
-  const business = useMarket();
   const pathname = usePathname();
   const [editing, setEditing] = useState(false);
   const [quoteInView, setQuoteInView] = useState<string | null>(null);

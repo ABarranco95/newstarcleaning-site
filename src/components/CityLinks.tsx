@@ -6,13 +6,9 @@ interface CityLinksProps {
 }
 
 const cities = [
-  { name: "San Jose", slug: "san-jose" },
-  { name: "Santa Clara", slug: "santa-clara" },
-  { name: "Sunnyvale", slug: "sunnyvale" },
-  { name: "Cupertino", slug: "cupertino" },
-  { name: "Campbell", slug: "campbell" },
-  { name: "Saratoga", slug: "saratoga" },
-  { name: "Los Gatos", slug: "los-gatos" },
+  { name: "Fresno", slug: "fresno" },
+  { name: "Clovis", slug: "clovis" },
+  { name: "Madera", slug: "madera" },
 ];
 
 export default function CityLinks({ omit, allAreas = false }: CityLinksProps) {

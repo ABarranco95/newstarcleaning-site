@@ -2,7 +2,6 @@
 
 import { type ReactNode } from "react";
 import PriceLeadForm, { normalizeServiceParam } from "@/components/PriceLeadForm";
-import type { MarketId } from "@/lib/markets";
 
 type QuickQuoteFormProps = {
   title?: string;
@@ -10,7 +9,6 @@ type QuickQuoteFormProps = {
   source?: string;
   defaultCity?: string;
   landingCity?: string;
-  pageMarket?: MarketId;
   defaultService?: string;
   compact?: boolean;
   extended?: boolean;
@@ -34,7 +32,6 @@ export default function QuickQuoteForm({
   source = "organic_website",
   defaultCity,
   landingCity,
-  pageMarket,
   defaultService,
   compact = false,
   paidSearch = false,
@@ -64,7 +61,7 @@ export default function QuickQuoteForm({
         source={source}
         service={service || undefined}
         defaultCity={defaultCity}
-        market={pageMarket}
+
         paidSearch={paidSearch}
         landingCity={landingCity}
         submitLabel={submitLabel}

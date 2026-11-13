@@ -1,13 +1,11 @@
 import { StarRow } from "@/components/Icon";
 import { reviewsFor, type GoogleReview, type ReviewTopic } from "@/lib/googleReviews";
-import type { MarketId } from "@/lib/markets";
 
 interface ReviewCardsProps {
   reviews?: GoogleReview[];
   topic?: ReviewTopic;
   count?: number;
   showRating?: boolean;
-  market?: MarketId;
   lead?: boolean;
 }
 

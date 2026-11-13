@@ -8,7 +8,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import Icon from "@/components/Icon";
-import { useMarket } from "@/components/MarketProvider";
+import { business } from "@/lib/business";
 
 type NavLink = { label: string; href: string };
 
@@ -30,22 +30,15 @@ const navigation: (NavLink & { panel?: "services" })[] = [
   { label: "About", href: "/about" },
 ];
 
-const sanJoseLinks: NavLink[] = [
-  { label: "Regular cleaning in San Jose", href: "/standard-cleaning-san-jose" },
-  { label: "Deep cleaning in San Jose", href: "/deep-cleaning-san-jose" },
-  { label: "Move-out cleaning in San Jose", href: "/move-out-cleaning-san-jose" },
-];
-const southBayLinks: NavLink[] = ["San Jose", "Santa Clara", "Sunnyvale", "Cupertino", "Campbell", "Saratoga", "Los Gatos"].map((label) => ({ label, href: `/cleaning-services-${label.toLowerCase().replaceAll(" ", "-")}` }));
 const centralValleyLinks: NavLink[] = ["Fresno", "Clovis", "Madera"].map((label) => ({ label, href: `/cleaning-services-${label.toLowerCase()}` }));
 export default function HomeHeader() {
-  const business = useMarket();
-  const serviceLinks = business.id === "southbay" ? sanJoseLinks : residentialLinks;
-  const areaLinks = business.id === "southbay" ? southBayLinks : business.id === "fresno" ? centralValleyLinks : [];
+  const serviceLinks = residentialLinks;
+  const areaLinks = centralValleyLinks;
   const mobileGroups: { title: string; links: NavLink[] }[] = [
     { title: "Home cleaning", links: serviceLinks },
     { title: "Areas", links: [...areaLinks, { label: "Service areas", href: "/service-areas" }] },
-    { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Our work", href: "/our-work" }, { label: "Service checklist", href: "/checklist" }, { label: "Contact", href: "/contact" }, ...(business.id === "fresno" ? [{ label: "Cleaning tips", href: "/blog" }] : [])] },
-    ...(business.id === "fresno" ? [{ title: "Fresno-area businesses", links: [...businessLinks, { label: "Request a walkthrough", href: "/commercial-quote" }] }] : []),
+    { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Our work", href: "/our-work" }, { label: "Service checklist", href: "/checklist" }, { label: "Contact", href: "/contact" }, { label: "Cleaning tips", href: "/blog" }] },
+    { title: "Fresno-area businesses", links: [...businessLinks, { label: "Request a walkthrough", href: "/commercial-quote" }] },
   ];
   const pathname = usePathname();
   const quoteHref = siteQuoteHref(pathname, "");
@@ -123,27 +116,27 @@ export default function HomeHeader() {
                 <p className="home-services-panel-label">Home cleaning</p>
                 {serviceLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
               </div>
-              {business.id === "fresno" ? <div className="home-services-panel-group">
+              <div className="home-services-panel-group">
                 <p className="home-services-panel-label">Fresno-area businesses</p>
                 {businessLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
-              </div> : null}
+              </div>
               <div className="home-services-panel-group">
                 <p className="home-services-panel-label">Before you book</p>
-                <Link href={business.id === "southbay" ? business.hub : "/services"} className="home-services-panel-more">All services <span aria-hidden="true">→</span></Link>
+                <Link href="/services" className="home-services-panel-more">All services <span aria-hidden="true">→</span></Link>
                 <Link href="/checklist" className="home-services-panel-more">Service checklist →</Link>
               </div>
             </div>
           </div>
-          {business.id ? <div ref={areasPanel} className={`home-nav-panel${areasOpen ? " is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setAreasOpen(false); }}>
+          <div ref={areasPanel} className={`home-nav-panel${areasOpen ? " is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setAreasOpen(false); }}>
             <button type="button" ref={areasTrigger} className="home-nav-trigger" aria-expanded={areasOpen} aria-controls="home-areas-panel" aria-current={currentLocation("/service-areas")} onClick={() => { setAreasOpen(!areasOpen); setServicesOpen(false); }}>Areas <span aria-hidden="true">▾</span></button>
-            <div id="home-areas-panel" className="home-services-panel home-areas-panel"><div><p className="home-services-panel-label">{business.name}</p>{areaLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}<Link href="/service-areas" className="home-services-panel-more">Service areas →</Link></div></div>
-          </div> : <Link href="/service-areas">Service areas</Link>}
+            <div id="home-areas-panel" className="home-services-panel home-areas-panel"><div><p className="home-services-panel-label">{business.serviceAreaName}</p>{areaLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}<Link href="/service-areas" className="home-services-panel-more">Service areas →</Link></div></div>
+          </div>
           {navigation.filter((link) => !link.panel).map((link) => (
             <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className={currentLocation(link.href) ? "is-active" : undefined}>{link.label}</Link>
           ))}
         </nav>
         <div className="home-header-actions">
-          <a href={business.phoneHref} className="home-header-phone" data-phone-location="header_desktop" aria-label={business.phoneDisplay === "Call us" ? "Call New Star Cleaning" : `Call ${business.phoneDisplay}`}><Icon name="phone" /><span className="home-header-phone-number">{business.phoneDisplay}</span></a>
+          <a href={business.phoneHref} className="home-header-phone" data-phone-location="header_desktop" aria-label={`Call ${business.phoneDisplay}`}><Icon name="phone" /><span className="home-header-phone-number">{business.phoneDisplay}</span></a>
           <HomeBookingLink placement="header" />
           <button type="button" ref={menu} className="home-menu-button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="home-mobile-menu" onClick={() => setOpen(!open)}>
             <span className="home-menu-label">{open ? "Close" : "Menu"}</span>

@@ -100,7 +100,7 @@ export default function ServiceDetailPage({ service, h1 }: {
         title={h1}
         description={heroDescriptions[service.slug]}
         photo={presentation.photo}
-        proof={<ProofRow market="fresno" tone="dark" />}
+        proof={<ProofRow tone="dark" />}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
       >
         <PricePicker id="price" source={`organic_${service.slug}_service_price`} leadSource={`organic_${service.slug}_service`} service={quoteFormService(service)} quoteHref="#quote" />
@@ -222,9 +222,9 @@ export default function ServiceDetailPage({ service, h1 }: {
         </div>
       </section>
 
-      <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks market="fresno" /></div>
+      <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>
       <section className="site-muted" aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
-      <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." market="fresno" phoneLocation="service_price_band" />
+      <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." phoneLocation="service_price_band" />
       <section className="site-muted"><div className="site-section site-split">
         <div className="site-copy">
           <h2>Good to know before you book.</h2>

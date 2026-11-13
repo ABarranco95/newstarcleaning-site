@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { allowedPrefillPair, bookingAttributionSnapshot, startBookingPrefill, type BookingPrefillPayload, type PrefillSendStatus } from "@/lib/bookingPrefill";
 import { captureFirstPaidTouch } from "@/lib/attribution";
 import { completedHome, paidSessionId, trackFunnelEvent } from "@/lib/conversionTracking";
-import type { MarketId } from "@/lib/markets";
 
 const messages: Record<PrefillSendStatus, string> = {
   waiting: "Booking opened in a new tab. Waiting to transfer your home details.",
@@ -18,14 +17,13 @@ const messages: Record<PrefillSendStatus, string> = {
   cancelled: "Home-detail transfer stopped. Nothing was booked or submitted.",
 };
 
-export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, zip, market, primary = false, source = "google-ads", ctaLocation = "paid_live_price" }: {
+export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, zip, primary = false, source = "google-ads", ctaLocation = "paid_live_price" }: {
   baseUrl: string;
   service: "Deep cleaning" | "Standard recurring cleaning" | "Move-in / move-out cleaning";
   bedrooms: string;
   bathrooms: string;
   squareFeet: string;
   zip?: string;
-  market: MarketId;
   primary?: boolean;
   source?: string;
   ctaLocation?: string;
@@ -63,14 +61,14 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           try { internal ||= window.localStorage.getItem("ns_internal") === "1"; } catch { /* URL flag still works without storage. */ }
           const attribution = bookingAttributionSnapshot({ ...captureFirstPaidTouch(), funnelSessionId: paidSessionId(), ...(internal ? { nsinternal: "1" } : {}) });
           const snapshot: BookingPrefillPayload = Object.freeze({
-            service, bedrooms, bathrooms, squareFeet, ...(zip ? { zip } : {}), market,
+            service, bedrooms, bathrooms, squareFeet, ...(zip ? { zip } : {}), market: "fresno",
             frequency: "one-time", condition: "normal",
             ...(service === "Move-in / move-out cleaning" ? { moveOutAddons: Object.freeze([]) } : {}),
             ...attribution,
           });
           const url = new URL(destination);
           if (zip) url.searchParams.set("zip", zip);
-          url.searchParams.set("market", market);
+          url.searchParams.set("market", "fresno");
           if (internal) url.searchParams.set("nsinternal", "1");
           cancelRef.current = startBookingPrefill(window, url.toString(), snapshot, setStatus);
           try {

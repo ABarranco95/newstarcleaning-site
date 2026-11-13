@@ -117,7 +117,7 @@ export default function PostConstructionCleaningPage() {
         description="The build is nearly finished. Get the space ready for handoff with final interior cleaning for new homes, remodels, and tenant improvements. Scope and deadline confirmed before scheduling."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
         tone="dark"
-        proof={<ProofRow market="fresno" tone="dark" />}
+        proof={<ProofRow tone="dark" />}
       >
         <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}

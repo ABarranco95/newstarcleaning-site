@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { MarketId } from "@/lib/markets";
 import type { RealWorkPhoto } from "@/lib/realWorkPhotos";
 
 interface SiteHeroProps {
@@ -13,7 +12,6 @@ interface SiteHeroProps {
   children?: ReactNode;
   aside?: ReactNode;
   proof?: ReactNode;
-  market?: MarketId;
   tone?: "light" | "dark";
 }
 

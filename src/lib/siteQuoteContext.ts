@@ -1,8 +1,6 @@
 import { homeQuoteParams, isBusinessCleaning } from "@/lib/homeQuoteContext";
-import { markets, citySlug, marketForPath } from "@/lib/markets";
 
 const cityLabels: Record<string, string> = {
-  ...Object.fromEntries(markets.southbay.cities.map((city) => [citySlug(city), city])),
   fresno: "Fresno", clovis: "Clovis", madera: "Madera",
   "tower-district": "Tower District", "fig-garden": "Fig Garden", "woodward-park": "Woodward Park",
 };
@@ -24,8 +22,7 @@ export function siteQuoteParams(pathname: string, search: string) {
   if (pathname === "/services/commercial-cleaning") set("service", "Office / commercial cleaning");
   if (pathname === "/services/post-construction-cleaning") set("service", "Post-construction cleaning");
   if (pathname === "/commercial-quote" && !isBusinessCleaning(params.get("service"))) set("service", "Office / commercial cleaning");
-  const pageMarket = marketForPath(pathname);
-  if (pageMarket) set("market", pageMarket);
+  set("market", "fresno");
   return params;
 }
 

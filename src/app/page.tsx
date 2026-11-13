@@ -23,11 +23,11 @@ import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 const directBookingUrl = resolveDirectBookingUrl();
 
 export const metadata: Metadata = {
-  title: { absolute: "House Cleaning | New Star Cleaning" },
-  description: "Standard, deep and move-out house cleaning. Enter your ZIP to see your price before you book.",
+  title: { absolute: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning" },
+  description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book.",
   alternates: { canonical: "/" },
-  openGraph: { title: "House Cleaning | New Star Cleaning", description: "Standard, deep and move-out house cleaning. Enter your ZIP to see your price before you book.", url: "https://newstarcleaning.com" },
-  twitter: { title: "House Cleaning | New Star Cleaning", description: "Standard, deep and move-out house cleaning. Enter your ZIP to see your price before you book." },
+  openGraph: { title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book.", url: "https://newstarcleaning.com" },
+  twitter: { title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book." },
 };
 
 const faqs = [
@@ -49,7 +49,7 @@ export default function Home() {
     <div className="home-reference">
       <section className="hx ns-on-dark" aria-labelledby="home-title">
         <div className="hx-inner">
-          <div className="hx-copy"><h1 id="home-title">House cleaning. See your price before you book.</h1><ProofRow market="southbay" tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. Put in your ZIP and see your price.</p></div>
+          <div className="hx-copy"><h1 id="home-title">House cleaning in Fresno, Clovis &amp; Madera.</h1><ProofRow tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. Put in your ZIP and see your price.</p></div>
           <div className="hx-action"><PricePicker id="price" source="organic_home_price" leadSource="organic_home_hero" quoteHref="#quote" /></div>
           <figure className="hx-photo" data-work-photo="hero"><div className="hx-photo-frame"><Image src={hero.src} alt={hero.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, 100vw" /></div><figcaption>Glass shower and freestanding tub · New Star job</figcaption></figure>
         </div>
@@ -57,7 +57,7 @@ export default function Home() {
 
       <section id="results" className="home-band" aria-labelledby="home-results-title"><div className="ns-section">
         <div className="ns-section-head"><h2 id="home-results-title" className="ns-h2">Before and after, from real New Star jobs.</h2></div>
-        <BeforeAfterPairs pairs={[tubSurroundPair, showerDetailPair, ventDetailPair, refrigeratorFullPair, ovenInteriorPair]} market="southbay">
+        <BeforeAfterPairs pairs={[tubSurroundPair, showerDetailPair, ventDetailPair, refrigeratorFullPair, ovenInteriorPair]}>
           <article className="home-ba-pair"><div className="home-ba-pair-images"><div className="home-comparison-image"><Image src="/photos/before1.jpg" alt="Shower before a New Star deep cleaning" fill sizes="(min-width: 1024px) 200px, 45vw" /><span className="home-ba-tag">Before</span></div><div className="home-comparison-image"><Image src="/photos/after1.jpg" alt="The same shower after a New Star deep cleaning" fill sizes="(min-width: 1024px) 200px, 45vw" /><span className="home-ba-tag">After</span></div></div><div className="home-ba-pair-label"><h3>Shower stall</h3></div></article>
         </BeforeAfterPairs>
         <div className="home-section-more"><Link href="/our-work" className="home-text-link">See all of our work <span aria-hidden="true">→</span></Link></div>
@@ -73,8 +73,8 @@ export default function Home() {
       <TrustStrip />
 
       <section id="reviews" className="ns-section" aria-labelledby="home-reviews-title">
-        <div className="ns-section-head"><h2 id="home-reviews-title" className="ns-h2">What customers say.</h2><GoogleRating prominent market="southbay" /></div>
-        <ReviewCards reviews={reviews} market="southbay" lead />
+        <div className="ns-section-head"><h2 id="home-reviews-title" className="ns-h2">What customers say.</h2><GoogleRating prominent /></div>
+        <ReviewCards reviews={reviews} lead />
       </section>
 
       <HowItWorks />

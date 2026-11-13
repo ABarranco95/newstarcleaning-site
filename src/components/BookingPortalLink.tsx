@@ -5,8 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { readFirstPaidTouch, type FirstPaidTouchRecord } from "@/lib/attribution";
 import { trackFunnelEvent } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
-import { useMarket } from "@/components/MarketProvider";
-import { normalizedZip, type MarketId } from "@/lib/markets";
+import { normalizedZip } from "@/lib/markets";
 
 const TRACKING_PARAMS = [
   "utm_source",
@@ -27,7 +26,6 @@ type BookingPortalLinkProps = {
   city?: string;
   frequency?: string;
   zip?: string;
-  market?: MarketId;
   sourcePage?: string;
   ctaLocation?: string;
   label?: string;
@@ -43,7 +41,6 @@ export default function BookingPortalLink({
   city,
   frequency,
   zip,
-  market,
   sourcePage,
   ctaLocation,
   label = "Start my booking",
@@ -52,7 +49,6 @@ export default function BookingPortalLink({
   showIcon = true,
 }: BookingPortalLinkProps) {
   const searchParams = useSearchParams();
-  const config = useMarket(market);
 
   const href = useMemo(() => {
     const url = new URL(baseUrl);
@@ -69,16 +65,14 @@ export default function BookingPortalLink({
     const postal = normalizedZip(zip || searchParams.get("zip") || searchParams.get("nsc_zip"));
     for (const key of ["zip", "nsc_zip", "market", "nsc_market"]) url.searchParams.delete(key);
     if (postal) { url.searchParams.set("zip", postal); url.searchParams.set("nsc_zip", postal); }
-    if (config.id) {
-      url.searchParams.set("market", config.id);
-      url.searchParams.set("nsc_market", config.id);
-    }
+    url.searchParams.set("market", "fresno");
+    url.searchParams.set("nsc_market", "fresno");
     url.searchParams.set(
       "utm_source_page",
       sourcePage ? `newstarcleaning.com${sourcePage}` : "newstarcleaning.com"
     );
     return url.toString();
-  }, [baseUrl, searchParams, service, city, frequency, sourcePage, zip, config.id]);
+  }, [baseUrl, searchParams, service, city, frequency, sourcePage, zip]);
 
   // The correlation ID is minted at click time and stamped onto the anchor
   // before navigation, so the analytics event and the booking URL carry

@@ -7,8 +7,6 @@ import type { ReactNode } from "react";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import { bookingServiceName, homeQuoteParams } from "@/lib/homeQuoteContext";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
-import { useMarket } from "@/components/MarketProvider";
-import { marketForCity, type MarketId } from "@/lib/markets";
 
 
 const directBookingUrl = resolveDirectBookingUrl();
@@ -20,18 +18,16 @@ const choices = [
 type ServiceSlug = (typeof choices)[number]["slug"];
 
 // `photos` lets a page swap a card photo so no frame shows twice on it.
-export default function HomeServices({ defaultCity, market, photos, children }: { defaultCity?: string; market?: MarketId; photos?: Partial<Record<ServiceSlug, { src: string; alt: string }>>; children?: ReactNode }) {
+export default function HomeServices({ defaultCity, photos, children }: { defaultCity?: string; photos?: Partial<Record<ServiceSlug, { src: string; alt: string }>>; children?: ReactNode }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const config = useMarket(market || marketForCity(defaultCity));
-  const linkMarket = config.id;
   return (
     <div className="home-service-rows">
       {choices.map((choice) => {
         const query = homeQuoteParams(searchParams.toString());
         query.set("service", choice.slug);
         query.delete("market"); query.delete("nsc_market");
-        if (config.id) query.set("market", config.id);
+        query.set("market", "fresno");
         query.delete("nsc_service");
         if (defaultCity) { query.set("city", defaultCity); query.delete("nsc_city"); }
         const photo = photos?.[choice.slug] ?? { src: `/photos/real-work/${choice.photo}`, alt: choice.alt };
@@ -41,8 +37,8 @@ export default function HomeServices({ defaultCity, market, photos, children }: 
             <div className="home-service-content"><h3>{choice.label}</h3><p>{choice.fit}</p>
             <p className="home-service-start">Priced for your ZIP and home.</p></div>
             <div className="home-service-row-actions">
-              {directBookingUrl ? <BookingPortalLink baseUrl={directBookingUrl} market={config.id} service={bookingServiceName(choice.slug)} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation="service_row" label={`Book ${choice.slug === "move-out-cleaning" ? "move-in / out" : choice.slug.split("-")[0]}`} showIcon={false} className="home-service-book" /> : <Link href={`/book-now?${query.toString()}`} className="home-service-book">Get a quote</Link>}
-              <Link href={linkMarket === "southbay" ? `/${choice.slug}-san-jose#whats-included` : `/services/${choice.slug}?${query.toString()}#whats-included`} className="home-text-link">What&apos;s included <span aria-hidden="true">→</span></Link>
+              {directBookingUrl ? <BookingPortalLink baseUrl={directBookingUrl} service={bookingServiceName(choice.slug)} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation="service_row" label={`Book ${choice.slug === "move-out-cleaning" ? "move-in / out" : choice.slug.split("-")[0]}`} showIcon={false} className="home-service-book" /> : <Link href={`/book-now?${query.toString()}`} className="home-service-book">Get a quote</Link>}
+              <Link href={`/services/${choice.slug}?${query.toString()}#whats-included`} className="home-text-link">What&apos;s included <span aria-hidden="true">→</span></Link>
             </div>
           </article>
         );

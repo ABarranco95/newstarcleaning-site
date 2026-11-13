@@ -117,7 +117,7 @@ export default function CommercialCleaningPage() {
         description="A clean workplace. A clear task list. One-time or recurring cleaning for offices, professional suites, retail spaces, and property-managed shared areas."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
         tone="dark"
-        proof={<ProofRow market="fresno" tone="dark" />}
+        proof={<ProofRow tone="dark" />}
       >
         <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}

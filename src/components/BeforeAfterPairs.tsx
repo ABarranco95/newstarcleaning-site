@@ -2,12 +2,10 @@
 
 import Image from "next/image";
 import { useId, useRef, type ReactNode } from "react";
-import type { MarketId } from "@/lib/markets";
 import type { RealWorkPair } from "@/lib/realWorkPhotos";
 
 interface BeforeAfterPairsProps {
   pairs: RealWorkPair[];
-  market: MarketId;
   titleLevel?: "h3";
   children?: ReactNode;
 }

@@ -1,11 +1,9 @@
 import { StarRow } from "@/components/Icon";
 import { googleRating } from "@/lib/googleRating";
-import type { MarketId } from "@/lib/markets";
 
 interface GoogleRatingProps {
   onDark?: boolean;
   prominent?: boolean;
-  market?: MarketId;
   rated?: boolean;
 }
 

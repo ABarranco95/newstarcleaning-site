@@ -12,8 +12,8 @@ import BookingPrefillLink from "@/components/BookingPrefillLink";
 import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
 import PaidPriceBookingButton from "@/components/PaidPriceBookingButton";
 import { acceptedPrefillSnapshot, allowedPrefillPair, bookingAttributionSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
-import { setMarketCookie, useMarket } from "@/components/MarketProvider";
-import { marketForCity, normalizedZip, type MarketId } from "@/lib/markets";
+import { business as BUSINESS } from "@/lib/business";
+import { isLocalCity, isServiceZip, normalizedZip } from "@/lib/markets";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import usePaidPriceRange from "@/lib/usePaidPriceRange";
 import { PAID_HOME_SIZES, paidHomeSize, paidLeadHomeSize } from "@/lib/paidHomeSize";
@@ -123,7 +123,7 @@ type SentState = {
   line: string;
   price: string;
   ready: boolean;
-  market: MarketId;
+  market: "fresno";
   acceptedSnapshot: BookingPrefillPayload | null;
   accepted: boolean;
   commercial: boolean;
@@ -204,7 +204,6 @@ export type PriceLeadFormProps = {
   priceSource?: string;
   service?: string;
   defaultCity?: string;
-  market?: MarketId;
   id?: string;
   paidSearch?: boolean;
   landingCity?: string;
@@ -227,7 +226,6 @@ function PriceLeadFormContent({
   priceSource,
   service,
   defaultCity,
-  market,
   id,
   paidSearch = false,
   landingCity,
@@ -239,7 +237,6 @@ function PriceLeadFormContent({
   directBookingUrl,
   pathname,
 }: PriceLeadFormProps & { pathname: string }) {
-  const BUSINESS = useMarket(market);
   const draft = useQuoteDraft(pathname);
   const siteOrigin = useSyncExternalStore(subscribeOrigin, readOrigin, serverOrigin);
   const uid = useId();
@@ -282,18 +279,17 @@ function PriceLeadFormContent({
     bedrooms: draft.bedrooms,
     bathrooms: draft.bathrooms,
     sqft: draft.size,
-    market: BUSINESS.id,
     zip: postal,
   });
   const ready = !walkthrough && postal && price.status === "ready" ? price : null;
   // Nothing on screen 1 leads on until the ZIP is valid (spec s4): a lead must
   // carry its location, and paid leads are refused without one.
-  const directQuote = Boolean(postal) && (price.status === "custom" || openEnded);
+  const outOfArea = Boolean(postal) && !isServiceZip(postal);
+  const directQuote = !outOfArea && Boolean(postal) && (price.status === "custom" || openEnded);
   const askState = !directQuote && !ready && Boolean(postal) && price.status === "zip-required";
   const loading = Boolean(postal) && price.status === "loading" && !directQuote;
-  // Preserve the existing intake fallback for an unresolved/custom-price home;
-  // neutral display context must not change the protected submission payload.
-  const marketId = ready?.market ?? BUSINESS.id ?? (pathname === "/" ? "southbay" : "fresno");
+  // Preserve the existing Fresno wire contract, including custom-price homes.
+  const marketId = "fresno";
   const resolvedBookingUrl = directBookingUrl === undefined ? resolveDirectBookingUrl() : directBookingUrl;
   const bookableService: ResidentialService =
     draft.service === "Deep cleaning" || draft.service === "Move-in / move-out cleaning" ? draft.service : "Standard recurring cleaning";
@@ -329,9 +325,6 @@ function PriceLeadFormContent({
   const priceLowCents = ready?.priceLowCents;
   const priceHighCents = ready?.priceHighCents;
   const readyMarket = ready?.market;
-  useEffect(() => {
-    if (postal && readyMarket) setMarketCookie(readyMarket);
-  }, [postal, readyMarket]);
   useEffect(() => {
     if (!readyMarket || priceLowCents === undefined) return;
     const key = JSON.stringify([draft.service, draft.bedrooms, draft.bathrooms, draft.size, postal, readyMarket, priceLowCents, priceHighCents]);
@@ -436,7 +429,7 @@ function PriceLeadFormContent({
       ].filter(Boolean).join("\n\n");
   // A page default is context, not a customer-confirmed address. Use it only
   // when Apex has resolved this ZIP to the same market.
-  const postedCity = walkthrough ? contact.city : ready && defaultCity && marketForCity(defaultCity) === ready.market ? defaultCity : postal || "";
+  const postedCity = walkthrough ? contact.city : ready && defaultCity && isLocalCity(defaultCity) ? defaultCity : postal || "";
   const postedZip = walkthrough ? normalizedZip(contact.city) || "" : postal || "";
 
   const formForSnapshot = {
@@ -471,7 +464,7 @@ function PriceLeadFormContent({
     // the disabled button. Release in finally so a failed request can retry.
     if (submitInFlightRef.current) return;
     // The other placement can edit the shared ZIP while this contact step is open.
-    if (!walkthrough && !postal) {
+    if (!walkthrough && (!postal || outOfArea)) {
       returnToPrice();
       return;
     }
@@ -673,9 +666,16 @@ function PriceLeadFormContent({
   const serviceName = serviceCaption(draft.service);
   const showBooking = Boolean(ready?.bookableSqft && bookingButtonRenders(siteOrigin, resolvedBookingUrl) &&
     (!paidSearch || draft.service === "Deep cleaning" || draft.service === "Not sure yet" || draft.service === "Move-in / move-out cleaning"));
-  const twoDayNotice = showBooking && ready?.market === "southbay";
 
   const renderPriceOutput = () => {
+    if (outOfArea) {
+      return (
+        <>
+          <p className="ns-price-prompt">That ZIP is outside our service area.</p>
+          <p className="ns-price-help">We clean in Fresno, Clovis and Madera. Check the ZIP and try again.</p>
+        </>
+      );
+    }
     if (directQuote) {
       return (
         <>
@@ -715,6 +715,7 @@ function PriceLeadFormContent({
   };
 
   const renderActions = () => {
+    if (outOfArea) return null;
     if (directQuote || askState) {
       return (
         <div className="nq-actions">
@@ -725,7 +726,7 @@ function PriceLeadFormContent({
             <p className="nq-note">{ready ? "We'll confirm your exact price and the days we have open. Nothing is booked until you say so." : "Leave a name and number and we'll get back to you during the day."}</p>
           </div>
           <div className="ns-price-contact">
-            <a href={BUSINESS.phoneHref} className="home-button-secondary" data-phone-location="organic_price">{BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a>
+            <a href={BUSINESS.phoneHref} className="home-button-secondary" data-phone-location="organic_price">{`Call ${BUSINESS.phoneDisplay}`}</a>
             <a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="home-button-secondary">Text us</a>
           </div>
         </div>
@@ -751,13 +752,12 @@ function PriceLeadFormContent({
               bathrooms={draft.bathrooms}
               squareFeet={ready.bookableSqft!}
               zip={postal}
-              market={ready.market}
+
               source={source}
               ctaLocation={paidSearch ? "paid_live_price" : "organic_live_price"}
             />
           </div>
         ) : null}
-        {twoDayNotice ? <p className="nq-note">Online booking needs two days&apos; notice.</p> : null}
       </div>
     );
   };
@@ -780,17 +780,16 @@ function PriceLeadFormContent({
             {sent.commercial
               ? "We'll be in touch during the day about your property or project."
               : sent.smsOptIn
-                ? `We'll text ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. ${BUSINESS.phoneDisplay === "Call us" ? "" : `The text comes from ${BUSINESS.phoneDisplay}. `} We reply during the day, Mon–Fri 8–6 and Sat 8–5.`
+                ? `We'll text ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. The text comes from ${BUSINESS.phoneDisplay}.  We reply during the day, Mon–Fri 8–6 and Sat 8–5.`
                 : `We'll reach you at ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. We reply during the day, Mon–Fri 8–6 and Sat 8–5.`}
           </p>
           {resolvedBookingUrl && sent.accepted && !sent.commercial && sent.ready ? (
             <div className="nq-sent-book">
               <BookingPrefillLink baseUrl={resolvedBookingUrl} snapshot={sent.acceptedSnapshot} onRelease={() => setSent((current) => current ? { ...current, acceptedSnapshot: null } : current)} />
               <p className="nq-note">Rather not wait? Pick your day and time now. You review the price before you confirm.</p>
-              {sent.market === "southbay" ? <p className="nq-note">Online booking needs two days&apos; notice.</p> : null}
             </div>
           ) : null}
-          <a href={BUSINESS.phoneHref} className="qf-success-call" data-phone-location="quote_success">Questions? {BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a>
+          <a href={BUSINESS.phoneHref} className="qf-success-call" data-phone-location="quote_success">Questions? {`Call ${BUSINESS.phoneDisplay}`}</a>
           <button
             type="button"
             className="qf-reset"
@@ -831,7 +830,7 @@ function PriceLeadFormContent({
         <div className="qf-stack">
           <div>
             <label className="qf-label" htmlFor={field("walkthrough-city")}>City or ZIP</label>
-            <input className="qf-input" id={field("walkthrough-city")} name="city" type="text" required autoComplete="address-level2" placeholder={BUSINESS.id === "southbay" ? "e.g. San Jose" : "e.g. Fresno"} value={contact.city} onChange={(event) => setContactField("city", event.target.value)} aria-describedby={field("city-error")} />
+            <input className="qf-input" id={field("walkthrough-city")} name="city" type="text" required autoComplete="address-level2" placeholder="e.g. Fresno" value={contact.city} onChange={(event) => setContactField("city", event.target.value)} aria-describedby={field("city-error")} />
             {fieldError("city") ? <p className="nq-field-error" id={field("city-error")}>{fieldError("city")}</p> : null}
           </div>
           <div className="qf-row qf-row-2">
@@ -862,7 +861,7 @@ function PriceLeadFormContent({
             </label>
           </div>
           <div role="alert" className="qf-error" hidden={!error}>
-            {error ? <><p>{error}</p><div className="nq-error-actions"><a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">{BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a><a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action">Text us</a></div></> : null}
+            {error ? <><p>{error}</p><div className="nq-error-actions"><a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">{`Call ${BUSINESS.phoneDisplay}`}</a><a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action">Text us</a></div></> : null}
           </div>
         </div>
       ) : (
@@ -900,7 +899,7 @@ function PriceLeadFormContent({
                 <>
                   <p>{error}</p>
                   <div className="nq-error-actions">
-                    <a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">{BUSINESS.phoneDisplay === "Call us" ? "Call us" : `Call ${BUSINESS.phoneDisplay}`}</a>
+                    <a href={BUSINESS.phoneHref} className="qf-error-action" data-phone-location="paid_quote_error">{`Call ${BUSINESS.phoneDisplay}`}</a>
                     <a href={BUSINESS.phoneHref.replace("tel:", "sms:")} className="qf-error-action">Text us</a>
                   </div>
                 </>
@@ -1056,7 +1055,7 @@ function PriceLeadFormContent({
       id={placement === "hero" ? id : undefined}
       data-price-picker={placement === "hero" ? true : undefined}
       data-has-zip={postal ? "" : undefined}
-      data-market-price={ready?.market ?? BUSINESS.id}
+      data-market-price="fresno"
     >
       {walkthrough ? null : <div data-quote-step="1" hidden={step !== "price"}>
         <fieldset className="ns-price-services">

@@ -1,10 +1,8 @@
 import Image from "next/image";
-import type { MarketId } from "@/lib/markets";
 import type { RealWorkPhoto } from "@/lib/realWorkPhotos";
 
 interface PhotoStripProps {
   photos: RealWorkPhoto[];
-  market: MarketId;
 }
 
 export default function PhotoStrip({ photos }: PhotoStripProps) {

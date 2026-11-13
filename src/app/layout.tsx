@@ -12,8 +12,6 @@ import PageViewTracker from "@/components/PageViewTracker";
 import WebsiteCallTracker from "@/components/WebsiteCallTracker";
 import PaidAttributionTracker from "@/components/PaidAttributionTracker";
 import MobileContactActions from "@/components/MobileContactActions";
-import MarketProvider from "@/components/MarketProvider";
-import MarketMetadata from "@/components/MarketMetadata";
 import { Suspense } from "react";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -26,12 +24,12 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://newstarcleaning.com"),
   title: {
-    default: "House Cleaning | New Star Cleaning",
+    default: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning",
     template: "%s | New Star Cleaning",
   },
   description:
-    "Professional house cleaning services. Request fast pricing and availability for recurring, deep, and move-out cleaning.",
-  keywords: ["house cleaning", "recurring house cleaning", "deep cleaning", "move out cleaning", "house cleaners near me", "professional house cleaning"],
+    "Professional house cleaning services in Fresno, Clovis, Madera, and nearby Fresno neighborhoods. Request fast pricing and availability for recurring, deep, and move-out cleaning.",
+  keywords: ["house cleaning Fresno", "cleaning service Fresno CA", "recurring house cleaning Clovis", "house cleaning Madera", "deep cleaning Fresno", "move out cleaning Fresno", "house cleaners near me", "professional cleaning Fresno CA"],
   alternates: {
     canonical: "/",
   },
@@ -40,9 +38,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://newstarcleaning.com",
     siteName: "New Star Cleaning",
-    title: "House Cleaning | New Star Cleaning",
+    title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning",
     description:
-      "Request clear pricing for professional house cleaning.",
+      "Request clear pricing for professional house cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
     images: [
       {
         url: "/og-image.png",
@@ -54,9 +52,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "House Cleaning | New Star Cleaning",
+    title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning",
     description:
-      "Request clear pricing for professional house cleaning.",
+      "Request clear pricing for professional house cleaning in Fresno, Clovis, Madera, and nearby Fresno neighborhoods.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -87,14 +85,11 @@ export default function RootLayout({
         <PageViewTracker />
         <PaidAttributionTracker />
         <WebsiteCallTracker />
-        <MarketProvider>
-          <SchemaMarkup />
-          <MarketMetadata />
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-          <Suspense fallback={null}><MobileContactActions /></Suspense>
-        </MarketProvider>
+        <SchemaMarkup />
+        <Header />
+        <main className="min-h-screen">{children}</main>
+        <Footer />
+        <Suspense fallback={null}><MobileContactActions /></Suspense>
       </body>
     </html>
   );

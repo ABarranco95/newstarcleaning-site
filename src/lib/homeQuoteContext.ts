@@ -8,6 +8,8 @@ export function homeQuoteParams(search: string) {
     const value = params.get(`nsc_${key}`);
     if (!params.get(key) && value) params.set(key, value);
   }
+  params.set("market", "fresno");
+  params.delete("nsc_market");
   return params;
 }
 

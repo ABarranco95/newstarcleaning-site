@@ -102,7 +102,7 @@ const comparisonRows = [
 export default function ChecklistPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="What each cleaning includes, what costs extra and what we don't do. It's the list we clean from." photo={kitchenSurfacesPhoto} proof={<ProofRow market="southbay" tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="What each cleaning includes, what costs extra and what we don't do. It's the list we clean from." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div><a href="#services" className="home-text-link mt-4">Jump to the lists ↓</a>
       </SiteHero>
       <section id="services" className="site-section scroll-mt-24"><div className="ns-section-head"><div><p className="ns-kicker">Included</p><h2>What&apos;s included, room by room.</h2><p className="site-intro">Standard keeps a home up. Deep adds the detail work. Move-out adds the inside of every empty cabinet, drawer and closet.</p></div></div><div className="site-disclosures">

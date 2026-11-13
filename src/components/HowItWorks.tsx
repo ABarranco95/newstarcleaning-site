@@ -1,10 +1,8 @@
 import { MarketCallOrText } from "@/components/MarketPhone";
-import type { MarketId } from "@/lib/markets";
 
 interface HowItWorksProps {
   priceHref?: string;
   showFootnote?: boolean;
-  market?: MarketId;
   actions?: boolean;
 }
 
@@ -14,7 +12,7 @@ const steps = [
   { title: "We clean. You check.", body: "If something in the agreed scope was missed, tell us within 24 hours and we come back at no charge." },
 ];
 
-export default function HowItWorks({ priceHref = "#price", showFootnote = false, market, actions = true }: HowItWorksProps) {
+export default function HowItWorks({ priceHref = "#price", showFootnote = false, actions = true }: HowItWorksProps) {
   return (
     <section className="site-muted">
       <div className="ns-section">
@@ -25,7 +23,7 @@ export default function HowItWorks({ priceHref = "#price", showFootnote = false,
           ))}
         </ol>
         {showFootnote ? <p className="ns-process-note">We place a hold for the visit total within 24 hours before the cleaning and charge it after the cleaning is finished. Free cancellation until 24 hours before your arrival window; inside 24 hours, 50% of that visit is charged. Recurring is month to month.</p> : null}
-        {actions ? <div className="site-actions"><a href={priceHref} className="home-button">See your price <span aria-hidden="true">→</span></a><span><MarketCallOrText prefix="or " market={market} location="how_it_works" className="home-text-link" /></span></div> : null}
+        {actions ? <div className="site-actions"><a href={priceHref} className="home-button">See your price <span aria-hidden="true">→</span></a><span><MarketCallOrText prefix="or " location="how_it_works" className="home-text-link" /></span></div> : null}
       </div>
     </section>
   );
