@@ -59,7 +59,7 @@ export const serviceAreas: ServiceArea[] = [
     localContent:
       "An older Fresno bungalow with detailed trim needs a different kind of attention than a larger north Fresno home. Tell us about your floors and the rooms you want help with. For a deep clean, we get into the baseboards, door frames and reachable fixtures as well as the kitchen and bathrooms.",
     localProof:
-      "Fresno is home for us. We clean houses and apartments from Woodward Park and Fig Garden through the rest of North Fresno and down into the older neighborhoods. Tell us your address and we'll check available dates.",
+      "Fresno is home for us. We clean houses and apartments all over town, from Woodward Park and Fig Garden to the older neighborhoods closer to downtown. Tell us your address and we'll check available dates.",
     homeProfiles: [
       "Newer single-family homes north of Shaw with more bathrooms and floor area",
       "Apartments, condos, duplexes, and single-family homes",
@@ -159,7 +159,7 @@ export const serviceAreas: ServiceArea[] = [
     areaType: "Fresno neighborhood",
     isPrimary: false,
     description:
-      "New Star Cleaning cleans homes north of Shaw in Fresno: Woodward Park, Fig Garden and the neighborhoods around them. Recurring, deep, and move-related cleaning.",
+      "We clean homes all over North Fresno, including Woodward Park, Fig Garden, Bullard and Copper River. Regular house cleaning, deep cleans for buildup, or an empty home before a move.",
     neighborhoods: [
       "Woodward Park",
       "Fig Garden",
@@ -170,7 +170,7 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Fresno", "Woodward Park", "Fig Garden", "Clovis", "Madera"],
     localContent:
-      "Most homes north of Shaw are newer single-family houses with open kitchens, more square footage and more bathrooms than Fresno's older neighborhoods, and plenty of them sit inside HOA communities with their own gate and parking rules. Square footage, bathroom count, flooring, pets and the rooms you want extra attention on are what change the price, so we ask for those before quoting.",
+      "A lot of North Fresno is newer single-family homes with more square footage and more bathrooms than the older parts of town, and plenty of them sit inside HOA communities with their own gate and parking rules. Square footage, bathroom count, flooring, pets and the rooms you want extra attention on are what change the price, so we ask for those before quoting.",
     localProof:
       "North Fresno is part of our Fresno service area. Tell us the address, the home size and the service you need, and we'll confirm the days we have open before you book.",
     homeProfiles: [
@@ -186,7 +186,7 @@ export const serviceAreas: ServiceArea[] = [
     bookingNote:
       "Share the address, home size and the rooms you want covered. HOA gate codes and parking details help us confirm the right arrival window.",
     serviceDetails: {
-      deep: "North Fresno homes usually mean more bathrooms and more floor to cover, plus shower glass, baseboards and vents that a standard visit does not reach. Tell us the room count and where the buildup is.",
+      deep: "North Fresno homes usually mean more bathrooms and more floor to cover. A deep clean adds the baseboards, vent covers, door frames and buildup a standard visit doesn't get to. Tell us the room count and where the buildup is.",
       move: "Tell us when the home will be empty and your walkthrough date. Empty cabinet, drawer and closet interiors are included; oven and fridge interiors and window cleaning are optional add-ons.",
     },
   },

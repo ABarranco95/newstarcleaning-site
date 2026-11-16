@@ -178,7 +178,7 @@ assert(
 assert(
   serviceAreasHub.includes("<MarketAreas directory />") &&
     serviceAreasHub.includes("<ServiceAreasSchema />") &&
-    marketAreas.includes("Tower District") && marketAreas.includes("Fig Garden") && marketAreas.includes("Woodward Park") &&
+    marketAreas.includes("North Fresno") && marketAreas.includes("Tower District") && marketAreas.includes("Fig Garden") && marketAreas.includes("Woodward Park") &&
     marketAreas.includes("business.cities.map") &&
     marketAreas.includes("ItemList") &&
     marketAreas.includes("/cleaning-services-") &&
