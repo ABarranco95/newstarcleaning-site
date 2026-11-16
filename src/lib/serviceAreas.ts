@@ -25,7 +25,7 @@ export interface ServiceArea {
 }
 
 export function getServiceAreaSchema(area: Pick<ServiceArea, "slug" | "name">) {
-  if (["fig-garden", "tower-district", "woodward-park"].includes(area.slug)) {
+  if (["fig-garden", "north-fresno", "tower-district", "woodward-park"].includes(area.slug)) {
     return {
       "@type": "Place",
       name: area.name,
@@ -45,24 +45,25 @@ export const serviceAreas: ServiceArea[] = [
     description:
       "We're based in Fresno. Whether your home needs regular cleaning or more time on buildup, we'll help you choose. We also clean empty homes before or after a move.",
     neighborhoods: [
-      "Tower District",
-      "Fig Garden",
+      "North Fresno",
       "Woodward Park",
+      "Fig Garden",
       "Bullard",
+      "Northwest Fresno",
       "Sunnyside",
       "McLane",
-      "Northwest Fresno",
       "Central Fresno",
+      "Tower District",
     ],
-    nearbyAreas: ["Clovis", "Madera", "Tower District", "Fig Garden", "Woodward Park"],
+    nearbyAreas: ["North Fresno", "Woodward Park", "Fig Garden", "Clovis", "Madera", "Tower District"],
     localContent:
       "An older Fresno bungalow with detailed trim needs a different kind of attention than a larger north Fresno home. Tell us about your floors and the rooms you want help with. For a deep clean, we get into the baseboards, door frames and reachable fixtures as well as the kitchen and bathrooms.",
     localProof:
-      "Fresno is home for us. We clean apartments and houses from Tower District to Woodward Park. Tell us your address and we'll check available dates.",
+      "Fresno is home for us. We clean houses and apartments from Woodward Park and Fig Garden through the rest of North Fresno and down into the older neighborhoods. Tell us your address and we'll check available dates.",
     homeProfiles: [
+      "Newer single-family homes north of Shaw with more bathrooms and floor area",
       "Apartments, condos, duplexes, and single-family homes",
       "Older homes with detailed trim, tile, or hardwood surfaces",
-      "Larger north Fresno homes with more bathrooms and floor area",
     ],
     commonJobs: [
       "Weekly, bi-weekly, and monthly maintenance cleaning",
@@ -152,37 +153,42 @@ export const serviceAreas: ServiceArea[] = [
     },
   },
   {
-    slug: "tower-district",
-    name: "Tower District",
+    slug: "north-fresno",
+    name: "North Fresno",
     county: "Fresno County",
     areaType: "Fresno neighborhood",
     isPrimary: false,
     description:
-      "New Star Cleaning serves Tower District homes, apartments, and duplexes with recurring, deep, and move-in/move-out cleaning.",
+      "New Star Cleaning cleans homes north of Shaw in Fresno: Woodward Park, Fig Garden and the neighborhoods around them. Recurring, deep, and move-related cleaning.",
     neighborhoods: [
-      "Olive Avenue corridor",
-      "Wishon Avenue",
-      "Echo Avenue",
-      "Palm Avenue",
-      "Wilson Island",
+      "Woodward Park",
+      "Fig Garden",
+      "Bullard",
+      "Northwest Fresno",
+      "River Park",
+      "Copper River",
     ],
-    nearbyAreas: ["Fresno", "Fig Garden", "Woodward Park", "Clovis"],
+    nearbyAreas: ["Fresno", "Woodward Park", "Fig Garden", "Clovis", "Madera"],
     localContent:
-      "Tower District properties often have older tile, hardwood, trim, built-ins, compact kitchens, and tighter access. We ask about the surfaces, parking, stairs, and current condition before pricing the visit.",
+      "Most homes north of Shaw are newer single-family houses with open kitchens, more square footage and more bathrooms than Fresno's older neighborhoods, and plenty of them sit inside HOA communities with their own gate and parking rules. Square footage, bathroom count, flooring, pets and the rooms you want extra attention on are what change the price, so we ask for those before quoting.",
     localProof:
-      "Tower District is in our Fresno service area. Its older housing stock makes accurate home and condition details especially useful before a deep or move-out clean.",
+      "North Fresno is part of our Fresno service area. Tell us the address, the home size and the service you need, and we'll confirm the days we have open before you book.",
     homeProfiles: [
-      "Historic bungalows with original floors, tile, and built-ins",
-      "Duplexes, walk-ups, apartments, and compact homes",
-      "Older rentals being prepared for a new occupant",
+      "Newer single-family homes north of Shaw",
+      "Larger floor plans with open kitchens and more bathrooms",
+      "HOA community homes with gate codes and guest parking rules",
     ],
     commonJobs: [
-      "Dust, baseboard, fan, and trim detail",
-      "Kitchen and bathroom deep cleaning",
-      "Move-out cleaning for apartments, duplexes, and homes",
+      "Weekly, every-two-weeks and monthly recurring cleaning",
+      "Deep cleaning for baseboards, shower glass, vents and fixtures",
+      "Move-in and move-out cleaning for empty homes",
     ],
     bookingNote:
-      "Include parking, stairs, gate access, and the preferred date in the quote request so we can confirm the right arrival window.",
+      "Share the address, home size and the rooms you want covered. HOA gate codes and parking details help us confirm the right arrival window.",
+    serviceDetails: {
+      deep: "North Fresno homes usually mean more bathrooms and more floor to cover, plus shower glass, baseboards and vents that a standard visit does not reach. Tell us the room count and where the buildup is.",
+      move: "Tell us when the home will be empty and your walkthrough date. Empty cabinet, drawer and closet interiors are included; oven and fridge interiors and window cleaning are optional add-ons.",
+    },
   },
   {
     slug: "fig-garden",
@@ -198,7 +204,7 @@ export const serviceAreas: ServiceArea[] = [
       "Palm and Shaw",
       "Bullard corridor",
     ],
-    nearbyAreas: ["Fresno", "Tower District", "Woodward Park", "Clovis"],
+    nearbyAreas: ["Fresno", "North Fresno", "Woodward Park", "Clovis", "Tower District"],
     localContent:
       "Fig Garden includes older homes and larger floor plans where room count, flooring, pets, and detail areas can change the workload substantially. Those details are confirmed before pricing.",
     localProof:
@@ -231,7 +237,7 @@ export const serviceAreas: ServiceArea[] = [
       "Champlain Drive",
       "River Park",
     ],
-    nearbyAreas: ["Fresno", "Clovis", "Fig Garden", "Madera"],
+    nearbyAreas: ["Fresno", "North Fresno", "Fig Garden", "Clovis", "Madera"],
     localContent:
       "Woodward Park and north Fresno include condos, townhomes, and larger single-family homes. Square footage, bathrooms, pets, stairs, and requested detail work are the main pricing variables.",
     localProof:
@@ -248,5 +254,38 @@ export const serviceAreas: ServiceArea[] = [
     ],
     bookingNote:
       "Include the address, home size, service type, and preferred date so we can confirm a window.",
+  },
+  {
+    slug: "tower-district",
+    name: "Tower District",
+    county: "Fresno County",
+    areaType: "Fresno neighborhood",
+    isPrimary: false,
+    description:
+      "New Star Cleaning serves Tower District homes, apartments, and duplexes with recurring, deep, and move-in/move-out cleaning.",
+    neighborhoods: [
+      "Olive Avenue corridor",
+      "Wishon Avenue",
+      "Echo Avenue",
+      "Palm Avenue",
+      "Wilson Island",
+    ],
+    nearbyAreas: ["Fresno", "North Fresno", "Fig Garden", "Woodward Park", "Clovis"],
+    localContent:
+      "Tower District properties often have older tile, hardwood, trim, built-ins, compact kitchens, and tighter access. We ask about the surfaces, parking, stairs, and current condition before pricing the visit.",
+    localProof:
+      "Tower District is in our Fresno service area. Its older housing stock makes accurate home and condition details especially useful before a deep or move-out clean.",
+    homeProfiles: [
+      "Historic bungalows with original floors, tile, and built-ins",
+      "Duplexes, walk-ups, apartments, and compact homes",
+      "Older rentals being prepared for a new occupant",
+    ],
+    commonJobs: [
+      "Dust, baseboard, fan, and trim detail",
+      "Kitchen and bathroom deep cleaning",
+      "Move-out cleaning for apartments, duplexes, and homes",
+    ],
+    bookingNote:
+      "Include parking, stairs, gate access, and the preferred date in the quote request so we can confirm the right arrival window.",
   },
 ];

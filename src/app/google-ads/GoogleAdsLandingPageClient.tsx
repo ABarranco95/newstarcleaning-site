@@ -28,6 +28,7 @@ type CityKey =
   | "fresno"
   | "clovis"
   | "madera"
+  | "north-fresno"
   | "woodward-park"
   | "fig-garden"
   | "tower-district"
@@ -64,6 +65,7 @@ const CITY_LABELS: Record<CityKey, string> = {
   fresno: "Fresno",
   clovis: "Clovis",
   madera: "Madera",
+  "north-fresno": "North Fresno",
   "woodward-park": "Woodward Park",
   "fig-garden": "Fig Garden",
   "tower-district": "Tower District",

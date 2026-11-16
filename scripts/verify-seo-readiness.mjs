@@ -35,7 +35,7 @@ const marketAreas = read("src/components/MarketAreas.tsx");
 const header = read("src/components/Header.tsx") + read("src/components/HomeHeader.tsx");
 const footer = read("src/components/Footer.tsx") + read("src/components/HomeFooter.tsx");
 const robots = read("src/app/robots.ts");
-const neighborhoodSlugs = ["tower-district", "fig-garden", "woodward-park"];
+const neighborhoodSlugs = ["north-fresno", "tower-district", "fig-garden", "woodward-park"];
 const neighborhoodPages = neighborhoodSlugs.map((slug) => read(`src/app/cleaning-services-${slug}/page.tsx`));
 
 const areaSlugs = [
@@ -54,7 +54,7 @@ const removedAreaSlugs = ["sanger", "selma", "kingsburg", "reedley", "visalia", 
 assert(
   expectedAreaSlugs.every((slug) => uniqueAreaSlugs.has(slug)) &&
     areaSlugs.every((slug) => expectedAreaSlugs.includes(slug)),
-  "service area data contains only Fresno, Clovis, Madera and the three Fresno neighborhoods",
+  "service area data contains only Fresno, Clovis, Madera and the four Fresno neighborhoods",
 );
 
 for (const slug of removedAreaSlugs) {
@@ -114,7 +114,7 @@ assert(
     serviceAreaPage.includes("<PricePicker") && serviceAreaPage.includes("<QuickQuoteForm") &&
     serviceAreaPage.includes("defaultCity={area.name}") && serviceAreaPage.includes("landingCity={area.name}") &&
     sitemap.includes("...cityPages") && sitemap.includes("serviceAreas.map"),
-  "three Fresno neighborhood pages have canonicals, local pricing/intake, hub links, schema and sitemap entries",
+  "four Fresno neighborhood pages have canonicals, local pricing/intake, hub links, schema and sitemap entries",
 );
 
 // Service-area address only, per the owner's address-removal request.

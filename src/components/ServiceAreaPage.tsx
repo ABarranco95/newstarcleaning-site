@@ -27,6 +27,7 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
   fresno: homeResultPhotos[0],
   clovis: bathroomResultPhotos[1],
   madera: cleanBathroomPhoto,
+  "north-fresno": homeResultPhotos[1],
   "tower-district": homeResultPhotos[2],
   "fig-garden": kitchenSurfacesPhoto,
   "woodward-park": bathroomResultPhotos[0],
@@ -34,9 +35,10 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
 const proofPairs = [tubSurroundPair, showerDetailPair, ventDetailPair, refrigeratorFullPair, ovenInteriorPair, legacyShowerPair];
 const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.find((review) => review.id === id)!);
 
-// Tower District, Fig Garden and Woodward Park are Fresno neighborhoods, so the
+// North Fresno, Fig Garden, Tower District and Woodward Park are Fresno
+// neighborhoods, so the
 // H1 names the city a visitor would recognize instead of a bare ", CA".
-const FRESNO_NEIGHBORHOODS = new Set(["tower-district", "fig-garden", "woodward-park"]);
+const FRESNO_NEIGHBORHOODS = new Set(["north-fresno", "tower-district", "fig-garden", "woodward-park"]);
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const isCity = ["fresno", "clovis", "madera"].includes(area.slug);

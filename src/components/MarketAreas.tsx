@@ -30,7 +30,7 @@ export default function MarketAreas({ home = false, directory = false }: { home?
       <div className="mb-8">
         <nav className="ns-city-links" aria-label={`${business.serviceAreaName} cleaning areas`}>
           {business.cities.map((city) => <Link key={city} href={`/cleaning-services-${citySlug(city)}`}>House cleaning in {city}, CA<span aria-hidden="true">↗</span></Link>)}
-          {directory ? ["Tower District", "Fig Garden", "Woodward Park"].map((city) => <Link key={city} href={`/cleaning-services-${citySlug(city)}`}>House cleaning in {city}<span aria-hidden="true">↗</span></Link>) : null}
+          {directory ? ["North Fresno", "Woodward Park", "Fig Garden", "Tower District"].map((city) => <Link key={city} href={`/cleaning-services-${citySlug(city)}`}>House cleaning in {city}<span aria-hidden="true">↗</span></Link>) : null}
         </nav>
       </div>
       {!directory ? <Link href="/service-areas" className="home-text-link">Service areas →</Link> : null}

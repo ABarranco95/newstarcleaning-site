@@ -18,7 +18,7 @@ const home = load("src/lib/homeQuoteContext.ts");
 const markets = {};
 vm.runInNewContext(ts.transpileModule(read("src/lib/markets.ts"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { exports: markets, URL, process: { env: {} } });
 const { siteQuoteParams, siteQuoteHref } = load("src/lib/siteQuoteContext.ts", { "@/lib/homeQuoteContext": home, "@/lib/markets": markets });
-const cities = { fresno: "Fresno", clovis: "Clovis", madera: "Madera", "tower-district": "Tower District", "fig-garden": "Fig Garden", "woodward-park": "Woodward Park" };
+const cities = { fresno: "Fresno", clovis: "Clovis", madera: "Madera", "north-fresno": "North Fresno", "tower-district": "Tower District", "fig-garden": "Fig Garden", "woodward-park": "Woodward Park" };
 const services = ["standard-cleaning", "deep-cleaning", "move-out-cleaning"];
 let cases = 0;
 for (const [slug, city] of Object.entries(cities)) {

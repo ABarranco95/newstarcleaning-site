@@ -3,7 +3,7 @@ export function citySlug(value: string) {
 }
 
 export function isLocalCity(city: string | null | undefined): boolean {
-  return Boolean(city && ["fresno", "clovis", "madera", "tower-district", "fig-garden", "woodward-park"].includes(citySlug(city)));
+  return Boolean(city && ["fresno", "clovis", "madera", "north-fresno", "fig-garden", "woodward-park", "tower-district"].includes(citySlug(city)));
 }
 
 export function normalizedZip(value: unknown): string | undefined {

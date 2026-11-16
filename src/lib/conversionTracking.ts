@@ -98,7 +98,7 @@ const paidServices = new Set([
   "Standard recurring cleaning", "Deep cleaning", "Move-in / move-out cleaning",
   "Post-construction cleaning", "Office / commercial cleaning", "Not sure yet",
 ]);
-const paidCities = new Set(["Fresno", "Clovis", "Madera", "Woodward Park", "Fig Garden", "Tower District", "Fresno-area"]);
+const paidCities = new Set(["Fresno", "Clovis", "Madera", "North Fresno", "Woodward Park", "Fig Garden", "Tower District", "Fresno-area"]);
 const paidIntents = new Set(["house", "move", "deep", "recurring", "postConstruction", "commercial"]);
 const paidFields = new Set([
   "city", "bedrooms", "bathrooms", "name", "phone", "contactPreference", "smsOptIn",

@@ -2,7 +2,7 @@ import { homeQuoteParams, isBusinessCleaning } from "@/lib/homeQuoteContext";
 
 const cityLabels: Record<string, string> = {
   fresno: "Fresno", clovis: "Clovis", madera: "Madera",
-  "tower-district": "Tower District", "fig-garden": "Fig Garden", "woodward-park": "Woodward Park",
+  "north-fresno": "North Fresno", "tower-district": "Tower District", "fig-garden": "Fig Garden", "woodward-park": "Woodward Park",
 };
 const residential = ["standard-cleaning", "deep-cleaning", "move-out-cleaning"];
 
