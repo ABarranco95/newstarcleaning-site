@@ -658,13 +658,14 @@ function PriceLeadFormContent({
     form.requestSubmit();
   };
 
+  // Only promise a text once the visitor ticked the text box.
   const submitText = isSubmitting
     ? "Sending…"
     : smsOptIn
       ? paidSearch && submitLabel
         ? submitLabel
-        : "Text me my price"
-      : "Text me this quote";
+        : ready ? "Text me this quote" : "Text me my price"
+      : ready ? "Get my exact price" : "Request my price";
 
   const summaryPrice = ready ? ready.range ?? ready.low : "Price confirmed with you";
   const serviceName = serviceCaption(draft.service);
@@ -893,7 +894,7 @@ function PriceLeadFormContent({
               </div>
             </div>
             <div>
-              <p className="nq-consent-lead">Want it by text? Tick this box.</p>
+              <p className="nq-consent-lead">{ready ? "Tick the box so we can text it to you." : "Want it by text? Tick this box."}</p>
               <label className="qf-consent">
                 <input type="checkbox" name="smsOptIn" checked={smsOptIn && contact.contactPreference !== "call" && contact.contactPreference !== "email"} disabled={contact.contactPreference === "call" || contact.contactPreference === "email"} onChange={(event) => setSmsOptIn(event.target.checked)} />
                 <span>{QUOTE_SMS_DISCLOSURE}</span>

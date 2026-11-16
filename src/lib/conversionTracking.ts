@@ -86,13 +86,12 @@ const googleAdsLeadConversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_LEAD_CON
 const googleAdsPhoneConversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL;
 // Two click actions Angel creates in Google Ads: Click-to-call and Click-to-text.
 // Empty labels mean nothing fires, so the site ships before the Ads UI does.
+// Click-to-call goes in as a Secondary action: Calls from website stays the
+// primary call conversion, so bidding never counts one tap twice.
 const googleAdsCallClickLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CALL_CLICK_CONVERSION_LABEL;
 const googleAdsTextClickLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_TEXT_CLICK_CONVERSION_LABEL;
 const gtmGoogleAdsFormConfigured = process.env.NEXT_PUBLIC_GTM_GOOGLE_ADS_FORM_CONVERSION_CONFIGURED === "true";
 const gtmGoogleAdsPhoneConfigured = process.env.NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURED === "true";
-// The forwarding-number snippet counts tel: clicks on its own. When it is on,
-// the manual Click-to-call conversion would double-count the same click.
-const forwardingNumberSnippetActive = Boolean(googleAdsConversionId && googleAdsPhoneConversionLabel);
 // Public URL only. No intake secret or customer form field belongs in a beacon.
 const apexFunnelUrl = process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL?.replace(/\/$/, "");
 const paidServices = new Set([
@@ -226,7 +225,7 @@ export const googleAdsConversionReadiness = {
   phone: googleTagManagerConfigured
     ? gtmGoogleAdsPhoneConfigured
     : Boolean(googleAdsConversionId && googleAdsPhoneConversionLabel),
-  callClick: Boolean(googleAdsConversionId && googleAdsCallClickLabel && !forwardingNumberSnippetActive),
+  callClick: Boolean(googleAdsConversionId && googleAdsCallClickLabel),
   textClick: Boolean(googleAdsConversionId && googleAdsTextClickLabel),
 };
 
@@ -325,7 +324,7 @@ export function trackLeadConversion(payload: FunnelEventPayload = {}) {
 
 export function trackWebsitePhoneClick(payload: FunnelEventPayload = {}) {
   trackFunnelEvent("website_phone_click", payload);
-  if (!forwardingNumberSnippetActive) fireGoogleAdsClickConversion(googleAdsCallClickLabel);
+  fireGoogleAdsClickConversion(googleAdsCallClickLabel);
 }
 
 export function trackWebsiteTextClick(payload: FunnelEventPayload = {}) {
