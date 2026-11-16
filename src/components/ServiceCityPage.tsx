@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SiteHero from "@/components/SiteHero";
@@ -91,11 +92,7 @@ export async function generateMetadata({
     description,
     robots: { index: false, follow: true },
     alternates: { canonical: `/${serviceCity}` },
-    openGraph: {
-      title,
-      description,
-      url: `https://newstarcleaning.com/${serviceCity}`,
-    },
+    ...socialMetadata({ title, description, url: `https://newstarcleaning.com/${serviceCity}` }),
   };
 }
 
