@@ -398,7 +398,7 @@ export default function CommercialQuoteForm({
               value={formData.phone}
               onChange={(event) => updateField("phone", event.target.value)}
               autoComplete="tel"
-              placeholder="(559) 000-0000"
+              placeholder="Your mobile number"
               className={fieldClass}
             />
           </div>

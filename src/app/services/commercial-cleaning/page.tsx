@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import SiteHero from "@/components/SiteHero";
 import ProofRow from "@/components/ProofRow";
@@ -13,12 +14,12 @@ export const metadata: Metadata = {
   description:
     "Office and commercial cleaning in Fresno, Clovis & Madera. Restrooms, breakrooms, shared spaces and floors. Request a walkthrough and written quote.",
   alternates: { canonical: "/services/commercial-cleaning" },
-  openGraph: {
+  ...socialMetadata({
     title: "Office & Commercial Cleaning in Fresno, CA | New Star Cleaning",
     description:
       "Walkthrough-based office cleaning proposals for Fresno, Clovis and Madera.",
     url: "https://newstarcleaning.com/services/commercial-cleaning",
-  },
+  }),
 };
 
 const scopes = [

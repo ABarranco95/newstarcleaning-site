@@ -80,11 +80,19 @@ declare global {
 }
 
 const googleTagManagerConfigured = Boolean(process.env.NEXT_PUBLIC_GTM_ID);
+const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID;
 const googleAdsConversionId = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID;
 const googleAdsLeadConversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL;
 const googleAdsPhoneConversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL;
+// Two click actions Angel creates in Google Ads: Click-to-call and Click-to-text.
+// Empty labels mean nothing fires, so the site ships before the Ads UI does.
+const googleAdsCallClickLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CALL_CLICK_CONVERSION_LABEL;
+const googleAdsTextClickLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_TEXT_CLICK_CONVERSION_LABEL;
 const gtmGoogleAdsFormConfigured = process.env.NEXT_PUBLIC_GTM_GOOGLE_ADS_FORM_CONVERSION_CONFIGURED === "true";
 const gtmGoogleAdsPhoneConfigured = process.env.NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURED === "true";
+// The forwarding-number snippet counts tel: clicks on its own. When it is on,
+// the manual Click-to-call conversion would double-count the same click.
+const forwardingNumberSnippetActive = Boolean(googleAdsConversionId && googleAdsPhoneConversionLabel);
 // Public URL only. No intake secret or customer form field belongs in a beacon.
 const apexFunnelUrl = process.env.NEXT_PUBLIC_APEX_CRM_BASE_URL?.replace(/\/$/, "");
 const paidServices = new Set([
@@ -218,7 +226,20 @@ export const googleAdsConversionReadiness = {
   phone: googleTagManagerConfigured
     ? gtmGoogleAdsPhoneConfigured
     : Boolean(googleAdsConversionId && googleAdsPhoneConversionLabel),
+  callClick: Boolean(googleAdsConversionId && googleAdsCallClickLabel && !forwardingNumberSnippetActive),
+  textClick: Boolean(googleAdsConversionId && googleAdsTextClickLabel),
 };
+
+/**
+ * A tel:/sms: tap is a conversion action in Google Ads, not a funnel step.
+ * No-op until Angel publishes the label for that action, so a missing label
+ * can never inflate the account.
+ */
+function fireGoogleAdsClickConversion(label: string | undefined) {
+  if (!googleAdsConversionId || !label || googleTagManagerConfigured) return;
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", "conversion", { send_to: `${googleAdsConversionId}/${label}` });
+}
 
 function funnelEvent(
   name: FunnelEventName,
@@ -261,8 +282,11 @@ export function trackFunnelEvent(
 
   sendPaidFunnelEvent(name, payload, context);
 
-  if (!googleTagManagerConfigured && typeof window.gtag === "function") {
-    window.gtag("event", name, event);
+  // Journey steps are diagnostics: they stay in dataLayer and go to Apex, and
+  // only GA4 gets them in Google. AW-18401625265 receives real conversions
+  // (quote accepted, click-to-call, click-to-text) and nothing else.
+  if (!googleTagManagerConfigured && googleAnalyticsId && typeof window.gtag === "function") {
+    window.gtag("event", name, { ...event, send_to: googleAnalyticsId });
   }
 }
 
@@ -272,13 +296,16 @@ export function trackLeadConversion(payload: FunnelEventPayload = {}) {
   trackFunnelEvent("lead_submit_accepted", payload);
 
   if (!googleTagManagerConfigured && typeof window.gtag === "function") {
-    window.gtag("event", "generate_lead", {
-      event_category: "Lead",
-      event_label: payload.source || "website",
-      lead_type: payload.leadType || "quote_request",
-      service: payload.service || undefined,
-      city: payload.city || undefined,
-    });
+    if (googleAnalyticsId) {
+      window.gtag("event", "generate_lead", {
+        send_to: googleAnalyticsId,
+        event_category: "Lead",
+        event_label: payload.source || "website",
+        lead_type: payload.leadType || "quote_request",
+        service: payload.service || undefined,
+        city: payload.city || undefined,
+      });
+    }
 
     if (googleAdsConversionId && googleAdsLeadConversionLabel) {
       window.gtag("event", "conversion", {
@@ -298,8 +325,10 @@ export function trackLeadConversion(payload: FunnelEventPayload = {}) {
 
 export function trackWebsitePhoneClick(payload: FunnelEventPayload = {}) {
   trackFunnelEvent("website_phone_click", payload);
+  if (!forwardingNumberSnippetActive) fireGoogleAdsClickConversion(googleAdsCallClickLabel);
 }
 
 export function trackWebsiteTextClick(payload: FunnelEventPayload = {}) {
   trackFunnelEvent("website_text_click", payload);
+  fireGoogleAdsClickConversion(googleAdsTextClickLabel);
 }

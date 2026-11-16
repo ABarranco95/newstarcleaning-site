@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import Image from "next/image";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
@@ -27,12 +28,12 @@ export const metadata: Metadata = {
   description:
     "Compare residential, post-construction, office, and commercial cleaning services for Fresno, Clovis and Madera.",
   alternates: { canonical: "/services" },
-  openGraph: {
+  ...socialMetadata({
     title: "House Cleaning Services in Fresno, Clovis & Madera | New Star Cleaning",
     description:
       "Compare local house cleaning services, what is included, and where New Star Cleaning serves across Fresno, Clovis, and Madera.",
     url: `${siteUrl}/services`,
-  },
+  }),
 };
 
 const serviceLinks = {

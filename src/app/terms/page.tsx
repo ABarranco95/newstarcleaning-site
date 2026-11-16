@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -6,11 +7,11 @@ export const metadata: Metadata = {
   description:
     "Terms of Service for New Star Cleaning LLC. Review our service terms, SMS/text messaging terms, and conditions of use.",
   alternates: { canonical: "/terms" },
-  openGraph: {
+  ...socialMetadata({
     title: "Terms of Service | New Star Cleaning",
     description: "Terms of Service for New Star Cleaning LLC.",
     url: "https://newstarcleaning.com/terms",
-  },
+  }),
 };
 
 export default function TermsOfService() {

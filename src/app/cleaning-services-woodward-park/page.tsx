@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import ServiceAreaPage from "@/components/ServiceAreaPage";
 import { serviceAreas } from "@/lib/serviceAreas";
 
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/cleaning-services-woodward-park",
   },
-  openGraph: {
+  ...socialMetadata({
     title: "House Cleaning in Woodward Park, Fresno | New Star Cleaning",
     description:
       "House cleaning for Woodward Park and nearby north Fresno neighborhoods. Request pricing and current availability.",
     url: "https://newstarcleaning.com/cleaning-services-woodward-park",
-  },
+  }),
 };
 
 export default function WoodwardParkPage() {

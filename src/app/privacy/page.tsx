@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Privacy Policy for New Star Cleaning LLC. Learn how we collect, use, and protect personal information.",
   alternates: { canonical: "/privacy" },
-  openGraph: {
+  ...socialMetadata({
     title: "Privacy Policy | New Star Cleaning",
     description: "Privacy Policy for New Star Cleaning LLC.",
     url: "https://newstarcleaning.com/privacy",
-  },
+  }),
 };
 
 export default function PrivacyPolicy() {

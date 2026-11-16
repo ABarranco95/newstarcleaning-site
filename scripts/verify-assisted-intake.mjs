@@ -377,7 +377,7 @@ function accepted() { return { ok: true, status: 201, body: { metadata: { apex: 
 const first = mountForm({ defaultService: "Deep cleaning" });
 const stepTwo = () => first.nodes().find((node) => node.type === "form" && node.props["data-quote-step"] === "2");
 assert.equal(stepTwo().props.hidden, true, "contact step is closed on arrival");
-first.press("Text me this price");
+first.press("Text me this quote");
 assert.equal(stepTwo().props.hidden, false, "the gold action opens the one short contact step");
 assert.equal(first.field("name").props.required, true);
 assert.equal(first.field("phone").props.required, true);
@@ -397,7 +397,7 @@ assert.equal(first.submissions[0].body.contactPreference, "");
 assert.equal(first.conversions.length, 1, "accepted organic lead converts once");
 
 const consent = mountForm({ defaultService: "Deep cleaning", source: "organic_quote_page" });
-consent.press("Text me this price");
+consent.press("Text me this quote");
 consent.change("name", "Intake Fixture");
 consent.change("phone", "559-555-0142");
 consent.openDetails();
@@ -414,7 +414,7 @@ assert.equal(consent.submissions.at(-1).body.contactPreference, "text", "ticked 
 assert.equal(consent.conversions.length, 1);
 
 const callPref = mountForm({ defaultService: "Deep cleaning", source: "organic_quote_page" });
-callPref.press("Text me this price");
+callPref.press("Text me this quote");
 callPref.change("name", "Intake Fixture");
 callPref.change("phone", "559-555-0142");
 callPref.openDetails();
@@ -429,7 +429,7 @@ assert.equal(callPref.submissions.at(-1).body.contactPreference, "call");
 
 // Deadline gating: nothing is posted for a missing, malformed or past date.
 const deadline = mountForm({ defaultService: "Deep cleaning" });
-deadline.press("Text me this price");
+deadline.press("Text me this quote");
 deadline.change("name", "Intake Fixture");
 deadline.change("phone", "559-555-0142");
 deadline.openDetails();
@@ -450,7 +450,7 @@ assert.equal(forwarded.at(-1).requestedDate, sentinel.requestedDate);
 
 // Paid: pinned service, paid route, and no success without Apex acceptance.
 const paidForm = mountForm({ paidSearch: true, defaultService: "Deep cleaning" });
-paidForm.press("Text me this price");
+paidForm.press("Text me this quote");
 paidForm.change("name", "Intake Fixture");
 paidForm.change("phone", "559-555-0142");
 paidForm.openDetails();
@@ -475,7 +475,7 @@ assert.equal(forwarded.at(-1).smsConsent.status, "denied");
 // A filtered honeypot post still shows the sent screen and still fires no conversion (organic rule).
 const bot = mountForm({ defaultService: "Deep cleaning" });
 bot.change("service", "Deep cleaning");
-bot.press("Text me this price");
+bot.press("Text me this quote");
 bot.change("name", "Bot Fixture");
 bot.change("phone", "559-555-0142");
 bot.setReply({ ok: true, status: 200, body: { filtered: true } });
@@ -486,7 +486,7 @@ assert(bot.nodes().some((node) => node.type === "h2" && textOf(node) === "Got it
 // Move-out scope and add-ons travel from the optional details.
 const move = mountForm({ defaultService: "Move-in / move-out cleaning" });
 move.change("service", "Move-in / move-out cleaning");
-move.press("Text me this price");
+move.press("Text me this quote");
 move.change("name", "Intake Fixture");
 move.change("phone", "559-555-0142");
 move.openDetails();
@@ -527,9 +527,9 @@ assert.equal((await paid.POST(request(walkBody))).status, 201);
 // tracking and failure contracts; only selectors/step entry change.
 const sizeNote = "Home size selected: 1,500–1,999 sq ft.";
 function enterContact(form) {
-  const next = form.nodes().find((node) => node.type === "button" && node.props["data-quote-next"] && textOf(node).includes("Text me this price"));
+  const next = form.nodes().find((node) => node.type === "button" && node.props["data-quote-next"] && textOf(node).includes("Text me this quote"));
   assert(next, "ready price exposes the contact action");
-  form.press("Text me this price");
+  form.press("Text me this quote");
   form.change("name", "Intake Fixture");
   form.change("phone", "559-555-0142");
 }

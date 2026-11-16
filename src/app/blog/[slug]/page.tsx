@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts, getBlogPost } from "@/lib/blogPosts";
@@ -27,13 +28,13 @@ export async function generateMetadata({
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
-    openGraph: {
+    ...socialMetadata({
       type: "article",
       title: post.metaTitle,
       description: post.metaDescription,
       url: `https://newstarcleaning.com/blog/${post.slug}`,
       publishedTime: post.publishedAt,
-    },
+    }),
   };
 }
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import { Suspense } from "react";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   title: "House Cleaning Service Areas",
   description: "House cleaning in Fresno, Clovis and Madera, including Fresno neighborhood guides. Check your price online.",
   alternates: { canonical: "/service-areas" },
-  openGraph: { title: "House Cleaning Service Areas | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera, including Fresno neighborhood guides. Check your price online.", url: `${siteUrl}/service-areas` },
+  ...socialMetadata({ title: "House Cleaning Service Areas | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera, including Fresno neighborhood guides. Check your price online.", url: `${siteUrl}/service-areas` }),
 };
 
 export default function ServiceAreasPage() {

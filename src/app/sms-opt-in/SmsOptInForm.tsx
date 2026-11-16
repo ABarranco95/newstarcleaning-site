@@ -157,7 +157,7 @@ export default function SmsOptInForm() {
           minLength={10}
           value={formData.phone}
           onChange={(event) => updateField("phone", event.target.value)}
-          placeholder="(559) 000-0000"
+          placeholder="Your mobile number"
           className={fieldClass}
         />
       </div>

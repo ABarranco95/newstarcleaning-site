@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import { MarketCoverage } from "@/components/MarketAreas";
 
 import QuickQuoteForm from "@/components/QuickQuoteForm";
@@ -46,12 +47,12 @@ export const metadata: Metadata = {
   description:
     "See your price for standard, deep or move-out cleaning in Fresno, Clovis and Madera, then pick a time online.",
   alternates: { canonical: "/book-now" },
-  openGraph: {
+  ...socialMetadata({
     title: "Book House Cleaning Online | New Star Cleaning",
     description:
       "See your price for standard, deep or move-out cleaning in Fresno, Clovis and Madera, then pick a time online.",
     url: "https://newstarcleaning.com/book-now",
-  },
+  }),
 };
 
 export default function BookNow() {

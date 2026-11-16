@@ -237,7 +237,11 @@ function PriceLeadFormContent({
   directBookingUrl,
   pathname,
 }: PriceLeadFormProps & { pathname: string }) {
-  const draft = useQuoteDraft(pathname);
+  // A page that pins a cleaning type (service pages, paid variants) has to
+  // render that radio checked in the server HTML, not Standard until hydration.
+  const pageDefaultService =
+    service && !isCommercialService(service) ? normalizeServiceParam(service) || undefined : undefined;
+  const draft = useQuoteDraft(pathname, pageDefaultService);
   const siteOrigin = useSyncExternalStore(subscribeOrigin, readOrigin, serverOrigin);
   const uid = useId();
   const field = (name: string) => `${uid}-${name}`;
@@ -660,7 +664,7 @@ function PriceLeadFormContent({
       ? paidSearch && submitLabel
         ? submitLabel
         : "Text me my price"
-      : "Request my price";
+      : "Text me this quote";
 
   const summaryPrice = ready ? ready.range ?? ready.low : "Price confirmed with you";
   const serviceName = serviceCaption(draft.service);
@@ -733,31 +737,32 @@ function PriceLeadFormContent({
       );
     }
     if (!ready) return null;
+    // The price is on screen, so booking it is the first action and the text
+    // quote sits under it. Nothing asks for the price a second time.
     return (
       <div className="nq-actions">
-        <div>
-          <button type="button" className="home-button" data-quote-next onClick={openContact}>
-            Text me this price <ArrowIcon />
-          </button>
-          <p className="nq-note">We&apos;ll confirm your exact price and the days we have open. Nothing is booked until you say so.</p>
-        </div>
         {showBooking && resolvedBookingUrl ? (
-          <div>
+          <div data-price-book>
             <PaidPriceBookingButton
               key={`${draft.service}-${draft.bedrooms}-${draft.bathrooms}-${draft.size}-${postal}-${ready.market}`}
-              primary={false}
+              primary
               baseUrl={resolvedBookingUrl}
               service={bookableService}
               bedrooms={draft.bedrooms}
               bathrooms={draft.bathrooms}
               squareFeet={ready.bookableSqft!}
               zip={postal}
-
               source={source}
               ctaLocation={paidSearch ? "paid_live_price" : "organic_live_price"}
             />
           </div>
         ) : null}
+        <div>
+          <button type="button" className={showBooking ? "home-button-secondary" : "home-button"} data-quote-next onClick={openContact}>
+            Text me this quote <ArrowIcon />
+          </button>
+          <p className="nq-note">We text you the exact price and the days we have open. Nothing is booked until you confirm.</p>
+        </div>
       </div>
     );
   };
@@ -873,7 +878,7 @@ function PriceLeadFormContent({
             </div>
             <button type="button" className="nq-edit" onClick={returnToPrice}>Change</button>
           </div>
-          <h2 className="nq-title" ref={titleRef} tabIndex={-1}>Where should we send it?</h2>
+          <h2 className="nq-title" ref={titleRef} tabIndex={-1}>{ready ? "Want this quote by text?" : "Where should we send it?"}</h2>
           <div className="qf-stack">
             <div className="qf-row qf-row-2">
               <div>
@@ -1137,7 +1142,7 @@ function PriceLeadFormContent({
           activeStep={step === "price" ? 1 : 2}
           bookingAvailable={Boolean(ready?.bookableSqft)}
           isSubmitting={isSubmitting}
-          label={step === "price" ? "Text me this price" : submitText}
+          label={step === "price" ? "Text me this quote" : submitText}
           onClick={handleStickySubmit}
         />
       ) : null}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import ServiceAreaPage from "@/components/ServiceAreaPage";
 import { serviceAreas } from "@/lib/serviceAreas";
 
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/cleaning-services-tower-district",
   },
-  openGraph: {
+  ...socialMetadata({
     title: "House Cleaning in Fresno's Tower District | New Star Cleaning",
     description:
       "House cleaning for Fresno's Tower District, including recurring care, deep cleaning, and empty-home moves.",
     url: "https://newstarcleaning.com/cleaning-services-tower-district",
-  },
+  }),
 };
 
 export default function TowerDistrictPage() {

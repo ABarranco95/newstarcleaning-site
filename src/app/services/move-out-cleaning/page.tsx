@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import ServiceDetailPage from "@/components/ServiceDetailPage";
 import { getService } from "@/lib/services";
 
 const service = getService("move-out-cleaning")!;
 
 export const metadata: Metadata = {
-  title: "Move-Out & Move-In Cleaning in Fresno & Clovis",
+  title: "Move-Out & Move-In Cleaning in Fresno, Clovis & Madera",
   description:
     "Empty-home cleaning in Fresno, Clovis and Madera, including empty cabinet, drawer and closet interiors. Oven and fridge interiors are optional. Request a quote.",
   alternates: {
     canonical: "/services/move-out-cleaning",
   },
-  openGraph: {
+  ...socialMetadata({
     title:
-      "Move-Out & Move-In Cleaning in Fresno & Clovis | New Star Cleaning",
+      "Move-Out & Move-In Cleaning in Fresno, Clovis & Madera | New Star Cleaning",
     description:
       "Move-out and move-in cleaning in Fresno, Clovis and Madera, including empty cabinet and closet interiors. Oven and refrigerator interiors are optional add-ons.",
     url: "https://newstarcleaning.com/services/move-out-cleaning",
-  },
+  }),
 };
 
 export default function MoveOutCleaningPage() {

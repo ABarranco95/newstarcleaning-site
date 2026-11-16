@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import ServiceAreaPage from "@/components/ServiceAreaPage";
 import { serviceAreas } from "@/lib/serviceAreas";
 
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/cleaning-services-clovis",
   },
-  openGraph: {
+  ...socialMetadata({
     title: "House Cleaning Services in Clovis, CA | New Star Cleaning",
     description:
       "House cleaning in Clovis, from Old Town to Harlan Ranch and Loma Vista. Compare recurring, deep and empty-home cleaning, then request your quote.",
     url: "https://newstarcleaning.com/cleaning-services-clovis",
-  },
+  }),
 };
 
 export default function ClovisPage() {

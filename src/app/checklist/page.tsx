@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import ProofRow from "@/components/ProofRow";
@@ -24,13 +25,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/checklist",
   },
-  openGraph: {
+  ...socialMetadata({
     title:
       "Service Checklist: Included, Add-Ons, Not Included | New Star Cleaning",
     description:
       "Room-by-room scope for standard, deep and move-out cleaning, the add-ons, and what isn't part of the job.",
     url: `${siteUrl}/checklist`,
-  },
+  }),
 };
 
 const serviceLinks = {

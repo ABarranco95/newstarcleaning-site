@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import MarketPhone from "@/components/MarketPhone";
 import ProofRow from "@/components/ProofRow";
@@ -12,7 +13,7 @@ const description = "Call, text or email Angel, the owner, for house cleaning in
 export const metadata: Metadata = {
   title: "Contact Us", description,
   alternates: { canonical: "/contact" },
-  openGraph: { title: "Contact New Star Cleaning", description, url: "https://newstarcleaning.com/contact" },
+  ...socialMetadata({ title: "Contact New Star Cleaning", description, url: "https://newstarcleaning.com/contact" }),
 };
 
 export default function ContactPage() {

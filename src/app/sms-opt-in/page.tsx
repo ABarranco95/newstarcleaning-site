@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import SmsOptInForm from "./SmsOptInForm";
 
@@ -9,11 +10,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/sms-opt-in" },
   // Compliance utility page reached from SMS disclosures, not a search target.
   robots: { index: false, follow: true },
-  openGraph: {
+  ...socialMetadata({
     title: "SMS Opt-In | New Star Cleaning",
     description: "Opt in to receive text messages from New Star Cleaning.",
     url: "https://newstarcleaning.com/sms-opt-in",
-  },
+  }),
 };
 
 export default function SmsOptIn() {

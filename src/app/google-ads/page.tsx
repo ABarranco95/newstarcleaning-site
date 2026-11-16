@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import GoogleAdsLandingPageClient from "./GoogleAdsLandingPageClient";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
@@ -31,8 +32,7 @@ export async function generateMetadata({ searchParams }: PaidPageProps): Promise
   return {
     title: { absolute: title },
     description,
-    openGraph: { title, description },
-    twitter: { title, description },
+    ...socialMetadata({ title, description }),
     alternates: { canonical: null },
     robots: { index: false, follow: false },
     other: { robots: "noindex, nofollow" },

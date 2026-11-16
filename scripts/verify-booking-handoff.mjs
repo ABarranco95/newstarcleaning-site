@@ -171,5 +171,5 @@ for (const service of ["Deep cleaning", "Standard recurring cleaning", "Move-in 
     check(events.at(-1).event === "booking_cta_click" && events.at(-1).payload.ctaLocation === "paid_live_price", "paid click retains the diagnostic funnel event, not a lead conversion");
   }
 }
-check(form.includes("Text me this price") && form.includes("primary={false}"), "the lead step is the gold action and paid booking stays the outline action");
+check(form.includes("Text me this quote") && /<PaidPriceBookingButton[^>]*\sprimary\b/.test(form) && !form.includes("primary={false}"), "the price step offers booking as the primary action and text as the outline action");
 console.log(`Booking continuity: ${checks}/${checks} checks passed (inert module tests; no network or live booking).`);

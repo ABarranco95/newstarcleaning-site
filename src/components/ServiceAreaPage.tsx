@@ -34,8 +34,13 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
 const proofPairs = [tubSurroundPair, showerDetailPair, ventDetailPair, refrigeratorFullPair, ovenInteriorPair, legacyShowerPair];
 const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.find((review) => review.id === id)!);
 
+// Tower District, Fig Garden and Woodward Park are Fresno neighborhoods, so the
+// H1 names the city a visitor would recognize instead of a bare ", CA".
+const FRESNO_NEIGHBORHOODS = new Set(["tower-district", "fig-garden", "woodward-park"]);
+
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const isCity = ["fresno", "clovis", "madera"].includes(area.slug);
+  const heroLocation = FRESNO_NEIGHBORHOODS.has(area.slug) ? "Fresno" : "CA";
   const directBookingUrl = resolveDirectBookingUrl();
   const heroPhoto = areaHeroPhotos[area.slug] ?? homeResultPhotos[0];
   const usedPhotos = [heroPhoto, ...(area.planCards?.map((card) => card.photo) ?? [])];
@@ -55,7 +60,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
   return (
     <div className="site-reference">
-      <SiteHero title={`House cleaning in ${area.name}, CA.`} description={area.description} photo={heroPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}>
+      <SiteHero title={`House cleaning in ${area.name}, ${heroLocation}.`} description={area.description} photo={heroPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}>
         <PricePicker id="price" source={`organic_${area.slug}_price`} leadSource={`organic_${area.slug}_service_area`} defaultCity={area.name} quoteHref="#quote" />
       </SiteHero>
 

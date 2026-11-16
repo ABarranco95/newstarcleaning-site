@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import { business } from "@/lib/business";
@@ -9,12 +10,12 @@ export const metadata: Metadata = {
     "Request a walkthrough for Fresno-area office, commercial, or post-construction cleaning.",
   alternates: { canonical: "/commercial-quote" },
   robots: { index: false, follow: true },
-  openGraph: {
+  ...socialMetadata({
     title: "Request Commercial Cleaning Pricing | New Star Cleaning",
     description:
       "Walkthrough-based proposals for Fresno-area office, commercial, and post-construction cleaning.",
     url: "https://newstarcleaning.com/commercial-quote",
-  },
+  }),
 };
 
 export default function CommercialQuotePage() {

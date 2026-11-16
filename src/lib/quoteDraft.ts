@@ -37,12 +37,18 @@ export function subscribeQuoteDraft(listener: () => void) {
   };
 }
 
-export function readQuoteDraft(pathname: string): QuoteDraft {
-  return draftPath === pathname ? draft : INITIAL;
+// A service page pins its own cleaning type, so the server has to render that
+// radio checked instead of flashing Standard until hydration.
+function initialDraft(defaultService?: string): QuoteDraft {
+  return defaultService && defaultService !== INITIAL.service ? { ...INITIAL, service: defaultService } : INITIAL;
 }
 
-export function serverQuoteDraft(): QuoteDraft {
-  return INITIAL;
+export function readQuoteDraft(pathname: string, defaultService?: string): QuoteDraft {
+  return draftPath === pathname ? draft : initialDraft(defaultService);
+}
+
+export function serverQuoteDraft(defaultService?: string): QuoteDraft {
+  return initialDraft(defaultService);
 }
 
 /** First caller wins; page-level defaults (pinned service, ?zip=) apply once per page. */
@@ -78,6 +84,10 @@ export function claimFormStart(): boolean {
   return true;
 }
 
-export function useQuoteDraft(pathname: string): QuoteDraft {
-  return useSyncExternalStore(subscribeQuoteDraft, () => readQuoteDraft(pathname), serverQuoteDraft);
+export function useQuoteDraft(pathname: string, defaultService?: string): QuoteDraft {
+  return useSyncExternalStore(
+    subscribeQuoteDraft,
+    () => readQuoteDraft(pathname, defaultService),
+    () => serverQuoteDraft(defaultService),
+  );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import { blogPosts } from "@/lib/blogPosts";
 import SiteHero from "@/components/SiteHero";
@@ -10,12 +11,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/blog",
   },
-  openGraph: {
+  ...socialMetadata({
     title: "Fresno House Cleaning Tips & Guides | New Star Cleaning",
     description:
       "Local Fresno-area cleaning advice from the New Star Cleaning team.",
     url: "https://newstarcleaning.com/blog",
-  },
+  }),
 };
 
 export default function BlogIndexPage() {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import ServiceAreaPage from "@/components/ServiceAreaPage";
 import { serviceAreas } from "@/lib/serviceAreas";
 
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/cleaning-services-fresno",
   },
-  openGraph: {
+  ...socialMetadata({
     title: "House Cleaning Services in Fresno, CA | New Star Cleaning",
     description:
       "Fresno house cleaning for recurring care, detailed resets, and empty-home moves. Request pricing and current availability.",
     url: "https://newstarcleaning.com/cleaning-services-fresno",
-  },
+  }),
 };
 
 export default function FresnoPage() {

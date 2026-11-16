@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import { Suspense } from "react";
 import BeforeAfterPairs from "@/components/BeforeAfterPairs";
@@ -26,8 +27,7 @@ export const metadata: Metadata = {
   title: { absolute: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning" },
   description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book.",
   alternates: { canonical: "/" },
-  openGraph: { title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book.", url: "https://newstarcleaning.com" },
-  twitter: { title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book." },
+  ...socialMetadata({ title: "Fresno, Clovis & Madera House Cleaning | New Star Cleaning", description: "House cleaning in Fresno, Clovis and Madera. Standard, deep and move-out cleaning. Put in your ZIP and see your price before you book.", url: "https://newstarcleaning.com" }),
 };
 
 const faqs = [

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import SiteHero from "@/components/SiteHero";
 import ProofRow from "@/components/ProofRow";
@@ -13,12 +14,12 @@ export const metadata: Metadata = {
   description:
     "Post-construction final cleaning for Fresno-area builders, remodelers, property owners, and project teams. Request a scoped walkthrough and written proposal.",
   alternates: { canonical: "/services/post-construction-cleaning" },
-  openGraph: {
+  ...socialMetadata({
     title: "Post-Construction Cleaning in Fresno, CA | New Star Cleaning",
     description:
       "Scoped final cleaning, detail cleaning, and punch-return support for Fresno-area construction and renovation projects.",
     url: "https://newstarcleaning.com/services/post-construction-cleaning",
-  },
+  }),
 };
 
 const scopes = [

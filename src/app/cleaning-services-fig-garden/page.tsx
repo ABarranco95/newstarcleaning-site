@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import ServiceAreaPage from "@/components/ServiceAreaPage";
 import { serviceAreas } from "@/lib/serviceAreas";
 
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/cleaning-services-fig-garden",
   },
-  openGraph: {
+  ...socialMetadata({
     title: "House Cleaning in Fig Garden, Fresno | New Star Cleaning",
     description:
       "House cleaning in Old Fig Garden and nearby Fresno neighborhoods. Request pricing and current availability.",
     url: "https://newstarcleaning.com/cleaning-services-fig-garden",
-  },
+  }),
 };
 
 export default function FigGardenPage() {

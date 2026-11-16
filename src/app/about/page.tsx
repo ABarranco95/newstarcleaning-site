@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
 import MarketAreas, { MarketAboutIntro } from "@/components/MarketAreas";
 import HomeBookingLink from "@/components/HomeBookingLink";
@@ -18,12 +19,12 @@ export const metadata: Metadata = {
   description:
     "New Star Cleaning is owned and run by Angel Barranco and has cleaned homes since 2020. Serving Fresno, Clovis and Madera.",
   alternates: { canonical: "/about" },
-  openGraph: {
+  ...socialMetadata({
     title: "About New Star Cleaning",
     description:
       "New Star Cleaning is owned and run by Angel Barranco and has cleaned homes since 2020. Serving Fresno, Clovis and Madera.",
     url: "https://newstarcleaning.com/about",
-  },
+  }),
 };
 
 const steps = [
