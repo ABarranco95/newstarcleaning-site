@@ -764,6 +764,13 @@ function PriceLeadFormContent({
           </button>
           <p className="nq-note">We text you the exact price and the days we have open. Nothing is booked until you confirm.</p>
         </div>
+        <a
+          href={BUSINESS.phoneHref}
+          className="home-text-link justify-center"
+          data-phone-location={paidSearch ? "paid_live_price" : "organic_live_price"}
+        >
+          Call now
+        </a>
       </div>
     );
   };

@@ -66,4 +66,9 @@ for (const name of ["double-vanity-detail-new-star"]) {
   assert.equal(meta.format, "webp");assert(meta.width <= 1600);
   assert(!meta.exif && !meta.xmp && !meta.iptc, `${name}: no EXIF/GPS/private metadata`);
 }
-console.log(`Site-wide checks passed: ${cases} route/context cases; ${routes.length} route families; shared paid shell boundary; optional-consent wording; optimized metadata-free photographs.`);
+const priceForm = read("src/components/PriceLeadForm.tsx");
+const readyActions = priceForm.slice(priceForm.indexOf("    if (!ready) return null;"), priceForm.indexOf('  if (step === "sent" && sent)'));
+assert.match(readyActions, /<a\s+href=\{BUSINESS\.phoneHref\}[^>]*data-phone-location=\{paidSearch \? "paid_live_price" : "organic_live_price"\}[^>]*>\s*Call now\s*<\/a>/, "ready-price actions expose a semantic call link with paid/organic attribution");
+const { business } = load("src/lib/business.ts");
+assert.equal(business.facebookUrl, "https://www.facebook.com/people/New-Star-Cleaning/61588657059106/", "schema uses New Star Cleaning's own Facebook Page");
+console.log(`Site-wide checks passed: ${cases} route/context cases; ${routes.length} route families; shared paid shell boundary; optional-consent wording; optimized metadata-free photographs; ready-price call attribution; Facebook identity.`);

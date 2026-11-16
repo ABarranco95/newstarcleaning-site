@@ -9,7 +9,7 @@ export const business = {
   // Review-carrying profile, verified by RX4 on 2026-11-06.
   googleMapsUrl: "https://www.google.com/maps?cid=13545152036473270457",
   previousGoogleMapsUrls: ["https://www.google.com/maps?cid=17160713985942079636", "https://www.google.com/maps?cid=12575787905603463321"],
-  facebookUrl: "https://www.facebook.com/newstarcleaning/",
+  facebookUrl: "https://www.facebook.com/people/New-Star-Cleaning/61588657059106/",
   serviceAreaName: "Fresno, Clovis & Madera",
   serviceAreaDescription: "Serving Fresno, Clovis & Madera",
   cities: ["Fresno", "Clovis", "Madera"],
