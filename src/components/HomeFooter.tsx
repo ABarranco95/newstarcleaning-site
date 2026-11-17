@@ -12,7 +12,7 @@ import { business } from "@/lib/business";
 
 const groups = [
   { label: "Home cleaning", links: [["Standard cleaning", "/services/standard-cleaning"], ["Deep cleaning", "/services/deep-cleaning"], ["Move-in / move-out", "/services/move-out-cleaning"], ["All services", "/services"], ["Service checklist", "/checklist"], ["Our work", "/our-work"]] },
-  { label: "Fresno, Clovis & Madera", links: [["Fresno", "/cleaning-services-fresno"], ["Clovis", "/cleaning-services-clovis"], ["Madera", "/cleaning-services-madera"], ["North Fresno", "/cleaning-services-north-fresno"], ["Woodward Park", "/cleaning-services-woodward-park"], ["Fig Garden", "/cleaning-services-fig-garden"], ["Tower District", "/cleaning-services-tower-district"]] },
+  { label: "Fresno, Clovis & Madera", links: [["Fresno", "/cleaning-services-fresno"], ["Clovis", "/cleaning-services-clovis"], ["Madera", "/cleaning-services-madera"], ["North Fresno", "/cleaning-services-north-fresno"], ["Woodward Park", "/cleaning-services-woodward-park"], ["Fig Garden", "/cleaning-services-fig-garden"]] },
   { label: "New Star", links: [["About", "/about"], ["Contact", "/contact"], ["Cleaning tips", "/blog"], ["Office & commercial", "/services/commercial-cleaning"], ["Post-construction", "/services/post-construction-cleaning"], ["Request a walkthrough", "/commercial-quote"]] },
 ] as const;
 

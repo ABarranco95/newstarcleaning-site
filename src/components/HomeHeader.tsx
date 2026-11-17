@@ -31,12 +31,17 @@ const navigation: (NavLink & { panel?: "services" })[] = [
 ];
 
 const centralValleyLinks: NavLink[] = ["Fresno", "Clovis", "Madera"].map((label) => ({ label, href: `/cleaning-services-${label.toLowerCase()}` }));
+const fresnoNeighborhoodLinks: NavLink[] = [
+  { label: "North Fresno", href: "/cleaning-services-north-fresno" },
+  { label: "Woodward Park", href: "/cleaning-services-woodward-park" },
+  { label: "Fig Garden", href: "/cleaning-services-fig-garden" },
+];
 export default function HomeHeader() {
   const serviceLinks = residentialLinks;
   const areaLinks = centralValleyLinks;
   const mobileGroups: { title: string; links: NavLink[] }[] = [
     { title: "Home cleaning", links: serviceLinks },
-    { title: "Areas", links: [...areaLinks, { label: "Service areas", href: "/service-areas" }] },
+    { title: "Areas", links: [...areaLinks, ...fresnoNeighborhoodLinks, { label: "Service areas", href: "/service-areas" }] },
     { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Our work", href: "/our-work" }, { label: "Service checklist", href: "/checklist" }, { label: "Contact", href: "/contact" }, { label: "Cleaning tips", href: "/blog" }] },
     { title: "Fresno-area businesses", links: [...businessLinks, { label: "Request a walkthrough", href: "/commercial-quote" }] },
   ];
@@ -129,7 +134,17 @@ export default function HomeHeader() {
           </div>
           <div ref={areasPanel} className={`home-nav-panel${areasOpen ? " is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setAreasOpen(false); }}>
             <button type="button" ref={areasTrigger} className="home-nav-trigger" aria-expanded={areasOpen} aria-controls="home-areas-panel" aria-current={currentLocation("/service-areas")} onClick={() => { setAreasOpen(!areasOpen); setServicesOpen(false); }}>Areas <span aria-hidden="true">▾</span></button>
-            <div id="home-areas-panel" className="home-services-panel home-areas-panel"><div><p className="home-services-panel-label">{business.serviceAreaName}</p>{areaLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}<Link href="/service-areas" className="home-services-panel-more">Service areas →</Link></div></div>
+            <div id="home-areas-panel" className="home-services-panel home-areas-panel">
+              <div className="home-services-panel-group">
+                <p className="home-services-panel-label">{business.serviceAreaName}</p>
+                {areaLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
+                <Link href="/service-areas" className="home-services-panel-more">Service areas →</Link>
+              </div>
+              <div className="home-services-panel-group">
+                <p className="home-services-panel-label">Fresno neighborhoods</p>
+                {fresnoNeighborhoodLinks.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link">{link.label}</Link>)}
+              </div>
+            </div>
           </div>
           {navigation.filter((link) => !link.panel).map((link) => (
             <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className={currentLocation(link.href) ? "is-active" : undefined}>{link.label}</Link>

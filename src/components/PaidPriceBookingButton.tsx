@@ -80,9 +80,9 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           } catch { /* Analytics must not interrupt the synchronous handoff. */ }
         }}
       >
-        Book this price <span aria-hidden="true">→</span>
+        Book this price <span aria-hidden="true">→</span><span className="ns-sr"> (opens in a new tab)</span>
       </button>
-      <p className="mt-3 text-xs leading-5 text-ink-soft">Pick your day and time. We confirm everything with you after you book.</p>
+      <p className="mt-3 text-xs leading-5 text-ink-soft">Opens in a new tab. Pick your day and time. We confirm everything with you after you book.</p>
       {status ? <p role="status" className="mt-1 text-xs leading-4 text-ink-soft">{messages[status]}</p> : null}
     </div>
   );
