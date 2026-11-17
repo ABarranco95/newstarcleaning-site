@@ -225,20 +225,35 @@ export default function ServiceDetailPage({ service, h1, intro }: {
 
       {(isStandard || isMoveOut) && (
         <section id="apartments" className="site-section scroll-mt-24">
-          <div className="site-copy">
-            <h2>{isStandard ? "Apartment cleaning" : "Apartment move-out cleaning"}</h2>
-            {isStandard ? (
+          {isStandard ? (
+            <div className="site-copy">
+              <h2>Apartment cleaning</h2>
               <p className="site-intro">We clean apartments, condos and duplexes on the same checklist as a house, priced by size and condition. When you send the address, tell us the floor, where to park and any gate or door code. Moving out of the apartment? That&apos;s a <Link href="/services/move-out-cleaning#apartments" className="home-text-link">move-out clean</Link>.</p>
-            ) : (
-              <p className="site-intro">An empty apartment gets the full move-out clean: inside empty cabinets, drawers and closets, the kitchen, bathrooms and floors. Oven and fridge interiors and window cleaning can be added. Send the walkthrough date and how we get in.</p>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="site-split">
+              <div className="site-copy">
+                <h2>Apartment move-out cleaning</h2>
+                <p className="site-intro">An apartment gets the same room-by-room move-out scope as a house, including empty cabinet, drawer and closet interiors. Oven and fridge interiors, interior window glass and reachable tracks are optional add-ons.</p>
+                <p className="site-note">Pricing assumes normal move-out condition. Heavy grease, heavy dust or long-neglected areas may need a heavy-duty quote. Tell us about those areas before booking so we can review the work and price with you.</p>
+              </div>
+              <div>
+                <h3>Before you hand over the keys</h3>
+                <ul className="site-list">
+                  <li>Remove belongings, food and loose trash. Empty the cabinets and closets, plus any appliances you want cleaned inside.</li>
+                  <li>Share the unit number, floor, stairs or elevator access, and where we can park with supplies.</li>
+                  <li>Keep water and electricity on, and arrange entry before any keys are returned to the office.</li>
+                  <li>Send the walkthrough deadline and any cleaning list from the property manager so we can confirm the scope before you book.</li>
+                </ul>
+              </div>
+            </div>
+          )}
         </section>
       )}
 
-      <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>
+      {!isMoveOut && <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>}
       <section className="site-muted" aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
-      <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." phoneLocation="service_price_band" />
+      {!isMoveOut && <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." phoneLocation="service_price_band" />}
       <section className="site-muted"><div className="site-section site-split">
         <div className="site-copy">
           <h2>Good to know before you book.</h2>
@@ -250,9 +265,10 @@ export default function ServiceDetailPage({ service, h1, intro }: {
               </Link>
             ))}
           </div>
-          <Link href={service.slug === "deep-cleaning" ? "/services/standard-cleaning" : "/services/deep-cleaning"} className="home-text-link">Compare {service.slug === "deep-cleaning" ? "standard" : "deep"} cleaning <span aria-hidden="true">→</span></Link>
-
-          {isMoveOut && <Link href="/blog/move-out-cleaning-checklist-before-inspection" className="home-text-link">Fresno rental turnover guide <span aria-hidden="true">↗</span></Link>}
+          <div className="mt-6 flex flex-col items-start gap-3">
+            <Link href={service.slug === "deep-cleaning" ? "/services/standard-cleaning" : "/services/deep-cleaning"} className="home-text-link">Compare {service.slug === "deep-cleaning" ? "standard" : "deep"} cleaning <span aria-hidden="true">→</span></Link>
+            {isMoveOut && <Link href="/blog/move-out-cleaning-checklist-before-inspection" className="home-text-link">Fresno rental turnover guide <span aria-hidden="true">↗</span></Link>}
+          </div>
           {directBookingUrl ? <div className="site-actions"><Suspense fallback={null}><BookingPortalLink baseUrl={directBookingUrl} service={quoteFormService(service)} sourcePage={`/services/${service.slug}`} ctaLocation="service_details" label="Book online" showIcon={false} className="home-button" /></Suspense></div> : null}
         </div>
         <div>

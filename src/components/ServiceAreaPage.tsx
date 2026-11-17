@@ -57,7 +57,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
     { question: `Do you provide house cleaning in ${area.name}, CA?`, answer: `Yes. New Star Cleaning serves ${area.name}, CA with standard recurring cleaning, deep cleaning, and move-in/move-out cleaning. ${area.localProof}` },
     { question: `Which ${area.name} neighborhoods do you serve?`, answer: `We serve ${area.neighborhoods.slice(0, 4).join(", ")} and nearby parts of ${area.county}. If your exact neighborhood is not listed, request a quote and we will confirm coverage.` },
     { question: `What cleaning services are available in ${area.name}?`, answer: `${area.name} clients can request recurring standard cleaning, one-time deep cleaning, and move-in/move-out cleaning. Common local requests include ${area.commonJobs.slice(0, 2).join(" and ")}.` },
-    { question: `How quickly can I book a cleaner in ${area.name}?`, answer: area.bookingNote },
+    { question: `How quickly can I book a cleaner in ${area.name}?`, answer: area.slug === "north-fresno" ? "Available windows depend on the address, cleaning scope and schedule. Enter your home details for pricing, then review the available times or contact us about a deadline." : area.bookingNote },
   ];
 
   return (
@@ -103,7 +103,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       ]} /></div></div></section>
 
       <section><div className="site-section site-quote-layout">
-        <div className="site-copy"><p className="ns-kicker">Your price</p><h2>{`See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">{area.bookingNote}</p><p className="site-note"><MarketCallOrText prefix="Or " location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
+        <div className="site-copy"><p className="ns-kicker">Your price</p><h2>{`See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p>{area.slug !== "north-fresno" && <p className="site-note">{area.bookingNote}</p>}<p className="site-note"><MarketCallOrText prefix="Or " location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
         <QuickQuoteForm title={`Get your ${area.name} price`} subtitle="Start with the cleaning you need." source={`organic_${area.slug}_service_area`} defaultCity={area.name} landingCity={area.name} directBookingUrl={directBookingUrl} compact />
       </div></section>
 

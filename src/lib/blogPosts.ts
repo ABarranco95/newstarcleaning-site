@@ -13,7 +13,7 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     slug: "how-often-should-you-deep-clean-your-house",
-    title: "How Often Should You Deep Clean Your House?",
+    title: "How often should you deep clean your house?",
     metaTitle:
       "How Often Should You Deep Clean Your House?",
     metaDescription:
@@ -51,7 +51,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "house-cleaning-vs-deep-cleaning-whats-the-difference",
-    title: "House Cleaning vs. Deep Cleaning — What's the Difference?",
+    title: "House cleaning vs. deep cleaning: what's the difference?",
     metaTitle:
       "House Cleaning vs. Deep Cleaning — What's the Difference?",
     metaDescription:
@@ -89,7 +89,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "move-out-cleaning-checklist-before-inspection",
-    title: "Fresno Move-Out and Rental Turnover Cleaning Checklist",
+    title: "Fresno move-out and rental turnover cleaning checklist",
     metaTitle:
       "Fresno Move-Out & Rental Turnover Checklist",
     metaDescription:
@@ -165,7 +165,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "how-to-prepare-your-home-for-a-cleaning-service",
-    title: "How to Prepare Your Home for a Cleaning Service",
+    title: "How to prepare your home for a cleaning service",
     metaTitle:
       "How to Prepare Your Home for a Cleaning Service",
     metaDescription:
@@ -203,7 +203,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "is-professional-house-cleaning-worth-it",
-    title: "Is Professional House Cleaning Worth It?",
+    title: "Is professional house cleaning worth it?",
     metaTitle:
       "Is Professional House Cleaning Worth It?",
     metaDescription:

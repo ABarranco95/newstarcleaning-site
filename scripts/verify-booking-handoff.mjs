@@ -113,7 +113,7 @@ for (const frequency of ["weekly", "bi-weekly", "monthly"]) {
 }
 check(form.includes("acceptedPrefillSnapshot({ ...formForSnapshot, ...location }, true, false)") && form.includes("acceptedSnapshot: apexAccepted ? submittedSnapshot : null"), "success snapshot comes from the submitted customer/location closure and is acceptance-gated");
 check(form.includes("<BookingPrefillLink baseUrl={resolvedBookingUrl} snapshot={sent.acceptedSnapshot}") && form.includes("onRelease={() => setSent((current) => current ? { ...current, acceptedSnapshot: null } : current)}"), "success card passes frequency privately and releases the snapshot after transfer");
-check(form.includes("Request a walkthrough") && form.includes("Text me my price") && !form.includes("Get my price"), "the lead submit describes a quote request, not instant pricing");
+check(form.includes("Request a walkthrough") && form.includes("Get a quote") && form.includes("Text me this quote") && !form.includes("Get my price"), "the lead submit describes a quote request, not instant pricing");
 check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, postedContactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
 
 const prefill = prefillModule.exports;

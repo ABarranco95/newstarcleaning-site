@@ -81,7 +81,7 @@ export default function Home() {
 
       <MarketAreas home />
 
-      <section className="site-muted" aria-labelledby="home-faq-title"><div className="ns-section home-faq"><div><h2 id="home-faq-title" className="ns-h2">Before the visit.</h2><Link href="/checklist" className="home-text-link">See the full checklist <span aria-hidden="true">→</span></Link></div><FaqList faqs={faqs} /></div></section>
+      <section className="site-muted" aria-labelledby="home-faq-title"><div className="ns-section"><div className="ns-section-head"><h2 id="home-faq-title" className="ns-h2">Before the visit.</h2><Link href="/checklist" className="home-text-link">See the full checklist <span aria-hidden="true">→</span></Link></div><FaqList faqs={faqs} /></div></section>
 
       <section aria-labelledby="home-quote-title"><div className="site-section site-quote-layout">
         <div className="site-copy"><p className="ns-kicker">Your price</p><h2 id="home-quote-title" className="ns-h2">See your price. We&apos;ll text you the rest.</h2><p className="ns-lead">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note"><MarketCallOrText prefix="Or " location="home_quote" />. Mon–Fri 8–6, Sat 8–5.</p><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote →</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense></div>

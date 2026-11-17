@@ -3,7 +3,7 @@
 const facts = [
   { token: "2020", body: "Cleaning homes since 2020." },
   { token: "24 hours", body: "Missed something in the agreed scope? Tell us within 24 hours and we come back at no charge." },
-  { token: "No contract", body: "Pay cleaning to cleaning. Nothing is charged when you book." },
+  { token: "No contract", body: "Pay per cleaning. Nothing is charged when you book." },
 ];
 
 // `links` is accepted for existing callers; the strip no longer links out.

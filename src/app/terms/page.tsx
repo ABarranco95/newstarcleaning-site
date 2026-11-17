@@ -19,7 +19,7 @@ export default function TermsOfService() {
     <div className="site-reference">
       <div className="site-document">
         <h1 className="text-3xl lg:text-4xl font-bold text-ink mb-2">
-          Terms of Service
+          Terms of service
         </h1>
         <p className="text-mute mb-12">
           Last Updated: October 26, 2026
@@ -28,7 +28,7 @@ export default function TermsOfService() {
         <div className="prose prose-gray max-w-none space-y-8">
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              1. Agreement to Terms
+              1. Agreement to terms
             </h2>
             <p className="text-ink-soft leading-relaxed">
               These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding
@@ -98,7 +98,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              3. Booking and Scheduling
+              3. Booking and scheduling
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
               Book through our website or contact us directly. Before booking,
@@ -122,7 +122,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              4. Payment Terms
+              4. Payment terms
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
               There&apos;s no contract. You pay cleaning to cleaning. A card on
@@ -166,7 +166,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              5. Service Concerns
+              5. Service concerns
             </h2>
             <p className="text-ink-soft leading-relaxed">
               If something included in the agreed cleaning scope was missed,
@@ -178,7 +178,7 @@ export default function TermsOfService() {
 
           <section className="bg-accent/5 border border-accent/15 rounded-xl p-6">
             <h2 className="text-xl font-bold text-ink mb-3">
-              6. SMS/Text Messaging Terms
+              6. SMS/text messaging terms
             </h2>
             <p className="text-ink-soft leading-relaxed mb-4">
               By providing your phone number and opting in, you consent to
@@ -190,7 +190,7 @@ export default function TermsOfService() {
             <div className="space-y-4">
               <div>
                 <h3 className="font-semibold text-ink">
-                  Consent to Receive Messages
+                  Consent to receive messages
                 </h3>
                 <p className="text-ink-soft text-sm">
                   By providing your mobile phone number and checking the SMS
@@ -203,7 +203,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Types of Messages
+                  Types of messages
                 </h3>
                 <p className="text-ink-soft text-sm mb-2">
                   You may receive the following types of text messages:
@@ -221,7 +221,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Message Frequency
+                  Message frequency
                 </h3>
                 <p className="text-ink-soft text-sm">
                   Message frequency varies. You may receive approximately 1–4
@@ -233,7 +233,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Message and Data Rates
+                  Message and data rates
                 </h3>
                 <p className="text-ink-soft text-sm">
                   <strong>Message and data rates may apply.</strong> Please
@@ -245,7 +245,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Opt-Out Instructions
+                  Opt-out instructions
                 </h3>
                 <p className="text-ink-soft text-sm">
                   You can opt out of receiving text messages at any time by
@@ -271,7 +271,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Carrier Liability Disclaimer
+                  Carrier liability disclaimer
                 </h3>
                 <p className="text-ink-soft text-sm">
                   Wireless carriers, including but not limited to AT&T,
@@ -286,7 +286,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Compatible Carriers
+                  Compatible carriers
                 </h3>
                 <p className="text-ink-soft text-sm">
                   Our SMS messaging program is compatible with all major U.S.
@@ -298,7 +298,7 @@ export default function TermsOfService() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Age Restriction
+                  Age restriction
                 </h3>
                 <p className="text-ink-soft text-sm">
                   You must be 18 years of age or older to opt in to our text
@@ -326,7 +326,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              7. Property Access and Security
+              7. Property access and security
             </h2>
             <p className="text-ink-soft leading-relaxed">
               You are responsible for providing safe and reasonable access to
@@ -340,7 +340,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              8. Liability and Insurance
+              8. Liability and insurance
             </h2>
             <p className="text-ink-soft leading-relaxed">
               New Star Cleaning carries liability insurance. In the
@@ -354,7 +354,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              9. Limitation of Liability
+              9. Limitation of liability
             </h2>
             <p className="text-ink-soft leading-relaxed">
               To the fullest extent permitted by law, New Star Cleaning, its
@@ -383,7 +383,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              11. Intellectual Property
+              11. Intellectual property
             </h2>
             <p className="text-ink-soft leading-relaxed">
               All content on our website, including text, graphics, logos,
@@ -396,7 +396,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              12. Governing Law
+              12. Governing law
             </h2>
             <p className="text-ink-soft leading-relaxed">
               These Terms shall be governed by and construed in accordance with
@@ -409,7 +409,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              13. Changes to These Terms
+              13. Changes to these terms
             </h2>
             <p className="text-ink-soft leading-relaxed">
               We reserve the right to modify these Terms at any time. Any
@@ -435,7 +435,7 @@ export default function TermsOfService() {
 
           <section className="bg-cream-2 rounded-xl p-6 border border-line">
             <h2 className="text-xl font-bold text-ink mb-3">
-              15. Contact Us
+              15. Contact us
             </h2>
             <p className="text-ink-soft leading-relaxed mb-4">
               If you have any questions about these Terms of Service, please

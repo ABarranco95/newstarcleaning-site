@@ -24,7 +24,7 @@ assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring 
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(
-  paidPage.includes("House Cleaning in Fresno & Clovis") &&
+  paidPage.includes("House cleaning in Fresno, Clovis & Madera") &&
     !paidPage.includes("without the guesswork"),
   "generic house headline matches the paid search service and core cities",
 );
@@ -141,9 +141,9 @@ const expectedPriceLines = {
   house: "See your house-cleaning price for your ZIP and home. Total confirmed before you book.",
 };
 const expectedHeadlines = {
-  deep: "Deep House Cleaning in Fresno & Clovis",
-  move: "Move-Out & Move-In Cleaning in Fresno & Clovis",
-  house: "House Cleaning in Fresno & Clovis",
+  deep: "Deep house cleaning in Fresno, Clovis & Madera",
+  move: "Move-out & move-in cleaning in Fresno, Clovis & Madera",
+  house: "House cleaning in Fresno, Clovis & Madera",
 };
 const expectedDecisionReviews = { deep: "daumdatta", move: "merle-f", house: "merle-f" };
 for (const intent of Object.keys(INTENT_CONFIG)) {
@@ -159,7 +159,7 @@ for (const [intent, priceLine] of Object.entries(expectedPriceLines)) {
   const hero = result.nodes.find((node) => node.type === "section" && node.props["aria-labelledby"] === "paid-title");
   assert(!JSON.stringify(hero).includes('"data-boundary":"BookingPortalLink"'), `${intent}: no competing self-book exit in the hero or form`);
   assert(form.props.subtitle === priceLine && form.props.compact === true, `${intent}: approved price replaces the subtitle on the compact one-step form`);
-  assert(form.props.submitLabel === (intent === "move" ? "Text me my price + move-out dates" : "Text me my price + open dates"), `${intent}: approved price-first submit label`);
+  assert(form.props.submitLabel === "Text me this quote", `${intent}: approved price-first submit label`);
   const call = form.props.submitAlternative;
   assert(call?.type === "a" && call.props.href === "tel:+1" + "559" + "785" + "2822" && call.props["data-phone-location"] === "paid_quote_submit" && !call.props.onClick, `${intent}: secondary call uses the customer number and existing delegated tel tracker without a duplicate click handler`);
   const proof = form.props.decisionProof;
@@ -189,7 +189,7 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
   const photoName = expected === "deep" ? "glass-shower-freestanding-tub-new-star.webp" : expected === "move" ? "dining-kitchen-turnover-new-star.webp" : "kitchen-island-clean-new-star.webp";
   const photo = [...photosModule.exports.bathroomResultPhotos, ...photosModule.exports.emptyHomeResultPhotos, ...photosModule.exports.homeResultPhotos].find((item) => item.src.endsWith(`/${photoName}`));
   assert(result.nodes.filter((node) => node.props?.src === photo.src && node.props?.alt === photo.alt).length === 1, `${expected}: one genuine intent-matched hero photo with approved alt text`);
-  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.ctaLocation === "paid_closing" && node.props.label === "Choose a date online" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: lower date-selection exit retains its location and matching frequency`);
+  assert(result.nodes.filter((node) => node.props?.["data-boundary"] === "BookingPortalLink").every((node) => node.props.ctaLocation === "paid_closing" && node.props.label === "Book online" && node.props.frequency === (expected === "recurring" && ["weekly", "biweekly", "monthly"].includes(frequency) ? frequency : undefined)), `${expected}: lower date-selection exit retains its location and matching frequency`);
   const gallery = result.nodes.find((node) => node.props?.id === "paid-proof-gallery");
   assert(gallery?.props.role === "region" && gallery.props.tabIndex === 0 && gallery.props["aria-label"] && typeof gallery.props.onKeyDown === "function" && result.nodes.filter((node) => node.type === "button" && node.props["aria-controls"] === "paid-proof-gallery").length === 2, `${expected}: gallery exposes focus, keyboard handler, label and two controls`);
   const scrollCalls = [];

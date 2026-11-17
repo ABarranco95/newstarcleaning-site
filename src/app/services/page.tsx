@@ -105,7 +105,7 @@ export default function ServicesPage() {
   return (
     <div className="site-reference">
       <SiteHero eyebrow="Services" title="House cleaning services in Fresno, Clovis & Madera." description="Here's what each cleaning covers. Not sure which one fits? Text us and we'll help you pick." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote by text</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
+        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
       </SiteHero>
 
       <section id="compare" className="ns-section scroll-mt-24" aria-labelledby="services-compare-title">
@@ -161,7 +161,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="site-muted"><div className="site-section site-split"><h2>See your price.</h2><div><p className="site-intro">Pick the cleaning and your home size, then book a time online.</p><div className="site-actions"><HomeBookingLink placement="footer" /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div></div></div></section>
+      <section className="site-muted"><div className="site-section site-split"><h2>See your price.</h2><div><p className="site-intro">Pick the cleaning and your home size, then book a time online.</p><div className="site-actions"><HomeBookingLink placement="footer" /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div></div></div></section>
       <BreadcrumbSchema items={[{ name: "Home", url: siteUrl }, { name: "Services", url: `${siteUrl}/services` }]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org", "@type": "ItemList", name: "New Star Cleaning services",

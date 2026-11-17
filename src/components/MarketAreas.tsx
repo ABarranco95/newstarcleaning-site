@@ -26,7 +26,7 @@ export default function MarketAreas({ home = false, directory = false }: { home?
   const headingId = home ? "home-local-title" : "market-areas-title";
   return (
     <section id={home ? "areas" : directory ? "cities" : undefined} className="ns-section scroll-mt-24" aria-labelledby={headingId}>
-      <div className="ns-section-head"><div><h2 id={headingId} className="ns-h2">{business.serviceAreaName}.</h2><p className="ns-lead"><MarketCoverage /></p></div></div>
+      <div className="ns-section-head"><div><h2 id={headingId} className="ns-h2">{home ? "Where we clean." : `${business.serviceAreaName}.`}</h2><p className="ns-lead">{home ? "Choose your city for local cleaning details. We confirm coverage for your address before you book." : <MarketCoverage />}</p></div></div>
       <div className="mb-8">
         <nav className="ns-city-links" aria-label={`${business.serviceAreaName} cleaning areas`}>
           {business.cities.map((city) => <Link key={city} href={`/cleaning-services-${citySlug(city)}`}>House cleaning in {city}, CA<span aria-hidden="true">↗</span></Link>)}

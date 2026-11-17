@@ -37,7 +37,7 @@ export const clientPrepChecklist = [
 export const services: ServiceDefinition[] = [
   {
     slug: "standard-cleaning",
-    name: "Standard House Cleaning",
+    name: "Standard house cleaning",
     shortName: "Standard cleaning",
     tagline:
       "Recurring weekly, bi-weekly, or monthly cleaning to keep your home consistently fresh.",
@@ -178,7 +178,7 @@ export const services: ServiceDefinition[] = [
   },
   {
     slug: "deep-cleaning",
-    name: "Deep House Cleaning",
+    name: "Deep house cleaning",
     shortName: "Deep cleaning",
     tagline:
       "A detailed reset for accessible surfaces, buildup, baseboards, fixtures, and first-time cleans.",
@@ -319,7 +319,7 @@ export const services: ServiceDefinition[] = [
   },
   {
     slug: "move-out-cleaning",
-    name: "Move-Out Cleaning",
+    name: "Move-out cleaning",
     shortName: "Move-out cleaning",
     tagline:
       "Empty-home cleaning for move-outs, move-ins, sellers, landlords, and property turnovers.",

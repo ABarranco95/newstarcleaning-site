@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
     <div className="site-reference">
       <div className="site-document">
         <h1 className="text-3xl lg:text-4xl font-bold text-ink mb-2">
-          Privacy Policy
+          Privacy policy
         </h1>
         <p className="text-mute mb-12">
           Last Updated: October 15, 2026
@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              2. Information We Collect
+              2. Information we collect
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
               We may collect the following types of personal information:
@@ -81,7 +81,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              3. How We Use Your Information
+              3. How we use your information
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
               We use the information we collect for the following purposes:
@@ -106,7 +106,7 @@ export default function PrivacyPolicy() {
 
           <section className="bg-accent/5 border border-accent/15 rounded-xl p-6">
             <h2 className="text-xl font-bold text-ink mb-3">
-              4. SMS/Text Messaging Policy
+              4. SMS/text messaging policy
             </h2>
             <p className="text-ink-soft leading-relaxed mb-4">
               When you provide your phone number and consent to receive text
@@ -127,7 +127,7 @@ export default function PrivacyPolicy() {
             <div className="space-y-4 mt-6">
               <div>
                 <h3 className="font-semibold text-ink">
-                  Message Frequency
+                  Message frequency
                 </h3>
                 <p className="text-ink-soft text-sm">
                   Message frequency varies based on your service interactions.
@@ -139,7 +139,7 @@ export default function PrivacyPolicy() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Message and Data Rates
+                  Message and data rates
                 </h3>
                 <p className="text-ink-soft text-sm">
                   Message and data rates may apply. Please contact your wireless
@@ -149,7 +149,7 @@ export default function PrivacyPolicy() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  Opt-Out Instructions
+                  Opt-out instructions
                 </h3>
                 <p className="text-ink-soft text-sm">
                   You may opt out of receiving text messages at any time by
@@ -173,7 +173,7 @@ export default function PrivacyPolicy() {
 
               <div>
                 <h3 className="font-semibold text-ink">
-                  No Mobile Information Sharing
+                  No mobile information sharing
                 </h3>
                 <p className="text-ink-soft text-sm">
                   We do not sell, rent, loan, trade, lease, or otherwise transfer
@@ -186,7 +186,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              5. Information Sharing and Disclosure
+              5. Information sharing and disclosure
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
               We do not sell your personal information. We may share your
@@ -216,7 +216,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              6. Data Security
+              6. Data security
             </h2>
             <p className="text-ink-soft leading-relaxed">
               We implement reasonable administrative, technical, and physical
@@ -229,7 +229,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              7. Data Retention
+              7. Data retention
             </h2>
             <p className="text-ink-soft leading-relaxed">
               We retain your personal information for as long as necessary to
@@ -242,7 +242,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              8. Cookies and Tracking Technologies
+              8. Cookies and tracking technologies
             </h2>
             <p className="text-ink-soft leading-relaxed">
               Our website may use cookies and similar tracking technologies to
@@ -273,7 +273,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              9. Your Rights
+              9. Your rights
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
               Depending on your location, you may have the following rights
@@ -298,7 +298,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              10. Children&apos;s Privacy
+              10. Children&apos;s privacy
             </h2>
             <p className="text-ink-soft leading-relaxed">
               Our services are not directed to individuals under the age of 18.
@@ -311,7 +311,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-bold text-ink mb-3">
-              11. Changes to This Privacy Policy
+              11. Changes to this privacy policy
             </h2>
             <p className="text-ink-soft leading-relaxed">
               We may update this Privacy Policy from time to time. Any changes
@@ -324,7 +324,7 @@ export default function PrivacyPolicy() {
 
           <section className="bg-cream-2 rounded-xl p-6 border border-line">
             <h2 className="text-xl font-bold text-ink mb-3">
-              12. Contact Us
+              12. Contact us
             </h2>
             <p className="text-ink-soft leading-relaxed mb-4">
               If you have any questions about this Privacy Policy, our data

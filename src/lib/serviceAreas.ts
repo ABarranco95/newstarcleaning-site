@@ -170,13 +170,17 @@ export const serviceAreas: ServiceArea[] = [
     ],
     nearbyAreas: ["Fresno", "Woodward Park", "Fig Garden", "Clovis", "Madera"],
     localContent:
-      "A lot of North Fresno is newer single-family homes with more square footage and more bathrooms than the older parts of town, and plenty of them sit inside HOA communities with their own gate and parking rules. Square footage, bathroom count, flooring, pets and the rooms you want extra attention on are what change the price, so we ask for those before quoting.",
+      "A condo near River Park and a larger house near Woodward Park need different amounts of work. We price from the home size, bathrooms, condition and optional work you choose, not the neighborhood name. Tell us about stairs, flooring and rooms that need extra attention so we can plan the visit.",
     localProof:
-      "North Fresno is part of our Fresno service area. Tell us the address, the home size and the service you need, and we'll confirm the days we have open before you book.",
+      "North of Shaw, homes around Bullard, River Park and Woodward Park range from condos and townhomes to larger single-family houses. Around Fig Garden, older trim and mixed flooring can need a different approach from an open-plan home farther north. Tell us which surfaces need care and which rooms get the most use. A kitchen that needs regular upkeep is different work from shower glass or baseboards with buildup.",
+    neighborhoodNotes: [
+      { title: "Woodward Park and River Park", body: "For a condo or townhome, include the unit number, floor and stair or elevator access. For a larger house, include the full bathroom count and approximate home size." },
+      { title: "Fig Garden and Bullard", body: "Tell us about wood floors, older tile, detailed trim or any surface that needs a particular product. We plan the cleaning around the materials in your home." },
+    ],
     homeProfiles: [
-      "Newer single-family homes north of Shaw",
-      "Larger floor plans with open kitchens and more bathrooms",
-      "HOA community homes with gate codes and guest parking rules",
+      "Condos and townhomes around River Park and Woodward Park",
+      "Single-family homes north of Shaw, including larger open floor plans",
+      "Established homes around Fig Garden and Bullard with varied flooring and trim",
     ],
     commonJobs: [
       "Weekly, every-two-weeks and monthly recurring cleaning",
@@ -184,9 +188,9 @@ export const serviceAreas: ServiceArea[] = [
       "Move-in and move-out cleaning for empty homes",
     ],
     bookingNote:
-      "Share the address, home size and the rooms you want covered. HOA gate codes and parking details help us confirm the right arrival window.",
+      "For a gated community, tell us which entrance to use, how guest entry works and where we can park. Share any access-hour restrictions before we confirm an arrival window.",
     serviceDetails: {
-      deep: "North Fresno homes usually mean more bathrooms and more floor to cover. A deep clean adds the baseboards, vent covers, door frames and buildup a standard visit doesn't get to. Tell us the room count and where the buildup is.",
+      deep: "A deep clean adds baseboards, vent covers, door frames and extra attention to buildup. Tell us whether the work is concentrated in the kitchen or showers, or spread through the home, so we can quote the actual scope.",
       move: "Tell us when the home will be empty and your walkthrough date. Empty cabinet, drawer and closet interiors are included; oven and fridge interiors and window cleaning are optional add-ons.",
     },
   },

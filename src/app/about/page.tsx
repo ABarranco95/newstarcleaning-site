@@ -51,7 +51,7 @@ export default function AboutPage() {
   return (
     <div className="site-reference">
       <SiteHero eyebrow="About New Star" title="Owned and run by Angel Barranco." description={<MarketAboutIntro />} visual={<OwnerPhoto />} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div>
+        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div>
         <MarketPhone className="site-hero-phone mt-4" location="about_hero" />
       </SiteHero>
       <section className="site-section site-split">
@@ -65,7 +65,7 @@ export default function AboutPage() {
       </section>
       <section className="site-muted"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Our work</p><h2 className="ns-h2">Rooms we&apos;ve cleaned.</h2></div><Link href="/our-work" className="home-text-link">See all of our work →</Link></div><PhotoStrip photos={[homeResultPhotos[0], homeResultPhotos[2], bathroomResultPhotos[1], kitchenSurfacesPhoto]} /></div></section>
       <MarketAreas />
-      <section className="site-muted"><div className="site-section site-split"><h2>See your price.</h2><div><p className="site-intro">Pick the cleaning and your home size, then book a time online.</p><div className="site-actions"><HomeBookingLink placement="footer" /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote by text</HomeQuoteLink></Suspense></div></div></div></section>
+      <section className="site-muted"><div className="site-section site-split"><h2>See your price.</h2><div><p className="site-intro">Pick the cleaning and your home size, then book a time online.</p><div className="site-actions"><HomeBookingLink placement="footer" /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div></div></div></section>
     </div>
   );
 }

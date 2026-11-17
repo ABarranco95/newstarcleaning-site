@@ -664,8 +664,8 @@ function PriceLeadFormContent({
     : smsOptIn
       ? paidSearch && submitLabel
         ? submitLabel
-        : ready ? "Text me this quote" : "Text me my price"
-      : ready ? "Get my exact price" : "Request my price";
+        : ready ? "Text me this quote" : "Text me a quote"
+      : "Get a quote";
 
   const summaryPrice = ready ? ready.range ?? ready.low : "Price confirmed with you";
   const serviceName = serviceCaption(draft.service);
@@ -726,7 +726,7 @@ function PriceLeadFormContent({
         <div className="nq-actions">
           <div>
             <button type="button" className="home-button" data-quote-next onClick={openContact}>
-              Ask us for a quote <ArrowIcon />
+              Get a quote <ArrowIcon />
             </button>
             <p className="nq-note">{ready ? "We'll confirm your exact price and the days we have open. Nothing is booked until you say so." : "Leave a name and number and we'll get back to you during the day."}</p>
           </div>
@@ -769,7 +769,7 @@ function PriceLeadFormContent({
           className="home-text-link justify-center"
           data-phone-location={paidSearch ? "paid_live_price" : "organic_live_price"}
         >
-          Call now
+          Call
         </a>
       </div>
     );
