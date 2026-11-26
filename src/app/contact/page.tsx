@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import { socialMetadata } from "@/lib/socialMeta";
 import Link from "next/link";
+import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import MapEmbed from "@/components/MapEmbed";
 import MarketPhone from "@/components/MarketPhone";
 import ProofRow from "@/components/ProofRow";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import SiteHero from "@/components/SiteHero";
 import { ContactSchema } from "@/components/SchemaMarkup";
 import { MarketCoverage, MarketBusinessNote } from "@/components/MarketAreas";
+import { business } from "@/lib/business";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import { homeResultPhotos } from "@/lib/realWorkPhotos";
+
+const directBookingUrl = resolveDirectBookingUrl();
 
 const description = "Call, text or email Angel, the owner, for house cleaning in Fresno, Clovis and Madera. Mon–Fri 8–6, Sat 8–5.";
 export const metadata: Metadata = {
@@ -27,8 +33,9 @@ export default function ContactPage() {
           <p className="py-4 text-sm font-medium leading-relaxed text-on-dark-soft">Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM · Sun closed</p>
         </div>
       </SiteHero>
-      <section className="site-muted"><div className="site-section site-quote-layout"><div><p className="ns-kicker">Your price</p><h2 className="mt-3">Tell us about your home.</h2><p className="site-intro">Put in your ZIP and the price shows here. This form doesn&apos;t book an appointment.</p></div><QuickQuoteForm title="Tell us about your home" subtitle="We'll help with the cleaning and the price. This form doesn't book an appointment." source="contact_page" compact /></div></section>
-      <section className="site-section site-split"><div><p className="ns-kicker">Areas</p><h2 className="mt-3">Where we clean.</h2></div><div><p className="site-intro"><MarketCoverage /></p><Link href="/service-areas" className="home-text-link mt-4">Check your area →</Link><MarketBusinessNote /></div></section>
+      <section className="site-muted"><div className="site-section site-quote-layout"><div><p className="ns-kicker">Your price</p><h2 className="mt-3">Tell us about your home.</h2><p className="site-intro">Put in your ZIP and the price shows here. This form doesn&apos;t book an appointment.</p></div><QuickQuoteForm title="Tell us about your home" subtitle="We'll help with the cleaning and the price. This form doesn't book an appointment." source="contact_page" directBookingUrl={directBookingUrl} compact /></div></section>
+      <section className="site-section site-split"><div><p className="ns-kicker">Areas</p><h2 className="mt-3">Where we clean.</h2><p className="site-intro"><MarketCoverage /></p><Link href="/service-areas" className="home-text-link mt-4">Check your area →</Link><MarketBusinessNote /></div><MapEmbed showAreasLink={false} /></section>
+      <BreadcrumbSchema items={[{ name: "Home", url: business.siteUrl }, { name: "Contact", url: `${business.siteUrl}/contact` }]} />
       <ContactSchema />
     </div>
   );

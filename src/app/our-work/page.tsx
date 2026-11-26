@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { socialMetadata } from "@/lib/socialMeta";
+import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import HomeBookingLink from "@/components/HomeBookingLink";
 import MarketPhone from "@/components/MarketPhone";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,8 +18,14 @@ import "./our-work.css";
 export const metadata: Metadata = {
   title: "Our Work: Real Cleaning Photos, Before & After",
   description:
-    "See New Star Cleaning’s work: kitchens, bathrooms, living areas, empty homes, and before-and-after cleaning photos.",
+    "See New Star Cleaning’s work across Fresno, Clovis, and Madera: kitchens, bathrooms, living areas, empty homes, and real before-and-after cleaning photos.",
   alternates: { canonical: "/our-work" },
+  ...socialMetadata({
+    title: "Our Work: Real Cleaning Photos, Before & After | New Star Cleaning",
+    description:
+      "Real before-and-after house cleaning photos from New Star Cleaning appointments across Fresno, Clovis, and Madera.",
+    url: "https://newstarcleaning.com/our-work",
+  }),
 };
 
 const categories = [
@@ -30,7 +39,7 @@ const kitchenLiving: { src: string; alt: string; label: string; note: string }[]
   { src: kitchenSurfacesPhoto.src, alt: kitchenSurfacesPhoto.alt, label: "Kitchen surfaces", note: "Counters, sink, cabinet fronts, and tile floor." },
   { src: homeResultPhotos[0].src, alt: homeResultPhotos[0].alt, label: "Kitchen with granite island", note: "Island, cooktop, and pendant fixtures." },
   { src: homeResultPhotos[1].src, alt: homeResultPhotos[1].alt, label: "Living room", note: "Sectional, rug, and wood-look floors." },
-  { src: homeResultPhotos[2].src, alt: homeResultPhotos[2].alt, label: "Bedroom", note: "Bedroom and wood-look floors. Bed making and linens are not included." },
+  { src: homeResultPhotos[2].src, alt: homeResultPhotos[2].alt, label: "Bedroom", note: "Dusted surfaces and wood-look floors." },
 ];
 
 const bathrooms: { src: string; alt: string; label: string; note: string }[] = [
@@ -127,7 +136,7 @@ export default function OurWorkPage() {
       </section>
 
       <section id="empty-homes" className="home-wrap work-section" aria-labelledby="work-empty-title">
-        <div className="work-section-heading"><h2 id="work-empty-title">Empty homes</h2><p>Move-in and move-out cleaning covers the full deep-cleaning scope plus empty cabinet, drawer, and closet interiors. Oven, fridge, and interior windows are optional add-ons.</p></div>
+        <div className="work-section-heading"><h2 id="work-empty-title">Empty homes</h2><p>Move-in and move-out cleaning covers kitchens, bathrooms, floors, baseboards, fixtures, and empty cabinet, drawer, and closet interiors. Oven, fridge, interior windows, and carpet shampooing are optional add-ons.</p></div>
         <Link href="/services/move-out-cleaning" className="home-text-link">See the full move-in and move-out cleaning scope <span aria-hidden="true">→</span></Link>
         <div className="work-grid work-grid-wide">
           {emptyHomes.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
@@ -145,7 +154,8 @@ export default function OurWorkPage() {
         <h2>Have a spot like this at home?</h2>
         <p>Tell us what needs attention. We&apos;ll explain what we can clean and give you a price before you book.</p>
         <div className="work-cta-actions">
-          <Suspense fallback={<Link href="/book-now" className="home-button">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
+          <HomeBookingLink placement="footer" />
+          <Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button-secondary">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           <MarketPhone className="home-text-link" location="our_work_cta"><Icon name="phone" /> </MarketPhone>
         </div>
         <div className="work-cta-links">
@@ -153,6 +163,7 @@ export default function OurWorkPage() {
           <Link href="/service-areas" className="home-text-link">Check your area <span aria-hidden="true">→</span></Link>
         </div>
       </section>
+      <BreadcrumbSchema items={[{ name: "Home", url: "https://newstarcleaning.com" }, { name: "Our Work", url: "https://newstarcleaning.com/our-work" }]} />
     </div>
   );
 }

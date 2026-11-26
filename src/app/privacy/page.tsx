@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
           Privacy policy
         </h1>
         <p className="text-mute mb-12">
-          Last Updated: October 15, 2026
+          Last Updated: November 25, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -335,6 +335,21 @@ export default function PrivacyPolicy() {
                 <strong>NEW STAR CLEANING LLC</strong>
               </p>
               <p>Fresno, CA</p>
+              <p>
+                Phone:{" "}
+                <a href="tel:+15597852822" className="text-primary underline">
+                  (559) 785-2822
+                </a>
+              </p>
+              <p>
+                Email:{" "}
+                <a
+                  href="mailto:support@newstarcleaning.com"
+                  className="text-primary underline"
+                >
+                  support@newstarcleaning.com
+                </a>
+              </p>
               <p>
                 Website:{" "}
                 <a

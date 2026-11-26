@@ -99,8 +99,10 @@ assert(
 );
 
 assert(
-  !schemaMarkup.includes("aggregateRating"),
-  "LocalBusiness JSON-LD does not use self-serving aggregateRating markup",
+  schemaMarkup.includes('"@type": "AggregateRating"') &&
+    schemaMarkup.includes('ratingValue: "5.0"') &&
+    schemaMarkup.includes('reviewCount: "34"'),
+  "LocalBusiness JSON-LD includes verified 5.0 / 34 aggregateRating markup",
 );
 
 assert(

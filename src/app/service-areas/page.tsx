@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import HomeBookingLink from "@/components/HomeBookingLink";
+import MapEmbed from "@/components/MapEmbed";
 import ProofRow from "@/components/ProofRow";
 import SiteHero from "@/components/SiteHero";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
@@ -25,6 +26,17 @@ export default function ServiceAreasPage() {
       <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#cities" className="home-text-link">Find your area ↓</a><MarketPhone className="site-hero-phone" location="areas_hero" /></div>
     </SiteHero>
     <MarketAreas directory />
+    <section className="site-muted" aria-labelledby="service-areas-map-title">
+      <div className="site-section">
+        <div className="ns-section-head">
+          <div>
+            <p className="ns-kicker">Coverage map</p>
+            <h2 id="service-areas-map-title" className="ns-h2">Serving Fresno, Clovis &amp; Madera.</h2>
+          </div>
+        </div>
+        <MapEmbed showAreasLink={false} />
+      </div>
+    </section>
     <section><div className="site-section site-split"><div><p className="ns-kicker">Not sure?</p><h2 className="mt-3">Not sure about your address?</h2></div><div><p className="site-intro">Text us the address and the date you want, and we&apos;ll tell you if we cover it before you book.</p><div className="site-actions"><MarketPhone text label="Text us" className="home-button" /><Suspense fallback={<Link href="/book-now" className="home-text-link">Get a quote →</Link>}><HomeQuoteLink className="home-text-link">Get a quote →</HomeQuoteLink></Suspense></div></div></div></section>
     <BreadcrumbSchema items={[{ name: "Home", url: siteUrl }, { name: "Service Areas", url: `${siteUrl}/service-areas` }]} />
     <ServiceAreasSchema />

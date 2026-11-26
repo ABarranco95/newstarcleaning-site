@@ -12,7 +12,7 @@ const businessDetails = {
 };
 
 const services = [
-  { name: "Standard Recurring Cleaning", slug: "standard-cleaning", description: "Weekly, bi-weekly, or monthly recurring house cleaning service." },
+  { name: "Recurring & Standard House Cleaning", slug: "standard-cleaning", description: "Weekly, bi-weekly, or monthly recurring house cleaning service." },
   { name: "Deep Cleaning", slug: "deep-cleaning", description: "Detailed one-time deep cleaning for Fresno-area homes." },
   { name: "Move-In/Move-Out Cleaning", slug: "move-out-cleaning", description: "Detailed cleaning for empty homes during move-ins, move-outs, and property turnovers." },
   { name: "Post-Construction Cleaning", slug: "post-construction-cleaning", description: "Scoped final cleaning for new construction, renovations, and property handoffs." },
@@ -57,6 +57,11 @@ export default function SchemaMarkup({ paid = false }: { paid?: boolean }) {
         { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "18:00" },
         { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "08:00", closes: "17:00" },
       ],
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5.0",
+        reviewCount: "34",
+      },
       hasOfferCatalog: offerCatalog,
     },
   ];
