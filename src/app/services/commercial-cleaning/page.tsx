@@ -9,15 +9,17 @@ import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import { business, businessAreaServed } from "@/lib/business";
 
+const pageDescription =
+  "Office and commercial cleaning in Fresno, Clovis, and Madera for professional offices, clinics, behavioral-health and recovery residences, retail, and shared spaces. General liability insured.";
+
 export const metadata: Metadata = {
-  title: "Office & Commercial Cleaning in Fresno, CA",
-  description:
-    "Office and commercial cleaning in Fresno, Clovis & Madera. Restrooms, breakrooms, shared spaces and floors. Request a walkthrough and written quote.",
+  title: "Office & Commercial Cleaning in Fresno & Clovis",
+  description: pageDescription,
   alternates: { canonical: "/services/commercial-cleaning" },
   ...socialMetadata({
-    title: "Office & Commercial Cleaning in Fresno, CA | New Star Cleaning",
+    title: "Office & Commercial Cleaning in Fresno & Clovis | New Star Cleaning",
     description:
-      "Walkthrough-based office cleaning proposals for Fresno, Clovis and Madera.",
+      "Walkthrough-based office, clinic, and commercial cleaning proposals for Fresno, Clovis, and Madera. We carry general liability insurance.",
     url: "https://newstarcleaning.com/services/commercial-cleaning",
   }),
 };
@@ -26,81 +28,105 @@ const scopes = [
   {
     title: "Offices and common areas",
     description:
-      "Reception areas, conference rooms, cleared desks, touchpoints, interior entry glass, and trash. We work around the areas your team uses and keep private work materials undisturbed.",
+      "Reception areas, conference rooms, cleared desks, high-touch doors and switches, interior entry glass, and trash removal. Private work materials stay undisturbed.",
   },
   {
     title: "Restrooms and breakrooms",
     description:
-      "Toilets, sinks, counters, tables, appliance exteriors, touchpoints, trash, and floors. Frequency is planned around daily use and the needs of the space.",
+      "Toilets, sinks, counters, mirrors, breakroom tables, appliance exteriors, touchpoints, trash liners, and floors — scheduled around your daily staff and visitor traffic.",
   },
   {
     title: "Recurring floor care",
     description:
-      "Vacuuming, sweeping, and mopping suited to your floor surfaces. Carpet extraction, stripping, waxing, refinishing, and restoration are not part of routine cleaning.",
+      "Consistent vacuuming, sweeping, and damp mopping suited to tile, LVP, hardwood, and office carpet. Carpet shampooing can be scoped as an add-on; stripping, waxing, and restoration are separate trades.",
+  },
+];
+
+const industries = [
+  {
+    title: "Offices & professional suites",
+    description:
+      "Law, accounting, real estate, insurance, and small business offices needing reliable after-hours or weekly upkeep.",
+  },
+  {
+    title: "Medical, dental & recovery facilities",
+    description:
+      "Outpatient clinics, therapy practices, behavioral-health offices, and recovery residences needing thorough cleaning of lobbies, offices, restrooms, kitchens, and common rooms (excluding regulated medical waste).",
+  },
+  {
+    title: "Retail & customer-facing spaces",
+    description:
+      "Showrooms, salons, studios, and neighborhood storefronts where entry glass, restrooms, and clean floors shape first impressions.",
+  },
+  {
+    title: "Property management & multi-unit common areas",
+    description:
+      "Leasing offices, clubhouses, hallways, laundry rooms, and unit turnovers across Fresno, Clovis, and Madera.",
   },
 ];
 
 const process = [
   {
-    title: "Facility intake",
+    title: "1. Quick facility intake",
     description:
-      "Share the address, square footage, business type, occupied hours, requested frequency, security requirements, and known problem areas.",
+      "Share your address, approximate square footage, facility type, preferred schedule, and priority areas.",
   },
   {
-    title: "Walkthrough",
+    title: "2. On-site walkthrough or photo review",
     description:
-      "We review restrooms, breakrooms, offices, common areas, floors, trash volume, access, storage, and service-window constraints.",
+      "We walk the restrooms, breakrooms, offices, common areas, and floors with you and note keys, alarms, and access windows.",
   },
   {
-    title: "Written proposal",
+    title: "3. Clear written proposal",
     description:
-      "The proposal defines the task list, frequency, exclusions, supplies or consumables responsibility, price, and start conditions.",
+      "You receive a written task list, visit frequency, consumables responsibility, exclusions, and transparent pricing before anything starts.",
   },
   {
-    title: "Start with one cleaning",
+    title: "4. Start with one paid clean",
     description:
-      "We can discuss a paid first cleaning before you agree to a recurring schedule.",
+      "Test our crew on a single paid visit before committing to a weekly, multi-day, or monthly recurring schedule.",
   },
 ];
 
 const faqs = [
   {
-    question: "Which commercial properties do you clean?",
+    question: "Which commercial properties do you clean in Fresno and Clovis?",
     answer:
-      "We evaluate offices, professional suites, retail spaces, small commercial facilities, property-management spaces, and similar workplaces within our service area. Medical, dental, and other specialized facilities are welcome to reach out: the walkthrough is where we confirm what the space needs and whether we are the right fit. Industrial, food-production, and hazardous environments may need work outside our scope, and we will say so directly.",
+      "We clean offices, professional suites, retail spaces, property-management common areas, and residential-style commercial facilities across Fresno, Clovis, and Madera. Medical, dental, behavioral-health, and recovery residences are welcome to reach out — during the walkthrough we confirm the exact task list and verify we are the right fit. Industrial, food-production, and biohazard environments require specialty vendors.",
   },
   {
-    question: "Do you provide nightly janitorial service?",
+    question: "Are you insured for commercial buildings?",
     answer:
-      "Tell us how often you need service and when the building is accessible. We review the facility and confirm the available schedule before you agree to ongoing cleaning.",
+      "Yes. We carry general liability insurance for our cleaning operations. Let us know during the walkthrough if your building manager or lease requires documentation before start.",
+  },
+  {
+    question: "Do you provide nightly or after-hours janitorial service?",
+    answer:
+      "Tell us how often you need service and when your building is accessible. We review your schedule, keys, and alarm procedures during the walkthrough and confirm an after-hours or daytime window in writing.",
   },
   {
     question: "Are paper products and restroom consumables included?",
     answer:
-      "Not automatically. The written proposal states whether the customer supplies consumables or asks New Star to price replenishment separately.",
+      "Not automatically. Most clients supply their own paper goods and soap, and our crew restocks from your supply closet. If you want New Star to handle replenishment, we can price that in the proposal.",
   },
   {
-    question: "Can you work after business hours?",
+    question: "Can we start with one paid cleaning before a recurring schedule?",
     answer:
-      "Ask about the hours you need. We review available coverage, building access, keys, and alarm instructions before confirming an after-hours schedule.",
-  },
-  {
-    question: "Can we start with one paid cleaning?",
-    answer:
-      "Yes. We can quote a paid first cleaning before you decide on ongoing visits.",
+      "Yes. Many offices and facility directors start with one paid initial cleaning to inspect our work before setting up recurring weekly or multi-day visits.",
   },
 ];
 
 const boundaries = [
-  "Medical waste, biohazards, sharps, mold remediation, industrial contamination, and regulated cleanup are not standard commercial scope.",
-  "Carpet extraction, stripping and waxing, floor refinishing, exterior high glass, pressure washing, and restoration are not included in routine cleaning.",
-  "Customer-supplied consumables, alarm procedures, keys, storage, and access permissions must be settled before service begins.",
-  "Recurring cleaning follows the task list and visit schedule in your proposal. Additional work is quoted separately.",
+  "Regulated medical waste, biohazards, sharps, mold remediation, and industrial contamination are outside our commercial scope.",
+  "Floor stripping and waxing, refinishing, exterior high glass, pressure washing, and restoration work are not part of routine janitorial cleaning.",
+  "Supplies, consumables, keys, alarm codes, and after-hours building access are confirmed in writing before service begins.",
+  "Recurring visits follow the agreed written task list. One-off add-ons such as carpet shampooing or interior glass are quoted separately.",
 ];
 
 const heroPoints = [
+  "We carry general liability insurance",
   "Walkthrough or photo review before we quote",
-  "Task list, schedule, and price in writing",
+  "Written task list, schedule, and price — no surprises",
   "Start with one paid cleaning before any recurring plan",
 ];
 
@@ -113,51 +139,130 @@ export default function CommercialCleaningPage() {
   return (
     <div className="site-reference">
       <SiteHero
-        eyebrow="Office and facility cleaning"
-        title="Office and commercial cleaning in Fresno, CA"
-        description="A clean workplace. A clear task list. One-time or recurring cleaning for offices, professional suites, retail spaces, and property-managed shared areas."
+        eyebrow="Office & facility cleaning"
+        title="Office & commercial cleaning in Fresno & Clovis."
+        description="Consistent, walkthrough-scoped cleaning for Fresno, Clovis, and Madera offices, clinics, behavioral-health and recovery residences, retail spaces, and shared facilities."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
         tone="dark"
         proof={<ProofRow tone="dark" />}
+        aside={
+          <div className="rounded-[var(--radius-card)] border border-on-dark-line bg-white/5 p-6 text-on-dark">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-gold">Commercial walkthrough summary</p>
+            <h2 className="mt-2 text-xl font-bold text-white">Built around your facility and schedule.</h2>
+            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-on-dark-soft">
+              <div>
+                <dt className="font-semibold text-white">Service area</dt>
+                <dd>Fresno, Clovis, Madera, and North Fresno business corridors.</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Insurance</dt>
+                <dd>We carry general liability insurance for every visit.</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Scheduling</dt>
+                <dd>Daytime, after-hours, weekly, multi-day, or one-time trial cleans.</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Pricing</dt>
+                <dd>Walkthrough or photo review followed by a clear written proposal.</dd>
+              </div>
+            </dl>
+          </div>
+        }
       >
         <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
         <div className="site-actions">
-          <Link href={quoteHref} className="home-button">Request a walkthrough <span aria-hidden="true">→</span></Link>
+          <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">→</span></a>
           <MarketPhone className="site-hero-phone" location="commercial_service_hero">Call </MarketPhone>
         </div>
-        <p className="site-note text-on-dark-mute">Fresno, Clovis &amp; Madera.</p>
+        <p className="site-note text-on-dark-mute">Serving Fresno, Clovis &amp; Madera.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="commercial-request-title">
         <div className="site-copy">
           <h2 id="commercial-request-title">Tell us about<br />your workplace.</h2>
-          <p className="site-intro">We review the space, access, frequency, and service window before confirming the work. Your proposal puts the task list, schedule, and price in writing.</p>
-          <p className="site-note">You can start with one paid cleaning before agreeing to recurring visits.</p>
-          <div className="site-links"><Link href={quoteHref}>Open the standalone request ↗</Link></div>
+          <p className="site-intro">We review your space, access, frequency, and priority areas before sending a written proposal. We carry general liability insurance and bring our own cleaning supplies.</p>
+          <p className="site-note">Start with one paid cleaning to verify our work before agreeing to recurring visits.</p>
+          <div className="site-links">
+            <Link href={quoteHref}>Open the standalone request ↗</Link>
+          </div>
         </div>
         <div id="quote" className="site-form-panel">
-          <CommercialQuoteForm defaultService={quoteService} source={source} title="Request a walkthrough" subtitle="Share your facility details. We confirm scope and availability before proposing work." />
+          <CommercialQuoteForm defaultService={quoteService} source={source} title="Request a walkthrough" subtitle="Share your facility details. We confirm scope and schedule before proposing work." />
         </div>
       </section>
 
-      <section id="whats-included" className="site-section site-split site-rule" aria-labelledby="commercial-scope-title">
-        <div className="site-copy">
-          <h2 id="commercial-scope-title">The everyday cleaning<br />your workplace needs.</h2>
-          <p className="site-intro">Start with the spaces that matter most to your staff and visitors. During the walkthrough, we agree on the areas to clean, how often, and the best time to work.</p>
+      <section id="whats-included" className="site-muted" aria-labelledby="commercial-scope-title">
+        <div className="site-section">
+          <div className="site-copy">
+            <p className="ns-kicker">What&apos;s covered</p>
+            <h2 id="commercial-scope-title" className="mt-2">The everyday cleaning your workplace needs.</h2>
+            <p className="site-intro">During the walkthrough, we build a clear room-by-room task list around your staff, clients, and operating hours.</p>
+          </div>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {scopes.map((scope) => (
+              <article key={scope.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+                <h3>{scope.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-ink-soft">{scope.description}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-8 site-disclosures">
+            <details>
+              <summary>Service limits and site preparation</summary>
+              <ul>{boundaries.map((item) => <li key={item}>{item}</li>)}</ul>
+            </details>
+          </div>
         </div>
-        <div className="site-disclosures">
-          {scopes.map((scope) => <details key={scope.title}><summary>{scope.title}</summary><p>{scope.description}</p></details>)}
-          <details><summary>Service limits and site preparation</summary><ul>{boundaries.map((item) => <li key={item}>{item}</li>)}</ul></details>
-          <details><summary>From walkthrough to start date</summary><dl>{process.map((step) => <div key={step.title}><dt>{step.title}</dt><dd>{step.description}</dd></div>)}</dl></details>
+      </section>
+
+      <section className="site-section" aria-labelledby="commercial-industries-title">
+        <div className="site-copy">
+          <p className="ns-kicker">Industries &amp; facilities</p>
+          <h2 id="commercial-industries-title" className="mt-2">Industries &amp; facilities we clean.</h2>
+          <p className="site-intro">Locally owned in Fresno and responsive when your facility needs change. We work directly with office managers, clinic directors, and property managers.</p>
+        </div>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2">
+          {industries.map((item) => (
+            <article key={item.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+              <h3>{item.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-ink-soft">{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="site-muted" aria-labelledby="commercial-process-title">
+        <div className="site-section">
+          <div className="site-copy">
+            <p className="ns-kicker">How it works</p>
+            <h2 id="commercial-process-title" className="mt-2">From walkthrough to start date.</h2>
+          </div>
+          <ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {process.map((step) => (
+              <li key={step.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+                <h3 className="text-lg font-bold text-primary">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{step.description}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
       <section className="site-section site-split site-rule" aria-labelledby="commercial-faq-title">
         <div>
           <h2 id="commercial-faq-title">Before the walkthrough.</h2>
-          <div className="site-links"><Link href="/services/post-construction-cleaning">Finishing a build or renovation? ↗</Link></div>
+          <p className="site-note">We serve workplaces across our core Central Valley footprint:</p>
+          <div className="site-links">
+            <Link href="/cleaning-services-fresno">Cleaning services in Fresno</Link>
+            <Link href="/cleaning-services-clovis">Cleaning services in Clovis</Link>
+            <Link href="/cleaning-services-madera">Cleaning services in Madera</Link>
+          </div>
+          <div className="site-links">
+            <Link href="/services/post-construction-cleaning">Finishing a build or renovation? ↗</Link>
+          </div>
         </div>
         <div className="site-disclosures">{faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div>
       </section>
@@ -168,9 +273,15 @@ export default function CommercialCleaningPage() {
         { name: "Office & Commercial Cleaning", url: `${business.siteUrl}${pagePath}` },
       ]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org", "@type": "Service", name: "Office & Commercial Cleaning",
-        serviceType: "Commercial cleaning and office cleaning", url: `${business.siteUrl}${pagePath}`,
-        provider: { "@id": `${business.siteUrl}/#localbusiness` }, areaServed: businessAreaServed,
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${business.siteUrl}${pagePath}#service`,
+        name: "Office & Commercial Cleaning",
+        serviceType: "Commercial cleaning and office cleaning",
+        description: pageDescription,
+        url: `${business.siteUrl}${pagePath}`,
+        provider: { "@id": `${business.siteUrl}/#localbusiness` },
+        areaServed: businessAreaServed,
       }) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org", "@type": "FAQPage",

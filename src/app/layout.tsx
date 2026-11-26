@@ -31,9 +31,6 @@ export const metadata: Metadata = {
   description:
     "Professional house cleaning services in Fresno, Clovis, Madera, and nearby Fresno neighborhoods. Request fast pricing and availability for recurring, deep, and move-out cleaning.",
   keywords: ["house cleaning Fresno", "cleaning service Fresno CA", "recurring house cleaning Clovis", "house cleaning Madera", "deep cleaning Fresno", "move out cleaning Fresno", "house cleaners near me", "professional cleaning Fresno CA"],
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "en_US",

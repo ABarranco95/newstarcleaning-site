@@ -33,6 +33,15 @@ const areaHeroPhotos: Record<string, RealWorkPhoto> = {
   "woodward-park": bathroomResultPhotos[0],
 };
 const proofPairs = [tubSurroundPair, showerDetailPair, ventDetailPair, refrigeratorFullPair, ovenInteriorPair, legacyShowerPair];
+const areaPairOffsets: Record<string, number> = {
+  fresno: 0,
+  clovis: 1,
+  madera: 2,
+  "north-fresno": 3,
+  "fig-garden": 4,
+  "woodward-park": 5,
+  "tower-district": 2,
+};
 const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.find((review) => review.id === id)!);
 
 // Fig Garden, Tower District and Woodward Park are Fresno neighborhoods, so the
@@ -42,9 +51,13 @@ const FRESNO_NEIGHBORHOODS = new Set(["tower-district", "fig-garden", "woodward-
 
 export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   const isCity = ["fresno", "clovis", "madera"].includes(area.slug);
-  const heroLocation = FRESNO_NEIGHBORHOODS.has(area.slug) ? "Fresno" : "CA";
+  const isFresnoNeighborhood = FRESNO_NEIGHBORHOODS.has(area.slug);
+  const heroLocation = isFresnoNeighborhood ? "Fresno" : "CA";
+  const areaDisplay = isFresnoNeighborhood ? `${area.name}, Fresno` : `${area.name}, CA`;
   const directBookingUrl = resolveDirectBookingUrl();
   const heroPhoto = areaHeroPhotos[area.slug] ?? homeResultPhotos[0];
+  const pairOffset = areaPairOffsets[area.slug] ?? 0;
+  const areaProofPairs = [...proofPairs.slice(pairOffset), ...proofPairs.slice(0, pairOffset)];
   const usedPhotos = [heroPhoto, ...(area.planCards?.map((card) => card.photo) ?? [])];
   const bandPhoto = pickUnusedPhoto([bathroomResultPhotos[0], bathroomResultPhotos[1], homeResultPhotos[0], homeResultPhotos[2]], usedPhotos);
   const servicePhotos = {
@@ -54,9 +67,9 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
   };
   const planPhoto = area.planCards ? null : pickUnusedPhoto([bathroomResultPhotos[1], vanityDetailPhoto, homeResultPhotos[1], homeResultPhotos[2]], [...usedPhotos, bandPhoto, ...Object.values(servicePhotos)]);
   const areaFaqs = area.faqs || [
-    { question: `Do you provide house cleaning in ${area.name}, CA?`, answer: `Yes. New Star Cleaning serves ${area.name}, CA with standard recurring cleaning, deep cleaning, and move-in/move-out cleaning. ${area.localProof}` },
-    { question: `Which ${area.name} neighborhoods do you serve?`, answer: `We serve ${area.neighborhoods.slice(0, 4).join(", ")} and nearby parts of ${area.county}. If your exact neighborhood is not listed, request a quote and we will confirm coverage.` },
-    { question: `What cleaning services are available in ${area.name}?`, answer: `${area.name} clients can request recurring standard cleaning, one-time deep cleaning, and move-in/move-out cleaning. Common local requests include ${area.commonJobs.slice(0, 2).join(" and ")}.` },
+    { question: `Do you provide house cleaning in ${areaDisplay}?`, answer: `Yes. New Star Cleaning serves ${areaDisplay} with recurring standard cleaning, deep cleaning, and move-in/move-out cleaning. ${area.localProof}` },
+    { question: isFresnoNeighborhood ? `Which areas around ${area.name} do you serve?` : `Which ${area.name} neighborhoods do you serve?`, answer: `We serve ${area.neighborhoods.slice(0, 4).join(", ")} and nearby parts of ${area.county}. If your exact neighborhood is not listed, request a quote and we will confirm coverage.` },
+    { question: `What cleaning services are available in ${area.name}?`, answer: `${area.name} clients can book recurring standard cleaning, one-time deep cleaning, and move-in/move-out cleaning, plus optional add-ons like oven, fridge, interior windows, and carpet shampooing. Common local requests include ${area.commonJobs.slice(0, 2).join(" and ")}.` },
     { question: `How quickly can I book a cleaner in ${area.name}?`, answer: area.slug === "north-fresno" ? "Available windows depend on the address, cleaning scope and schedule. Enter your home details for pricing, then review the available times or contact us about a deadline." : area.bookingNote },
   ];
 
@@ -68,7 +81,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
       <section aria-labelledby="area-reviews-title"><div className="ns-section"><div className="ns-section-head"><h2 id="area-reviews-title" className="ns-h2">What customers say.</h2><GoogleRating prominent /></div><ReviewCards topic="home" reviews={reviews} lead /></div></section>
 
-      <section className="site-muted" aria-labelledby="area-results-title"><div className="ns-section"><div className="ns-section-head"><h2 id="area-results-title" className="ns-h2">Before and after, from real New Star jobs.</h2></div><BeforeAfterPairs pairs={proofPairs} /><div className="home-section-more"><Link href="/our-work" className="home-text-link">See all of our work <span aria-hidden="true">→</span></Link></div></div></section>
+      <section className="site-muted" aria-labelledby="area-results-title"><div className="ns-section"><div className="ns-section-head"><h2 id="area-results-title" className="ns-h2">Before and after, from real New Star jobs.</h2></div><BeforeAfterPairs pairs={areaProofPairs} /><div className="home-section-more"><Link href="/our-work" className="home-text-link">See all of our work <span aria-hidden="true">→</span></Link></div></div></section>
 
       <section className="site-section" aria-labelledby="area-services-title">
         <div className="ns-section-head"><h2 id="area-services-title" className="ns-h2">Which cleaning do you need?</h2><Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">→</span></Link></div>
@@ -116,13 +129,17 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
         "@context": "https://schema.org", "@type": "Service",
         "@id": `${siteUrl}/cleaning-services-${area.slug}#service`,
         url: `${siteUrl}/cleaning-services-${area.slug}`,
-        name: `House Cleaning Service in ${area.name}, CA`, description: area.description,
+        name: `House Cleaning Service in ${areaDisplay}`, description: area.description,
         provider: { "@id": `${siteUrl}/#localbusiness` },
         areaServed: getServiceAreaSchema(area),
         hasOfferCatalog: { "@type": "OfferCatalog", name: "Cleaning Services", itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Standard Recurring Cleaning", url: `${siteUrl}/services/standard-cleaning` } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Recurring & Standard House Cleaning", url: `${siteUrl}/services/standard-cleaning` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Deep Cleaning", url: `${siteUrl}/services/deep-cleaning` } },
           { "@type": "Offer", itemOffered: { "@type": "Service", name: "Move-In/Move-Out Cleaning", url: `${siteUrl}/services/move-out-cleaning` } },
+          ...(isCity ? [
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Office & Commercial Cleaning", url: `${siteUrl}/services/commercial-cleaning` } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Post-Construction Cleaning", url: `${siteUrl}/services/post-construction-cleaning` } },
+          ] : []),
         ] },
       }) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

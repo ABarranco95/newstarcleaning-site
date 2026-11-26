@@ -19,17 +19,17 @@ import {
 const siteUrl = "https://newstarcleaning.com";
 
 export const metadata: Metadata = {
-  title: "House Cleaning Service Checklist",
+  title: "House Cleaning Checklist for Fresno & Clovis Homes",
   description:
-    "See New Star Cleaning's standard, deep, and move-out cleaning scope, available add-ons, exclusions, and client prep checklist.",
+    "See New Star Cleaning's room-by-room standard, deep, and move-out cleaning checklist for Fresno, Clovis, and Madera homes — including optional add-ons like carpet shampooing and what is not included.",
   alternates: {
     canonical: "/checklist",
   },
   ...socialMetadata({
     title:
-      "Service Checklist: Included, Add-Ons, Not Included | New Star Cleaning",
+      "House Cleaning Checklist for Fresno & Clovis Homes | New Star Cleaning",
     description:
-      "Room-by-room scope for standard, deep and move-out cleaning, the add-ons, and what isn't part of the job.",
+      "Room-by-room scope for standard, deep and move-out cleaning, optional add-ons, and what isn't part of the job.",
     url: `${siteUrl}/checklist`,
   }),
 };
@@ -49,12 +49,12 @@ const faqs = [
   {
     question: "Are add-ons included automatically?",
     answer:
-      "No. Add-ons are only included when they are requested before the appointment and listed in the confirmed quote. This protects the time window, price, and cleaner workload.",
+      "No. Add-ons are included only when requested before the appointment and listed in your confirmed quote, so we reserve enough time and confirm your full price upfront.",
   },
   {
     question: "Which detail items are optional?",
     answer:
-      "The inside of the oven and refrigerator, plus interior window glass and tracks, are optional add-ons. Cabinet and drawer interiors are optional for standard and deep cleaning, but included when empty on move-in/move-out cleaning. The inside of an empty microwave is included when accessible. Move-outs can also add garage or patio sweeping, extra blind detail, and heavy-buildup time. Whatever you select is written into the quote, so the appointment has the hours to cover it.",
+      "The inside of the oven and refrigerator, interior window glass and tracks, and carpet shampooing (priced by room, hallway, or stairway) are optional add-ons. Cabinet and drawer interiors are optional for standard and deep cleaning, and included when empty on move-in/move-out cleaning. The inside of an empty microwave is included when accessible. Move-outs can also add garage or patio sweeping, extra blind detail, and heavy-buildup time. Whatever you select is written into your quote before the visit.",
   },
   {
     question: "Does deep cleaning include every add-on?",
@@ -89,7 +89,7 @@ const comparisonRows = [
   { label: "Vent covers, switch plates, trim wiped", standard: false, deep: true, moveOut: true },
   { label: "Door frames & fronts detailed", standard: false, deep: true, moveOut: true },
   { label: "Reachable grout & buildup detail", standard: false, deep: true, moveOut: true },
-  { label: "Under furniture vacuumed", standard: false, deep: true, moveOut: true },
+  { label: "Under furniture vacuumed (furnished homes)", standard: false, deep: true, moveOut: false },
   { label: "Floor edges & corners detailed", standard: false, deep: true, moveOut: true },
   { label: "Inside microwave (when empty)", standard: true, deep: true, moveOut: true },
   { label: "Blinds dusted", standard: false, deep: false, moveOut: true },
@@ -103,7 +103,7 @@ const comparisonRows = [
 export default function ChecklistPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Service checklist" title="Included. Optional. Not part of the job." description="What each cleaning includes, what costs extra and what we don't do. It's the list we clean from." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero eyebrow="Service checklist" title="House cleaning checklist for Fresno & Clovis homes." description="What each cleaning includes, which add-ons you can choose, and what we don't do. It's the exact list our crews clean from." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><a href="#services" className="home-text-link mt-4">Jump to the lists ↓</a>
       </SiteHero>
       <section id="services" className="site-section scroll-mt-24"><div className="ns-section-head"><div><p className="ns-kicker">Included</p><h2>What&apos;s included, room by room.</h2><p className="site-intro">Standard keeps a home up. Deep adds the detail work. Move-out adds the inside of every empty cabinet, drawer and closet.</p></div></div><div className="site-disclosures">

@@ -38,7 +38,7 @@ export default function HomeServices({ defaultCity, photos, children }: { defaul
             <p className="home-service-start">Priced for your ZIP and home.</p></div>
             <div className="home-service-row-actions">
               {directBookingUrl ? <BookingPortalLink baseUrl={directBookingUrl} service={bookingServiceName(choice.slug)} city={query.get("city") || undefined} frequency={query.get("frequency") || undefined} sourcePage={pathname} ctaLocation="service_row" label="Book online" showIcon={false} className="home-service-book" /> : <Link href={`/book-now?${query.toString()}`} className="home-service-book">Get a quote</Link>}
-              <Link href={`/services/${choice.slug}?${query.toString()}#whats-included`} className="home-text-link">What&apos;s included <span aria-hidden="true">→</span></Link>
+              <Link href={`/services/${choice.slug}#whats-included`} className="home-text-link">What&apos;s included <span aria-hidden="true">→</span></Link>
             </div>
           </article>
         );

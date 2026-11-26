@@ -22,7 +22,7 @@ export default function TermsOfService() {
           Terms of service
         </h1>
         <p className="text-mute mb-12">
-          Last Updated: October 26, 2026
+          Last Updated: November 25, 2026
         </p>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -47,30 +47,44 @@ export default function TermsOfService() {
               2. Services
             </h2>
             <p className="text-ink-soft leading-relaxed mb-3">
-              New Star Cleaning provides professional residential cleaning
-              services in Fresno, CA and the Fresno, Clovis, and Madera area.
-              Our core residential services are:
+              New Star Cleaning provides professional residential, office,
+              commercial, and post-construction cleaning services in Fresno,
+              Clovis, Madera, and nearby Fresno neighborhoods. Our services
+              include:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-ink-soft">
               <li>
-                <strong>Standard Recurring Cleaning:</strong> Regularly
+                <strong>Recurring &amp; Standard House Cleaning:</strong> Regularly
                 scheduled house cleaning on a weekly, bi-weekly, or monthly
-                basis
+                basis, or one-time maintenance visits
               </li>
               <li>
-                <strong>Deep Cleaning:</strong> One-time thorough cleaning of
-                your home
+                <strong>Deep Cleaning:</strong> Detailed one-time or first-time
+                reset cleaning of your home
               </li>
               <li>
                 <strong>Move-In/Move-Out Cleaning:</strong> Comprehensive
-                cleaning for properties being vacated or newly occupied
+                empty-home cleaning for properties being vacated or newly
+                occupied
+              </li>
+              <li>
+                <strong>Office &amp; Commercial Cleaning:</strong> Walkthrough-scoped
+                one-time or recurring cleaning for offices, clinics, facilities,
+                and commercial spaces under a written proposal
+              </li>
+              <li>
+                <strong>Post-Construction Cleaning:</strong> Walkthrough-scoped
+                final interior cleaning for new builds, remodels, and tenant
+                improvements under a written proposal
               </li>
             </ul>
             <p className="mt-4 text-ink-soft leading-relaxed">
               The service scope is limited to the work confirmed in your quote,
-              booking, or written communication before the appointment. Add-ons
-              are included only when they are specifically requested and
-              confirmed before service.
+              booking, or written proposal before the appointment. Optional
+              add-ons — including inside oven, inside refrigerator, cabinet
+              interiors, interior window glass, and carpet shampooing — are
+              included only when specifically requested and confirmed before
+              service.
             </p>
             <p className="mt-4 text-ink-soft leading-relaxed">
               We bring our own cleaning supplies. Let us know about delicate
@@ -82,10 +96,10 @@ export default function TermsOfService() {
               confirmed in writing, we do not provide laundry, folding,
               ironing, changing linens, bed making, washing dishes, loading
               dishwashers, organizing, decluttering, packing, unpacking,
-              hauling trash, moving heavy furniture or appliances, carpet
-              shampooing, exterior window cleaning, pressure washing, mold
-              remediation, pest waste cleanup, biohazard cleanup, repairs, paint
-              removal, or restoration work.
+              hauling trash, moving heavy furniture or appliances, exterior
+              window cleaning, pressure washing, mold remediation, pest waste
+              cleanup, biohazard cleanup, repairs, paint removal, or restoration
+              work.
             </p>
             <p className="mt-4 text-ink-soft leading-relaxed">
               Move-in and move-out cleaning does not determine any landlord,
@@ -274,8 +288,8 @@ export default function TermsOfService() {
                   Carrier liability disclaimer
                 </h3>
                 <p className="text-ink-soft text-sm">
-                  Wireless carriers, including but not limited to AT&T,
-                  T-Mobile, Verizon, Sprint, and other major U.S. carriers, are
+                  Wireless carriers, including but not limited to AT&amp;T,
+                  T-Mobile, Verizon, and other major U.S. carriers, are
                   not liable for delayed or undelivered messages. Message
                   delivery is subject to effective transmission by your wireless
                   carrier. New Star Cleaning is not responsible for messages that
@@ -290,7 +304,7 @@ export default function TermsOfService() {
                 </h3>
                 <p className="text-ink-soft text-sm">
                   Our SMS messaging program is compatible with all major U.S.
-                  wireless carriers, including AT&T, Verizon, T-Mobile, Sprint,
+                  wireless carriers, including AT&amp;T, Verizon, T-Mobile,
                   US Cellular, and most regional and prepaid carriers. Carrier
                   coverage and compatibility may vary by location.
                 </p>
@@ -446,6 +460,21 @@ export default function TermsOfService() {
                 <strong>NEW STAR CLEANING LLC</strong>
               </p>
               <p>Fresno, CA</p>
+              <p>
+                Phone:{" "}
+                <a href="tel:+15597852822" className="text-primary underline">
+                  (559) 785-2822
+                </a>
+              </p>
+              <p>
+                Email:{" "}
+                <a
+                  href="mailto:support@newstarcleaning.com"
+                  className="text-primary underline"
+                >
+                  support@newstarcleaning.com
+                </a>
+              </p>
               <p>
                 Website:{" "}
                 <a

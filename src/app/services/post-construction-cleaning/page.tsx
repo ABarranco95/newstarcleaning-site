@@ -9,15 +9,17 @@ import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import { business, businessAreaServed } from "@/lib/business";
 
+const pageDescription =
+  "Post-construction and remodel final cleaning in Fresno, Clovis, and Madera for builders, general contractors, remodelers, and property owners. General liability insured.";
+
 export const metadata: Metadata = {
-  title: "Post-Construction Cleaning in Fresno, CA",
-  description:
-    "Post-construction final cleaning for Fresno-area builders, remodelers, property owners, and project teams. Request a scoped walkthrough and written proposal.",
+  title: "Post-Construction & Remodel Cleaning in Fresno & Clovis",
+  description: pageDescription,
   alternates: { canonical: "/services/post-construction-cleaning" },
   ...socialMetadata({
-    title: "Post-Construction Cleaning in Fresno, CA | New Star Cleaning",
+    title: "Post-Construction & Remodel Cleaning in Fresno & Clovis | New Star Cleaning",
     description:
-      "Scoped final cleaning, detail cleaning, and punch-return support for Fresno-area construction and renovation projects.",
+      "Scoped final interior cleaning, detail cleaning, and punch-return support for Fresno, Clovis, and Madera construction and renovation projects.",
     url: "https://newstarcleaning.com/services/post-construction-cleaning",
   }),
 };
@@ -26,82 +28,111 @@ const scopes = [
   {
     title: "Final interior clean",
     description:
-      "Dust and debris remaining after trades are substantially complete are addressed across accessible horizontal surfaces, kitchens, bathrooms, fixtures, trim, doors, and finished floors.",
+      "Once dusty trades wrap up, we remove fine construction dust across accessible horizontal surfaces, kitchens, bathrooms, fixtures, trim, doors, baseboards, and finished floors.",
   },
   {
-    title: "Turnover detail",
+    title: "Turnover & presentation detail",
     description:
-      "Cabinet interiors, appliance surfaces, closet shelving, reachable glass, labels, light adhesive residue, and presentation details are included only when written into the approved scope.",
+      "Empty cabinet and drawer interiors, appliance surfaces, closet shelving, reachable interior glass, manufacturer stickers, and light adhesive residue scoped cleanly into your written proposal.",
   },
   {
     title: "Punch-return visit",
     description:
-      "A separate return can be priced after final trade corrections or inspections. The proposal defines which areas are being revisited and what new construction dust is included.",
+      "Need a second pass after final trade touch-ups or client walkthroughs? We can price a targeted punch-return visit once trade traffic is complete.",
+  },
+];
+
+const projectTypes = [
+  {
+    title: "New custom & production homes",
+    description:
+      "Pre-closing final cleans across Fresno, Clovis, and Madera residential builds so buyers walk into a clean, dust-free home.",
+  },
+  {
+    title: "Kitchen, bath & full-home remodels",
+    description:
+      "Detailed dust removal for remodelers and homeowners wrapping up cabinetry, tile, flooring, or paint upgrades.",
+  },
+  {
+    title: "Commercial tenant improvements & offices",
+    description:
+      "Final interior handoff cleans for offices, clinics, and retail buildouts ahead of furniture delivery and opening day.",
+  },
+  {
+    title: "Property-management renovations & turns",
+    description:
+      "Post-rehab cleaning for renovated rentals, duplexes, and multi-unit properties ready for leasing photos and move-in.",
   },
 ];
 
 const process = [
   {
-    title: "Project intake",
+    title: "1. Project intake",
     description:
-      "Share the address, square footage, construction stage, required handoff date, access rules, site contact, and current photos or plans.",
+      "Share the job address, square footage, build stage, required handoff date, site contact, and a few current photos or plans.",
   },
   {
-    title: "Walkthrough and scope",
+    title: "2. Walkthrough & scope",
     description:
-      "We separate rough, final, glass/detail, and return work so the proposal reflects the actual condition and deadline.",
+      "We separate final clean, interior glass/sticker detail, and any return visits so the proposal matches the actual site condition.",
   },
   {
-    title: "Written proposal",
+    title: "3. Written proposal",
     description:
-      "The proposal lists included areas, exclusions, access assumptions, price, and timing before a crew is scheduled.",
+      "You get included rooms, exclusions, utility/access assumptions, price, and handoff timing in writing before we put a crew on the calendar.",
   },
   {
-    title: "Handoff check",
+    title: "4. Handoff check",
     description:
-      "Completed work is checked against the written scope. Newly created dust or trade work after cleaning is handled as a separate return scope.",
+      "Completed work is checked against the written scope. New dust created by later trade work can be handled as a separate return visit.",
   },
 ];
 
 const faqs = [
   {
-    question: "Do you provide post-construction cleaning for new homes and remodels?",
+    question: "Do you provide post-construction cleaning for new homes and remodels in Fresno and Clovis?",
     answer:
-      "Yes, when the project, condition, access, deadline, and crew capacity fit. We review the site before confirming a final-clean or renovation-cleaning proposal.",
+      "Yes. We clean newly built homes, kitchen and whole-home remodels, and commercial tenant improvements across Fresno, Clovis, and Madera. We review the site or photos first so your proposal matches the condition and handoff deadline.",
+  },
+  {
+    question: "Are you insured to work on active builder or contractor job sites?",
+    answer:
+      "Yes. We carry general liability insurance. Share any site-entry or vendor documentation requirements during intake so we have everything ready before start.",
   },
   {
     question: "Is construction debris hauling included?",
     answer:
-      "No. Contractors should remove lumber, drywall, packaging, sharp debris, hazardous material, and bulk waste before the cleaning phase unless a separate disposal scope is expressly approved.",
+      "No. Contractors should clear lumber, drywall scraps, packaging, sharp debris, and bulk waste before final cleaning begins so our crew can focus on fine dust and finish surfaces.",
   },
   {
     question: "Can final window cleaning be included?",
     answer:
-      "Reachable interior glass and selected accessible window detail can be scoped. Exterior elevations, lifts, roof access, high ladder work, damaged glass, and specialized restoration are not automatically included.",
+      "Reachable interior glass, sills, and accessible tracks can be scoped into your proposal. Exterior elevations, lifts, roof access, high ladder work, and damaged glass are separate specialty services.",
   },
   {
     question: "When should the final clean be scheduled?",
     answer:
-      "After dusty trades and major corrections are substantially complete, utilities are working, surfaces are cured, debris is removed, and controlled access is available. Continued trade traffic can create a separate punch-return need.",
+      "Schedule final cleaning after dusty trades and major touch-ups are substantially complete, utilities (water and power) are on, surfaces are cured, and bulk debris is cleared.",
   },
   {
     question: "Can we start with one paid project?",
     answer:
-      "Yes. We can quote one home, unit, renovation, or part of a project before discussing ongoing work.",
+      "Yes. Many builders and remodelers start with one home, unit, or remodel phase to test our crew before using us on ongoing projects.",
   },
 ];
 
 const boundaries = [
   "No hazardous dust, lead, asbestos, mold remediation, biohazards, active demolition, or unsafe unfinished areas.",
-  "Bulk construction debris, sharp materials, paint disposal, and hauling remain the contractor’s responsibility unless separately approved.",
+  "Bulk construction debris, sharp materials, paint disposal, and hauling remain the contractor’s responsibility.",
   "Exterior elevations, lifts, roof access, high glass, pressure washing, floor refinishing, and restoration are not part of final interior cleaning.",
   "The site needs working utilities, safe access, cured surfaces, and major dusty trades substantially complete before final cleaning.",
 ];
 
 const heroPoints = [
+  "We carry general liability insurance",
   "Walkthrough or photo review before we quote",
-  "Scope, deadline, and price in writing",
-  "Start with one home, unit, or phase of the project",
+  "Scope, handoff deadline, and price in writing",
+  "Start with one home, unit, or project phase",
 ];
 
 const quoteService = "Post-construction cleaning";
@@ -113,51 +144,128 @@ export default function PostConstructionCleaningPage() {
   return (
     <div className="site-reference">
       <SiteHero
-        eyebrow="Fresno-area project cleaning"
-        title="Post-construction cleaning in Fresno, CA"
-        description="The build is nearly finished. Get the space ready for handoff with final interior cleaning for new homes, remodels, and tenant improvements. Scope and deadline confirmed before scheduling."
+        eyebrow="Fresno & Clovis project cleaning"
+        title="Post-construction cleaning in Fresno & Clovis."
+        description="Final interior cleaning for new homes, remodels, and commercial tenant improvements across Fresno, Clovis, and Madera — scoped in writing around your handoff date."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
         tone="dark"
         proof={<ProofRow tone="dark" />}
+        aside={
+          <div className="rounded-[var(--radius-card)] border border-on-dark-line bg-white/5 p-6 text-on-dark">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-gold">Handoff summary</p>
+            <h2 className="mt-2 text-xl font-bold text-white">Clean, dust-free handoffs on deadline.</h2>
+            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-on-dark-soft">
+              <div>
+                <dt className="font-semibold text-white">Service area</dt>
+                <dd>Fresno, Clovis, Madera, and North Fresno job sites.</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Insurance</dt>
+                <dd>We carry general liability insurance.</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Scope options</dt>
+                <dd>Final interior clean, turnover detail, and punch-return visits.</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Proposals</dt>
+                <dd>Site walkthrough or photo review with clear written pricing.</dd>
+              </div>
+            </dl>
+          </div>
+        }
       >
         <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
         <div className="site-actions">
-          <Link href={quoteHref} className="home-button">Request a walkthrough <span aria-hidden="true">→</span></Link>
+          <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">→</span></a>
           <MarketPhone className="site-hero-phone" location="construction_service_hero">Call </MarketPhone>
         </div>
-        <p className="site-note text-on-dark-mute">Fresno, Clovis &amp; Madera.</p>
+        <p className="site-note text-on-dark-mute">Serving Fresno, Clovis &amp; Madera.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="construction-request-title">
         <div className="site-copy">
           <h2 id="construction-request-title">What is the<br />handoff date?</h2>
-          <p className="site-intro">For builders, remodelers, property owners, and project teams preparing for occupancy. Tell us the construction stage, site condition, and deadline. We review the project before confirming a crew.</p>
-          <p className="site-note">Start with one paid home, unit, renovation, or part of a project. Glass detail and return visits are scoped separately.</p>
+          <p className="site-intro">For builders, general contractors, remodelers, and property owners preparing for occupancy. We carry general liability insurance, bring our own supplies, and confirm scope and timing in writing.</p>
+          <p className="site-note">Start with one paid home, unit, renovation, or project phase. Interior glass detail and return visits are scoped clearly upfront.</p>
           <div className="site-links"><Link href={quoteHref}>Open the standalone request ↗</Link></div>
         </div>
         <div id="quote" className="site-form-panel">
-          <CommercialQuoteForm defaultService={quoteService} source={source} title="Request a project walkthrough" subtitle="Share the site details and required handoff date. We confirm scope and capacity before proposing work." />
+          <CommercialQuoteForm defaultService={quoteService} source={source} title="Request a project walkthrough" subtitle="Share the site details and required handoff date. We confirm scope and schedule before proposing work." />
         </div>
       </section>
 
-      <section id="whats-included" className="site-section site-split site-rule" aria-labelledby="construction-scope-title">
-        <div className="site-copy">
-          <h2 id="construction-scope-title">Final cleaning.<br />Ready for handoff.</h2>
-          <p className="site-intro">Once dusty trades are finished and bulk debris is removed, we focus on settled dust, fixtures, cabinetry, bathrooms, and finished floors. Your written proposal defines the included areas and return work.</p>
+      <section id="whats-included" className="site-muted" aria-labelledby="construction-scope-title">
+        <div className="site-section">
+          <div className="site-copy">
+            <p className="ns-kicker">What&apos;s covered</p>
+            <h2 id="construction-scope-title" className="mt-2">Final cleaning, ready for handoff.</h2>
+            <p className="site-intro">Once dusty trades are finished and bulk debris is cleared, we focus on settled dust, fixtures, cabinetry, bathrooms, and finished floors.</p>
+          </div>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {scopes.map((scope) => (
+              <article key={scope.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+                <h3>{scope.title}</h3>
+                <p className="mt-3 text-base leading-relaxed text-ink-soft">{scope.description}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-8 site-disclosures">
+            <details>
+              <summary>Service limits and site preparation</summary>
+              <ul>{boundaries.map((item) => <li key={item}>{item}</li>)}</ul>
+            </details>
+          </div>
         </div>
-        <div className="site-disclosures">
-          {scopes.map((scope) => <details key={scope.title}><summary>{scope.title}</summary><p>{scope.description}</p></details>)}
-          <details><summary>Service limits and site preparation</summary><ul>{boundaries.map((item) => <li key={item}>{item}</li>)}</ul></details>
-          <details><summary>From project intake to handoff</summary><dl>{process.map((step) => <div key={step.title}><dt>{step.title}</dt><dd>{step.description}</dd></div>)}</dl></details>
+      </section>
+
+      <section className="site-section" aria-labelledby="construction-projects-title">
+        <div className="site-copy">
+          <p className="ns-kicker">Projects &amp; properties</p>
+          <h2 id="construction-projects-title" className="mt-2">Industries &amp; projects we clean.</h2>
+          <p className="site-intro">From single-home remodels in Fig Garden and Clovis to commercial tenant improvements across Fresno, we match crew size to your walkthrough date.</p>
+        </div>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2">
+          {projectTypes.map((item) => (
+            <article key={item.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+              <h3>{item.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-ink-soft">{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="site-muted" aria-labelledby="construction-process-title">
+        <div className="site-section">
+          <div className="site-copy">
+            <p className="ns-kicker">How it works</p>
+            <h2 id="construction-process-title" className="mt-2">From project intake to handoff.</h2>
+          </div>
+          <ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {process.map((step) => (
+              <li key={step.title} className="rounded-[var(--radius-card)] border border-line bg-white p-6">
+                <h3 className="text-lg font-bold text-primary">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{step.description}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
       <section className="site-section site-split site-rule" aria-labelledby="construction-faq-title">
         <div>
           <h2 id="construction-faq-title">Before the final clean.</h2>
-          <div className="site-links"><Link href="/services/commercial-cleaning">Need ongoing workplace cleaning? ↗</Link></div>
+          <p className="site-note">We support job sites across our core service footprint:</p>
+          <div className="site-links">
+            <Link href="/cleaning-services-fresno">Cleaning services in Fresno</Link>
+            <Link href="/cleaning-services-clovis">Cleaning services in Clovis</Link>
+            <Link href="/cleaning-services-madera">Cleaning services in Madera</Link>
+          </div>
+          <div className="site-links">
+            <Link href="/services/commercial-cleaning">Need ongoing workplace cleaning? ↗</Link>
+          </div>
         </div>
         <div className="site-disclosures">{faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div>
       </section>
@@ -168,9 +276,15 @@ export default function PostConstructionCleaningPage() {
         { name: "Post-Construction Cleaning", url: `${business.siteUrl}${pagePath}` },
       ]} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org", "@type": "Service", name: "Post-Construction Cleaning",
-        serviceType: "Post-construction cleaning", url: `${business.siteUrl}${pagePath}`,
-        provider: { "@id": `${business.siteUrl}/#localbusiness` }, areaServed: businessAreaServed,
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${business.siteUrl}${pagePath}#service`,
+        name: "Post-Construction Cleaning",
+        serviceType: "Post-construction cleaning",
+        description: pageDescription,
+        url: `${business.siteUrl}${pagePath}`,
+        provider: { "@id": `${business.siteUrl}/#localbusiness` },
+        areaServed: businessAreaServed,
       }) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org", "@type": "FAQPage",

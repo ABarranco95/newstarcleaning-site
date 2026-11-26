@@ -39,7 +39,7 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
   "standard-cleaning": {
     photo: homeResultPhotos[2],
     summary: "For an already maintained home. Kitchens, bathrooms, dusting, and floors on a weekly, bi-weekly, or monthly schedule.",
-    boundary: "Heavy buildup may need a deep clean first. Oven, fridge, cabinet interiors, and interior windows are optional add-ons.",
+    boundary: "Heavy buildup may need a deep clean first. Oven, fridge, cabinet interiors, interior windows, and carpet shampooing are optional add-ons.",
     lead: "For a home that needs regular upkeep. We scrub the sinks, clean the bathrooms, wipe the kitchen surfaces and take care of the floors. Even the inside of the microwave is included when it's empty and accessible.",
     proofLayout: "cadence",
     proofPhotos: [
@@ -51,8 +51,8 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
   },
   "deep-cleaning": {
     photo: cleanBathroomPhoto,
-    summary: "The standard cleaning work, with more time for buildup, baseboards, fixtures, and reachable detail areas.",
-    boundary: "Oven, fridge, cabinet interiors, and interior windows are optional add-ons.",
+    summary: "Kitchen, bathrooms, and floors, plus dedicated time for shower buildup, baseboards, door frames, vent covers, and reachable fixtures.",
+    boundary: "Oven, fridge, cabinet interiors, interior windows, and carpet shampooing are optional add-ons.",
     lead: "For the buildup you notice every time you walk past it. We clean the kitchen, bathrooms and floors, then spend more time on shower detail, baseboards, door frames and reachable fixtures.",
     proofLayout: "reveal",
     proofPhotos: [
@@ -66,8 +66,8 @@ export const servicePresentation: Record<ServiceDefinition["slug"], ServicePrese
   },
   "move-out-cleaning": {
     photo: emptyHomeResultPhotos[5],
-    summary: "For an empty home. Deep-cleaning work plus empty cabinet, drawer, and closet interiors.",
-    boundary: "Oven and refrigerator interiors, interior window glass, and reachable window tracks are optional add-ons. Deposit returns are not guaranteed.",
+    summary: "Full empty-home cleaning across kitchens, bathrooms, floors, baseboards, and fixtures — plus empty cabinet, drawer, and closet interiors.",
+    boundary: "Oven and refrigerator interiors, interior window glass, reachable window tracks, and carpet shampooing are optional add-ons. Deposit returns are not guaranteed.",
     lead: "Moving out or getting the keys? We clean the empty home's kitchen, bathrooms and floors, down to the baseboards. Empty cabinet, drawer and closet interiors are included, not extra.",
     proofLayout: "handoff",
     proofPhotos: [

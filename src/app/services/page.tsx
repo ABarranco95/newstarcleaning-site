@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import SiteHero from "@/components/SiteHero";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
 import ServiceContextLink from "@/components/ServiceContextLink";
+import BookingPortalLink from "@/components/BookingPortalLink";
 import GoogleRating from "@/components/GoogleRating";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import HowItWorks from "@/components/HowItWorks";
@@ -18,20 +19,23 @@ import { homeResultPhotos, cleanBathroomPhoto, emptyHomeResultPhotos } from "@/l
 import { googleReviews } from "@/lib/googleReviews";
 import { serviceAreas } from "@/lib/serviceAreas";
 import { services } from "@/lib/services";
+import { bookingServiceName } from "@/lib/homeQuoteContext";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 
 import "@/components/service-editorial.css";
 
 const siteUrl = "https://newstarcleaning.com";
+const directBookingUrl = resolveDirectBookingUrl();
 
 export const metadata: Metadata = {
   title: "House Cleaning Services in Fresno, Clovis & Madera",
   description:
-    "Compare residential, post-construction, office, and commercial cleaning services for Fresno, Clovis and Madera.",
+    "Compare recurring, deep, move-out, commercial, and post-construction cleaning services in Fresno, Clovis, and Madera. Standard from $165, deep from $235, move-out from $325.",
   alternates: { canonical: "/services" },
   ...socialMetadata({
     title: "House Cleaning Services in Fresno, Clovis & Madera | New Star Cleaning",
     description:
-      "Compare local house cleaning services, what is included, and where New Star Cleaning serves across Fresno, Clovis, and Madera.",
+      "Compare local house, office, and post-construction cleaning services, starting prices, and included work across Fresno, Clovis, and Madera.",
     url: `${siteUrl}/services`,
   }),
 };
@@ -46,7 +50,8 @@ const guides = [
   {
     slug: "standard-cleaning",
     short: "Standard",
-    name: "Standard cleaning",
+    name: "Recurring & standard cleaning",
+    startingAt: "$165",
     photo: homeResultPhotos[2],
     fit: "Keep up with the rooms you use every day. We clean the kitchen and bathrooms, dust accessible surfaces, and vacuum or mop the floors.",
     pick: "For an already-maintained home, once or on a weekly, bi-weekly, or monthly schedule. If there's heavy buildup, start with a deep clean.",
@@ -55,38 +60,40 @@ const guides = [
     slug: "deep-cleaning",
     short: "Deep",
     name: "Deep cleaning",
+    startingAt: "$235",
     photo: cleanBathroomPhoto,
-    fit: "The kitchen, bathrooms and floors, with more time for shower buildup, baseboards, door frames and reachable fixtures.",
-    pick: "Choose this when a regular clean won't be enough. Oven, fridge, cabinet interiors, and interior windows stay optional add-ons.",
+    fit: "Kitchens, bathrooms, and floors, plus dedicated time for shower buildup, baseboards, door frames, vent covers, and reachable fixtures.",
+    pick: "Choose this for a first-time reset or when buildup has settled in. Oven, fridge, cabinet interiors, interior windows, and carpet shampooing are optional add-ons.",
   },
   {
     slug: "move-out-cleaning",
     short: "Move-out",
     name: "Move-in / move-out",
+    startingAt: "$325",
     photo: emptyHomeResultPhotos[5],
-    fit: "An empty home cleaned for the move. Kitchens, bathrooms, floors and deep-cleaning details, including inside empty cabinets, drawers and closets.",
-    pick: "For moving out or moving in. Inside oven and fridge, interior glass, and tracks are optional add-ons. We can't promise a deposit return.",
+    fit: "An empty home cleaned for the move: kitchens, bathrooms, floors, baseboards, fixtures, and inside empty cabinets, drawers, and closets.",
+    pick: "For moving out, moving in, or rental turnovers. Oven and fridge interiors, interior glass, tracks, and carpet shampooing are optional add-ons. We can't promise a deposit return.",
   },
 ] as const;
 
 const projectServices: { name: string; short: string; href: string; description: string; fit: string; icon: IconName }[] = [
   {
-    name: "Post-construction cleaning",
-    short: "post-construction",
-    href: "/services/post-construction-cleaning",
-    description:
-      "Final cleaning after a build or renovation. We quote the work and any return visits separately.",
-    fit: "Builders, remodelers, owners, and project teams",
-    icon: "calendar",
-  },
-  {
     name: "Office & commercial cleaning",
     short: "commercial",
     href: "/services/commercial-cleaning",
     description:
-      "Cleaning for offices and small commercial spaces, with a written task list and schedule.",
-    fit: "Offices, property managers, and commercial facilities",
+      "Walkthrough-based cleaning for offices, clinics, behavioral-health and recovery facilities, and commercial spaces — backed by general liability insurance and a written task list.",
+    fit: "Offices, clinics, recovery residences, retail, and property managers",
     icon: "clipboard",
+  },
+  {
+    name: "Post-construction cleaning",
+    short: "post-construction",
+    href: "/services/post-construction-cleaning",
+    description:
+      "Final interior cleaning after new builds, remodels, and tenant improvements. We put scope, handoff dates, and return visits in writing.",
+    fit: "Builders, remodelers, owners, and project teams",
+    icon: "calendar",
   },
 ];
 
@@ -104,7 +111,7 @@ const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.fin
 export default function ServicesPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Services" title="House cleaning services in Fresno, Clovis & Madera." description="Here's what each cleaning covers. Not sure which one fits? Text us and we'll help you pick." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero eyebrow="Services" title="House cleaning services in Fresno, Clovis & Madera." description="Standard cleaning from $165, deep cleaning from $235, and move-in/move-out from $325 — plus walkthrough-scoped commercial and post-construction cleaning." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
       </SiteHero>
 
@@ -120,10 +127,28 @@ export default function ServicesPage() {
                 <figure><div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)]"><Image src={guide.photo.src} alt={guide.photo.alt} fill sizes="(min-width: 1024px) 400px, (min-width: 640px) 45vw, 100vw" className="object-cover" /></div><figcaption className="mt-2 text-[13px] text-mute">{guide.photo.caption} · New Star job</figcaption></figure>
                 <div className="se-guide-body">
                   <h3>{guide.name}</h3>
+                  <p className="mt-1 text-base font-bold text-primary">From {guide.startingAt}</p>
                   <p>{guide.fit}</p>
                   <p>{guide.pick}</p>
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    {directBookingUrl ? (
+                      <Suspense fallback={<Link href={`/book-now?service=${guide.slug}`} className="home-button">Book online</Link>}>
+                        <BookingPortalLink
+                          baseUrl={directBookingUrl}
+                          service={bookingServiceName(guide.slug)}
+                          sourcePage="/services"
+                          ctaLocation="services_hub_card"
+                          label={`Book ${guide.short.toLowerCase()}`}
+                          showIcon={false}
+                          className="home-button"
+                        />
+                      </Suspense>
+                    ) : (
+                      <Link href={`/book-now?service=${guide.slug}`} className="home-button">Get a quote</Link>
+                    )}
+                  </div>
                   <div className="se-guide-links">
-                    <Suspense fallback={<><Link href={`/services/${guide.slug}?service=${guide.slug}`} data-service-guide-link={guide.slug} data-service-guide-action="details">{guide.short} details</Link><Link href={`/services/${guide.slug}?service=${guide.slug}#quote`} data-service-guide-link={guide.slug} data-service-guide-action="quote">Get a quote</Link></>}>
+                    <Suspense fallback={<><Link href={`/services/${guide.slug}`} data-service-guide-link={guide.slug} data-service-guide-action="details">{guide.short} details</Link><Link href={`/services/${guide.slug}#quote`} data-service-guide-link={guide.slug} data-service-guide-action="quote">Get a quote</Link></>}>
                       <ServiceContextLink service={guide.slug}>{guide.short} details</ServiceContextLink>
                       <ServiceContextLink service={guide.slug} quote>Get a quote</ServiceContextLink>
                     </Suspense>
@@ -133,11 +158,11 @@ export default function ServicesPage() {
             ))}
           </div>
         </div>
-        <p className="home-service-notes">Oven and fridge interiors, interior window glass, and reachable window tracks are optional. Cabinet interiors are optional for standard and deep cleaning. Price depends on size, condition, frequency, and requested work. Laundry, dishes, bed making, organizing, and packing are not included.</p>
+        <p className="home-service-notes">Oven and fridge interiors, interior window glass, reachable window tracks, and carpet shampooing are optional add-ons. Cabinet interiors are optional for standard and deep cleaning (included when empty on move-out). Price depends on size, condition, frequency, and requested work. Laundry, dishes, bed making, organizing, and packing are not included.</p>
       </section>
 
       <section className="site-muted"><div className="ns-section" aria-labelledby="services-business-title">
-        <div className="ns-section-head"><div><p className="ns-kicker">Fresno-area businesses</p><h2 id="services-business-title" className="ns-h2">Workplaces &amp; projects.</h2><p className="ns-lead">A walkthrough or photo review, followed by a written proposal.</p></div></div>
+        <div className="ns-section-head"><div><p className="ns-kicker">For businesses</p><h2 id="services-business-title" className="ns-h2">For offices, facilities &amp; job sites.</h2><p className="ns-lead">Walkthrough or photo review first, written task list and price before we start. We carry general liability insurance.</p></div></div>
         <div className="site-directory site-directory-cards site-directory-two">
           {projectServices.map((service) => (
             <article key={service.href}>
@@ -154,7 +179,7 @@ export default function ServicesPage() {
       <section className="site-muted" aria-labelledby="services-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="services-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards reviews={reviews} lead /></div></section>
       <section aria-labelledby="services-areas-title">
         <div className="ns-section">
-          <div className="ns-section-head"><div><p className="ns-kicker">Service area</p><h2 id="services-areas-title" className="ns-h2">Near you.</h2><p className="ns-lead">We&apos;re based in Fresno and clean in Clovis too. For Madera, send your address and preferred date so we can check the schedule.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
+          <div className="ns-section-head"><div><p className="ns-kicker">Service area</p><h2 id="services-areas-title" className="ns-h2">Near you.</h2><p className="ns-lead">Serving Fresno, Clovis, Madera, and nearby Fresno neighborhoods including North Fresno, Woodward Park, Fig Garden, and Tower District.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
           <div className="grid gap-6 sm:grid-cols-3">
             {primaryAreas.map((area) => <Link key={area.slug} href={`/cleaning-services-${area.slug}`} className="flex min-h-20 flex-col justify-center gap-2 border-t border-line py-4 text-primary"><strong className="text-xl">{area.name} →</strong><span className="text-sm text-mute">{area.county}</span></Link>)}
           </div>

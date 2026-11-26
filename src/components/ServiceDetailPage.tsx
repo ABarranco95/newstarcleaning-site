@@ -31,7 +31,7 @@ const siteUrl = "https://newstarcleaning.com";
 
 const heroDescriptions = {
   "standard-cleaning": "Kitchen, bathrooms, dusting and floors. One visit, or weekly, every other week or monthly.",
-  "deep-cleaning": "Everything in a standard clean, plus extra time on shower buildup, baseboards, door frames and reachable fixtures.",
+  "deep-cleaning": "Kitchen, bathrooms, and floors, plus extra time on shower buildup, baseboards, door frames, and reachable fixtures.",
   "move-out-cleaning": "The empty home, including the inside of every cleared cabinet, drawer and closet.",
 };
 
@@ -289,7 +289,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
       <section>
         <div className="site-section site-quote-layout">
           <div className="site-copy"><p className="ns-kicker">Your price</p><h2>Price your {service.shortName.toLowerCase()}.</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="service_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
-          <QuickQuoteForm title={`Price your ${service.shortName.toLowerCase()}`} subtitle="Your service is selected. Start with your city and timing." source={`organic_${service.slug}_service`} defaultService={quoteFormService(service)} compact />
+          <QuickQuoteForm title={`Price your ${service.shortName.toLowerCase()}`} subtitle="Your service is selected. Start with your city and timing." source={`organic_${service.slug}_service`} defaultService={quoteFormService(service)} directBookingUrl={directBookingUrl} compact />
         </div>
       </section>
 

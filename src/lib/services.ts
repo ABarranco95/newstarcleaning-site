@@ -22,7 +22,7 @@ export const serviceLimitations = [
   "Making beds or arranging personal items",
   "Moving heavy furniture, appliances, or items over 25 pounds",
   "Biohazards, pest waste, mold remediation, hoarding cleanup, or bodily fluids",
-  "Exterior windows, pressure washing, carpet shampooing, or restoration work",
+  "Exterior windows, pressure washing, or restoration work",
   "Wall washing, paint removal, ceiling washing, or ladder work above normal reach",
 ];
 
@@ -106,6 +106,11 @@ export const services: ServiceDefinition[] = [
         description:
           "Additional vacuuming and lint detail can be added for heavy pet hair homes when quoted ahead of time.",
       },
+      {
+        title: "Carpet shampooing",
+        description:
+          "Carpet shampooing can be added by room, hallway, or stairway when requested before the appointment.",
+      },
     ],
     notIncluded: serviceLimitations,
     scopeNotes: [
@@ -143,9 +148,9 @@ export const services: ServiceDefinition[] = [
     ],
     faqs: [
       {
-        question: "Is this the same as maid service?",
+        question: "Is recurring house cleaning the same as maid service?",
         answer:
-          "Yes, if you mean house cleaning. Maid service, housekeeping and house cleaning are different names for the same visit: kitchens, bathrooms, floors, dusting and the surfaces we can reach. What we don't do is household help: laundry, dishes, making beds, organizing, packing or personal household tasks.",
+          "Yes — if you are searching for recurring maid service or regular house cleaning in Fresno, Clovis, or Madera, this is the service you want. We focus strictly on room-by-room cleaning across kitchens, bathrooms, dusting, and floors on a weekly, bi-weekly, or monthly schedule. We do not do laundry, wash dishes, make beds, or organize belongings so every visit goes toward cleaning your home.",
       },
       {
         question: "Do you wash dishes, do laundry, or make beds?",
@@ -247,6 +252,11 @@ export const services: ServiceDefinition[] = [
         description:
           "Heavy pet hair removal requires extra time and must be quoted before the visit.",
       },
+      {
+        title: "Carpet shampooing",
+        description:
+          "Carpet shampooing can be added by room, hallway, or stairway when requested before the visit.",
+      },
     ],
     notIncluded: serviceLimitations,
     scopeNotes: [
@@ -306,7 +316,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "What is not included in deep cleaning?",
         answer:
-          "Laundry, dishes, bed making, organizing, heavy furniture moving, biohazards, exterior windows, carpet shampooing, and restoration work are not included.",
+          "Laundry, dishes, bed making, organizing, heavy furniture moving, biohazards, exterior windows, and restoration work are not included. Carpet shampooing can be added separately by room, hallway, or stairway.",
       },
       {
         question: "Why does deep cleaning cost more than standard cleaning?",
@@ -389,7 +399,12 @@ export const services: ServiceDefinition[] = [
       {
         title: "Extra blind detail",
         description:
-          "Light blind dusting can be added. Heavily soiled, fragile, or damaged blinds may not be serviceable.",
+          "Hand-wiping or heavier slat-by-slat blind cleaning can be added (light dusting of accessible blinds is included). Heavily soiled, fragile, or damaged blinds may not be serviceable.",
+      },
+      {
+        title: "Carpet shampooing",
+        description:
+          "Carpet shampooing can be added by room, hallway, or stairway when requested before the visit.",
       },
       {
         title: "Heavy buildup time",
@@ -461,7 +476,7 @@ export const services: ServiceDefinition[] = [
       {
         question: "Do you shampoo carpets or repair walls?",
         answer:
-          "No. Carpet shampooing, repairs, paint touch-ups, wall washing, and restoration work are not part of our cleaning service.",
+          "Carpet shampooing is available as an optional priced add-on by room, hallway, or stairway when requested ahead of time. Repairs, paint touch-ups, wall washing, and restoration work are not part of our cleaning service.",
       },
       {
         question: "What should be done before a move-out cleaning?",
