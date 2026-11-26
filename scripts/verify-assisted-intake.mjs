@@ -213,7 +213,7 @@ function mountForm(props = {}) {
   const fixtureId = `fx-${++nextFormId}`;
   const location = {
     pathname: props.testPath || "/" + (props.paidSearch ? "google-ads" : "services/deep-cleaning"),
-    search: props.testSearch ?? "?gclid=synthetic-gclid&utm_campaign=synthetic-assisted&zip=95118",
+    search: props.testSearch ?? "?gclid=synthetic-gclid&utm_campaign=synthetic-assisted&zip=93711",
     origin: props.testOrigin || "https://newstarcleaning.com",
     href: "https://newstarcleaning.com/",
   };
@@ -229,9 +229,9 @@ function mountForm(props = {}) {
   const jsx = (type, propsArg) => ({ type, props: propsArg || {} });
   const storage = new Map();
   const readyPrice = {
-    status: "ready", market: "southbay", low: "$271", range: "$271–$354",
+    status: "ready", market: "fresno", low: "$271", range: "$271–$354",
     priceLowCents: 27100, priceHighCents: 35400, bookableSqft: "1500", biweekly: "$231",
-    note: "Range shown on page: $271–$354 (normal at size minimum–dusty at size maximum, 3 bed / 2 bath, 1,500–1,999 sqft, Deep cleaning; southbay).",
+    note: "Range shown on page: $271–$354 (normal at size minimum–dusty at size maximum, 3 bed / 2 bath, 1,500–1,999 sqft, Deep cleaning; fresno).",
   };
   const hooks = {
     useState(initial) {
@@ -283,7 +283,6 @@ function mountForm(props = {}) {
       "@/components/BookingPrefillLink": { default: (childProps) => jsx("booking-prefill", childProps) },
       "@/components/PaidQuoteStickyCTA": { default: (childProps) => jsx("paid-sticky", childProps) },
       "@/components/PaidPriceBookingButton": { default: (childProps) => jsx("paid-booking", childProps) },
-      "@/components/MarketProvider": { useMarket: (id) => loadTs(site, "src/lib/markets.ts").markets[id || "fresno"], setMarketCookie: () => {} },
       "@/lib/usePaidPriceRange": { default: () => props.testPrice || readyPrice },
       "@/lib/bookingPortal": { resolveDirectBookingUrl: () => "https://book.newstarcleaning.com/book" },
       "@/lib/conversionTracking": {
@@ -467,7 +466,7 @@ await paidForm.submit();
 assert.equal(paidForm.conversions.length, 1);
 const paidBody = paidForm.submissions.at(-1);
 assert.equal(paidBody.url, "/api/google-ads-lead");
-assert.equal(paidBody.body.city, "95118", "paid city falls back to the typed ZIP, never a campaign city");
+assert.equal(paidBody.body.city, "93711", "paid city falls back to the typed ZIP, never a campaign city");
 assert.equal(paidBody.body.source, "fixture-form");
 assert.equal((await paid.POST(request(paidBody.body))).status, 201, "actual paid route accepts the actual form payload");
 assert.equal(forwarded.at(-1).smsConsent.status, "denied");
@@ -533,13 +532,13 @@ function enterContact(form) {
   form.change("name", "Intake Fixture");
   form.change("phone", "559-555-0142");
 }
-const seededService = mountForm({ testSearch: "?service=deep-cleaning&market=southbay&zip=95118" });
+const seededService = mountForm({ testSearch: "?service=deep-cleaning&zip=93720" });
 assert.equal(seededService.field("service").props.value, "Deep cleaning", "query service is preselected");
 enterContact(seededService);
 seededService.setReply(accepted());
 await seededService.submit();
-assert.equal(seededService.submissions[0].body.zip, "95118");
-assert.equal(seededService.submissions[0].body.market, "southbay");
+assert.equal(seededService.submissions[0].body.zip, "93720");
+assert.equal(seededService.submissions[0].body.market, "fresno");
 seededService.press("Send another request");
 assert(seededService.fields("service").every((node) => node.props.type === "radio"), "fresh request exposes valid service choices, not a hidden empty value");
 assert(seededService.field("service").props.value, "fresh request retains a real service");
@@ -549,7 +548,7 @@ for (const status of ["hidden", "loading", "custom", "zip-required", "ready"]) {
   const note = "Range shown on page: $345–$380 (normal–dusty, 3 bed / 2 bath, Deep cleaning).";
   const form = mountForm({ paidSearch: true, defaultService: "Deep cleaning" });
   enterContact(form);
-  form.setPrice({ status, note, range: "$345–$380", market: "southbay" });
+  form.setPrice({ status, note, range: "$345–$380", market: "fresno" });
   form.openDetails(); form.change("message", sentinel.message);
   form.setReply(accepted());
   await form.submit();
@@ -744,7 +743,7 @@ for (const [reply, failureKind] of [
   assert.equal(failedPaid.field("smsOptIn").props.checked, true);
   assert.equal(failedPaid.field("contactPreference").props.value, "either");
   assert(failedPaid.nodes().some((node) => node.type === "p" && textOf(node) === "We couldn't send your request. Your details are still here, so you can try again, or call or text us for your price."));
-  const phone = loadTs(site, "src/lib/markets.ts").markets.fresno.phoneHref;
+  const phone = loadTs(site, "src/lib/business.ts").business.phoneHref;
   for (const href of [phone, phone.replace("tel:", "sms:")]) assert(failedPaid.nodes().some((node) => node.type === "a" && node.props.href === href && node.props.className.includes("qf-error-action")));
   assert(/\.qf-error a\.qf-error-action\s*\{[^}]*min-height:\s*48px/.test(readFileSync(path.join(site, "src/app/brand-system.css"), "utf8")), "recovery links keep their minimum touch target in the new shared class");
   assert.equal(failedPaid.conversions.length, 0);
@@ -755,7 +754,7 @@ for (const [reply, failureKind] of [
 // FORM-FIX regression cases. Synthetic price replies isolate the form's own
 // actual payload/handlers; these are not live quote prices or browser proof.
 const fixturePrice = {
-  status: "ready", market: "southbay", low: "$271", range: "$271–$354",
+  status: "ready", market: "fresno", low: "$271", range: "$271–$354",
   priceLowCents: 27100, priceHighCents: 35400, bookableSqft: "1500",
   note: "Synthetic price fixture for offline payload verification.",
 };
@@ -797,11 +796,11 @@ for (const params of comboPage.generateStaticParams()) {
   const serviceSlug = params.serviceCity.slice(0, -(area.slug.length + 1));
   const expectedService = serviceSlug === "standard-cleaning" ? "Standard recurring cleaning" : serviceSlug === "deep-cleaning" ? "Deep cleaning" : "Move-in / move-out cleaning";
   assert.equal(picker.props.leadSource, `organic_${serviceSlug}_${area.slug}`);
-  assert.equal(picker.props.defaultCity, area.name); assert.equal(picker.props.market, area.market);
+  assert.equal(picker.props.defaultCity, area.name);
   assert.equal(picker.props.service, expectedService);
   for (const pageForm of tree.filter((node) => node.type === "QuickQuoteForm")) {
     assert.equal(pageForm.props.source, picker.props.leadSource);
-    assert.equal(pageForm.props.defaultCity, area.name); assert.equal(pageForm.props.pageMarket, area.market);
+    assert.equal(pageForm.props.defaultCity, area.name);
     assert.equal(pageForm.props.defaultService, expectedService);
   }
   comboMounts.push({ path: `/${params.serviceCity}`, ...picker.props });
@@ -810,22 +809,17 @@ const clovis = comboMounts.find((mount) => mount.path === "/deep-cleaning-clovis
 assert(clovis, "requested Fresno-market combo case exists");
 const clovisBody = await capturePayload("F2 deep-cleaning-clovis", {
   placement: "hero", testPath: clovis.path, source: clovis.leadSource, defaultCity: clovis.defaultCity,
-  pageMarket: clovis.market, defaultService: clovis.service, testSearch: "?zip=93611",
-  testPrice: { ...fixturePrice, market: "fresno" },
+  defaultService: clovis.service, testSearch: "?zip=93611",
+  testPrice: fixturePrice,
 });
 assert.equal(clovisBody.city, "Clovis"); assert.equal(clovisBody.zip, "93611");
 assert.equal(clovisBody.source, "organic_deep-cleaning_clovis"); assert.equal(clovisBody.sourceForm, clovisBody.source);
 assert.equal(clovisBody.market, "fresno"); assert.equal(clovisBody.service, "Deep cleaning");
-const crossMarket = await capturePayload("F5 Fresno page, ZIP 95124", {
-  testPath: "/cleaning-services-fresno", source: "organic_fresno_service_area", defaultCity: "Fresno",
-  pageMarket: "fresno", testSearch: "?zip=95124", testPrice: fixturePrice,
+const nearbyAssistedForm = mountForm({
+  testPath: "/book-now", source: "organic_quote_page", testSearch: "?zip=93622", testPrice: { status: "out-of-area" },
 });
-assert.equal(crossMarket.city, "95124"); assert.equal(crossMarket.zip, "95124"); assert.equal(crossMarket.market, "southbay");
-const reverseMarket = await capturePayload("F5 San Jose page, Fresno ZIP", {
-  testPath: "/cleaning-services-san-jose", source: "organic_san-jose_service_area", defaultCity: "San Jose",
-  pageMarket: "southbay", testSearch: "?zip=93711", testPrice: { ...fixturePrice, market: "fresno" },
-});
-assert.equal(reverseMarket.city, "93711"); assert.equal(reverseMarket.market, "fresno");
+assert(!nearbyAssistedForm.nodes().some((node) => node.type === "paid-booking"), "outer 936xx ZIP never renders instant online self-booking");
+assert(nearbyAssistedForm.nodes().some((node) => node.type === "button" && textOf(node).includes("Get a quote")), "outer 936xx ZIP routes to assisted quote capture");
 const largeBody = await capturePayload("F7 home over 5,500 square feet", {
   testPath: "/book-now", source: "organic_quote_page", testPrice: fixturePrice,
 }, (form) => { form.change("sqft", "larger"); form.setPrice({ status: "custom" }); });
@@ -838,33 +832,33 @@ for (const key of ["bedrooms", "bathrooms", "sqft", "homeSize", "frequency"]) as
 assert.equal(walkthroughBody.message, sentinel.message); assert.equal(walkthroughBody.service, "Post-construction cleaning");
 assert.equal((await paid.POST(request(walkthroughBody))).status, 201);
 
-// F1: note exactly follows the real button's origin/path/size eligibility.
+// F1: booking button strictly follows origin/path/size/blocked eligibility.
 for (const [overrides, expected] of [
   [{}, true], [{ directBookingUrl: null }, false], [{ testOrigin: "http://localhost:3097" }, false],
   [{ testOrigin: "https://newstarcleaning-site.vercel.app" }, false],
   [{ directBookingUrl: "https://book.newstarcleaning.com/not-book" }, false],
   [{ testPrice: { ...fixturePrice, bookableSqft: undefined } }, false],
+  [{ testPrice: { ...fixturePrice, onlineBookingBlocked: true } }, false],
 ]) {
   const form = mountForm({ defaultService: "Deep cleaning", ...overrides });
   assert.equal(form.nodes().some((node) => node.type === "paid-booking"), expected);
-  assert.equal(textOf(form.nodes()).includes("Online booking needs two days' notice."), expected, "notice is never orphaned");
 }
 // F3: each placement honors page service even when a query asks for another.
 for (const placement of ["hero", "page"]) for (const defaultService of ["Deep cleaning", "Move-in / move-out cleaning"]) {
-  const form = mountForm({ placement, defaultService, testSearch: "?service=standard&zip=95124" });
+  const form = mountForm({ placement, defaultService, testSearch: "?service=standard&zip=93711" });
   assert.equal(form.field("service").props.value, defaultService);
 }
 // F4/F12: no large-home action or paid submission without a valid ZIP.
-for (const [field, value, status] of [["bedrooms", "6+", "hidden"], ["bathrooms", "4+", "hidden"], ["sqft", "larger", "custom"]]) {
+for (const [field, value, status] of [["bedrooms", "6+", "hidden"], ["bathrooms", "4+", "hidden"], ["sqft", "larger", "custom"], ["sqft", "not-sure", "hidden"]]) {
   const form = mountForm({ paidSearch: true, defaultService: "Deep cleaning", testSearch: "", testPrice: { status } });
   form.change(field, value);
   for (const zip of ["", "1234"]) {
     form.change("zip", zip);
-    assert(!form.nodes().some((node) => node.type === "button" && textOf(node).includes("Ask us for a quote")));
+    assert(!form.nodes().some((node) => node.type === "button" && node.props["data-quote-next"] && textOf(node).includes("Get a quote")));
     await form.submit(); assert.equal(form.submissions.length, 0, "paid location cannot be omitted");
   }
-  form.change("zip", "95124");
-  assert(form.nodes().some((node) => node.type === "button" && textOf(node).includes("Ask us for a quote")));
+  form.change("zip", "93711");
+  assert(form.nodes().some((node) => node.type === "button" && node.props["data-quote-next"] && textOf(node).includes("Get a quote")));
 }
 const clearedZip = mountForm({ paidSearch: true, defaultService: "Deep cleaning" });
 enterContact(clearedZip); clearedZip.change("zip", ""); await clearedZip.submit();
@@ -911,10 +905,10 @@ assert.equal(queryWalk.nodes().find((node) => node.type === "form").props.hidden
 const queryHero = mountForm({ placement: "hero", testSearch: "?service=commercial" });
 assert.equal(queryHero.fields("city").length, 0); assert.equal(queryHero.field("service").props.value, "Standard recurring cleaning");
 assert.equal(queryHero.nodes().find((node) => node.props["data-quote-step"] === "1").props.hidden, false);
-// F11: exact former paid live-price booking eligibility, not a new policy.
+// F11: paid live-price booking eligibility covers all residential services.
 for (const defaultService of ["Standard recurring cleaning", "Deep cleaning", "Not sure yet", "Move-in / move-out cleaning"]) {
   const form = mountForm({ paidSearch: true, defaultService });
-  assert.equal(form.nodes().some((node) => node.type === "paid-booking"), defaultService !== "Standard recurring cleaning");
+  assert.equal(form.nodes().some((node) => node.type === "paid-booking"), true);
 }
 assert(mountForm({ defaultService: "Standard recurring cleaning" }).nodes().some((node) => node.type === "paid-booking"), "organic Standard still permits booking");
 

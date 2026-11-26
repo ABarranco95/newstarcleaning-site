@@ -148,7 +148,7 @@ const PROOF_PAIRS: Record<ProofPairKey, ProofPair> = {
 const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   house: {
     eyebrow: "Professional house cleaning",
-    h1: () => "House cleaning in Fresno, Clovis & Madera",
+    h1: (city) => `House cleaning in ${city}`,
     subhead: "Kitchen, bathrooms, dusting and floors, once or on a schedule.",
     serviceDefault: "Not sure yet",
     formTitle: "Get a quote",
@@ -168,7 +168,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   move: {
     eyebrow: "Move-in / move-out cleaning",
-    h1: () => "Move-out & move-in cleaning in Fresno, Clovis & Madera",
+    h1: (city) => `Move-out & move-in cleaning in ${city}`,
     subhead: "Empty cabinet, drawer and closet interiors included.",
     serviceDefault: "Move-in / move-out cleaning",
     formTitle: "Get a quote",
@@ -191,7 +191,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
   },
   deep: {
     eyebrow: "Detailed deep cleaning",
-    h1: () => "Deep house cleaning in Fresno, Clovis & Madera",
+    h1: (city) => `Deep house cleaning in ${city}`,
     subhead: "Baseboards, fixtures and the buildup a regular clean skips.",
     serviceDefault: "Deep cleaning",
     formTitle: "Get a quote",
@@ -255,6 +255,7 @@ const INTENT_CONFIG: Record<PaidIntent, PaidIntentConfig> = {
     subhead: "We’ll keep up with the kitchen, bathrooms, dusting, and floors. Choose weekly, every other week, or monthly cleaning.",
     serviceDefault: "Standard recurring cleaning",
     formTitle: "Get a quote",
+    priceLine: "See your recurring cleaning price for your ZIP and home. Total confirmed before you book.",
     proofOrder: ["shower", "tub", "refrigeratorDetail", "oven", "refrigerator", "vent"],
     faqs: [
       {
@@ -432,6 +433,7 @@ const DECISION_REVIEW_ID: Partial<Record<PaidIntent, string>> = {
   deep: "daumdatta",
   move: "merle-f",
   house: "merle-f",
+  recurring: "daisy-m",
 };
 
 const HOME_POINTS = [
@@ -593,7 +595,8 @@ export default function GoogleAdsLandingPageClient({
   const isProjectRequest = intentKey === "postConstruction";
   const isCommercialRequest = intentKey === "commercial";
   const isBusinessRequest = isProjectRequest || isCommercialRequest;
-  const compactResidentialHero = intentKey === "deep" || intentKey === "move" || intentKey === "house";
+  const compactResidentialHero =
+    intentKey === "deep" || intentKey === "move" || intentKey === "house" || intentKey === "recurring";
   const residentialBookingUrl = isBusinessRequest ? null : directBookingUrl;
   const requestedFrequency = frequency?.trim().toLowerCase().replace(/^bi-weekly$/, "biweekly");
   const bookingFrequency = intentKey === "recurring" && (requestedFrequency === "weekly" || requestedFrequency === "biweekly" || requestedFrequency === "monthly") ? requestedFrequency : undefined;
@@ -696,18 +699,23 @@ export default function GoogleAdsLandingPageClient({
             </div>
 
             <div id="booking-form" className="paid-hero-form site-form-panel min-w-0 scroll-mt-4">
-              {isCommercialRequest ? (
+              {isBusinessRequest ? (
                 <CommercialQuoteForm
                   source="google-ads"
                   defaultService={intent.serviceDefault}
+                  defaultCity={city.formValue || undefined}
                   title={intent.formTitle}
-                  subtitle="Share your facility details. We confirm scope and availability before proposing work."
+                  subtitle={
+                    isProjectRequest
+                      ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed."
+                      : "Share your facility details. We confirm scope and availability before proposing work."
+                  }
                 />
               ) : (
                 <QuickQuoteForm
                   source="google-ads"
                   title={intent.formTitle}
-                  subtitle={isProjectRequest ? "Share the project details. Angel will confirm scope, timing, and whether a walkthrough is needed." : intent.priceLine || "We’ll follow up with your price and available dates."}
+                  subtitle={intent.priceLine || "We’ll follow up with your price and available dates."}
                   landingCity={city.formValue || city.label}
 
                   defaultService={intent.serviceDefault}

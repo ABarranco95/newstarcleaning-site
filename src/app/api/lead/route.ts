@@ -30,6 +30,8 @@ function forwardedHeaders(req: NextRequest) {
   const userAgent = req.headers.get("user-agent");
 
   if (forwardedFor) headers["x-forwarded-for"] = forwardedFor;
+  const clientIp = forwardedFor?.split(",")[0].trim();
+  if (clientIp) headers["x-nsc-client-ip"] = clientIp;
   if (realIp) headers["x-real-ip"] = realIp;
   if (userAgent) headers["x-source-user-agent"] = userAgent;
 
@@ -52,7 +54,10 @@ export async function POST(req: NextRequest) {
     const phone = text(body.phone);
     const email = text(body.email);
 
-    if (text(body.quoteWebsiteUrl)) {
+    const isLegacyCommercialHoneypot =
+      Boolean(text(body.company)) &&
+      /commercial|post_construction|walkthrough/i.test(text(body.sourceForm) || text(body.source));
+    if (text(body.quoteWebsiteUrl) || isLegacyCommercialHoneypot) {
       return NextResponse.json({ success: true, filtered: true });
     }
 

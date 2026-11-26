@@ -25,7 +25,7 @@ const context = load("src/lib/homeQuoteContext.ts");
 const siteContext = load("src/lib/siteQuoteContext.ts", { "@/lib/homeQuoteContext": context, "@/lib/markets": markets });
 const navImports = (pathname, search) => {
   const navigation = { usePathname: () => pathname, useSearchParams: () => new URLSearchParams(search) };
-  return { "next/navigation": navigation, "@/lib/homeQuoteContext": context, "@/lib/siteQuoteContext": siteContext, "@/lib/markets": markets, "@/components/MarketProvider": load("src/components/MarketProvider.tsx", { "next/navigation": navigation, "@/lib/markets": markets }) };
+  return { "next/navigation": navigation, "@/lib/homeQuoteContext": context, "@/lib/siteQuoteContext": siteContext, "@/lib/markets": markets };
 };
 const bookingServiceNames = {
   "standard-cleaning": "Standard recurring cleaning",
@@ -41,7 +41,7 @@ const cases = [
 for (const item of cases) {
   const imports = navImports("/", item.search);
   const expected = context.homeQuoteParams(item.search);
-  const Portal = load("src/components/BookingPortalLink.tsx", { ...imports, "@/lib/attribution": { readFirstPaidTouch: () => null }, "@/lib/conversionTracking": { trackFunnelEvent() {} }, "@/lib/submissionId": { createSubmissionId: () => "test-handoff" } }).default;
+  const Portal = load("src/components/BookingPortalLink.tsx", { ...imports, "@/lib/attribution": { readFirstPaidTouch: () => null }, "@/lib/conversionTracking": { trackFunnelEvent() {}, paidSessionId: () => "11111111-1111-4111-8111-111111111111" }, "@/lib/submissionId": { createSubmissionId: () => "test-handoff" } }).default;
   for (const configured of [null, "https://booking.example.test/book"]) {
     const Services = load("src/components/HomeServices.tsx", { ...imports, "@/components/BookingPortalLink": { default: Portal }, "@/lib/bookingPortal": { resolveDirectBookingUrl: () => configured } }).default;
     const html = renderToStaticMarkup(createElement(Services));
@@ -53,9 +53,7 @@ for (const item of cases) {
       const [action, scope] = links.slice(index * 2, index * 2 + 2);
       assert.equal(action.pathname, configured ? "/book" : "/book-now");
       assert.equal(action.searchParams.get(configured ? "nsc_service" : "service"), configured ? bookingServiceNames[slug] : slug);
-      // The San Jose-first homepage links each row to its canonical San Jose service page.
-      assert.equal(scope.pathname, `/${slug}-san-jose`);
-      assert.equal(scope.search, "");
+      assert.equal(scope.pathname, `/services/${slug}`);
       assert.equal(scope.hash, "#whats-included");
       for (const key of ["city", "frequency", "utm_source"]) {
         assert.equal(action.searchParams.get(configured && key !== "utm_source" ? `nsc_${key}` : key), expected.get(key));
@@ -67,17 +65,16 @@ for (const item of cases) {
   const quote = new URL(quoteHtml.match(/href="([^"]+)"/)[1].replaceAll("&amp;", "&"), "https://newstarcleaning.com");
   for (const key of ["service", "city", "frequency", "utm_source"]) assert.equal(quote.searchParams.get(key), expected.get(key));
 }
-// Fresno area pages keep carrying the known quote context into the shared service pages.
+// Fresno area pages keep linking each row to its shared service page.
 {
   const imports = navImports("/cleaning-services-clovis", "frequency=monthly&utm_source=original");
-  const Portal = load("src/components/BookingPortalLink.tsx", { ...imports, "@/lib/attribution": { readFirstPaidTouch: () => null }, "@/lib/conversionTracking": { trackFunnelEvent() {} }, "@/lib/submissionId": { createSubmissionId: () => "test-handoff" } }).default;
+  const Portal = load("src/components/BookingPortalLink.tsx", { ...imports, "@/lib/attribution": { readFirstPaidTouch: () => null }, "@/lib/conversionTracking": { trackFunnelEvent() {}, paidSessionId: () => "11111111-1111-4111-8111-111111111111" }, "@/lib/submissionId": { createSubmissionId: () => "test-handoff" } }).default;
   const Services = load("src/components/HomeServices.tsx", { ...imports, "@/components/BookingPortalLink": { default: Portal }, "@/lib/bookingPortal": { resolveDirectBookingUrl: () => null } }).default;
-  const html = renderToStaticMarkup(createElement(Services, { defaultCity: "Clovis", market: "fresno" }));
+  const html = renderToStaticMarkup(createElement(Services, { defaultCity: "Clovis" }));
   const scopes = [...html.matchAll(/<a[^>]*href="([^"]+)"/g)].map((m) => new URL(m[1].replaceAll("&amp;", "&"), "https://newstarcleaning.com")).filter((url) => url.hash === "#whats-included");
   assert.equal(scopes.length, 3);
   for (const [index, slug] of ["standard-cleaning", "deep-cleaning", "move-out-cleaning"].entries()) {
     assert.equal(scopes[index].pathname, `/services/${slug}`);
-    for (const [key, value] of [["service", slug], ["city", "Clovis"], ["frequency", "monthly"], ["utm_source", "original"], ["market", "fresno"]]) assert.equal(scopes[index].searchParams.get(key), value);
   }
 }
 for (const item of [
@@ -86,7 +83,7 @@ for (const item of [
   { pathname: "/", search: "service=Standard+recurring+cleaning", service: "Standard recurring cleaning", city: null },
 ]) {
   const imports = navImports(item.pathname, item.search);
-  const Portal = load("src/components/BookingPortalLink.tsx", { ...imports, "@/lib/attribution": { readFirstPaidTouch: () => null }, "@/lib/conversionTracking": { trackFunnelEvent() {} }, "@/lib/submissionId": { createSubmissionId: () => "test-handoff" } }).default;
+  const Portal = load("src/components/BookingPortalLink.tsx", { ...imports, "@/lib/attribution": { readFirstPaidTouch: () => null }, "@/lib/conversionTracking": { trackFunnelEvent() {}, paidSessionId: () => "11111111-1111-4111-8111-111111111111" }, "@/lib/submissionId": { createSubmissionId: () => "test-handoff" } }).default;
   const BookingLink = load("src/components/HomeBookingContextLink.tsx", { ...imports, "@/components/BookingPortalLink": { default: Portal } }).default;
   const html = renderToStaticMarkup(createElement(BookingLink, { baseUrl: "https://booking.example.test/book", onDark: false, placement: "mobile" }));
   const href = new URL(html.match(/href="([^"]+)"/)[1].replaceAll("&amp;", "&"));
@@ -100,6 +97,10 @@ for (const service of ["post-construction", "Office / commercial cleaning"]) {
   assert(renderToStaticMarkup(createElement(QuoteLink, { className: "test" }, "Quote")).includes("/commercial-quote?"));
   const BookingLink = load("src/components/HomeBookingContextLink.tsx", { ...imports, "@/components/BookingPortalLink": () => createElement("a", null, "unsafe") }).default;
   assert.equal(renderToStaticMarkup(createElement(BookingLink, { baseUrl: "https://example.com/book", onDark: false, placement: "hero" })), "");
+  const headerWalkthrough = renderToStaticMarkup(createElement(BookingLink, { baseUrl: "https://example.com/book", onDark: false, placement: "header" }));
+  const mobileWalkthrough = renderToStaticMarkup(createElement(BookingLink, { baseUrl: "https://example.com/book", onDark: false, placement: "mobile" }));
+  assert(headerWalkthrough.includes("Request walkthrough") && headerWalkthrough.includes("/commercial-quote"), "commercial header renders walkthrough link instead of dead slot");
+  assert(mobileWalkthrough.includes("Walkthrough") && mobileWalkthrough.includes("/commercial-quote"), "commercial mobile renders walkthrough link instead of dead slot");
 }
 for (const name of ["cleaning-regular", "cleaning-deep", "cleaning-empty-home"]) {
   const file = `public/illustrations/${name}.svg`;
@@ -111,8 +112,9 @@ for (const name of ["cleaning-regular", "cleaning-deep", "cleaning-empty-home"])
 const home = read("src/app/page.tsx");
 assert(home.includes("<GoogleRating") && home.includes("<HomeServices") && home.includes("fill preload"));
 assert(!/blur-3xl|line-clamp|RealWorkGallery|QuotePathPanel|BeforeAfterCarousel|shadow-soft|shadow-elev/.test(home));
-assert(["/cleaning-services-fresno", "/cleaning-services-clovis", "/cleaning-services-madera"].every((href) => home.includes(`href="${href}"`)), "homepage keeps the Fresno, Clovis and Madera hubs linked as the secondary market");
-assert(read("src/lib/serviceAreas.ts").includes("fewer appointment options in Madera"), "Madera keeps its route-availability caveat where the area is described");
+const business = load("src/lib/business.ts").business;
+assert(home.includes("<MarketAreas") && ["Fresno", "Clovis", "Madera"].every((city) => business.cities.includes(city)), "homepage renders MarketAreas for Fresno, Clovis and Madera");
+assert(read("src/lib/serviceAreas.ts").includes("Share the Madera address"), "Madera confirms the available window for the address before booking");
 assert(home.includes("Empty cabinet, drawer, and closet interiors are included"));
 assert(home.includes("are optional") && home.includes("guarantee a deposit return"));
 for (const path of ["src/app/page.tsx", "src/components/HomeHeader.tsx", "src/components/HomeFooter.tsx"]) assert(read(path).includes("<HomeQuoteLink"), `${path} preserves known quote context`);

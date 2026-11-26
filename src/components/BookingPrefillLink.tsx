@@ -37,6 +37,10 @@ export default function BookingPrefillLink({ baseUrl, snapshot, onRelease }: {
             service={snapshot?.service}
             city={snapshot?.city}
             frequency={snapshot?.frequency}
+            zip={snapshot?.zip}
+            sqft={snapshot?.squareFeet}
+            bedrooms={snapshot?.bedrooms}
+            bathrooms={snapshot?.bathrooms}
             sourcePage={typeof window !== "undefined" ? window.location.pathname : undefined}
             ctaLocation={typeof window !== "undefined" && window.location.pathname.startsWith("/google-ads") ? "paid_success_card" : "quote_success"}
             label="Book online"

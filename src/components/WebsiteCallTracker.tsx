@@ -12,6 +12,17 @@ const businessPhoneDigits = businessPhoneDisplay.replace(/\D/g, "").slice(-10);
 
 let phoneSnippetInstalled = false;
 
+function replacePhoneInTextNodes(root: Node, target: string, replacement: string) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+  while (node) {
+    if (node.nodeValue?.includes(target)) {
+      node.nodeValue = node.nodeValue.replace(target, replacement);
+    }
+    node = walker.nextNode();
+  }
+}
+
 function updateWebsitePhoneLinks(formattedNumber: string, mobileNumber: string) {
   if (!formattedNumber || !mobileNumber) return;
 
@@ -21,7 +32,7 @@ function updateWebsitePhoneLinks(formattedNumber: string, mobileNumber: string) 
 
     link.href = `tel:${mobileNumber}`;
     if (link.textContent?.includes(businessPhoneDisplay)) {
-      link.textContent = link.textContent.replace(businessPhoneDisplay, formattedNumber);
+      replacePhoneInTextNodes(link, businessPhoneDisplay, formattedNumber);
     }
     const ariaLabel = link.getAttribute("aria-label");
     if (ariaLabel?.includes(businessPhoneDisplay)) {

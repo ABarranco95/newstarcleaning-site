@@ -230,9 +230,9 @@ assert(tracking.includes('"booking_handoff_started"'), "funnel contract must typ
 assert(!tracking.includes('"booking_completed"'), "a click-side booking_completed event must not exist; completion requires verified BookingKoala evidence");
 
 console.log("Lead contract verifier passed");
-for (const market of ["southbay", "fresno"]) {
-  const located = paid.buildPaidLeadForward({ ...paidBrowserBody, zip: "95118", market });
-  assert.equal(located.zip, "95118", "typed ZIP survives the existing paid forward builder");
-  assert.equal(located.market, market, "market hint survives separately; Apex resolves the ZIP");
+const located = paid.buildPaidLeadForward({ ...paidBrowserBody, zip: "93711", market: "fresno" });
+assert.equal(located.zip, "93711", "typed ZIP survives the existing paid forward builder");
+assert.equal(located.market, "fresno", "market hint survives separately; Apex resolves the ZIP");
+for (const retired of ["southbay", "unknown"]) {
+  assert.equal(paid.buildPaidLeadForward({ ...paidBrowserBody, market: retired }).market, undefined, `${retired} market is not forwarded as a supported market`);
 }
-assert.equal(paid.buildPaidLeadForward({ ...paidBrowserBody, market: "unknown" }).market, undefined, "unknown market is not forwarded as a supported market");

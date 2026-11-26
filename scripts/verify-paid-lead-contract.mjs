@@ -12,7 +12,7 @@ const contractPath = "src/lib/paidLeadContract.ts";
 assert(page.includes('landingCity={city.formValue || city.label}'), "Paid landing must pass campaign city as landingCity context");
 assert(!page.includes('defaultCity={city.formValue}'), "Paid landing must not prefill campaign city as customer location");
 assert(form.includes("landingCity?: string;"), "Paid quote form must type landingCity separately");
-assert(form.includes("marketForCity(defaultCity) === ready.market ? defaultCity : postal || \"\"") && !form.includes("landingCity ||"), "Customer city comes from the page default or the typed ZIP, never from the campaign city");
+assert(form.includes('isLocalCity(defaultCity) ? defaultCity : postal || ""') && !form.includes("landingCity ||"), "Customer city comes from the page default or the typed ZIP, never from the campaign city");
 assert(!form.includes('params.get("city")') && !form.includes("landingCity ||"), "Paid form must ignore campaign URL city when filling customer location");
 assert(form.includes('data-quote-step="1"') && form.includes('data-quote-step="2"'), "Price and contact screens exist in one card");
 assert(!form.includes('id="quote-city"') && !form.includes('<input type="hidden" name="city"'), "Customer location is never a typed or hidden city field on the residential form");

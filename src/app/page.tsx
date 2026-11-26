@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 const faqs = [
   { question: "How do I get a price?", answer: "Pick the cleaning, your bedrooms, bathrooms and home size above. The price comes from our booking system, and you see your exact price before you confirm." },
   { question: "What's included?", answer: "Every visit follows our checklist, so you know what gets cleaned before we arrive. See the full checklist." },
-  { question: "What isn't included?", answer: "Laundry, dishes, organizing, moving furniture, carpet shampooing, exterior windows, pressure washing, biohazard and repairs, unless we confirm them in writing first." },
+  { question: "What isn't included?", answer: "Laundry, dishes, organizing, moving heavy furniture, exterior windows, pressure washing, biohazard and repairs aren't included. Carpet shampooing is available as an optional priced add-on." },
   { question: "Do I need to supply anything?", answer: "No. We bring our own cleaning supplies." },
   { question: "When am I charged?", answer: "Nothing is charged when you book. Within 24 hours before the cleaning we place a hold for the visit total, and it becomes the charge after the cleaning is finished." },
   { question: "What if something was missed?", answer: "Tell us within 24 hours and we come back and make it right at no charge, as long as it was part of the agreed scope." },
@@ -49,7 +49,7 @@ export default function Home() {
     <div className="home-reference">
       <section className="hx ns-on-dark" aria-labelledby="home-title">
         <div className="hx-inner">
-          <div className="hx-copy"><h1 id="home-title">House cleaning in Fresno, Clovis &amp; Madera.</h1><ProofRow tone="dark" /><p className="hx-intro">Standard, deep and move-out cleaning. Put in your ZIP and see your price.</p></div>
+          <div className="hx-copy"><h1 id="home-title">House cleaning in Fresno, Clovis &amp; Madera.</h1><ProofRow tone="dark" /><p className="hx-intro">I&apos;m Angel, the local owner. Standard, deep and move-out cleaning — put in your ZIP and see your price.</p></div>
           <div className="hx-action"><PricePicker id="price" source="organic_home_price" leadSource="organic_home_hero" quoteHref="#quote" /></div>
           <figure className="hx-photo" data-work-photo="hero"><div className="hx-photo-frame"><Image src={hero.src} alt={hero.alt} fill preload fetchPriority="high" sizes="(min-width: 1024px) 560px, 100vw" /></div><figcaption>Glass shower and freestanding tub · New Star job</figcaption></figure>
         </div>
@@ -66,8 +66,19 @@ export default function Home() {
       <section id="services" className="ns-section" aria-labelledby="home-services-title">
         <div className="ns-section-head"><h2 id="home-services-title" className="ns-h2">Three ways we clean.</h2><Link href="/checklist" className="home-text-link">See the full checklist <span aria-hidden="true">→</span></Link></div>
         <Suspense fallback={null}><HomeServices photos={{ "deep-cleaning": bathroomResultPhotos[1] }}>
-          <p className="home-service-notes">Empty cabinet, drawer, and closet interiors are included in move-in / move-out cleaning. Oven and fridge interiors, interior window glass, and cabinet interiors on standard or deep cleans are optional add-ons. We do not guarantee a deposit return.</p>
+          <p className="home-service-notes">Empty cabinet, drawer, and closet interiors are included in move-in / move-out cleaning. Oven and fridge interiors, interior window glass, carpet shampooing, and cabinet interiors on standard or deep cleans are optional add-ons. We do not guarantee a deposit return.</p>
         </HomeServices></Suspense>
+        <div className="home-commercial-band">
+          <div>
+            <h3>Offices, commercial spaces &amp; post-construction cleanups</h3>
+            <p>Need recurring janitorial work or a final clean after a remodel or build? We walk the space first and put the scope, schedule, and price in writing.</p>
+          </div>
+          <div className="home-commercial-actions">
+            <Link href="/services/commercial-cleaning" className="home-text-link">Office &amp; commercial <span aria-hidden="true">→</span></Link>
+            <Link href="/services/post-construction-cleaning" className="home-text-link">Post-construction <span aria-hidden="true">→</span></Link>
+            <Link href="/commercial-quote" className="home-service-book">Request a walkthrough</Link>
+          </div>
+        </div>
       </section>
 
       <TrustStrip />

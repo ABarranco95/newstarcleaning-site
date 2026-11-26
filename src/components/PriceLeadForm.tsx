@@ -7,13 +7,13 @@ import { mergeAttributionForSubmission, sanitizeReferrer } from "@/lib/attributi
 import { completedHome, paidSessionId, trackFunnelEvent, trackLeadConversion } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
 import { buildQuoteSmsConsent, QUOTE_SMS_DISCLOSURE } from "@/lib/quoteSmsConsent";
-import { serviceAreaToday, specificDeadlineError } from "@/lib/assistedIntakeValidation";
+import { replyWindowExpectation, serviceAreaToday, specificDeadlineError } from "@/lib/assistedIntakeValidation";
 import BookingPrefillLink from "@/components/BookingPrefillLink";
 import PaidQuoteStickyCTA from "@/components/PaidQuoteStickyCTA";
 import PaidPriceBookingButton from "@/components/PaidPriceBookingButton";
 import { acceptedPrefillSnapshot, allowedPrefillPair, bookingAttributionSnapshot, type BookingPrefillPayload } from "@/lib/bookingPrefill";
 import { business as BUSINESS } from "@/lib/business";
-import { isLocalCity, isServiceZip, normalizedZip } from "@/lib/markets";
+import { isLocalCity, isNearbyAssistedZip, isServiceZip, normalizedZip } from "@/lib/markets";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import usePaidPriceRange from "@/lib/usePaidPriceRange";
 import { PAID_HOME_SIZES, paidHomeSize, paidLeadHomeSize } from "@/lib/paidHomeSize";
@@ -86,10 +86,18 @@ const bathroomsOptions = ["1", "1.5", "2", "2.5", "3", "3.5", "4+"];
 const moveOutAddons = [
   "Inside oven",
   "Inside refrigerator",
-  "Interior window glass",
+  "Interior Windows (glass + tracks)",
+  "Heavy Blind Cleaning",
+  "Carpet Shampooing",
   "Garage, patio, or balcony sweeping",
-  "Extra blind detail",
-  "Heavy pet hair or heavy buildup",
+];
+
+const residentialAddons = [
+  "Inside oven",
+  "Inside refrigerator",
+  "Inside empty cabinets or drawers",
+  "Interior Windows (glass + tracks)",
+  "Carpet Shampooing",
 ];
 
 // Apex's current timeline enum cannot represent a two-week window. Keep its
@@ -112,6 +120,7 @@ type ContactState = {
   requestedDate: string;
   contactPreference: string;
   condition: string;
+  hasPets: "" | "yes" | "no";
   organization: string;
   quoteWebsiteUrl: string;
 };
@@ -154,6 +163,7 @@ const emptyContact: ContactState = {
   requestedDate: "",
   contactPreference: "",
   condition: "",
+  hasPets: "",
   organization: "",
   quoteWebsiteUrl: "",
 };
@@ -239,8 +249,11 @@ function PriceLeadFormContent({
 }: PriceLeadFormProps & { pathname: string }) {
   // A page that pins a cleaning type (service pages, paid variants) has to
   // render that radio checked in the server HTML, not Standard until hydration.
+  // Generic paid "Not sure yet" keeps the 3-chip service picker visible and
+  // defaults to Standard so Stella always receives an explicit residential service.
+  const normalizedPropService = service && !isCommercialService(service) ? normalizeServiceParam(service) : "";
   const pageDefaultService =
-    service && !isCommercialService(service) ? normalizeServiceParam(service) || undefined : undefined;
+    normalizedPropService && normalizedPropService !== "Not sure yet" ? normalizedPropService : undefined;
   const draft = useQuoteDraft(pathname, pageDefaultService);
   const siteOrigin = useSyncExternalStore(subscribeOrigin, readOrigin, serverOrigin);
   const uid = useId();
@@ -271,27 +284,30 @@ function PriceLeadFormContent({
   const submissionIdRef = useRef("");
   const submitInFlightRef = useRef(false);
 
-  const pinnedService = paidSearch ? service || "" : "";
+  const pinnedService = paidSearch && service && service !== "Not sure yet" ? service : "";
   const leadService = walkthrough ? walkthroughService : draft.service;
   const postal = normalizedZip(draft.zip);
+  const unsureSize = draft.size === "not-sure";
   const sizeBand = paidHomeSize(draft.size);
-  const sizeLabel = sizeBand?.label ?? draft.size;
+  const sizeLabel = unsureSize ? "Not sure" : sizeBand?.label ?? draft.size;
+  const sizeSummary = unsureSize ? "size to confirm" : `${sizeLabel} sq ft`;
   const openEnded = draft.bedrooms.endsWith("+") || draft.bathrooms.endsWith("+");
+  const nearbyAssisted = Boolean(postal) && isNearbyAssistedZip(postal);
   const price = usePaidPriceRange({
-    enabled: !walkthrough && Boolean(postal),
+    enabled: !walkthrough && Boolean(postal) && !nearbyAssisted && !unsureSize,
     service: leadService,
     bedrooms: draft.bedrooms,
     bathrooms: draft.bathrooms,
-    sqft: draft.size,
+    sqft: unsureSize ? "" : draft.size,
     zip: postal,
   });
-  const ready = !walkthrough && postal && price.status === "ready" ? price : null;
+  const ready = !walkthrough && postal && !nearbyAssisted && !unsureSize && price.status === "ready" ? price : null;
   // Nothing on screen 1 leads on until the ZIP is valid (spec s4): a lead must
   // carry its location, and paid leads are refused without one.
-  const outOfArea = Boolean(postal) && !isServiceZip(postal);
-  const directQuote = !outOfArea && Boolean(postal) && (price.status === "custom" || openEnded);
-  const askState = !directQuote && !ready && Boolean(postal) && price.status === "zip-required";
-  const loading = Boolean(postal) && price.status === "loading" && !directQuote;
+  const outOfArea = Boolean(postal) && !isServiceZip(postal) && !nearbyAssisted;
+  const directQuote = !outOfArea && !nearbyAssisted && Boolean(postal) && (price.status === "custom" || openEnded || unsureSize);
+  const askState = !directQuote && !ready && Boolean(postal) && (nearbyAssisted || price.status === "zip-required");
+  const loading = Boolean(postal) && !nearbyAssisted && !unsureSize && price.status === "loading" && !directQuote;
   // Preserve the existing Fresno wire contract, including custom-price homes.
   const marketId = "fresno";
   const resolvedBookingUrl = directBookingUrl === undefined ? resolveDirectBookingUrl() : directBookingUrl;
@@ -307,7 +323,8 @@ function PriceLeadFormContent({
     // the shared price draft (and so the hero) stays residential.
     const commercialQuery = isCommercialService(queryService);
     if (commercialQuery && placement === "page" && !service) setQueryWalkthrough(queryService);
-    const draftService = isCommercialService(service || "") ? "" : service || (commercialQuery ? "" : queryService);
+    const explicitPropService = service && service !== "Not sure yet" ? service : "";
+    const draftService = isCommercialService(service || "") ? "" : explicitPropService || (commercialQuery ? "" : queryService);
     ensureQuoteDraft(pathname, {
       ...(draftService ? { service: draftService } : {}),
       ...(queryZip ? { zip: queryZip } : {}),
@@ -427,7 +444,8 @@ function PriceLeadFormContent({
     ? contact.message
     : [
         contact.message,
-        sizeBand ? `Home size selected: ${sizeLabel} sq ft.` : "",
+        unsureSize ? "Home size selected: Not sure (please confirm)." : sizeBand ? `Home size selected: ${sizeLabel} sq ft.` : "",
+        contact.hasPets === "yes" ? "Pets in home: Yes." : contact.hasPets === "no" ? "Pets in home: No." : "",
         paidMoveTimingChoice ? `Move cleaning timing requested: ${paidMoveTimingChoice.label}.` : "",
         priceNote,
       ].filter(Boolean).join("\n\n");
@@ -468,7 +486,11 @@ function PriceLeadFormContent({
     // the disabled button. Release in finally so a failed request can retry.
     if (submitInFlightRef.current) return;
     // The other placement can edit the shared ZIP while this contact step is open.
-    if (!walkthrough && (!postal || outOfArea)) {
+    if (!walkthrough && !postal) {
+      returnToPrice();
+      return;
+    }
+    if (!walkthrough && outOfArea) {
       returnToPrice();
       return;
     }
@@ -530,6 +552,7 @@ function PriceLeadFormContent({
           preferredTime: "",
           bookingIntent: "",
           condition: contact.condition,
+          ...(contact.hasPets ? { hasPets: contact.hasPets === "yes" } : {}),
           moveOutAddons: moveOutAddonsSelected,
           moveOutScopeConfirmed,
           organization: contact.organization,
@@ -596,7 +619,7 @@ function PriceLeadFormContent({
 
       const summaryLine = walkthrough
         ? ""
-        : `${serviceCaption(draft.service)} · ${draft.bedrooms} bed · ${draft.bathrooms} bath · ${sizeLabel} sq ft${postedZip ? ` · ${postedZip}` : ""}`;
+        : `${serviceCaption(draft.service)} · ${draft.bedrooms} bed · ${draft.bathrooms} bath · ${sizeSummary}${postedZip ? ` · ${postedZip}` : ""}`;
       setSent({
         firstWord: contact.name.trim().split(/\s+/)[0] || "",
         phone: contact.phone.trim(),
@@ -669,8 +692,16 @@ function PriceLeadFormContent({
 
   const summaryPrice = ready ? ready.range ?? ready.low : "Price confirmed with you";
   const serviceName = serviceCaption(draft.service);
-  const showBooking = Boolean(ready?.bookableSqft && bookingButtonRenders(siteOrigin, resolvedBookingUrl) &&
-    (!paidSearch || draft.service === "Deep cleaning" || draft.service === "Not sure yet" || draft.service === "Move-in / move-out cleaning"));
+  const showBooking = Boolean(
+    ready?.bookableSqft &&
+      !ready.onlineBookingBlocked &&
+      bookingButtonRenders(siteOrigin, resolvedBookingUrl) &&
+      (!paidSearch ||
+        draft.service === "Standard recurring cleaning" ||
+        draft.service === "Deep cleaning" ||
+        draft.service === "Not sure yet" ||
+        draft.service === "Move-in / move-out cleaning"),
+  );
 
   const renderPriceOutput = () => {
     if (outOfArea) {
@@ -684,8 +715,18 @@ function PriceLeadFormContent({
     if (directQuote) {
       return (
         <>
-          <p className="ns-price-prompt">{openEnded ? "This home needs a direct quote." : "Homes over 5,500 sq ft get a direct quote."}</p>
-          <p className="ns-price-help">Send us the home and we&apos;ll price it with you.</p>
+          <p className="ns-price-prompt">
+            {unsureSize
+              ? "Not sure on home size?"
+              : openEnded
+                ? "This home needs a direct quote."
+                : "Homes over 5,500 sq ft get a direct quote."}
+          </p>
+          <p className="ns-price-help">
+            {unsureSize
+              ? "Send your details and we'll confirm the size and price with you."
+              : "Send us the home and we'll price it with you."}
+          </p>
         </>
       );
     }
@@ -694,9 +735,13 @@ function PriceLeadFormContent({
         <>
           <p className="ns-price-label">Your price</p>
           <p className="ns-price-value">{ready.range ?? ready.low}</p>
-          <p className="ns-price-caption">{serviceName} · {draft.bedrooms} bed · {draft.bathrooms} bath · {sizeLabel} sq ft</p>
+          <p className="ns-price-caption">{serviceName} · {draft.bedrooms} bed · {draft.bathrooms} bath · {sizeSummary}</p>
           {ready.biweekly ? <p className="ns-price-recurring">Every other week: <strong>{ready.biweekly}</strong> a visit</p> : null}
-          {ready.range ? <p className="ns-price-help">A kept-up home lands near the low end. More buildup or a bigger home moves it up.</p> : null}
+          {ready.onlineBookingBlocked ? (
+            <p className="ns-price-help">Homes 3,500 sq ft and up are confirmed directly with our team before booking.</p>
+          ) : ready.range ? (
+            <p className="ns-price-help">A kept-up home lands near the low end. More buildup or a bigger home moves it up.</p>
+          ) : null}
         </>
       );
     }
@@ -711,8 +756,14 @@ function PriceLeadFormContent({
     if (askState) {
       return (
         <>
-          <p className="ns-price-prompt">We don&apos;t have an online price for that ZIP yet.</p>
-          <p className="ns-price-help">Send us the home and we&apos;ll check the address and price it with you.</p>
+          <p className="ns-price-prompt">
+            {nearbyAssisted ? "Instant online pricing covers Fresno, Clovis and Madera." : "We don't have an online price for that ZIP yet."}
+          </p>
+          <p className="ns-price-help">
+            {nearbyAssisted
+              ? "Send your details and we'll check route availability and quote your home."
+              : "Send us the home and we'll check the address and price it with you."}
+          </p>
         </>
       );
     }
@@ -753,6 +804,7 @@ function PriceLeadFormContent({
               bathrooms={draft.bathrooms}
               squareFeet={ready.bookableSqft!}
               zip={postal}
+              frequency={leadFrequency || undefined}
               source={source}
               ctaLocation={paidSearch ? "paid_live_price" : "organic_live_price"}
             />
@@ -776,6 +828,7 @@ function PriceLeadFormContent({
   };
 
   if (step === "sent" && sent) {
+    const replyWindow = replyWindowExpectation();
     return (
       <div className={`${placement === "hero" ? "ns-price-picker" : "nq-form"} ${paidSearch ? "scroll-mt-4" : "scroll-mt-22"}`} id={placement === "hero" ? id : undefined} data-price-picker={placement === "hero" ? true : undefined} data-market-price={sent.market} ref={containerRef}>
         <div className="nq-sent">
@@ -791,10 +844,10 @@ function PriceLeadFormContent({
           ) : null}
           <p className="nq-sent-next">
             {sent.commercial
-              ? "We'll be in touch during the day about your property or project."
+              ? `We'll be in touch about your property or project. ${replyWindow}`
               : sent.smsOptIn
-                ? `We'll text ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. The text comes from ${BUSINESS.phoneDisplay}.  We reply during the day, Mon–Fri 8–6 and Sat 8–5.`
-                : `We'll reach you at ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. We reply during the day, Mon–Fri 8–6 and Sat 8–5.`}
+                ? `We'll text ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. The text comes from ${BUSINESS.phoneDisplay}. ${replyWindow}`
+                : `We'll reach you at ${sent.phone} with ${sent.ready ? "your exact price and the days we have open" : "a price for your home"}. ${replyWindow}`}
           </p>
           {resolvedBookingUrl && sent.accepted && !sent.commercial && sent.ready ? (
             <div className="nq-sent-book">
@@ -881,7 +934,7 @@ function PriceLeadFormContent({
         <>
           <div className="nq-summary">
             <div>
-              <p className="nq-summary-line">{serviceName} · {draft.bedrooms} bed · {draft.bathrooms} bath · {sizeLabel} sq ft{postal ? ` · ${postal}` : ""}</p>
+              <p className="nq-summary-line">{serviceName} · {draft.bedrooms} bed · {draft.bathrooms} bath · {sizeSummary}{postal ? ` · ${postal}` : ""}</p>
               <p className="nq-summary-price">{summaryPrice}</p>
             </div>
             <button type="button" className="nq-edit" onClick={returnToPrice}>Change</button>
@@ -906,6 +959,11 @@ function PriceLeadFormContent({
                 <input type="checkbox" name="smsOptIn" checked={smsOptIn && contact.contactPreference !== "call" && contact.contactPreference !== "email"} disabled={contact.contactPreference === "call" || contact.contactPreference === "email"} onChange={(event) => setSmsOptIn(event.target.checked)} />
                 <span>{QUOTE_SMS_DISCLOSURE}</span>
               </label>
+              {contact.contactPreference === "text" && !smsOptIn ? (
+                <p className="nq-sms-callout" role="status">
+                  Check the box above so we can text your price — or switch to Call.
+                </p>
+              ) : null}
             </div>
             <div role="alert" className="qf-error" hidden={!error}>
               {error ? (
@@ -929,7 +987,7 @@ function PriceLeadFormContent({
       {submitAlternative}
       <p className="qf-fine">
         <LockIcon />
-        <span>We reply during the day, Mon–Fri 8–6 and Sat 8–5. No payment, and nothing is booked until you confirm. <Link href="/privacy" target="_blank" rel="noopener">Privacy</Link></span>
+        <span>{replyWindowExpectation()} No payment, and nothing is booked until you confirm. <Link href="/privacy" target="_blank" rel="noopener">Privacy</Link></span>
       </p>
       {!walkthrough ? (
         <>
@@ -985,6 +1043,26 @@ function PriceLeadFormContent({
                     <option value="heavy-buildup-pet-hair-neglected">Heavy buildup or a lot of pet hair</option>
                   </select>
                 </div>
+                <fieldset className="qf-step">
+                  <legend className="qf-label">Pets in the home?<span className="qf-optional">Optional</span></legend>
+                  <div className="qf-chips mt-2">
+                    {[
+                      { value: "no", label: "No pets" },
+                      { value: "yes", label: "Yes, pets" },
+                    ].map((option) => (
+                      <label key={option.value}>
+                        <input
+                          type="radio"
+                          name="hasPets"
+                          value={option.value}
+                          checked={contact.hasPets === option.value}
+                          onChange={() => setContactField("hasPets", option.value)}
+                        />
+                        <span>{option.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
                 {draft.service === "Standard recurring cleaning" ? (
                   <div>
                     <label className="qf-label" htmlFor={field("frequency")}>How often would you like cleaning?<span className="qf-optional">Optional</span></label>
@@ -1024,7 +1102,28 @@ function PriceLeadFormContent({
                       </div>
                     </fieldset>
                   </div>
-                ) : null}
+                ) : (
+                  <fieldset className="qf-step">
+                    <legend className="qf-label">Optional add-ons<span className="qf-optional">Optional</span></legend>
+                    <p className="qf-help">Add any extras you want included in your quote.</p>
+                    <div className="qf-checks mt-3 sm:grid-cols-2">
+                      {residentialAddons.map((addon) => (
+                        <label key={addon} className="qf-check">
+                          <input
+                            type="checkbox"
+                            name="moveOutAddons"
+                            checked={moveOutAddonsSelected.includes(addon)}
+                            onChange={() => {
+                              trackFormStart();
+                              setMoveOutAddonsSelected((current) => current.includes(addon) ? current.filter((item) => item !== addon) : [...current, addon]);
+                            }}
+                          />
+                          <span>{addon}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                )}
                 <div>
                   <label className="qf-label" htmlFor={field("email")}>Email<span className="qf-optional">Optional</span></label>
                   <input className="qf-input" id={field("email")} name="email" type="email" autoComplete="email" placeholder="you@example.com" value={contact.email} onChange={(event) => setContactField("email", event.target.value)} />
@@ -1099,26 +1198,68 @@ function PriceLeadFormContent({
             />
           </div>
           <div className="ns-price-home-summary">
-            <span id={field("summary")}>{draft.bedrooms} bed · {draft.bathrooms} bath · {sizeLabel} sq ft</span>
+            <span id={field("summary")}>{draft.bedrooms} bed · {draft.bathrooms} bath · {sizeSummary}</span>
             <button type="button" aria-expanded={homeExpanded} aria-controls={field("home")} aria-describedby={field("summary")} onClick={() => setHomeExpanded(!homeExpanded)}>Change</button>
           </div>
           <div id={field("home")} className="ns-price-home" data-collapsed={homeExpanded ? undefined : ""}>
-            <div>
-              <label htmlFor={field("bedrooms")}>Bedrooms</label>
-              <select id={field("bedrooms")} name="bedrooms" value={draft.bedrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bedrooms: event.target.value }); }}>
-                {bedroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
-              </select>
-            </div>
-            <div>
-              <label htmlFor={field("bathrooms")}>Bathrooms</label>
-              <select id={field("bathrooms")} name="bathrooms" value={draft.bathrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bathrooms: event.target.value }); }}>
-                {bathroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
-              </select>
-            </div>
+            {placement === "page" ? (
+              <>
+                <fieldset className="qf-step">
+                  <legend className="qf-label">Bedrooms</legend>
+                  <div className="qf-chips nq-home-chips">
+                    {bedroomsOptions.map((value) => (
+                      <label key={value}>
+                        <input
+                          type="radio"
+                          name={field("bedrooms")}
+                          value={value}
+                          checked={draft.bedrooms === value}
+                          onChange={() => { trackFormStart(); updateQuoteDraft({ bedrooms: value }); }}
+                        />
+                        <span>{value}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+                <fieldset className="qf-step">
+                  <legend className="qf-label">Bathrooms</legend>
+                  <div className="qf-chips nq-home-chips">
+                    {bathroomsOptions.map((value) => (
+                      <label key={value}>
+                        <input
+                          type="radio"
+                          name={field("bathrooms")}
+                          value={value}
+                          checked={draft.bathrooms === value}
+                          onChange={() => { trackFormStart(); updateQuoteDraft({ bathrooms: value }); }}
+                        />
+                        <span>{value}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label htmlFor={field("bedrooms")}>Bedrooms</label>
+                  <select id={field("bedrooms")} name="bedrooms" value={draft.bedrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bedrooms: event.target.value }); }}>
+                    {bedroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor={field("bathrooms")}>Bathrooms</label>
+                  <select id={field("bathrooms")} name="bathrooms" value={draft.bathrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bathrooms: event.target.value }); }}>
+                    {bathroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
+                  </select>
+                </div>
+              </>
+            )}
             <div>
               <label htmlFor={field("size")}>Home size</label>
               <select id={field("size")} name="sqft" aria-label="Home size in square feet" value={draft.size} onChange={(event) => { trackFormStart(); updateQuoteDraft({ size: event.target.value }); }}>
                 {PAID_HOME_SIZES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+                <option value="not-sure">Not sure — confirm with me</option>
               </select>
             </div>
           </div>
@@ -1148,7 +1289,7 @@ function PriceLeadFormContent({
           key={`${step}-${ready ? "ready" : directQuote ? "direct" : askState ? "ask" : loading ? "loading" : "first"}`}
           formRef={containerRef}
           activeStep={step === "price" ? 1 : 2}
-          bookingAvailable={Boolean(ready?.bookableSqft)}
+          bookingAvailable={showBooking}
           isSubmitting={isSubmitting}
           label={step === "price" ? "Text me this quote" : submitText}
           onClick={handleStickySubmit}

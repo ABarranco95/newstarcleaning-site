@@ -11,19 +11,43 @@ const messages: Record<PrefillSendStatus, string> = {
   applied: "Home details received. Review your size, condition and price in the booking tab. Nothing is booked yet.",
   review: "You have an existing booking draft. Review the new home details in the booking tab before continuing.",
   rejected: "The booking tab could not use your home details. Review them there before continuing.",
-  blocked: "Allow popups, then try again. Nothing was booked or submitted.",
-  unsupported: "Home-detail transfer is unavailable. You can still request your price by text below.",
-  unavailable: "Home-detail transfer is unavailable. You can still request your price by text below.",
+  blocked: "Your browser blocked the new tab. Use the direct link below to continue booking.",
+  unsupported: "Home-detail transfer is unavailable. Use the direct booking link below or request your price by text.",
+  unavailable: "Home-detail transfer is unavailable. Use the direct booking link below or request your price by text.",
   cancelled: "Home-detail transfer stopped. Nothing was booked or submitted.",
 };
 
-export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bathrooms, squareFeet, zip, primary = false, source = "google-ads", ctaLocation = "paid_live_price" }: {
+const URL_ATTRIBUTION_KEYS = [
+  "gclid",
+  "gbraid",
+  "wbraid",
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "funnelSessionId",
+] as const;
+
+export default function PaidPriceBookingButton({
+  baseUrl,
+  service,
+  bedrooms,
+  bathrooms,
+  squareFeet,
+  zip,
+  frequency,
+  primary = false,
+  source = "google-ads",
+  ctaLocation = "paid_live_price",
+}: {
   baseUrl: string;
   service: "Deep cleaning" | "Standard recurring cleaning" | "Move-in / move-out cleaning";
   bedrooms: string;
   bathrooms: string;
   squareFeet: string;
   zip?: string;
+  frequency?: string;
   primary?: boolean;
   source?: string;
   ctaLocation?: string;
@@ -32,19 +56,21 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
     try {
       const url = new URL(baseUrl);
       if (allowedPrefillPair(window.location.origin, url.origin) && ["/book", "/book/"].includes(url.pathname) && !url.username && !url.password) {
-        // Discard configured query values. Attribution travels privately;
-        // only ZIP/market hints, the internal flag, and nonce travel in the URL.
+        // Discard any untrusted query values; only allowlisted home hints and
+        // non-PII attribution are appended at click time.
         return `${url.origin}/book`;
       }
     } catch { /* Unsupported destinations fail closed. */ }
     return null;
   });
   const [status, setStatus] = useState<PrefillSendStatus | null>(null);
+  const [fallbackHref, setFallbackHref] = useState<string | null>(null);
   const cancelRef = useRef<(() => void) | null>(null);
   useEffect(() => () => { cancelRef.current?.(); }, []);
 
   if (!destination) return null;
   const pending = status === "waiting" || status === "sent";
+  const showDirectFallback = Boolean(fallbackHref && (status === "blocked" || status === "unsupported" || status === "unavailable"));
   return (
     <div className="mt-2" data-paid-booking>
       <button
@@ -62,15 +88,30 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
           const attribution = bookingAttributionSnapshot({ ...captureFirstPaidTouch(), funnelSessionId: paidSessionId(), ...(internal ? { nsinternal: "1" } : {}) });
           const snapshot: BookingPrefillPayload = Object.freeze({
             service, bedrooms, bathrooms, squareFeet, ...(zip ? { zip } : {}), market: "fresno",
-            frequency: "one-time", condition: "normal",
+            frequency: frequency || "one-time", condition: "normal",
             ...(service === "Move-in / move-out cleaning" ? { moveOutAddons: Object.freeze([]) } : {}),
             ...attribution,
           });
           const url = new URL(destination);
-          if (zip) url.searchParams.set("zip", zip);
+          if (zip) {
+            url.searchParams.set("zip", zip);
+            url.searchParams.set("nsc_zip", zip);
+          }
           url.searchParams.set("market", "fresno");
+          url.searchParams.set("nsc_market", "fresno");
+          url.searchParams.set("nsc_service", service);
+          url.searchParams.set("nsc_sqft", squareFeet);
+          url.searchParams.set("nsc_beds", bedrooms);
+          url.searchParams.set("nsc_baths", bathrooms);
+          if (frequency) url.searchParams.set("nsc_frequency", frequency);
+          for (const key of URL_ATTRIBUTION_KEYS) {
+            const value = attribution[key];
+            if (value) url.searchParams.set(key, value);
+          }
           if (internal) url.searchParams.set("nsinternal", "1");
-          cancelRef.current = startBookingPrefill(window, url.toString(), snapshot, setStatus);
+          const targetUrl = url.toString();
+          setFallbackHref(targetUrl);
+          cancelRef.current = startBookingPrefill(window, targetUrl, snapshot, setStatus);
           try {
             trackFunnelEvent("booking_cta_click", {
               source, service, page: window.location.pathname,
@@ -84,6 +125,14 @@ export default function PaidPriceBookingButton({ baseUrl, service, bedrooms, bat
       </button>
       <p className="mt-3 text-xs leading-5 text-ink-soft">Opens in a new tab. Pick your day and time. We confirm everything with you after you book.</p>
       {status ? <p role="status" className="mt-1 text-xs leading-4 text-ink-soft">{messages[status]}</p> : null}
+      {showDirectFallback && fallbackHref ? (
+        <a
+          href={fallbackHref}
+          className="mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-primary bg-white px-4 py-2 text-sm font-semibold text-primary hover:bg-slate-50"
+        >
+          Continue to online booking <span aria-hidden="true" className="ml-1">→</span>
+        </a>
+      ) : null}
     </div>
   );
 }

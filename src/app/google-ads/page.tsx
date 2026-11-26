@@ -16,19 +16,42 @@ function firstParam(value: string | string[] | undefined): string | null {
   return (Array.isArray(value) ? value[0] : value) ?? null;
 }
 
+const PAID_CITY_LABELS: Record<string, string> = {
+  fresno: "Fresno",
+  clovis: "Clovis",
+  madera: "Madera",
+  "north-fresno": "North Fresno",
+  "woodward-park": "Woodward Park",
+  "fig-garden": "Fig Garden",
+  "tower-district": "Tower District",
+};
+
+function resolveCityTitleLabel(value: string | null): string {
+  const key = (value || "").trim().toLowerCase().replace(/[ _]+/g, "-");
+  return PAID_CITY_LABELS[key] || business.serviceAreaName;
+}
+
 export async function generateMetadata({ searchParams }: PaidPageProps): Promise<Metadata> {
   const params = await searchParams;
   const service = (firstParam(params.service) || "").trim().toLowerCase();
-  const region = business.serviceAreaName;
-  const title = service.includes("post") || service.includes("commercial") || service.includes("office")
-    ? "Cleaning Quote Request | New Star Cleaning"
-    : service.includes("deep")
-      ? `Deep Cleaning in ${region} | New Star Cleaning`
-      : service.includes("move")
-        ? `Move-Out & Move-In Cleaning in ${region} | New Star Cleaning`
-        : `House Cleaning in ${region} | New Star Cleaning`;
+  const frequency = (firstParam(params.frequency) || "").trim().toLowerCase();
+  const region = resolveCityTitleLabel(firstParam(params.city));
+  const isRecurring =
+    service.includes("recurring") ||
+    ["recurring", "weekly", "biweekly", "bi-weekly", "monthly"].includes(frequency);
+  const title = service.includes("post")
+    ? `Post-Construction Cleaning in ${region} | New Star Cleaning`
+    : service.includes("commercial") || service.includes("office")
+      ? `Commercial & Office Cleaning in ${region} | New Star Cleaning`
+      : service.includes("deep")
+        ? `Deep Cleaning in ${region} | New Star Cleaning`
+        : service.includes("move")
+          ? `Move-Out & Move-In Cleaning in ${region} | New Star Cleaning`
+          : isRecurring
+            ? `Recurring House Cleaning in ${region} | New Star Cleaning`
+            : `House Cleaning in ${region} | New Star Cleaning`;
 
-  const description = "See your house-cleaning price for Fresno, Clovis and Madera, then review available dates.";
+  const description = `See your cleaning price or request a quote in ${region}. Locally owned, insured, and confirmed before you book.`;
   return {
     title: { absolute: title },
     description,

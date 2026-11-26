@@ -29,6 +29,9 @@ export async function GET(req: NextRequest) {
     googleAdsConversionId: hasEnv("NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID"),
     googleAdsLeadConversionLabel: hasEnv("NEXT_PUBLIC_GOOGLE_ADS_LEAD_CONVERSION_LABEL"),
     googleAdsPhoneConversionLabel: hasEnv("NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL"),
+    bookingConversionConfigured:
+      hasEnv("NEXT_PUBLIC_GOOGLE_ADS_BOOKING_SEND_TO") ||
+      envTrue("NEXT_PUBLIC_GOOGLE_ADS_BOOKING_CONVERSION_CONFIGURED"),
     gtmGoogleAdsFormConfigured: envTrue("NEXT_PUBLIC_GTM_GOOGLE_ADS_FORM_CONVERSION_CONFIGURED"),
     gtmGoogleAdsPhoneConfigured: envTrue("NEXT_PUBLIC_GTM_GOOGLE_ADS_PHONE_CONVERSION_CONFIGURED"),
     metaPixel: hasEnv("NEXT_PUBLIC_META_PIXEL_ID"),
@@ -74,6 +77,11 @@ export async function GET(req: NextRequest) {
         : "Set NEXT_PUBLIC_GOOGLE_ADS_PHONE_CONVERSION_LABEL for the direct Google forwarding-number snippet."
     );
   }
+  if (!analytics.bookingConversionConfigured) {
+    nextActions.push(
+      "Set NEXT_PUBLIC_GOOGLE_ADS_BOOKING_SEND_TO (or NEXT_PUBLIC_GOOGLE_ADS_BOOKING_CONVERSION_CONFIGURED=true) so self-booking conversions are verified."
+    );
+  }
   if (!analytics.metaPixel) nextActions.push("Set NEXT_PUBLIC_META_PIXEL_ID before Meta ads.");
   if (!analytics.clarity) nextActions.push("Set NEXT_PUBLIC_CLARITY_ID before heatmap/session QA.");
   if (!leadRouting.apexLeadUrlConfigured) nextActions.push("Set APEX_LEAD_URL to the Apex public lead endpoint.");
@@ -95,6 +103,7 @@ export async function GET(req: NextRequest) {
       googleAdsPhoneConversionReady,
       googleAdsWebsiteCallTrackingMode,
       googleAdsWebsiteConversionReady,
+      bookingConversionConfigured: analytics.bookingConversionConfigured,
       conversionTrackingReady,
       leadRouting,
       domain,

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { readFirstPaidTouch, type FirstPaidTouchRecord } from "@/lib/attribution";
-import { trackFunnelEvent } from "@/lib/conversionTracking";
+import { paidSessionId, trackFunnelEvent } from "@/lib/conversionTracking";
 import { createSubmissionId } from "@/lib/submissionId";
 import { normalizedZip } from "@/lib/markets";
 
@@ -26,6 +26,9 @@ type BookingPortalLinkProps = {
   city?: string;
   frequency?: string;
   zip?: string;
+  sqft?: string;
+  bedrooms?: string;
+  bathrooms?: string;
   sourcePage?: string;
   ctaLocation?: string;
   label?: string;
@@ -41,6 +44,9 @@ export default function BookingPortalLink({
   city,
   frequency,
   zip,
+  sqft,
+  bedrooms,
+  bathrooms,
   sourcePage,
   ctaLocation,
   label = "Start my booking",
@@ -62,6 +68,9 @@ export default function BookingPortalLink({
     if (service) url.searchParams.set("nsc_service", service);
     if (city) url.searchParams.set("nsc_city", city);
     if (frequency) url.searchParams.set("nsc_frequency", frequency);
+    if (sqft) url.searchParams.set("nsc_sqft", sqft);
+    if (bedrooms) url.searchParams.set("nsc_beds", bedrooms);
+    if (bathrooms) url.searchParams.set("nsc_baths", bathrooms);
     const postal = normalizedZip(zip || searchParams.get("zip") || searchParams.get("nsc_zip"));
     for (const key of ["zip", "nsc_zip", "market", "nsc_market"]) url.searchParams.delete(key);
     if (postal) { url.searchParams.set("zip", postal); url.searchParams.set("nsc_zip", postal); }
@@ -72,16 +81,18 @@ export default function BookingPortalLink({
       sourcePage ? `newstarcleaning.com${sourcePage}` : "newstarcleaning.com"
     );
     return url.toString();
-  }, [baseUrl, searchParams, service, city, frequency, sourcePage, zip]);
+  }, [baseUrl, searchParams, service, city, frequency, sourcePage, zip, sqft, bedrooms, bathrooms]);
 
   // The correlation ID is minted at click time and stamped onto the anchor
   // before navigation, so the analytics event and the booking URL carry
   // the same value without server/client markup drift.
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const handoffId = createSubmissionId();
+    const sessionId = typeof paidSessionId === "function" ? paidSessionId() : "";
     try {
       const url = new URL(event.currentTarget.href);
       url.searchParams.set("nsc_handoff", handoffId);
+      if (sessionId) url.searchParams.set("funnelSessionId", sessionId);
       event.currentTarget.href = url.toString();
     } catch {
       // The handoff still proceeds on the unstamped URL.

@@ -54,8 +54,9 @@ assert(
     layout.includes("<MobileContactActions") &&
     read("src/components/MobileContactActions.tsx").includes('pathname.startsWith("/google-ads")') &&
     read("src/components/MobileContactActions.tsx").includes('hidden={editing || quoteInView === pathname}') &&
-    read("src/components/MobileContactActions.tsx").includes('observer.observe(quote)') &&
-    read("src/components/MobileContactActions.tsx").includes('data-phone-location="mobile_contact"'),
+    read("src/components/MobileContactActions.tsx").includes('observer.observe(') &&
+    read("src/components/MobileContactActions.tsx").includes('data-phone-location="mobile_contact_call"') &&
+    read("src/components/MobileContactActions.tsx").includes('data-phone-location="mobile_contact_sms"'),
   "mobile contact actions replace the retired bar, stay out of paid pages and hide during editing or while the quote form is visible",
 );
 
@@ -177,7 +178,7 @@ assert(
     priceForm.includes("home like right now") &&
     priceForm.includes('data-clarity-mask="true"') &&
     priceForm.includes("landingCity?: string;") &&
-    priceForm.includes("marketForCity(defaultCity) === ready.market ? defaultCity : postal") &&
+    priceForm.includes("isLocalCity(defaultCity) ? defaultCity : postal") &&
     !priceForm.includes('<input type="hidden" name="city"') &&
     priceForm.includes("pinnedService"),
   "the form keeps optional extras behind one disclosure and never hides a campaign-prefilled customer city",

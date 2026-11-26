@@ -21,7 +21,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: deadlineError }, { status: 400 });
     }
 
-    return submitLeadToApex(buildPaidLeadForward(body), req.headers);
+    const forwardedHeaders = new Headers(req.headers);
+    const clientIp =
+      req.headers
+        .get("x-forwarded-for")
+        ?.split(",")[0]
+        ?.trim() || req.headers.get("x-real-ip")?.trim();
+    if (clientIp && !forwardedHeaders.has("x-nsc-client-ip")) {
+      forwardedHeaders.set("x-nsc-client-ip", clientIp);
+    }
+
+    const forwardPayload = {
+      ...buildPaidLeadForward(body),
+      ...(typeof body.hasPets === "boolean" ? { hasPets: body.hasPets } : {}),
+    };
+
+    return submitLeadToApex(forwardPayload, forwardedHeaders);
   } catch (error) {
     console.error("Google Ads lead routing error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

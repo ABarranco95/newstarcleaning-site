@@ -40,7 +40,7 @@ export default function HomeHeader() {
   const serviceLinks = residentialLinks;
   const areaLinks = centralValleyLinks;
   const mobileGroups: { title: string; links: NavLink[] }[] = [
-    { title: "Home cleaning", links: serviceLinks },
+    { title: "Home cleaning", links: [...serviceLinks, { label: "All services", href: "/services" }] },
     { title: "Areas", links: [...areaLinks, ...fresnoNeighborhoodLinks, { label: "Service areas", href: "/service-areas" }] },
     { title: "Company", links: [{ label: "About", href: "/about" }, { label: "Our work", href: "/our-work" }, { label: "Service checklist", href: "/checklist" }, { label: "Contact", href: "/contact" }, { label: "Cleaning tips", href: "/blog" }] },
     { title: "Fresno-area businesses", links: [...businessLinks, { label: "Request a walkthrough", href: "/commercial-quote" }] },
@@ -67,7 +67,7 @@ export default function HomeHeader() {
   const header = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1280px)");
+    const desktop = window.matchMedia("(min-width: 1024px)");
     const reset = () => { setOpen(false); setServicesOpen(false); setAreasOpen(false); };
     desktop.addEventListener("change", reset);
     return () => desktop.removeEventListener("change", reset);
@@ -97,7 +97,7 @@ export default function HomeHeader() {
   }, [open, servicesOpen, areasOpen]);
 
   return (
-    <header ref={header} key={pathname} className="home-header ns-on-dark" data-open={open} onClickCapture={(event) => { if ((event.target as Element).closest("a")) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }}>
+    <header ref={header} className="home-header ns-on-dark" data-open={open} onClickCapture={(event) => { if ((event.target as Element).closest("a")) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }}>
       <div className="home-header-inner">
         <Link href="/" aria-label="New Star Cleaning home" className="home-wordmark"><Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} sizes="(min-width: 1024px) 176px, 156px" /></Link>
         <nav className="home-desktop-nav" aria-label="Main navigation">

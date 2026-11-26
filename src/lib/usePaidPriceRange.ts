@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { paidHomeSize } from "@/lib/paidHomeSize";
+import { paidHomeSize, representativeBookableSqft } from "@/lib/paidHomeSize";
 import { isServiceZip, normalizedZip } from "@/lib/markets";
 
 type PriceInputs = {
@@ -28,10 +28,16 @@ type QuoteRequest = {
   market?: "fresno";
 };
 
-type QuotePrice = { total: number; biweekly?: number; market: "fresno" };
+type QuotePrice = {
+  total: number;
+  rangeHigh?: number;
+  biweekly?: number;
+  market: "fresno";
+  onlineBookingBlocked?: boolean;
+};
 type PriceResult =
   | { status: "hidden" | "custom" | "zip-required" | "out-of-area" }
-  | { status: "ready"; low: number; high?: number; biweekly?: number; market: "fresno" };
+  | { status: "ready"; low: number; high?: number; biweekly?: number; market: "fresno"; onlineBookingBlocked?: boolean };
 
 type PriceState = PriceResult & { key: string };
 
@@ -92,11 +98,22 @@ async function fetchPrice(request: QuoteRequest, condition: "normal" | "dusty", 
   // A ZIP lookup must attest to this region; never display another region's price.
   if ((request.zip && data.market !== "fresno") ||
       (data.market !== undefined && data.market !== "fresno")) throw new Error("Local price unavailable");
-  const total = request.serviceType === "MOVE_OUT" && isRecord(data.moveOutPackages) && data.moveOutPackages.essentials != null
+  const onlineBookingBlocked = data.onlineBookingBlocked === true;
+  const priceRange = isRecord(data.priceRange) && isPrice(data.priceRange.low) && isPrice(data.priceRange.high)
+    ? { low: data.priceRange.low, high: data.priceRange.high }
+    : null;
+  const rawTotal = request.serviceType === "MOVE_OUT" && isRecord(data.moveOutPackages) && data.moveOutPackages.essentials != null
     ? data.moveOutPackages.essentials : data.totalPrice;
+  const total = isPrice(rawTotal) ? rawTotal : priceRange?.low;
   if (!isPrice(total)) throw new Error("Invalid price");
   const biweekly = isRecord(data.frequencyTotals) ? data.frequencyTotals.BIWEEKLY : undefined;
-  return { total, market: "fresno", ...(isPrice(biweekly) ? { biweekly } : {}) };
+  return {
+    total,
+    ...(priceRange && priceRange.high >= total ? { rangeHigh: priceRange.high } : {}),
+    market: "fresno",
+    ...(isPrice(biweekly) ? { biweekly } : {}),
+    ...(onlineBookingBlocked ? { onlineBookingBlocked: true } : {}),
+  };
 }
 
 export default function usePaidPriceRange(inputs: PriceInputs) {
@@ -123,7 +140,17 @@ export default function usePaidPriceRange(inputs: PriceInputs) {
         if (normal === "custom" || dusty === "custom") {
           setResult({ key, status: "custom" });
         } else if (!dusty || (dusty.total >= normal.total && dusty.market === normal.market)) {
-          setResult({ key, status: "ready", market: normal.market, low: normal.total, ...(dusty ? { high: dusty.total } : {}),
+          const highTotal = dusty
+            ? Math.max(dusty.total, dusty.rangeHigh ?? 0, normal.rangeHigh ?? 0)
+            : normal.rangeHigh;
+          const blocked = Boolean(normal.onlineBookingBlocked || dusty?.onlineBookingBlocked);
+          setResult({
+            key,
+            status: "ready",
+            market: normal.market,
+            low: normal.total,
+            ...(highTotal !== undefined ? { high: highTotal } : {}),
+            ...(blocked ? { onlineBookingBlocked: true } : {}),
             ...(body.high && body.low.serviceType === "STANDARD" && normal.biweekly !== undefined && normal.biweekly < normal.total
               ? { biweekly: normal.biweekly } : {}),
           });
@@ -153,14 +180,16 @@ export default function usePaidPriceRange(inputs: PriceInputs) {
   const low = formatPrice(result.low);
   const range = result.high === undefined ? undefined : `${low}–${formatPrice(result.high, "high")}`;
   const service = request?.serviceType === "STANDARD" ? "Standard" : inputs.service;
+  const onlineBookingBlocked = Boolean(result.onlineBookingBlocked || (band && band.min >= 3500));
   return {
     status: "ready" as const,
     market: result.market,
     low,
     range,
+    onlineBookingBlocked,
     priceLowCents: Math.floor(result.low / 100) * 100,
     priceHighCents: result.high === undefined ? undefined : Math.ceil(result.high / 100) * 100,
-    bookableSqft: band && range ? String(band.min) : undefined,
+    bookableSqft: band && range && !onlineBookingBlocked ? representativeBookableSqft(band.value) : undefined,
     biweekly: result.biweekly === undefined ? undefined : formatPrice(result.biweekly, "nearest"),
     note: `Range shown on page: ${range || `From ${low}`} (${range ? "normal at size minimum–dusty at size maximum" : "normal condition"}, ${inputs.bedrooms} bed / ${inputs.bathrooms} bath${inputs.exactSqft ? `, ${inputs.exactSqft} sqft` : band ? `, ${band.label} sqft` : ""}, ${service}; ${result.market}).`,
   };

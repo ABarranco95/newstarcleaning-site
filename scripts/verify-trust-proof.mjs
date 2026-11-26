@@ -62,9 +62,12 @@ for (const review of googleReviews) {
 for (const topic of ["home", "standard", "deep", "move"]) assert.equal(reviewsFor(topic, 3).length, 3);
 
 const countClaim = /(\d[\d,]*)\s*\+?\s*(?:five-star\s+|5-star\s+|google\s+|customer\s+|verified\s+|happy\s+)*reviews?\b/gi;
-function assertReviewPresentation(html, label) {
+function assertReviewPresentation(html, label, allowVerifiedCount = false) {
   assert(!/<a\b/i.test(html), `${label}: review proof has no public links`);
-  for (const match of html.matchAll(countClaim)) assert.fail(`${label}: "${match[0]}" is a public numerical review-count claim`);
+  for (const match of html.matchAll(countClaim)) {
+    if (allowVerifiedCount && match[1] === String(googleRating.reviewCount)) continue;
+    assert.fail(`${label}: "${match[0]}" is an unverified public numerical review-count claim`);
+  }
 }
 const { default: StarRowModule } = { default: load("src/components/Icon.tsx", { react: {} }) };
 const { default: GoogleRating } = load("src/components/GoogleRating.tsx", {
@@ -72,34 +75,31 @@ const { default: GoogleRating } = load("src/components/GoogleRating.tsx", {
   "@/components/Icon": StarRowModule,
 });
 assert.equal(business.googleMapsUrl, "https://www.google.com/maps?cid=13545152036473270457", "rating is backed by the current review-carrying profile");
-for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { market: "southbay" }, { market: "southbay", onDark: true }, { market: "southbay", prominent: true }, { market: "southbay", onDark: true, prominent: true }]) {
+assert.equal(googleRating.reviewCount, 34, "canonical verified Google review count is recorded in googleRating.ts");
+for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { rated: true }, { rated: true, onDark: true }]) {
   const html = renderToStaticMarkup(createElement(GoogleRating, props));
-  assertReviewPresentation(html, "GoogleRating");
+  assertReviewPresentation(html, "GoogleRating", true);
   const visible = html.replace(/<[^>]*>/g, "");
-  assert(visible.includes(`${googleRating.score} on Google`), "shared proof renders the verified current Google score from its single source");
-  assert(!visible.includes(homesServedLine), "rating placements do not imply local job history in either market");
-  assert(!visible.includes("Central Valley"), "Angel's 2026-11-09 override removes region labels from rating proof in every market");
+  assert(visible.includes(`${googleRating.score} · ${googleRating.reviewCount} Google reviews`), "shared proof renders the verified Google score and review count from its single source");
+  assert(!visible.includes(homesServedLine), "rating placements do not imply unverified job-history slogans");
+  assert(!visible.includes("Central Valley"), "Angel's 2026-11-09 override removes region labels from rating proof");
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
 }
 const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
-  "@/components/MarketProvider": { useMarket: (id) => ({ id }) },
   "@/lib/googleRating": ratingModule,
   "@/components/Icon": StarRowModule,
 });
 const { default: ProofRow } = load("src/components/ProofRow.tsx", { "@/components/GoogleRating": { default: GoogleRating } });
-for (const market of ["fresno", "southbay"]) {
-  const html = renderToStaticMarkup(createElement(ProofRow, { market, tone: "dark" }));
-  assertReviewPresentation(html, `${market} hero proof`);
+for (const tone of ["dark", "light"]) {
+  const html = renderToStaticMarkup(createElement(ProofRow, { tone }));
+  assertReviewPresentation(html, `${tone} hero proof`, true);
   const visible = html.replace(/<[^>]*>/g, "");
-  assert(visible.includes(`Rated ${googleRating.score} on Google`) && visible.includes("100+ happy homeowners") && visible.includes("Insured"), "both markets lead with the owner-approved rating, homeowner count and insurance proof");
+  assert(visible.includes(`${googleRating.score} · ${googleRating.reviewCount} Google reviews`) && visible.includes("100+ happy homeowners") && visible.includes("Insured"), "hero proof leads with the verified Google rating, homeowner count and insurance proof");
   assert(!/Central Valley|local homes/i.test(visible), "hero proof makes no regional job-history claim");
 }
-const stripHtml = renderToStaticMarkup(createElement(TrustStrip, { market: "fresno" }));
+const stripHtml = renderToStaticMarkup(createElement(TrustStrip, {}));
 assertReviewPresentation(stripHtml, "TrustStrip");
-assert(!/on Google|5\.0/.test(stripHtml) && stripHtml.includes("Locally owned"), "shared trust strip replaces the unverifiable rating with local ownership");
-const southBayStripHtml = renderToStaticMarkup(createElement(TrustStrip, { market: "southbay" }));
-assertReviewPresentation(southBayStripHtml, "South Bay TrustStrip");
-assert(southBayStripHtml.includes("Owner-run") && !southBayStripHtml.includes("Locally owned") && southBayStripHtml.includes("within 24 hours") && southBayStripHtml.includes("no charge"), "South Bay trust proof uses owner identity and the scoped make-it-right promise, not Fresno locality");
+assert(!/on Google|5\.0/.test(stripHtml) && stripHtml.includes("Locally owned") && stripHtml.includes("within 24 hours") && stripHtml.includes("no charge"), "shared trust strip pairs local ownership with the scoped 24-hour promise");
 
 const { default: ReviewCards } = load("src/components/ReviewCards.tsx", {
   "@/lib/googleReviews": reviewsModule,
@@ -129,14 +129,16 @@ function sourceFiles(dir) {
   });
 }
 for (const file of sourceFiles("src")) {
+  const normalizedPath = file.replaceAll("\\", "/");
   const source = read(file);
-  for (const match of source.matchAll(countClaim)) {
-    assert.fail(`${file}: "${match[0]}" is a public numerical review-count claim`);
+  if (normalizedPath !== "src/lib/googleRating.ts") {
+    for (const match of source.matchAll(countClaim)) {
+      assert.fail(`${file}: "${match[0]}" is a hardcoded numerical review-count claim outside googleRating.ts`);
+    }
   }
-  assert(!/aggregateRating|reviewCount"\s*:/.test(source), `${file}: no self-served review schema`);
   if (file.endsWith(".tsx")) {
     assert(!/5\.0\s*(?:on Google|★)/.test(source), `${file}: no typed Google rating claims`);
-    if (file.replaceAll("\\", "/") !== "src/components/GoogleRating.tsx") assert(!/googleRating\.score/.test(source), `${file}: only GoogleRating reads the score`);
+    if (normalizedPath !== "src/components/GoogleRating.tsx") assert(!/googleRating\.score/.test(source), `${file}: only GoogleRating reads the score`);
   }
 }
 

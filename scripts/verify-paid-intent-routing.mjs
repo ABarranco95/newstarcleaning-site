@@ -24,9 +24,9 @@ assert(paidPage.includes('normalizedService.includes("recurring")'), "recurring 
 assert(!paidPage.includes('normalizedService.includes("standard") return "recurring"'), "generic standard/house intent is not silently routed to recurring");
 assert(paidPage.includes('serviceDefault: "Not sure yet"'), "generic house form state remains neutral");
 assert(
-  paidPage.includes("House cleaning in Fresno, Clovis & Madera") &&
+  paidPage.includes("House cleaning in ${city}") &&
     !paidPage.includes("without the guesswork"),
-  "generic house headline matches the paid search service and core cities",
+  "generic house headline matches the paid search service and dynamic city",
 );
 // Approved L1 price anchors replace the earlier no-price policy. Check the
 // exact scoped copy on the rendered form, not merely the presence of a price.
@@ -85,6 +85,10 @@ const reviewsModule = { exports: {} };
 vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/googleReviews.ts"), "utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
 }).outputText, { exports: reviewsModule.exports, module: reviewsModule });
+const businessModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(readFileSync(path.join(root, "src/lib/business.ts"), "utf8"), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+}).outputText, { exports: businessModule.exports, module: businessModule });
 let params = new URLSearchParams();
 const boundary = (name) => (props) => jsx.jsx("test-boundary", { ...props, "data-boundary": name });
 const compiled = ts.transpileModule(`${paidPage}\nexports.routingTest = { detectIntent, INTENT_CONFIG };`, {
@@ -106,7 +110,6 @@ vm.runInNewContext(compiled.outputText, {
     };
     if (name === "next/navigation") return { useSearchParams: () => params };
     if (name === "next/image") return boundary("Image");
-    if (name === "@/components/MarketProvider") return { useMarket: (id) => id ? marketsModule.exports.markets[id] : marketsModule.exports.neutralMarket };
     if (name.startsWith("@/components/")) return boundary(name.split("/").at(-1));
     if (name === "@/lib/attribution") return { captureFirstPaidTouch: () => {} };
     if (name === "@/lib/conversionTracking") return { trackFunnelEvent: () => {} };
@@ -115,11 +118,12 @@ vm.runInNewContext(compiled.outputText, {
     if (name === "@/lib/realWorkPhotos") return photosModule.exports;
     if (name === "@/lib/googleReviews") return reviewsModule.exports;
     if (name === "@/lib/markets") return marketsModule.exports;
+    if (name === "@/lib/business") return businessModule.exports;
     throw new Error(`Unexpected paid dependency: ${name}`);
   },
 });
 const { detectIntent, INTENT_CONFIG } = runtimeModule.exports.routingTest;
-const render = (service, frequency = "", directBookingUrl = "https://booking.example.test/", city = "clovis", pageMarket) => {
+const render = (service, frequency = "", directBookingUrl = "https://booking.example.test/", city = "clovis") => {
   params = new URLSearchParams({ service: service || "", frequency, city, gclid: "regression-only" });
   const nodes = [];
   const text = [];
@@ -131,7 +135,7 @@ const render = (service, frequency = "", directBookingUrl = "https://booking.exa
     nodes.push(node);
     visit(node.props?.children);
   }
-  visit(runtimeModule.exports.default({ directBookingUrl, service, frequency, city: params.get("city"), pageMarket }));
+  visit(runtimeModule.exports.default({ directBookingUrl, service, frequency, city: params.get("city") }));
   return { nodes, text: text.join(" "), forms: nodes.filter((node) => /QuoteForm$/.test(node.props?.["data-boundary"] || "")) };
 };
 const commercialAliases = ["Office / commercial cleaning", "commercial-cleaning", "commercial", "office", "commercial cleaning", "office-cleaning", "  OFFICE CLEANING  ", "recurring office cleaning", "commercial deep cleaning"];
@@ -139,13 +143,21 @@ const expectedPriceLines = {
   deep: "See your deep-cleaning price for your ZIP and home. Total confirmed before you book.",
   move: "See your move-in/out price for your ZIP and home. Total confirmed before you book.",
   house: "See your house-cleaning price for your ZIP and home. Total confirmed before you book.",
+  recurring: "See your recurring cleaning price for your ZIP and home. Total confirmed before you book.",
 };
-const expectedHeadlines = {
+const expectedDefaultHeadlines = {
   deep: "Deep house cleaning in Fresno, Clovis & Madera",
   move: "Move-out & move-in cleaning in Fresno, Clovis & Madera",
   house: "House cleaning in Fresno, Clovis & Madera",
+  recurring: "Reliable recurring house cleaning for Fresno, Clovis & Madera homes.",
 };
-const expectedDecisionReviews = { deep: "daumdatta", move: "merle-f", house: "merle-f" };
+const expectedClovisHeadlines = {
+  deep: "Deep house cleaning in Clovis",
+  move: "Move-out & move-in cleaning in Clovis",
+  house: "House cleaning in Clovis",
+  recurring: "Reliable recurring house cleaning for Clovis homes.",
+};
+const expectedDecisionReviews = { deep: "daumdatta", move: "merle-f", house: "merle-f", recurring: "daisy-m" };
 for (const intent of Object.keys(INTENT_CONFIG)) {
   assert(INTENT_CONFIG[intent].priceLine === expectedPriceLines[intent], `${intent}: service-specific ZIP pricing instructions, never hardcoded prices`);
   const result = render(intent);
@@ -153,9 +165,11 @@ for (const intent of Object.keys(INTENT_CONFIG)) {
   assert(!Object.hasOwn(result.forms[0].props, "offer") && !Object.hasOwn(result.forms[0].props, "recurringOffer"), `${intent}: no incentive props can reach intake`);
 }
 for (const [intent, priceLine] of Object.entries(expectedPriceLines)) {
+  const defaultResult = render(intent, "", "https://booking.example.test/", "");
+  assert(defaultResult.nodes.find((node) => node.type === "h1")?.props.children === expectedDefaultHeadlines[intent], `${intent}: default service-area H1`);
   const result = render(intent);
   const form = result.forms[0];
-  assert(result.nodes.find((node) => node.type === "h1")?.props.children === expectedHeadlines[intent], `${intent}: exact message-matched H1`);
+  assert(result.nodes.find((node) => node.type === "h1")?.props.children === expectedClovisHeadlines[intent], `${intent}: exact dynamic city H1`);
   const hero = result.nodes.find((node) => node.type === "section" && node.props["aria-labelledby"] === "paid-title");
   assert(!JSON.stringify(hero).includes('"data-boundary":"BookingPortalLink"'), `${intent}: no competing self-book exit in the hero or form`);
   assert(form.props.subtitle === priceLine && form.props.compact === true, `${intent}: approved price replaces the subtitle on the compact one-step form`);
@@ -164,7 +178,7 @@ for (const [intent, priceLine] of Object.entries(expectedPriceLines)) {
   assert(call?.type === "a" && call.props.href === "tel:+1" + "559" + "785" + "2822" && call.props["data-phone-location"] === "paid_quote_submit" && !call.props.onClick, `${intent}: secondary call uses the customer number and existing delegated tel tracker without a duplicate click handler`);
   const proof = form.props.decisionProof;
   const reviewId = expectedDecisionReviews[intent];
-  const existingReview = reviewsModule.exports.reviewsFor(intent === "house" ? "home" : intent).find((review) => review.id === reviewId);
+  const existingReview = reviewsModule.exports.reviewsFor(intent === "house" ? "home" : intent === "recurring" ? "standard" : intent).find((review) => review.id === reviewId);
   assert(proof?.type === "figure" && proof.props["data-review-id"] === reviewId && existingReview?.excerpt.every((part) => existingReview.text.includes(part)), `${intent}: decision proof comes from a verbatim review already on this variant`);
   const remaining = render(intent).nodes.find((node) => node.props?.["data-boundary"] === "ReviewCards")?.props.reviews;
   assert(remaining?.length === 2 && remaining.every((review) => review.id !== reviewId), `${intent}: the moved review is not duplicated in the lower review strip`);
@@ -202,7 +216,7 @@ for (const [service, frequency, expected] of [[null, "", "house"], ["unknown", "
   assert(!render(service, frequency, null).nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink"), `${expected}: missing booking configuration removes the lower exit`);
 }
 const project = render("post-construction-cleaning", "weekly");
-assert(detectIntent("post-construction-cleaning", "weekly") === "postConstruction" && project.forms[0]?.props["data-boundary"] === "QuickQuoteForm" && project.forms[0].props.defaultService === "Post-construction cleaning" && project.forms[0].props.directBookingUrl === null && !project.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "")), "post-construction retains its existing conditional form and no residential booking/proof");
+assert(detectIntent("post-construction-cleaning", "weekly") === "postConstruction" && project.forms[0]?.props["data-boundary"] === "CommercialQuoteForm" && project.forms[0].props.defaultService === "Post-construction cleaning" && project.forms[0].props.defaultCity === "Clovis" && !project.forms[0].props.directBookingUrl && !project.nodes.some((node) => node.props?.["data-boundary"] === "BookingPortalLink" || /\/photos\/|\/illustrations\//.test(node.props?.src || "")), "post-construction uses the dedicated walkthrough proposal form with city carryover and no residential booking/proof");
 assert(project.text.includes("Review your written proposal") && project.text.includes("Request a proposal") && project.text.includes("Before we propose the work.") && !/\$\d|You choose the date|Get my quote|Before you book|Price before booking/.test(project.text), "post-construction process, trust, FAQ and sticky stay proposal-only");
 assert(INTENT_CONFIG.postConstruction.proofOrder.length === 0 && !("priceContext" in INTENT_CONFIG.postConstruction), "post-construction has no residential photo mapping or price anchor");
 for (const frequency of ["", "weekly", "biweekly", "monthly", "bi-weekly", "recurring", "WEEKLY", "  Bi-Weekly  ", " MONTHLY ", "unknown"]) {
@@ -257,27 +271,24 @@ for (const reply of [{ ok: false, body: { error: "unavailable" } }, { ok: true, 
   assert(rejected, "bad quote responses cannot render fabricated prices");
 }
 
-// Region isolation extends the existing money-boundary test, not a new probe.
-for (const intent of ["house", "deep", "move"]) {
-  const result = render(intent, "", "https://booking.example.test/", "san-jose", "southbay");
-  const form = result.forms[0];
-  assert(result.nodes.find((node) => node.type === "h1")?.props.children.endsWith("in San Jose") && form.props.pageMarket === "southbay" && form.props.landingCity === "San Jose", `${intent}: South Bay variant renders its own H1 and freezes the form pricing market`);
-  assert(!/\$\d/.test(result.text) && !/Fresno & Clovis/.test(result.text), `${intent}: no hardcoded price or Fresno headline on a South Bay variant`);
-}
-const southBayRequest = priceTest.buildRequest({ ...priceInput, market: "southbay" });
-const zipRequest = priceTest.buildRequest({ ...priceInput, market: "fresno", zip: "95118" });
-assert(southBayRequest.market === "southbay" && zipRequest.zip === "95118" && !("market" in zipRequest), "typed ZIP wins over page/cookie market; only Apex resolves ZIP coverage");
-for (const body of [{ totalPrice: 66000 }, { totalPrice: 66000, market: "fresno" }, { code: "unsupported_area", market: "unsupported" }]) {
+// Fresno / Clovis / Madera allowlist + large-home onlineBookingBlocked handling.
+assert(sizeModule.exports.representativeBookableSqft("under-1000") === "850" && sizeModule.exports.representativeBookableSqft("1500-1999") === "1500" && sizeModule.exports.representativeBookableSqft("3500-3999") === undefined, "representative bookable sqft maps under-1000 to 850 and withholds online self-booking at 3,500+ sqft");
+assert(marketsModule.exports.isServiceZip("93720") && marketsModule.exports.isServiceZip("93619") && marketsModule.exports.isServiceZip("93637") && marketsModule.exports.isServiceZip("93650"), "instant service ZIP allowlist covers Fresno, Clovis, Madera and Pinedale");
+assert(!marketsModule.exports.isServiceZip("93622") && marketsModule.exports.isNearbyAssistedZip("93622") && !marketsModule.exports.isServiceZip("95118") && !marketsModule.exports.isNearbyAssistedZip("95118"), "outer 936xx towns route to assisted quotes while non-area ZIPs stay out of area");
+assert(priceTest.buildRequest({ ...priceInput, zip: "93622" }) === null && priceTest.buildRequest({ ...priceInput, zip: "95118" }) === null, "outer 936xx and out-of-area ZIPs never request instant online pricing");
+const fresnoZipRequest = priceTest.buildRequest({ ...priceInput, zip: "93711" });
+assert(fresnoZipRequest.zip === "93711" && !("market" in fresnoZipRequest), "typed Fresno ZIP wins so Apex resolves ZIP coverage");
+for (const body of [{ totalPrice: 66000 }, { totalPrice: 66000, market: "southbay" }, { code: "unsupported_area", market: "unsupported" }]) {
   quoteReply = { ok: true, body };
   let rejected = false;
-  try { await priceTest.fetchPrice(southBayRequest, "normal", priceSignal); } catch { rejected = true; }
-  assert(rejected, "South Bay never displays a stale Fresno/unattested/unsupported numeric quote");
+  try { await priceTest.fetchPrice(fresnoZipRequest, "normal", priceSignal); } catch { rejected = true; }
+  assert(rejected, "ZIP pricing rejects unattested or non-Fresno responses");
 }
-quoteReply = { ok: true, body: { totalPrice: 66000, market: "southbay" } };
-assert((await priceTest.fetchPrice(southBayRequest, "normal", priceSignal)).market === "southbay", "attested South Bay engine result is accepted");
 quoteReply = { ok: true, body: { totalPrice: 38600, market: "fresno" } };
-const fresnoZipRequest = priceTest.buildRequest({ ...priceInput, market: "southbay", zip: "93711" });
-assert((await priceTest.fetchPrice(fresnoZipRequest, "normal", priceSignal)).market === "fresno", "typed ZIP result uses Apex's returned market, never the page guess");
+assert((await priceTest.fetchPrice(fresnoZipRequest, "normal", priceSignal)).market === "fresno", "attested Fresno engine result is accepted");
+quoteReply = { ok: true, body: { market: "fresno", onlineBookingBlocked: true, priceRange: { low: 46000, high: 58000 } } };
+const blockedLarge = await priceTest.fetchPrice(fresnoZipRequest, "normal", priceSignal);
+assert(blockedLarge.onlineBookingBlocked === true && blockedLarge.total === 46000 && blockedLarge.rangeHigh === 58000, "large-home onlineBookingBlocked + priceRange responses preserve range while blocking online self-booking");
 
 if (failures.length) {
   console.error("Paid intent routing verification failed:");

@@ -27,7 +27,7 @@ vm.runInNewContext(emitted, {
     if (name === "react") return { useMemo: (fn) => fn() };
     if (name === "next/navigation") return { useSearchParams: () => params };
     if (name === "@/lib/attribution") return { readFirstPaidTouch: () => stored };
-    if (name === "@/lib/conversionTracking") return { trackFunnelEvent: (event, payload) => events.push({ event, payload }) };
+    if (name === "@/lib/conversionTracking") return { trackFunnelEvent: (event, payload) => events.push({ event, payload }), paidSessionId: () => "11111111-1111-4111-8111-111111111111" };
     if (name === "@/lib/submissionId") return { createSubmissionId: () => `handoff-test-${++sequence}` };
     if (name === "@/lib/markets") return marketsModule.exports;
     if (name === "@/components/MarketProvider") return { useMarket: (id) => marketsModule.exports.markets[id || "fresno"] };
@@ -63,9 +63,9 @@ for (const [service, city, frequency] of [
 }
 const portalModule = { exports: {} };
 params = new URLSearchParams("zip=93711&market=fresno");
-const regionalLink = render({ baseUrl: "https://booking.example.test/book?zip=93711", service: "Deep cleaning", zip: "95118", market: "southbay" });
+const regionalLink = render({ baseUrl: "https://booking.example.test/book?zip=93711", service: "Deep cleaning", zip: "93720", sqft: "1500", bedrooms: "3", bathrooms: "2" });
 const regionalUrl = new URL(regionalLink.props.href);
-check(["zip", "nsc_zip"].every(key => regionalUrl.searchParams.get(key) === "95118") && ["market", "nsc_market"].every(key => regionalUrl.searchParams.get(key) === "southbay"), "explicit ZIP and page market reach ordinary booking URLs in canonical and legacy hint fields");
+check(["zip", "nsc_zip"].every(key => regionalUrl.searchParams.get(key) === "93720") && ["market", "nsc_market"].every(key => regionalUrl.searchParams.get(key) === "fresno") && regionalUrl.searchParams.get("nsc_sqft") === "1500" && regionalUrl.searchParams.get("nsc_beds") === "3" && regionalUrl.searchParams.get("nsc_baths") === "2", "explicit ZIP, home size, and Fresno market reach ordinary booking URLs in canonical and legacy hint fields");
 const bookingEnv = { NEXT_PUBLIC_DIRECT_BOOKING_URL: "" };
 vm.runInNewContext(ts.transpileModule(readFileSync("src/lib/bookingPortal.ts", "utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
@@ -117,8 +117,8 @@ check(form.includes("Request a walkthrough") && form.includes("Get a quote") && 
 check(form.includes("data.metadata?.apex?.success === true") && form.includes("buildQuoteSmsConsent(smsOptIn, postedContactPreference, source)"), "Apex acceptance and optional-consent contract remain in place");
 
 const prefill = prefillModule.exports;
-const regionalSnapshot = prefill.acceptedPrefillSnapshot({ service: "Deep cleaning", zip: "95118", market: "southbay", city: "San Jose" }, true, false);
-check(regionalSnapshot.zip === "95118" && regionalSnapshot.market === "southbay" && !regionalSnapshot.city && prefill.validPayload(regionalSnapshot), "ZIP/market survive privately without promoting a campaign city to the customer's address");
+const regionalSnapshot = prefill.acceptedPrefillSnapshot({ service: "Deep cleaning", zip: "93720", market: "fresno", city: "Clovis" }, true, false);
+check(regionalSnapshot.zip === "93720" && regionalSnapshot.market === "fresno" && !regionalSnapshot.city && prefill.validPayload(regionalSnapshot), "ZIP/market survive privately without promoting a campaign city to the customer's address");
 const emptyMove = prefill.acceptedPrefillSnapshot({ service: "Move-in / move-out cleaning", moveOutAddons: [] }, true, true);
 check(Array.isArray(emptyMove.moveOutAddons) && emptyMove.moveOutAddons.length === 0 && Object.isFrozen(emptyMove.moveOutAddons), "explicit empty Move extras survive as a frozen Essentials selection");
 check(!Object.hasOwn(prefill.acceptedPrefillSnapshot({ service: "Move-in / move-out cleaning" }, true, true), "moveOutAddons"), "omitted Move extras remain omitted, not silently changed to Essentials");
@@ -156,17 +156,18 @@ for (const service of ["Deep cleaning", "Standard recurring cleaning", "Move-in 
     paidInternal = mode === "url" || mode === "blocked-storage";
     storageInternal = mode === "storage";
     storageBlocked = mode === "blocked-storage";
-    const tree = paidModule.exports.default({ baseUrl: "https://book.newstarcleaning.com/book?name=excluded&gclid=excluded", service, bedrooms: "3", bathrooms: "2", squareFeet: "1500", zip: "95118", market: "southbay", primary: true });
+    const tree = paidModule.exports.default({ baseUrl: "https://book.newstarcleaning.com/book?name=excluded&gclid=excluded", service, bedrooms: "3", bathrooms: "2", squareFeet: "1500", zip: "93720", primary: true });
     const button = tree.props.children[0];
     const count = transfers.length;
     check(button.props.type === "button" && button.props.className.includes("qf-submit") && transfers.length === count, "priced booking is the primary non-submit action; rendering does not open booking");
     button.props.onClick();
     const { destination, snapshot } = transfers.at(-1);
     const url = new URL(destination);
-    check(transfers.length === count + 1 && url.searchParams.get("nsinternal") === (mode === "external" ? null : "1") && url.searchParams.get("zip") === "95118" && url.searchParams.get("market") === "southbay" && [...url.searchParams.keys()].every(key => ["nsinternal", "zip", "market"].includes(key)), "explicit click carries ZIP/market and internal exclusion, never identity or attribution IDs in the URL");
+    const allowedUrlKeys = ["nsinternal", "zip", "nsc_zip", "market", "nsc_market", "nsc_service", "nsc_sqft", "nsc_beds", "nsc_baths", "nsc_frequency", "gclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "funnelSessionId"];
+    check(transfers.length === count + 1 && url.searchParams.get("nsinternal") === (mode === "external" ? null : "1") && url.searchParams.get("zip") === "93720" && url.searchParams.get("nsc_zip") === "93720" && url.searchParams.get("nsc_sqft") === "1500" && url.searchParams.get("nsc_service") === service && url.searchParams.get("market") === "fresno" && url.searchParams.get("gclid") === "gclid-fixture" && url.searchParams.get("funnelSessionId") === "11111111-1111-4111-8111-111111111111" && [...url.searchParams.keys()].every(key => allowedUrlKeys.includes(key)) && !["name", "phone", "email", "smsConsent", "fbclid"].some(key => url.searchParams.has(key)), "explicit click carries home hints, allowlisted attribution and internal exclusion, never PII");
     check(snapshot.service === service && snapshot.squareFeet === "1500" && snapshot.frequency === "one-time" && snapshot.condition === "normal" && snapshot.gclid === "gclid-fixture" && !snapshot.name && !snapshot.fbclid && !snapshot.smsConsent, "paid prefill keeps home pricing defaults and allowlisted attribution only");
     check(snapshot.funnelSessionId === "11111111-1111-4111-8111-111111111111", "paid prefill carries the originating journey session");
-    check(snapshot.zip === "95118" && snapshot.market === "southbay" && prefill.validPayload(snapshot), "paid private prefill carries the priced ZIP/market in an accepted wire shape");
+    check(snapshot.zip === "93720" && snapshot.market === "fresno" && prefill.validPayload(snapshot), "paid private prefill carries the priced ZIP/market in an accepted wire shape");
     check(service === "Move-in / move-out cleaning" ? Array.isArray(snapshot.moveOutAddons) && snapshot.moveOutAddons.length === 0 : !Object.hasOwn(snapshot, "moveOutAddons"), "Move alone explicitly requests Essentials with empty extras");
     check(events.at(-1).event === "booking_cta_click" && events.at(-1).payload.ctaLocation === "paid_live_price", "paid click retains the diagnostic funnel event, not a lead conversion");
   }

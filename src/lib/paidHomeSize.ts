@@ -18,6 +18,17 @@ export function paidHomeSize(value: string) {
   return PAID_HOME_SIZES.find((size) => size.value === value);
 }
 
+/**
+ * Representative square footage carried into /book so the wizard opens at the
+ * matching price tier (avoids prefilling 100 sqft for "under-1000" and leaves
+ * 3,500+ sqft homes to assisted quote review).
+ */
+export function representativeBookableSqft(value: string): string | undefined {
+  const size = paidHomeSize(value);
+  if (!size || size.max === null || size.min >= 3500) return undefined;
+  return size.value === "under-1000" ? "850" : String(size.min);
+}
+
 // Preserve a band, not invented exact footage, in Apex's existing lead shape.
 // Apex's lead bands are coarser than its pricing tiers above 3,499 sqft.
 export function paidLeadHomeSize(value: string): string {

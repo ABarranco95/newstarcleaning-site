@@ -13,6 +13,24 @@ export function serviceAreaToday(now = new Date()): string {
   return `${part("year")}-${part("month")}-${part("day")}`;
 }
 
+export function isWithinReplyWindow(now = new Date()): boolean {
+  const hourPart = new Intl.DateTimeFormat("en-US", {
+    timeZone: SERVICE_TIME_ZONE,
+    hour: "2-digit",
+    hour12: false,
+  })
+    .formatToParts(now)
+    .find((value) => value.type === "hour")?.value;
+  const hour = Number(hourPart);
+  return Number.isFinite(hour) && hour >= 8 && hour < 20;
+}
+
+export function replyWindowExpectation(now = new Date()): string {
+  return isWithinReplyWindow(now)
+    ? "We reply quickly during 8 AM–8 PM PT."
+    : "We're after hours right now — we'll follow up first thing after 8 AM PT.";
+}
+
 function isCalendarDay(value: unknown): value is string {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const parsed = new Date(`${value}T00:00:00.000Z`);

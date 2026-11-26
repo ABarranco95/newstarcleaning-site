@@ -15,9 +15,17 @@ export default function MobileContactActions() {
   const [quoteInView, setQuoteInView] = useState<string | null>(null);
 
   useEffect(() => {
-    const quote = document.querySelector("#quote, #quote-form");
-    const pickers = document.querySelectorAll("[data-price-picker]");
+    const targets = document.querySelectorAll("#quote, #quote-form, main form, [data-price-picker]");
     const visible = new Set<Element>();
+    const syncInitial = () => {
+      const vh = window.innerHeight || 0;
+      targets.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.height > 0 && rect.top < vh && rect.bottom > 0) visible.add(el);
+      });
+      setQuoteInView(visible.size ? pathname : null);
+    };
+    syncInitial();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) visible.add(entry.target);
@@ -25,8 +33,7 @@ export default function MobileContactActions() {
       }
       setQuoteInView(visible.size ? pathname : null);
     });
-    if (quote) observer.observe(quote);
-    pickers.forEach((picker) => observer.observe(picker));
+    targets.forEach((quote) => observer.observe(quote));
     return () => observer.disconnect();
   }, [pathname]);
 
@@ -60,8 +67,8 @@ export default function MobileContactActions() {
         className="mobile-contact-bar"
       >
         <div className="mobile-contact-inner">
-          <a href={business.phoneHref} data-phone-location="mobile_contact" className="mobile-contact-link">Call</a>
-          <a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_contact" className="mobile-contact-link">Text</a>
+          <a href={business.phoneHref} data-phone-location="mobile_contact_call" className="mobile-contact-link">Call</a>
+          <a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_contact_sms" className="mobile-contact-link">Text</a>
           {directBookingUrl ? <HomeBookingLink placement="mobile" /> : <HomeQuoteLink className="mobile-contact-link">Get a quote</HomeQuoteLink>}
         </div>
       </nav>
