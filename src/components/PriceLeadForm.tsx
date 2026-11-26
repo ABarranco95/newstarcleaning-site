@@ -1045,12 +1045,12 @@ function PriceLeadFormContent({
                 </div>
                 <fieldset className="qf-step">
                   <legend className="qf-label">Pets in the home?<span className="qf-optional">Optional</span></legend>
-                  <div className="qf-chips mt-2">
+                  <div className="qf-chips qf-chips-2 mt-2">
                     {[
                       { value: "no", label: "No pets" },
                       { value: "yes", label: "Yes, pets" },
                     ].map((option) => (
-                      <label key={option.value}>
+                      <label key={option.value} className="qf-chip">
                         <input
                           type="radio"
                           name="hasPets"
@@ -1202,59 +1202,18 @@ function PriceLeadFormContent({
             <button type="button" aria-expanded={homeExpanded} aria-controls={field("home")} aria-describedby={field("summary")} onClick={() => setHomeExpanded(!homeExpanded)}>Change</button>
           </div>
           <div id={field("home")} className="ns-price-home" data-collapsed={homeExpanded ? undefined : ""}>
-            {placement === "page" ? (
-              <>
-                <fieldset className="qf-step">
-                  <legend className="qf-label">Bedrooms</legend>
-                  <div className="qf-chips nq-home-chips">
-                    {bedroomsOptions.map((value) => (
-                      <label key={value}>
-                        <input
-                          type="radio"
-                          name={field("bedrooms")}
-                          value={value}
-                          checked={draft.bedrooms === value}
-                          onChange={() => { trackFormStart(); updateQuoteDraft({ bedrooms: value }); }}
-                        />
-                        <span>{value}</span>
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-                <fieldset className="qf-step">
-                  <legend className="qf-label">Bathrooms</legend>
-                  <div className="qf-chips nq-home-chips">
-                    {bathroomsOptions.map((value) => (
-                      <label key={value}>
-                        <input
-                          type="radio"
-                          name={field("bathrooms")}
-                          value={value}
-                          checked={draft.bathrooms === value}
-                          onChange={() => { trackFormStart(); updateQuoteDraft({ bathrooms: value }); }}
-                        />
-                        <span>{value}</span>
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-              </>
-            ) : (
-              <>
-                <div>
-                  <label htmlFor={field("bedrooms")}>Bedrooms</label>
-                  <select id={field("bedrooms")} name="bedrooms" value={draft.bedrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bedrooms: event.target.value }); }}>
-                    {bedroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor={field("bathrooms")}>Bathrooms</label>
-                  <select id={field("bathrooms")} name="bathrooms" value={draft.bathrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bathrooms: event.target.value }); }}>
-                    {bathroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
-                  </select>
-                </div>
-              </>
-            )}
+            <div>
+              <label htmlFor={field("bedrooms")}>Bedrooms</label>
+              <select id={field("bedrooms")} name="bedrooms" value={draft.bedrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bedrooms: event.target.value }); }}>
+                {bedroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor={field("bathrooms")}>Bathrooms</label>
+              <select id={field("bathrooms")} name="bathrooms" value={draft.bathrooms} onChange={(event) => { trackFormStart(); updateQuoteDraft({ bathrooms: event.target.value }); }}>
+                {bathroomsOptions.map((value) => <option key={value} value={value}>{value}</option>)}
+              </select>
+            </div>
             <div>
               <label htmlFor={field("size")}>Home size</label>
               <select id={field("size")} name="sqft" aria-label="Home size in square feet" value={draft.size} onChange={(event) => { trackFormStart(); updateQuoteDraft({ size: event.target.value }); }}>

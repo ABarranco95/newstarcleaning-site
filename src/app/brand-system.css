@@ -111,6 +111,7 @@
   .qf-progress[data-steps="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .qf-offer { margin-top: 12px; padding: 12px; border-left: 2px solid var(--color-primary); background: var(--color-cream-2); font-size: 14px; color: var(--color-ink); }
   .qf-chips { display: grid; grid-template-columns: repeat(var(--qf-cols, 3), minmax(0, 1fr)); gap: 8px; }
+  .qf-chips-2 { --qf-cols: 2; }
   .qf-chip { position: relative; display: flex; min-width: 0; }
   .qf-chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
   .qf-chip span { display: flex; flex: 1; align-items: center; justify-content: center; min-height: 46px; padding: 0 6px; border: 1.5px solid #cdd6e2; border-radius: 10px; background: #fff; font-size: 15.5px; font-weight: 700; color: var(--color-ink); transition: border-color .15s, background-color .15s; }
@@ -193,7 +194,7 @@
     .ns-section { padding: 72px 24px; }
     .ns-trust-list { padding: 72px 24px; }
     .ns-price-picker { padding: 24px; }
-    .ns-price-fields { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr) minmax(0, .85fr) minmax(0, 1.65fr); gap: 8px; margin-top: 16px; }
+    .ns-price-fields { grid-template-columns: minmax(112px, 1.05fr) minmax(0, .8fr) minmax(0, .85fr) minmax(0, 1.55fr); gap: 8px; margin-top: 16px; }
     .ns-price-home-summary { display: none; }
     .ns-price-home, .ns-price-home[data-collapsed] { display: contents; }
     .ns-price-home > div:last-child { grid-column: auto; }

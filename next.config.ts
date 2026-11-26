@@ -81,6 +81,16 @@ const nextConfig: NextConfig = {
         destination: "/blog/move-out-cleaning-checklist-before-inspection",
         permanent: true,
       },
+      {
+        source: "/services/move-in-move-out",
+        destination: "/services/move-out-cleaning",
+        permanent: true,
+      },
+      {
+        source: "/services/move-in-cleaning",
+        destination: "/services/move-out-cleaning",
+        permanent: true,
+      },
     ];
   },
 };
