@@ -9,6 +9,21 @@ export interface BlogSection {
   links?: BlogLink[];
 }
 
+export interface CostGuideConfig {
+  defaultService:
+    | "Standard recurring cleaning"
+    | "Deep cleaning"
+    | "Move-in / move-out cleaning";
+  priceSource: string;
+  leadLine: string;
+  snapshotCards: Array<{ label: string; price: string; detail: string }>;
+  comparisonTable: {
+    caption: string;
+    headers: [string, string, string];
+    rows: Array<[string, string, string]>;
+  };
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -21,6 +36,7 @@ export interface BlogPost {
   ctaHeadline?: string;
   ctaQuoteHref?: string;
   relatedLinks?: BlogLink[];
+  costGuide?: CostGuideConfig;
   body: BlogSection[];
 }
 
@@ -44,6 +60,61 @@ export const blogPosts: BlogPost[] = [
       { href: "/cleaning-services-fresno", label: "House cleaning in Fresno" },
       { href: "/cleaning-services-clovis", label: "House cleaning in Clovis" },
     ],
+    costGuide: {
+      defaultService: "Standard recurring cleaning",
+      priceSource: "organic_cost_guide_house",
+      leadLine:
+        "Put in your ZIP to see your real Fresno, Clovis, or Madera price right away. Nothing is charged today.",
+      snapshotCards: [
+        {
+          label: "Standard cleaning",
+          price: "From $165",
+          detail: "Maintained homes & recurring plans (save 10-20% starting Visit #2)",
+        },
+        {
+          label: "Deep cleaning",
+          price: "From $235",
+          detail: "Baseboards, shower glass, vents, switch plates & buildup reset",
+        },
+        {
+          label: "Move-in / move-out",
+          price: "From $325",
+          detail: "Empty home + inside empty cabinets, drawers & closets included",
+        },
+      ],
+      comparisonTable: {
+        caption: "2026 Fresno & Clovis house cleaning prices at a glance",
+        headers: ["Service or add-on", "Starting price", "What it covers"],
+        rows: [
+          [
+            "Standard house cleaning",
+            "$165+",
+            "Kitchen, bathrooms, dusting, and floors for maintained homes (save 10-20% Visit #2+ on recurring plans)",
+          ],
+          [
+            "Deep house cleaning",
+            "$235+",
+            "Full clean plus shower buildup, hand-wiped baseboards, vents, switch plates, door frames, and fans",
+          ],
+          [
+            "Move-in / move-out cleaning",
+            "$325+",
+            "Empty-home clean including inside empty cabinets, drawers, and closets",
+          ],
+          ["Inside refrigerator / inside oven", "+$35 / +$45", "Optional interior degreasing and shelf/drawer wipe-out"],
+          [
+            "Interior window glass / glass + tracks",
+            "+$6 / +$9 per window",
+            "Optional reachable interior glass, sills, and window tracks",
+          ],
+          [
+            "Carpet shampooing",
+            "+$60/room · +$45/stairway · +$30/hallway",
+            "Optional hot-water carpet shampooing priced per area before arrival",
+          ],
+        ],
+      },
+    },
     body: [
       {
         paragraphs: [
@@ -116,6 +187,57 @@ export const blogPosts: BlogPost[] = [
       { href: "/cleaning-services-fresno", label: "Deep cleaning in Fresno" },
       { href: "/cleaning-services-clovis", label: "Deep cleaning in Clovis" },
     ],
+    costGuide: {
+      defaultService: "Deep cleaning",
+      priceSource: "organic_cost_guide_deep",
+      leadLine:
+        "Check your exact deep cleaning price for Fresno, Clovis, or Madera in seconds. Book one-time or pair it with discounted recurring visits.",
+      snapshotCards: [
+        {
+          label: "Deep clean floor",
+          price: "From $235",
+          detail: "Smaller maintained homes & 1-2 bed layouts",
+        },
+        {
+          label: "What's added vs. standard",
+          price: "Detail scrub",
+          detail: "Hand-wiped baseboards, shower glass/grout, vents, trim & fans",
+        },
+        {
+          label: "Deep → Recurring",
+          price: "Save 10-20%",
+          detail: "Book Deep for Visit #1, switch to discounted upkeep Visit #2+",
+        },
+      ],
+      comparisonTable: {
+        caption: "Fresno & Clovis deep cleaning prices and optional add-ons",
+        headers: ["Deep clean item", "Price", "What's included"],
+        rows: [
+          [
+            "Deep house cleaning base",
+            "$235+",
+            "Kitchen, bathrooms, floors, shower buildup, baseboards, door frames, vents, switch plates, and reachable fans",
+          ],
+          [
+            "Ongoing recurring upkeep (Visit #2+)",
+            "$165+ (10-20% off)",
+            "Switch to monthly (10% off), every 2 weeks (15% off), or weekly (20% off) after Visit #1",
+          ],
+          ["Inside oven", "+$45", "Optional interior oven rack and door glass degreasing when cool and empty"],
+          ["Inside refrigerator", "+$35", "Optional interior shelf, bin, and drawer wipe-out when cleared"],
+          [
+            "Interior windows (glass / glass + tracks)",
+            "+$6 / +$9 per window",
+            "Optional reachable interior glass and dusty tracks",
+          ],
+          [
+            "Carpet shampooing",
+            "+$60/room · +$45/stairway · +$30/hallway",
+            "Optional room-by-room carpet shampooing added before your visit",
+          ],
+        ],
+      },
+    },
     body: [
       {
         paragraphs: [
@@ -178,6 +300,57 @@ export const blogPosts: BlogPost[] = [
       { href: "/cleaning-services-fresno", label: "Move-out cleaning in Fresno" },
       { href: "/cleaning-services-clovis", label: "Move-out cleaning in Clovis" },
     ],
+    costGuide: {
+      defaultService: "Move-in / move-out cleaning",
+      priceSource: "organic_cost_guide_moveout",
+      leadLine:
+        "See your empty-home move-out or move-in price for Fresno, Clovis, or Madera now. Empty cabinets, drawers, and closets are included.",
+      snapshotCards: [
+        {
+          label: "Empty-home floor",
+          price: "From $325",
+          detail: "Empty apartments & smaller Fresno/Clovis homes",
+        },
+        {
+          label: "Cabinets & closets",
+          price: "Included",
+          detail: "Empty kitchen/bath cabinets, drawers & closet shelves in base price",
+        },
+        {
+          label: "Popular lease add-ons",
+          price: "Priced upfront",
+          detail: "Oven +$45 · Fridge +$35 · Windows +$6-$9 · Carpet +$60/rm",
+        },
+      ],
+      comparisonTable: {
+        caption: "Fresno & Clovis move-out cleaning base scope vs. optional add-ons",
+        headers: ["Move-out item", "Price", "Scope details"],
+        rows: [
+          [
+            "Move-in / move-out base clean",
+            "$325+",
+            "Empty home kitchen, bathrooms, baseboards, fixtures, blinds dusted, edge-to-edge floors, empty microwave & dishwasher",
+          ],
+          [
+            "Empty cabinets, drawers & closets",
+            "Included",
+            "All cleared kitchen cabinets, bathroom vanities, drawers, closet shelves, and rods wiped inside",
+          ],
+          ["Inside oven", "+$45", "Optional interior oven cleaning when cool and empty"],
+          ["Inside refrigerator", "+$35", "Optional empty refrigerator shelves, bins, and drawers"],
+          [
+            "Interior windows (glass / glass + tracks)",
+            "+$6 / +$9 per window",
+            "Optional reachable interior window glass and tracks",
+          ],
+          [
+            "Carpet shampooing",
+            "+$60/room · +$45/stairway · +$30/hallway",
+            "Optional carpet shampooing for rooms, stairs, or hallways requested on lease checklists",
+          ],
+        ],
+      },
+    },
     body: [
       {
         paragraphs: [

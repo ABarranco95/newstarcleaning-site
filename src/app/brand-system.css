@@ -274,4 +274,51 @@
     :is(.home-reference, .site-reference:not(.paid-reference)) .ns-review-lead blockquote { font-size: 16px; line-height: 1.65; }
     :is(.home-reference, .site-reference:not(.paid-reference)) .ns-city-links-nearby { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
+
+  /* Local cost-guide interactive hero & comparison table */
+  .cost-guide-hero { max-width: 1280px; margin-inline: auto; display: grid; gap: 24px; padding: 28px 16px 36px; }
+  .cost-guide-copy { min-width: 0; }
+  .site-reference .cost-guide-copy h1 { color: var(--color-on-dark); max-width: 20ch; font-size: clamp(2rem, 1.45rem + 2.4vw, 3.25rem); line-height: 1.06; }
+  .cost-guide-lead { max-width: 58ch; margin-top: 14px; font-size: clamp(1rem, .95rem + .25vw, 1.125rem); line-height: 1.55; color: var(--color-on-dark-soft); }
+  .cost-guide-tiers { display: grid; gap: 8px; margin-top: 20px; }
+  .cost-guide-tier { padding: 10px 14px; border: 1px solid var(--color-on-dark-line); border-radius: var(--radius-control); background: var(--color-primary-dark); }
+  .cost-guide-tier-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .cost-guide-tier strong { font-size: 14.5px; font-weight: 700; line-height: 1.35; color: var(--color-on-dark); }
+  .cost-guide-tier-price { flex-shrink: 0; font-size: 14px; font-weight: 800; line-height: 1.3; color: var(--color-gold); font-variant-numeric: tabular-nums; }
+  .cost-guide-tier p { margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--color-on-dark-soft); }
+  .cost-guide-picker { min-width: 0; }
+  .cost-guide-article { padding-top: 32px; }
+  .cost-guide-article > .site-note:first-child { margin-top: 0; }
+  .cost-guide-table-wrap { overflow-x: auto; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); margin-block: 24px; }
+  .cost-guide-table-wrap .site-comparison { min-width: 520px; width: 100%; }
+  .cost-guide-table-wrap .site-comparison caption { background: var(--color-cream-2); color: var(--color-primary); border-bottom: 1px solid var(--color-line); font-size: 15px; }
+  .cost-guide-table-wrap .site-comparison thead th { background: var(--color-cream-2); color: var(--color-primary); font-size: 13.5px; }
+  .cost-guide-table-wrap .site-comparison tbody tr:last-child td,
+  .cost-guide-table-wrap .site-comparison tbody tr:last-child th { border-bottom: 0; }
+  @media (max-width: 639px) {
+    .cost-guide-table-wrap { overflow-x: visible; }
+    .cost-guide-table-wrap .site-comparison,
+    .cost-guide-table-wrap .site-comparison caption,
+    .cost-guide-table-wrap .site-comparison tbody { display: block; min-width: 0; }
+    .cost-guide-table-wrap .site-comparison thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .cost-guide-table-wrap .site-comparison tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 4px 12px; padding: 14px 16px; border-bottom: 1px solid var(--color-line); }
+    .cost-guide-table-wrap .site-comparison tbody tr:last-child { border-bottom: 0; }
+    .cost-guide-table-wrap .site-comparison tbody th,
+    .cost-guide-table-wrap .site-comparison tbody td { padding: 0; border: 0; }
+    .cost-guide-table-wrap .site-comparison tbody th { font-size: 15px; font-weight: 700; color: var(--color-ink); }
+    .cost-guide-table-wrap .site-comparison tbody td:nth-child(2) { font-size: 14.5px; font-weight: 800; color: var(--color-primary); text-align: right; font-variant-numeric: tabular-nums; max-width: 11.5rem; }
+    .cost-guide-table-wrap .site-comparison tbody td:nth-child(3) { grid-column: 1 / -1; font-size: 13.5px; line-height: 1.45; color: var(--color-ink-soft); }
+  }
+  @media (min-width: 640px) {
+    .cost-guide-hero { padding: 40px 24px 48px; gap: 28px; }
+    .cost-guide-tiers { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .cost-guide-tier { padding: 12px 14px; }
+    .cost-guide-tier-head { flex-direction: column; gap: 2px; }
+  }
+  @media (min-width: 1024px) {
+    .cost-guide-hero { padding: 56px 32px 64px; grid-template-columns: minmax(0, 1fr) minmax(510px, 540px); gap: 40px; align-items: start; }
+    .cost-guide-tiers { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .cost-guide-tier { padding: 12px 16px; }
+    .cost-guide-tier-head { flex-direction: row; align-items: baseline; justify-content: space-between; gap: 12px; }
+  }
 }
