@@ -114,6 +114,10 @@
 
   .home-reference .fresno-hero .hx-photo,
   .home-reference .fresno-hero-secondary {
+    grid-area: auto;
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
     margin: 0;
     min-width: 0;
   }
