@@ -3,7 +3,6 @@ import { socialMetadata } from "@/lib/socialMeta";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import MarketPhone from "@/components/MarketPhone";
-import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import GoogleRating from "@/components/GoogleRating";
@@ -11,14 +10,28 @@ import HomeQuoteLink from "@/components/HomeQuoteLink";
 import SiteHero from "@/components/SiteHero";
 import ReviewCards from "@/components/ReviewCards";
 import Icon from "@/components/Icon";
-import { bathroomResultPhotos, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, ovenInteriorPair, refrigeratorFullPair, tubSurroundPair, vanityDetailPhoto, ventDetailPair } from "@/lib/realWorkPhotos";
-
+import FresnoWorkGallery, {
+  type FresnoBeforeAfterPair,
+  type FresnoGalleryPhoto,
+} from "@/components/FresnoWorkGallery";
+import {
+  bathroomResultPhotos,
+  cooktopGratesPair,
+  emptyHomeResultPhotos,
+  homeResultPhotos,
+  kitchenSurfacesPhoto,
+  ovenBuildupPair,
+  refrigeratorFullPair,
+  tubSurroundPair,
+  vanityDetailPhoto,
+  ventDetailPair,
+} from "@/lib/realWorkPhotos";
 import "./our-work.css";
 
 export const metadata: Metadata = {
   title: "Our Work: Real Cleaning Photos, Before & After",
   description:
-    "See New Star Cleaning’s work across Fresno, Clovis, and Madera: kitchens, bathrooms, living areas, empty homes, and real before-and-after cleaning photos.",
+    "See New Star Cleaning's work across Fresno, Clovis, and Madera: interactive before-and-after shower, oven, cooktop, and vent slider plus real room photos.",
   alternates: { canonical: "/our-work" },
   ...socialMetadata({
     title: "Our Work: Real Cleaning Photos, Before & After | New Star Cleaning",
@@ -28,142 +41,297 @@ export const metadata: Metadata = {
   }),
 };
 
-const categories = [
-  { id: "before-after", label: "Before & after" },
-  { id: "kitchens-living", label: "Kitchens & living areas" },
-  { id: "bathrooms", label: "Bathrooms" },
-  { id: "empty-homes", label: "Empty homes" },
+const pairs: FresnoBeforeAfterPair[] = [
+  {
+    id: "shower-detail",
+    pillLabel: "Shower Detail",
+    title: "Shower Detail",
+    scopeBadge: "Included in Deep & Move-Out",
+    caption:
+      "A shower before and after a New Star cleaning. Soap buildup and surface grime removed; permanent hard-water etching on aged glass or tile can remain.",
+    serviceSlug: "deep-cleaning",
+    before: { src: "/photos/before1.jpg", alt: "Shower before cleaning" },
+    after: { src: "/photos/after1.jpg", alt: "The same shower after cleaning" },
+  },
+  {
+    id: "inside-oven",
+    pillLabel: "Inside the Oven",
+    title: "Inside the Oven (Add-On)",
+    scopeBadge: "Optional Add-On ($45)",
+    isAddOn: true,
+    caption: ovenBuildupPair.label,
+    serviceSlug: "deep-cleaning",
+    before: { src: ovenBuildupPair.before.src, alt: ovenBuildupPair.before.alt },
+    after: { src: ovenBuildupPair.after.src, alt: ovenBuildupPair.after.alt },
+  },
+  {
+    id: "tub-surround",
+    pillLabel: "Tub & Tile Surround",
+    title: "Tub & Tile Surround",
+    scopeBadge: "Included in Deep & Move-Out",
+    caption: "Tub and tile surround detail from our work. Reachable tile and tub buildup scrubbed clean.",
+    serviceSlug: "deep-cleaning",
+    before: { src: tubSurroundPair.before.src, alt: tubSurroundPair.before.alt },
+    after: { src: tubSurroundPair.after.src, alt: tubSurroundPair.after.alt },
+  },
+  {
+    id: "gas-cooktop",
+    pillLabel: "Gas Cooktop & Grates",
+    title: "Gas Cooktop & Grates",
+    scopeBadge: "Included in All Visits",
+    caption: "Cooktop enamel, burner grates, and control knobs cleaned during a New Star appointment.",
+    serviceSlug: "standard-cleaning",
+    before: { src: cooktopGratesPair.before.src, alt: cooktopGratesPair.before.alt },
+    after: { src: cooktopGratesPair.after.src, alt: cooktopGratesPair.after.alt },
+  },
+  {
+    id: "refrigerator-interior",
+    pillLabel: "Refrigerator Interior",
+    title: "Refrigerator Interior (Add-On)",
+    scopeBadge: "Optional Add-On ($35)",
+    isAddOn: true,
+    caption: refrigeratorFullPair.label,
+    serviceSlug: "move-out-cleaning",
+    before: { src: refrigeratorFullPair.before.src, alt: refrigeratorFullPair.before.alt },
+    after: { src: refrigeratorFullPair.after.src, alt: refrigeratorFullPair.after.alt },
+  },
+  {
+    id: "vent-cover",
+    pillLabel: "Vent Cover",
+    title: "Vent Cover Detail",
+    scopeBadge: "Included in Deep & Move-Out",
+    caption: "Reachable return air grille and vent cover wiped free of heavy dust buildup.",
+    serviceSlug: "deep-cleaning",
+    before: { src: ventDetailPair.before.src, alt: ventDetailPair.before.alt },
+    after: { src: ventDetailPair.after.src, alt: ventDetailPair.after.alt },
+  },
 ];
 
-const kitchenLiving: { src: string; alt: string; label: string; note: string }[] = [
-  { src: kitchenSurfacesPhoto.src, alt: kitchenSurfacesPhoto.alt, label: "Kitchen surfaces", note: "Counters, sink, cabinet fronts, and tile floor." },
-  { src: homeResultPhotos[0].src, alt: homeResultPhotos[0].alt, label: "Kitchen with granite island", note: "Island, cooktop, and pendant fixtures." },
-  { src: homeResultPhotos[1].src, alt: homeResultPhotos[1].alt, label: "Living room", note: "Sectional, rug, and wood-look floors." },
-  { src: homeResultPhotos[2].src, alt: homeResultPhotos[2].alt, label: "Bedroom", note: "Dusted surfaces and wood-look floors." },
+const galleryPhotos: FresnoGalleryPhoto[] = [
+  {
+    id: "kitchen-surfaces",
+    src: kitchenSurfacesPhoto.src,
+    alt: kitchenSurfacesPhoto.alt,
+    label: "Kitchen surfaces",
+    note: "Counters, sink, cabinet fronts, stainless exteriors, and tile floor.",
+    category: "kitchens-living",
+    categoryBadge: "Kitchens & Living",
+    serviceSlug: "standard-cleaning",
+  },
+  {
+    id: "kitchen-granite-island",
+    src: homeResultPhotos[0].src,
+    alt: homeResultPhotos[0].alt,
+    label: "Kitchen with granite island",
+    note: "Granite island, cooktop, and pendant fixtures wiped and shined.",
+    category: "kitchens-living",
+    categoryBadge: "Kitchens & Living",
+    serviceSlug: "standard-cleaning",
+  },
+  {
+    id: "living-room",
+    src: homeResultPhotos[1].src,
+    alt: homeResultPhotos[1].alt,
+    label: "Living room",
+    note: "Accessible dusting, rug vacuuming, and wood-look floor care.",
+    category: "kitchens-living",
+    categoryBadge: "Kitchens & Living",
+    serviceSlug: "standard-cleaning",
+  },
+  {
+    id: "bedroom-floors",
+    src: homeResultPhotos[2].src,
+    alt: homeResultPhotos[2].alt,
+    label: "Bedroom",
+    note: "Bedroom dusting and wood-look floors. Bed making and linens are not included.",
+    category: "kitchens-living",
+    categoryBadge: "Kitchens & Living",
+    serviceSlug: "standard-cleaning",
+  },
+  {
+    id: "shower-bathtub",
+    src: bathroomResultPhotos[0].src,
+    alt: bathroomResultPhotos[0].alt,
+    label: "Shower and bathtub",
+    note: "Walk-in glass shower, freestanding tub, and wood-look floor detail.",
+    category: "bathrooms",
+    categoryBadge: "Bathrooms & Tile",
+    serviceSlug: "deep-cleaning",
+  },
+  {
+    id: "primary-bathroom",
+    src: bathroomResultPhotos[1].src,
+    alt: bathroomResultPhotos[1].alt,
+    label: "Primary bathroom",
+    note: "Freestanding tub, double vanity counters, mirrors, and floor.",
+    category: "bathrooms",
+    categoryBadge: "Bathrooms & Tile",
+    serviceSlug: "deep-cleaning",
+  },
+  {
+    id: "shower-tile",
+    src: bathroomResultPhotos[2].src,
+    alt: bathroomResultPhotos[2].alt,
+    label: "Shower tile",
+    note: "Reachable shower tile and tub surround cleaned and rinsed.",
+    category: "bathrooms",
+    categoryBadge: "Bathrooms & Tile",
+    serviceSlug: "deep-cleaning",
+  },
+  {
+    id: "double-vanity",
+    src: vanityDetailPhoto.src,
+    alt: vanityDetailPhoto.alt,
+    label: "Double vanity",
+    note: "Dark wood cabinet fronts, mirrors, sinks, and chrome fixtures.",
+    category: "bathrooms",
+    categoryBadge: "Bathrooms & Tile",
+    serviceSlug: "standard-cleaning",
+  },
+  {
+    id: "empty-kitchen-cabinets",
+    src: emptyHomeResultPhotos[0].src,
+    alt: emptyHomeResultPhotos[0].alt,
+    label: "Kitchen cabinets and floor",
+    note: "Empty white kitchen cabinets and wood-look tile floor.",
+    category: "empty-homes",
+    categoryBadge: "Empty Homes",
+    serviceSlug: "move-out-cleaning",
+  },
+  {
+    id: "empty-dining-kitchen",
+    src: emptyHomeResultPhotos[1].src,
+    alt: emptyHomeResultPhotos[1].alt,
+    label: "Dining and kitchen",
+    note: "Unfurnished dining room and kitchen turnover detail.",
+    category: "empty-homes",
+    categoryBadge: "Empty Homes",
+    serviceSlug: "move-out-cleaning",
+  },
+  {
+    id: "empty-refrigerator",
+    src: emptyHomeResultPhotos[2].src,
+    alt: emptyHomeResultPhotos[2].alt,
+    label: "Refrigerator interior",
+    note: "Optional add-on ($35): empty refrigerator shelves and drawers wiped clean.",
+    category: "empty-homes",
+    categoryBadge: "Empty Homes",
+    serviceSlug: "move-out-cleaning",
+  },
+  {
+    id: "empty-bathroom",
+    src: emptyHomeResultPhotos[3].src,
+    alt: emptyHomeResultPhotos[3].alt,
+    label: "Bathroom interior",
+    note: "Bathroom fixtures, vanity, and surfaces cleaned for turnover.",
+    category: "empty-homes",
+    categoryBadge: "Empty Homes",
+    serviceSlug: "move-out-cleaning",
+  },
+  {
+    id: "stairs-landing",
+    src: emptyHomeResultPhotos[4].src,
+    alt: emptyHomeResultPhotos[4].alt,
+    label: "Stairs and landing",
+    note: "Carpeted stairs and upper landing vacuumed edge to edge.",
+    category: "empty-homes",
+    categoryBadge: "Empty Homes",
+    serviceSlug: "move-out-cleaning",
+  },
+  {
+    id: "empty-closet",
+    src: emptyHomeResultPhotos[5].src,
+    alt: emptyHomeResultPhotos[5].alt,
+    label: "Empty closet",
+    note: "Empty closet shelving, hanging rods, and tile floor wiped clean.",
+    category: "empty-homes",
+    categoryBadge: "Empty Homes",
+    serviceSlug: "move-out-cleaning",
+  },
 ];
-
-const bathrooms: { src: string; alt: string; label: string; note: string }[] = [
-  { src: bathroomResultPhotos[0].src, alt: bathroomResultPhotos[0].alt, label: "Shower and bathtub", note: "Glass shower and freestanding tub detail." },
-  { src: bathroomResultPhotos[1].src, alt: bathroomResultPhotos[1].alt, label: "Primary bathroom", note: "Tub, double vanity, and wood-look floor." },
-  { src: bathroomResultPhotos[2].src, alt: bathroomResultPhotos[2].alt, label: "Shower tile", note: "Tile and tub surround." },
-  { src: vanityDetailPhoto.src, alt: vanityDetailPhoto.alt, label: "Double vanity", note: "Dark wood cabinets, mirrors, and fixtures." },
-];
-
-const emptyHomes: { src: string; alt: string; label: string; note: string }[] = [
-  { src: emptyHomeResultPhotos[0].src, alt: emptyHomeResultPhotos[0].alt, label: "Kitchen cabinets and floor", note: "White cabinets and tile floor." },
-  { src: emptyHomeResultPhotos[1].src, alt: emptyHomeResultPhotos[1].alt, label: "Dining and kitchen", note: "An empty dining area and kitchen." },
-  { src: emptyHomeResultPhotos[2].src, alt: emptyHomeResultPhotos[2].alt, label: "Refrigerator interior", note: "Optional add-on: an empty fridge interior." },
-  { src: emptyHomeResultPhotos[3].src, alt: emptyHomeResultPhotos[3].alt, label: "Bathroom interior", note: "Bathroom fixtures and surfaces." },
-  { src: emptyHomeResultPhotos[4].src, alt: emptyHomeResultPhotos[4].alt, label: "Stairs and landing", note: "Carpeted stairs above a kitchen." },
-  { src: emptyHomeResultPhotos[5].src, alt: emptyHomeResultPhotos[5].alt, label: "Empty closet", note: "Empty closet shelving and tile." },
-];
-
-const pairs = [
-  { pair: { before: { src: "/photos/before1.jpg", alt: "Shower before cleaning", caption: "Before" }, after: { src: "/photos/after1.jpg", alt: "The same shower after cleaning", caption: "After" }, label: "A shower before and after a New Star cleaning." }, title: "Shower detail" },
-  { pair: ovenInteriorPair, title: "Inside the oven" },
-  { pair: tubSurroundPair, title: "Tub and tile surround" },
-  { pair: refrigeratorFullPair, title: "Refrigerator interior" },
-  { pair: ventDetailPair, title: "Vent cover" },
-];
-
-function PhotoCard({ src, alt, label, note, sizes }: { src: string; alt: string; label: string; note: string; sizes: string }) {
-  return (
-    <figure className="work-card">
-      <a className="work-card-image" href={src} target="_blank" rel="noopener noreferrer" aria-label={`View full-size photo: ${label} (opens new tab)`}>
-        <Image src={src} alt={alt} fill sizes={sizes} />
-        <span className="work-enlarge" aria-hidden="true">View photo ↗</span>
-      </a>
-      <figcaption><strong>{label}</strong><span>{note}</span></figcaption>
-    </figure>
-  );
-}
 
 export default function OurWorkPage() {
   return (
-    <div className="home-reference work-page">
-      <SiteHero tone="dark" eyebrow="Our work" title="Real photos from our cleaning jobs." description="Look at the shower surfaces and the buildup inside the oven. These are real New Star jobs, with the before and after shown together so you can see the work." breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-proof-row"><GoogleRating onDark /></div>
-        <nav className="work-category-nav" aria-label="Gallery categories">
-          {categories.map((category) => <a key={category.id} href={`#${category.id}`} className="border-on-dark-line text-on-dark hover:border-white">{category.label}</a>)}
+    <div className="site-reference work-page">
+      <SiteHero
+        tone="dark"
+        eyebrow="New Star Cleaning · Fresno, Clovis & Madera"
+        title="Real photos from our cleaning jobs."
+        description="Slide across real shower glass, inside-oven buildup, gas cooktops, and return vents, or inspect 14 unedited room and empty-home photos."
+        breadcrumbs={[{ label: "Home", href: "/" }]}
+      >
+        <div className="site-proof-row">
+          <GoogleRating onDark />
+        </div>
+        <nav className="work-category-nav" aria-label="Gallery sections">
+          <a href="#before-after">Interactive Slider (6 Pairs)</a>
+          <a href="#photo-gallery">Room Gallery (14 Photos)</a>
+          <a href="#work-reviews">Customer Feedback</a>
         </nav>
       </SiteHero>
 
+      <FresnoWorkGallery pairs={pairs} photos={galleryPhotos} />
 
-      <section id="before-after" className="work-before-after" aria-labelledby="work-ba-title">
+      <section id="work-reviews" className="work-reviews" aria-labelledby="work-reviews-title">
         <div className="home-wrap">
-          <div className="work-section-heading work-section-heading-light">
-            <h2 id="work-ba-title">Before &amp; after cleaning</h2>
-            <p>The same surfaces from our cleaning appointments. Staining and wear can remain after cleaning. Oven and refrigerator interiors are optional add-ons.</p>
+          <div className="ns-section-head">
+            <div>
+              <p className="ns-kicker">Customer Feedback</p>
+              <h2 id="work-reviews-title" className="ns-h2">
+                What customers say on Google.
+              </h2>
+            </div>
+            <GoogleRating prominent />
           </div>
-          <div className="work-pairs">
-            {pairs.map(({ pair, title }) => (
-              <figure key={pair.before.src} className="work-pair">
-                <div className="work-pair-images">
-                  <figure>
-                    <figcaption>Before</figcaption>
-                    <a className="home-comparison-image work-pair-image" href={pair.before.src} target="_blank" rel="noopener noreferrer" aria-label={`View full-size photo: ${title}, before cleaning (opens new tab)`}>
-                      <Image src={pair.before.src} alt={pair.before.alt} fill sizes="(min-width: 1024px) 330px, (min-width: 640px) 42vw, 44vw" />
-                      <span className="work-enlarge" aria-hidden="true">View photo ↗</span>
-                    </a>
-                  </figure>
-                  <figure>
-                    <figcaption>After</figcaption>
-                    <a className="home-comparison-image work-pair-image" href={pair.after.src} target="_blank" rel="noopener noreferrer" aria-label={`View full-size photo: ${title}, after cleaning (opens new tab)`}>
-                      <Image src={pair.after.src} alt={pair.after.alt} fill sizes="(min-width: 1024px) 330px, (min-width: 640px) 42vw, 44vw" />
-                      <span className="work-enlarge" aria-hidden="true">View photo ↗</span>
-                    </a>
-                  </figure>
-                </div>
-                <figcaption className="work-pair-label"><strong>{title}{pair.label.includes("optional add-ons") ? <span className="ml-3 inline-flex rounded-full border border-line bg-white px-3 py-1 text-[13px] font-semibold text-primary">Add-on</span> : null}</strong><span>{pair.label}</span></figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="kitchens-living" className="home-wrap work-section" aria-labelledby="work-kitchens-title">
-        <div className="work-section-heading"><h2 id="work-kitchens-title">Kitchens &amp; living areas</h2><p>Kitchens, furnished rooms, and floor details from our cleaning work.</p></div>
-        <div className="work-grid work-grid-kitchen">
-          {kitchenLiving.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
-        </div>
-      </section>
-
-      <section id="bathrooms" className="home-wrap work-section" aria-labelledby="work-bathrooms-title">
-        <div className="work-section-heading"><h2 id="work-bathrooms-title">Bathrooms</h2><p>A closer look at tubs, showers, tile, vanities, mirrors, and fixtures.</p></div>
-        <div className="work-grid">
-          {bathrooms.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
-        </div>
-      </section>
-
-      <section id="empty-homes" className="home-wrap work-section" aria-labelledby="work-empty-title">
-        <div className="work-section-heading"><h2 id="work-empty-title">Empty homes</h2><p>Move-in and move-out cleaning covers kitchens, bathrooms, floors, baseboards, fixtures, and empty cabinet, drawer, and closet interiors. Oven, fridge, interior windows, and carpet shampooing are optional add-ons.</p></div>
-        <Link href="/services/move-out-cleaning" className="home-text-link">See the full move-in and move-out cleaning scope <span aria-hidden="true">→</span></Link>
-        <div className="work-grid work-grid-wide">
-          {emptyHomes.map((photo) => <PhotoCard key={photo.src} src={photo.src} alt={photo.alt} label={photo.label} note={photo.note} sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw" />)}
-        </div>
-      </section>
-
-      <section className="work-reviews" aria-labelledby="work-reviews-title">
-        <div className="home-wrap">
-          <div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="work-reviews-title" className="ns-h2">What customers say on Google.</h2></div><GoogleRating prominent /></div>
           <ReviewCards topic="home" />
         </div>
       </section>
 
-      <section className="home-wrap work-cta">
-        <h2>Have a spot like this at home?</h2>
-        <p>Tell us what needs attention. We&apos;ll explain what we can clean and give you a price before you book.</p>
-        <div className="work-cta-actions">
-          <HomeBookingLink placement="footer" />
-          <Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote <span aria-hidden="true">→</span></Link>}><HomeQuoteLink className="home-button-secondary">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
-          <MarketPhone className="home-text-link" location="our_work_cta"><Icon name="phone" /> </MarketPhone>
-        </div>
-        <div className="work-cta-links">
-          <Link href="/checklist" className="home-text-link">See what’s included <span aria-hidden="true">→</span></Link>
-          <Link href="/service-areas" className="home-text-link">Check your area <span aria-hidden="true">→</span></Link>
+      <section className="home-wrap work-closing-wrap">
+        <div className="work-closing-card">
+          <div className="work-closing-copy">
+            <p className="work-ba-kicker">Clear Scope &amp; Pricing</p>
+            <h2>Have a spot like this at home?</h2>
+            <p>
+              Tell New Star Cleaning which rooms or buildup areas need attention. We confirm what
+              is included, optional add-on pricing, and your appointment window before you book.
+            </p>
+            <div className="work-closing-links">
+              <Link href="/checklist" className="work-inline-link">
+                See 45-point checklist <span aria-hidden="true">→</span>
+              </Link>
+              <Link href="/service-areas" className="work-inline-link">
+                Check your Fresno / Clovis / Madera area <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="work-closing-actions">
+            <Suspense
+              fallback={
+                <Link href="/book-now" className="home-button">
+                  Get a quote <span aria-hidden="true">→</span>
+                </Link>
+              }
+            >
+              <HomeQuoteLink className="home-button">
+                Get a quote <span aria-hidden="true">→</span>
+              </HomeQuoteLink>
+            </Suspense>
+            <HomeBookingLink placement="footer" onDark />
+            <MarketPhone className="work-closing-phone" location="our_work_cta">
+              <Icon name="phone" />{" "}
+            </MarketPhone>
+          </div>
         </div>
       </section>
-      <BreadcrumbSchema items={[{ name: "Home", url: "https://newstarcleaning.com" }, { name: "Our Work", url: "https://newstarcleaning.com/our-work" }]} />
+
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://newstarcleaning.com" },
+          { name: "Our Work", url: "https://newstarcleaning.com/our-work" },
+        ]}
+      />
     </div>
   );
 }

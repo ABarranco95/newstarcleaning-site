@@ -15,6 +15,9 @@ import { bathroomResultPhotos } from "@/lib/realWorkPhotos";
 import { googleReviews } from "@/lib/googleReviews";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
 import MarketPhone from "@/components/MarketPhone";
+import { Suspense } from "react";
+import FresnoInstantPriceCalculator from "@/components/FresnoInstantPriceCalculator";
+import "@/app/fresno-flagship.css";
 
 const directBookingUrl = resolveDirectBookingUrl();
 const featuredReview = googleReviews.find((review) => review.id === "merle-f")!;
@@ -61,6 +64,20 @@ export default function BookNow() {
       <SiteHero eyebrow="Book online" title="See your price and book." description="Pick the cleaning and your home size. You'll see the price before you choose a time, and nothing is charged when you book." photo={bathroomResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <PricePicker id="price" source="organic_book_now_price" leadSource="organic_quote_page" quoteHref="#quote-form" />
       </SiteHero>
+      <section className="site-section site-split" aria-label="Instant Fresno flat-rate preview">
+        <div className="site-copy">
+          <p className="ns-kicker">Instant Room-by-Room Rate</p>
+          <h2>Tap your home size to compare rates.</h2>
+          <p className="site-intro">Compare New Star Cleaning&apos;s recurring, deep-clean, and move-out rates right here, then jump straight into online date selection.</p>
+        </div>
+        <Suspense fallback={null}>
+          <FresnoInstantPriceCalculator
+            directBookingUrl={directBookingUrl}
+            source="book_now_calc"
+            compact
+          />
+        </Suspense>
+      </section>
       <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>
       <section id="quote-form" className="site-muted"><div className="site-section site-quote-layout"><div className="site-copy"><p className="ns-kicker">Your price</p><h2>See your price. We&apos;ll text you the rest.</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><ul className="site-list"><li>One-time or recurring: weekly, every other week or monthly.</li><li>Missed something in the agreed scope? Tell us within 24 hours and we come back and make it right at no charge.</li></ul><div className="site-links"><MarketPhone location="book_now_hero" /><HomeBookingLink placement="footer" /></div><div className="mt-8 [&_.ns-reviews]:grid-cols-1"><ReviewCards reviews={[featuredReview]} /></div></div><QuickQuoteForm title="Your cleaning quote" subtitle="Start with the basics. We'll help with anything you're unsure about." source="organic_quote_page" directBookingUrl={directBookingUrl} compact /></div></section>
       <section className="site-section site-split"><div><p className="ns-kicker">Questions</p><h2 className="mt-3">Before you book.</h2><p className="site-intro"><MarketCoverage booking /></p></div><FaqList faqs={bookNowFaqs.map((faq) => ({ question: faq.q, answer: faq.a }))} /></section>

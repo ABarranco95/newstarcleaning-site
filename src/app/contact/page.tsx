@@ -15,7 +15,7 @@ import { homeResultPhotos } from "@/lib/realWorkPhotos";
 
 const directBookingUrl = resolveDirectBookingUrl();
 
-const description = "Call, text or email Angel, the owner, for house cleaning in Fresno, Clovis and Madera. Mon–Fri 8–6, Sat 8–5.";
+const description = "Call, text or email New Star Cleaning for house cleaning in Fresno, Clovis and Madera. Mon–Fri 8–6, Sat 8–5.";
 export const metadata: Metadata = {
   title: "Contact Us", description,
   alternates: { canonical: "/contact" },
@@ -25,11 +25,11 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="site-reference">
-      <SiteHero title="Call, text or email." description="Have a question before you book? Call or text us about your home. You can also email me directly. I'm Angel, the owner." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero title="Call, text or email." description="Have a question before you book? Call, text, or email New Star Cleaning about your home and schedule." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="grid divide-y divide-on-dark-line text-lg font-semibold">
           <MarketPhone className="flex min-h-14 items-center gap-2 text-white" location="contact_hero">Call </MarketPhone>
           <MarketPhone text className="flex min-h-14 items-center gap-2 text-white" location="contact_hero_text">Text </MarketPhone>
-          <a href="mailto:angel@newstarcleaning.com" className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-1 py-4 text-white"><span>Email Angel</span><span className="break-all text-[15px] font-normal text-on-dark-soft">angel@newstarcleaning.com</span></a>
+          <a href="mailto:angel@newstarcleaning.com" className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-1 py-4 text-white"><span>Email New Star</span><span className="break-all text-[15px] font-normal text-on-dark-soft">angel@newstarcleaning.com</span></a>
           <p className="py-4 text-sm font-medium leading-relaxed text-on-dark-soft">Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM · Sun closed</p>
         </div>
       </SiteHero>

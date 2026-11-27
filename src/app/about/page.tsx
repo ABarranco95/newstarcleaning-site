@@ -51,12 +51,12 @@ const steps = [
 export default function AboutPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="About New Star" title="Owned and run by Angel Barranco." description={<MarketAboutIntro />} visual={<OwnerPhoto />} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <SiteHero eyebrow="About New Star Cleaning" title="Locally owned Fresno house cleaning." description={<MarketAboutIntro />} visual={<OwnerPhoto />} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
         <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div>
         <MarketPhone className="site-hero-phone mt-4" location="about_hero" />
       </SiteHero>
       <section className="site-section site-split">
-        <div><p className="ns-kicker">From Angel</p><h2 className="mt-3">Here&apos;s how I run it.</h2></div>
+        <div><p className="ns-kicker">Our Standard</p><h2 className="mt-3">How New Star Cleaning runs every visit.</h2></div>
         <div className="site-area-prose"><p>When you book, tell us about the part of the house that bothers you most. A shower with buildup takes more time than a kitchen that just needs keeping up, and the price accounts for that.</p><p>Every visit follows our checklist, and we bring our own supplies. If something in the agreed scope gets missed, tell us within 24 hours and we come back and fix it at no charge.</p><p className="font-semibold">Angel Barranco, owner</p></div>
       </section>
       <TrustStrip />

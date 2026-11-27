@@ -8,7 +8,9 @@ import SiteHero from "@/components/SiteHero";
 
 import { Suspense } from "react";
 import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import FresnoInteractiveChecklist from "@/components/FresnoInteractiveChecklist";
 import { kitchenSurfacesPhoto } from "@/lib/realWorkPhotos";
+import "./../fresno-checklist.css";
 import {
   clientPrepChecklist,
   getFullIncludedList,
@@ -103,9 +105,12 @@ const comparisonRows = [
 export default function ChecklistPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Service checklist" title="House cleaning checklist for Fresno & Clovis homes." description="What each cleaning includes, which add-ons you can choose, and what we don't do. It's the exact list our crews clean from." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><a href="#services" className="home-text-link mt-4">Jump to the lists ↓</a>
+      <SiteHero eyebrow="Service checklist" title="House cleaning checklist for Fresno & Clovis homes." description="What each cleaning includes, which add-ons you can choose, and what we don't do. Filter all 45 room-by-room tasks across New Star Cleaning's three scopes below." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><a href="#interactive-checklist" className="home-text-link mt-4">Explore 45-point checklist ↓</a>
       </SiteHero>
+      <section id="interactive-checklist" className="site-section scroll-mt-24">
+        <FresnoInteractiveChecklist />
+      </section>
       <section id="services" className="site-section scroll-mt-24"><div className="ns-section-head"><div><p className="ns-kicker">Included</p><h2>What&apos;s included, room by room.</h2><p className="site-intro">Standard keeps a home up. Deep adds the detail work. Move-out adds the inside of every empty cabinet, drawer and closet.</p></div></div><div className="site-disclosures">
         {services.map((service, index) => <details key={service.slug} open={index === 0}><summary><h3>{service.name}</h3></summary><p>{service.description}</p><ul className="site-list">{service.scopeNotes.map((note) => <li key={note}>{note}</li>)}</ul><div className="my-8 grid gap-6 sm:grid-cols-2">{getFullIncludedList(service.slug).map((group) => <div key={group.title} className="rounded-[var(--radius-card)] border border-line p-6 last:sm:col-span-2"><h4 className="text-lg font-bold text-primary">{group.title}</h4><ul className="site-list">{group.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)}</div><Link href={serviceLinks[service.slug]} className="home-text-link">{service.shortName} details ↗</Link></details>)}
       </div></section>

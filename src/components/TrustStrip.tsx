@@ -8,7 +8,7 @@ const facts = [
 
 // `links` is accepted for existing callers; the strip no longer links out.
 export default function TrustStrip({ className = "" }: { className?: string; links?: boolean }) {
-  const ownership = { token: "Locally owned", body: "Owned and run by Angel Barranco in Fresno." };
+  const ownership = { token: "Locally owned", body: "Locally owned and operated in Fresno, CA." };
   return (
     <section aria-label="Why homeowners choose New Star" className={`ns-trust ns-on-dark ${className}`.trim()}>
       <ul className="ns-trust-list">
