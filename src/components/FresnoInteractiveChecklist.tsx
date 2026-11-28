@@ -407,7 +407,6 @@ export default function FresnoInteractiveChecklist() {
                 className={`fcl-tab${selected ? " is-active" : ""}`}
               >
                 <span>{tab.label}</span>
-                {tab.popular ? <span className="fcl-tab-popular">Most Popular</span> : null}
               </button>
             );
           })}
@@ -494,7 +493,7 @@ export default function FresnoInteractiveChecklist() {
                             onClick={() => setActiveTier(unlockTier)}
                             className="fcl-unlock-btn"
                           >
-                            {unlockText} -&gt;
+                            {unlockText} →
                           </button>
                         )}
                       </div>
@@ -539,7 +538,7 @@ export default function FresnoInteractiveChecklist() {
             quote so there are zero day-of surprises.
           </span>
           <Link href={activeTab.quoteHref} className="home-button">
-            Request Quote With Extras <span aria-hidden="true">-&gt;</span>
+            Request Quote With Extras <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>

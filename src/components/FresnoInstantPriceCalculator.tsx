@@ -188,35 +188,29 @@ export default function FresnoInstantPriceCalculator({
   };
 
   const ctaLabel = isCustomLarge
-    ? "Request 3,500+ Sq Ft Quote ->"
+    ? "Request 3,500+ Sq Ft Quote"
     : resolvedBookingUrl
-      ? `Book Online ($${activeDollars}${service === "STANDARD" && frequency !== "ONE_TIME" ? "/visit" : ""}) ->`
-      : `Get Exact Quote ($${activeDollars}) ->`;
+      ? `Book Online · $${activeDollars}${service === "STANDARD" && frequency !== "ONE_TIME" ? "/visit" : ""}`
+      : `Get Exact Quote · $${activeDollars}`;
 
   const ctaClassName =
-    "fresno-calc-cta flex min-h-[52px] w-full items-center justify-center rounded-xl bg-gold px-5 py-3.5 text-center text-[15px] font-bold text-primary-dark transition-colors hover:bg-gold-hover sm:text-base";
+    "fresno-calc-cta flex min-h-[52px] w-full items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-center text-[15.5px] font-bold text-white transition-colors hover:bg-primary-light sm:text-base";
 
   return (
     <div
       data-testid="fresno-instant-calculator"
-      className={`fresno-calc-card w-full overflow-hidden rounded-2xl border border-line-strong bg-white text-ink ${
+      className={`fresno-calc-card w-full overflow-hidden rounded-2xl border border-line-strong bg-white text-ink shadow-[0_18px_44px_-24px_rgb(15_28_46/18%)] ${
         compact ? "fresno-calc-compact" : ""
       }`}
     >
       {/* Header Bar */}
-      <div className="border-b border-line bg-cream-2 px-4 py-3 sm:px-5 sm:py-3.5">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="inline-flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
-            <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
-            Instant Fresno &amp; Clovis Estimate
-          </span>
-          <span className="rounded-full border border-primary/20 bg-selected px-2.5 py-0.5 text-[11px] font-semibold text-primary">
-            No phone or email gate
-          </span>
-        </div>
+      <div className="border-b border-line bg-cream-2 px-4 py-3.5 sm:px-5">
+        <p className="text-[15px] font-bold tracking-tight text-ink">
+          Instant Price Estimate
+        </p>
         {!compact ? (
-          <p className="mt-1 text-xs leading-4 text-ink-soft">
-            Tap your rooms and home size for live New Star flat-rate pricing.
+          <p className="mt-0.5 text-xs leading-4 text-ink-soft">
+            Select your cleaning type, rooms, and home size to see your flat rate.
           </p>
         ) : null}
       </div>
@@ -248,10 +242,10 @@ export default function FresnoInstantPriceCalculator({
                 <span className="text-xs leading-tight sm:text-[13px]">{tab.label}</span>
                 <span
                   className={`mt-0.5 text-[11px] leading-tight tabular-nums ${
-                    selected ? "text-gold" : "text-mute"
+                    selected ? "text-white/80" : "text-mute"
                   }`}
                 >
-                  ({tab.floorText})
+                  {tab.floorText}
                 </span>
               </button>
             );
@@ -263,7 +257,7 @@ export default function FresnoInstantPriceCalculator({
           <div>
             <div className="mb-1 flex items-center justify-between text-xs">
               <span className="font-semibold text-ink-soft">Visit Schedule</span>
-              <span className="font-semibold text-success">Pause or cancel anytime</span>
+              <span className="font-medium text-mute">No contract · pause anytime</span>
             </div>
             <div
               role="group"
@@ -283,7 +277,7 @@ export default function FresnoInstantPriceCalculator({
                     }}
                     className={`flex min-h-[40px] cursor-pointer flex-col items-center justify-center rounded-lg border px-1.5 py-1 text-center transition-colors ${
                       selected
-                        ? "border-primary bg-selected text-primary ring-1 ring-primary"
+                        ? "border-primary bg-selected text-primary"
                         : "border-line bg-white text-ink hover:border-primary/60"
                     }`}
                   >
@@ -291,7 +285,7 @@ export default function FresnoInstantPriceCalculator({
                       {opt.label}
                     </span>
                     {opt.badge ? (
-                      <span className="text-[10px] font-bold text-primary">{opt.badge}</span>
+                      <span className="text-[10px] font-semibold text-success">{opt.badge}</span>
                     ) : (
                       <span className="text-[10px] text-mute">Single</span>
                     )}
@@ -306,7 +300,7 @@ export default function FresnoInstantPriceCalculator({
         <div>
           <div className="mb-1 flex items-center justify-between text-xs">
             <span className="font-semibold text-ink-soft">Bedrooms</span>
-            <span className="font-bold text-ink tabular-nums">
+            <span className="font-semibold text-ink tabular-nums">
               {beds} {beds === 1 ? "Bedroom" : "Bedrooms"}
             </span>
           </div>
@@ -343,7 +337,7 @@ export default function FresnoInstantPriceCalculator({
         <div>
           <div className="mb-1 flex items-center justify-between text-xs">
             <span className="font-semibold text-ink-soft">Bathrooms</span>
-            <span className="font-bold text-ink tabular-nums">
+            <span className="font-semibold text-ink tabular-nums">
               {baths} {baths === 1 ? "Bathroom" : "Bathrooms"}
             </span>
           </div>
@@ -400,7 +394,7 @@ export default function FresnoInstantPriceCalculator({
                   }}
                   className={`min-h-[38px] cursor-pointer rounded-lg border px-2 py-1 text-xs font-semibold tabular-nums transition-colors ${
                     selected
-                      ? "border-primary bg-selected text-primary ring-1 ring-primary"
+                      ? "border-primary bg-selected text-primary"
                       : "border-line bg-white text-ink hover:border-primary/60"
                   }`}
                 >
@@ -415,14 +409,14 @@ export default function FresnoInstantPriceCalculator({
         <div
           aria-live="polite"
           data-testid="fresno-calculator-price"
-          className="rounded-xl border border-primary/20 bg-cream-2 p-3.5 sm:p-4"
+          className="rounded-xl border border-line bg-cream-2 p-3.5 sm:p-4"
         >
           <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2 text-xs text-mute">
             <span className="font-semibold text-ink-soft tabular-nums">
               {beds} bd / {baths} ba · {activePreset.approxLabel}
             </span>
             {!isCustomLarge ? (
-              <span className="rounded-md border border-line bg-white px-2 py-0.5 text-[11px] font-semibold text-primary tabular-nums">
+              <span className="text-[11.5px] font-medium text-mute tabular-nums">
                 Est. {estimate.estimatedHoursRange}
               </span>
             ) : null}
@@ -436,21 +430,21 @@ export default function FresnoInstantPriceCalculator({
                   : "Photo review for 3,500+ sq ft"}
               </p>
               <p className="mt-1 text-xs leading-5 text-ink-soft">
-                For larger Fresno &amp; Clovis homes, we confirm exact room count and condition
-                first so your price and crew schedule are accurate.
+                For larger Fresno &amp; Clovis homes, we confirm room count and condition first so
+                your price and crew schedule are accurate.
               </p>
             </div>
           ) : service === "STANDARD" ? (
             <div>
               <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="text-3xl font-bold tracking-tight text-primary tabular-nums sm:text-4xl">
+                <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-4xl">
                   ${activeStandardPrice}
                 </span>
                 <span className="text-sm font-semibold text-ink-soft">
                   {frequency === "ONE_TIME" ? "one-time visit" : "/ visit"}
                 </span>
                 {standardSavings > 0 ? (
-                  <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-white tabular-nums">
+                  <span className="rounded-full border border-[#bfe0ce] bg-[#eaf5ef] px-2.5 py-0.5 text-xs font-bold text-[#16613e] tabular-nums">
                     Save ${standardSavings}/visit
                   </span>
                 ) : null}
@@ -472,7 +466,7 @@ export default function FresnoInstantPriceCalculator({
           ) : service === "DEEP" ? (
             <div>
               <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="text-3xl font-bold tracking-tight text-primary tabular-nums sm:text-4xl">
+                <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-4xl">
                   ${estimate.deepClean}
                 </span>
                 <span className="text-sm font-semibold text-ink-soft">flat-rate deep clean</span>
@@ -485,7 +479,7 @@ export default function FresnoInstantPriceCalculator({
           ) : (
             <div>
               <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="text-3xl font-bold tracking-tight text-primary tabular-nums sm:text-4xl">
+                <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-4xl">
                   ${estimate.moveOut}
                 </span>
                 <span className="text-sm font-semibold text-ink-soft">empty-home flat rate</span>
@@ -497,8 +491,8 @@ export default function FresnoInstantPriceCalculator({
             </div>
           )}
 
-          <p className="mt-2.5 border-t border-line pt-2 text-[11.5px] font-medium leading-4 text-ink-soft sm:text-xs">
-            Confirmed before anything is booked · Supplies &amp; liability insurance included
+          <p className="mt-2.5 border-t border-line pt-2 text-[11.5px] font-medium leading-4 text-mute sm:text-xs">
+            Nothing charged when you book · Supplies &amp; insurance included
           </p>
         </div>
 
@@ -535,13 +529,13 @@ export default function FresnoInstantPriceCalculator({
               href="/checklist"
               className="inline-flex min-h-[34px] items-center font-semibold text-primary underline underline-offset-4 hover:text-primary-light"
             >
-              Compare all 3 checklists -&gt;
+              See 45-point checklist
             </Link>
             <a
               href={pathname === "/" ? "#quote" : fallbackQuoteHref}
               className="inline-flex min-h-[34px] items-center font-semibold text-ink-soft underline underline-offset-4 hover:text-primary"
             >
-              Rather get a quote by text? -&gt;
+              Prefer a text quote?
             </a>
           </div>
         </div>

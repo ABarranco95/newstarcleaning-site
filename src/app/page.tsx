@@ -8,9 +8,8 @@ import FaqList from "@/components/FaqList";
 import GoogleRating from "@/components/GoogleRating";
 import HomeServices from "@/components/HomeServices";
 import HomeQuoteLink from "@/components/HomeQuoteLink";
-import HomeBookingLink from "@/components/HomeBookingLink";
 import HowItWorks from "@/components/HowItWorks";
-import Icon, { type IconName } from "@/components/Icon";
+import Icon from "@/components/Icon";
 import { MarketCallOrText } from "@/components/MarketPhone";
 import ProofRow from "@/components/ProofRow";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
@@ -37,29 +36,6 @@ export const metadata: Metadata = {
   }),
 };
 
-const standardsTiles: ReadonlyArray<{ icon: IconName; title: string; body: string }> = [
-  {
-    icon: "check",
-    title: "24-Hour Make-It-Right Promise",
-    body: "If anything included in your agreed scope is missed, tell us within 24 hours and we return to fix it at no charge.",
-  },
-  {
-    icon: "supplies",
-    title: "Supplies & Equipment Included",
-    body: "Crews bring vacuums, clean microfibers, and surface cleaners. Share any stone or finish notes before your visit.",
-  },
-  {
-    icon: "clipboard",
-    title: "Clear Scope & Honest Add-Ons",
-    body: "Written room-by-room checklists keep expectations clear. Oven interiors, fridge interiors, and interior window glass are optional add-ons.",
-  },
-  {
-    icon: "shield",
-    title: "Insured Local Crews",
-    body: "Locally owned and operated in Fresno by New Star Cleaning with vetted crews and liability insurance.",
-  },
-];
-
 const faqs = [
   { question: "How do I get a price?", answer: "Tap your cleaning type, bedrooms, bathrooms, and home size in the calculator above for an instant Fresno & Clovis estimate, or enter your ZIP when booking online. You always see your confirmed total before you book." },
   { question: "What's included in move-out vs regular cleaning?", answer: "Every visit follows our room-by-room checklist. Empty cabinet, drawer, and closet interiors are included in move-in / move-out cleaning. Oven and refrigerator interiors, interior window glass, and carpet shampooing are optional add-ons. We do not haul trash, repair damage, or guarantee a deposit return." },
@@ -77,44 +53,24 @@ const heroKitchen = homeResultPhotos[0];
 export default function Home() {
   return (
     <div className="home-reference">
-      <section className="fresno-hero ns-on-dark" aria-labelledby="home-title">
+      <section className="fresno-hero" aria-labelledby="home-title">
         <div className="fresno-container fresno-hero-grid">
           <div className="fresno-hero-copy min-w-0">
-            <div className="fresno-eyebrow-pill">
-              <span className="fresno-eyebrow-dot" aria-hidden="true" />
-              <span>New Star Cleaning · Fresno, Clovis &amp; Madera</span>
-            </div>
+            <p className="fresno-eyebrow">Fresno, Clovis &amp; Madera</p>
 
             <h1 id="home-title">House cleaning in Fresno &amp; Clovis, priced upfront.</h1>
 
-            <div className="mt-3">
-              <ProofRow tone="dark" />
-            </div>
+            <ProofRow tone="light" />
 
             <p className="fresno-hero-lead">
               New Star Cleaning handles recurring upkeep, deep cleans, and empty-home move-outs
-              across Fresno, Clovis, and Madera with cleaning supplies and liability insurance
-              included.
+              across Fresno, Clovis, and Madera. Supplies, equipment, and liability insurance are
+              included on every visit.
             </p>
-
-            <ul className="fresno-hero-pills" aria-label="New Star service standards">
-              <li>
-                <Icon name="check" />
-                <span>Save up to 20% recurring</span>
-              </li>
-              <li>
-                <Icon name="shield" />
-                <span>Supplies + insurance included</span>
-              </li>
-              <li>
-                <Icon name="clock" />
-                <span>24-hour make-it-right promise</span>
-              </li>
-            </ul>
           </div>
 
           <div className="fresno-hero-calc min-w-0">
-            <Suspense fallback={<div className="fresno-calc-skeleton">Loading live Fresno calculator...</div>}>
+            <Suspense fallback={<div className="fresno-calc-skeleton">Loading instant price calculator...</div>}>
               <FresnoInstantPriceCalculator
                 directBookingUrl={directBookingUrl}
                 source="home_hero_calc"
@@ -162,15 +118,9 @@ export default function Home() {
                 <span className="fresno-hero-hours">Mon-Fri 8-6 · Sat 8-5</span>
               </div>
 
-              <div className="fresno-hero-direct">
-                {directBookingUrl ? (
-                  <HomeBookingLink onDark />
-                ) : (
-                  <a href="#quote" className="home-button">
-                    Get a quote
-                  </a>
-                )}
-              </div>
+              <a href="#quote" className="home-text-link">
+                Prefer a quote by text? <span aria-hidden="true">↓</span>
+              </a>
             </div>
           </div>
         </div>
@@ -240,19 +190,7 @@ export default function Home() {
             </HomeServices>
           </Suspense>
 
-          <div className="fresno-standards-grid" aria-label="Hospitality standards">
-            {standardsTiles.map((tile) => (
-              <article key={tile.title} className="fresno-standard-tile">
-                <span className="fresno-standard-icon" aria-hidden="true">
-                  <Icon name={tile.icon} />
-                </span>
-                <h3>{tile.title}</h3>
-                <p>{tile.body}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="home-commercial-band mt-8">
+          <div className="home-commercial-band">
             <div>
               <h3>Offices, commercial spaces &amp; post-construction cleanups</h3>
               <p>

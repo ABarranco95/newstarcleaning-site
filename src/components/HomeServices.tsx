@@ -12,7 +12,6 @@ const directBookingUrl = resolveDirectBookingUrl();
 const choices = [
   {
     slug: "standard-cleaning",
-    badge: "Recurring or One-Time",
     label: "Standard cleaning",
     fit: "Regular upkeep weekly, every other week or monthly.",
     includes: [
@@ -25,7 +24,6 @@ const choices = [
   },
   {
     slug: "deep-cleaning",
-    badge: "Most Popular First Visit",
     label: "Deep cleaning",
     fit: "A first visit or a reset when buildup has set in.",
     includes: [
@@ -38,7 +36,6 @@ const choices = [
   },
   {
     slug: "move-out-cleaning",
-    badge: "Empty Home Turnover",
     label: "Move-in / move-out",
     fit: "Empty-home cleaning before the keys change hands.",
     includes: [
@@ -88,9 +85,8 @@ export default function HomeServices({
                 src={photo.src}
                 alt={photo.alt}
                 fill
-                sizes="(min-width: 1024px) 400px, (min-width: 640px) 45vw, 120px"
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 45vw, 100vw"
               />
-              <span className="home-service-badge">{choice.badge}</span>
             </div>
             <div className="home-service-content">
               <h3>{choice.label}</h3>

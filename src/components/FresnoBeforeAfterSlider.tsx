@@ -49,8 +49,8 @@ const SURFACE_TABS: readonly SurfaceTab[] = [
   },
   {
     id: "inside-oven",
-    title: "Inside Oven (Add-On)",
-    badge: "+$45 Add-On",
+    title: "Inside Oven",
+    badge: "Optional +$45",
     isAddon: true,
     beforeSrc: ovenBuildupPair.before.src,
     beforeAlt: ovenBuildupPair.before.alt,
@@ -70,8 +70,8 @@ const SURFACE_TABS: readonly SurfaceTab[] = [
   },
   {
     id: "empty-fridge",
-    title: "Empty Fridge (Add-On)",
-    badge: "+$35 Add-On",
+    title: "Empty Fridge",
+    badge: "Optional +$35",
     isAddon: true,
     beforeSrc: refrigeratorFullPair.before.src,
     beforeAlt: refrigeratorFullPair.before.alt,
@@ -165,7 +165,7 @@ export default function FresnoBeforeAfterSlider({
               role="tab"
               aria-selected={selected}
               onClick={() => selectSurface(surface.id)}
-              className={`inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-xl border px-3.5 py-2 text-left transition-colors ${
+              className={`inline-flex min-h-[42px] cursor-pointer items-center gap-2 rounded-xl border px-3.5 py-2 text-left transition-colors ${
                 selected
                   ? "border-primary bg-primary text-white"
                   : "border-line bg-cream-2 text-ink hover:border-primary/60 hover:bg-white"
@@ -173,14 +173,10 @@ export default function FresnoBeforeAfterSlider({
             >
               <span className="text-xs font-bold sm:text-sm">{surface.title}</span>
               <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide sm:text-[11px] ${
+                className={`rounded-full px-2 py-0.5 text-[10.5px] font-semibold ${
                   selected
-                    ? surface.isAddon
-                      ? "bg-gold text-primary-dark"
-                      : "bg-white/15 text-white"
-                    : surface.isAddon
-                      ? "bg-gold/20 text-primary-dark"
-                      : "bg-white text-primary"
+                    ? "bg-white/16 text-white"
+                    : "bg-white text-mute border border-line"
                 }`}
               >
                 {surface.badge}
@@ -200,7 +196,7 @@ export default function FresnoBeforeAfterSlider({
             onPointerMove={handlePointerMove}
             onPointerUp={stopDragging}
             onPointerCancel={stopDragging}
-            className="relative aspect-[4/3] w-full cursor-ew-resize touch-pan-y overflow-hidden bg-primary-dark select-none lg:aspect-[16/11]"
+            className="relative aspect-[4/3] w-full cursor-ew-resize touch-pan-y overflow-hidden bg-surface select-none lg:aspect-[16/11]"
           >
             {/* Base AFTER layer */}
             <div className="pointer-events-none absolute inset-0 h-full w-full select-none [&_img]:pointer-events-none [&_img]:object-cover [&_img]:select-none">
@@ -235,25 +231,25 @@ export default function FresnoBeforeAfterSlider({
               )}
             </div>
 
-            {/* Corner Badges */}
+            {/* Calm Corner Labels */}
             <span
-              className={`pointer-events-none absolute top-3 left-3 z-10 rounded-full border border-white/25 bg-primary-dark/90 px-3 py-1 text-[11px] font-bold tracking-wider text-white uppercase transition-opacity ${
+              className={`pointer-events-none absolute top-3 left-3 z-10 rounded-full bg-primary-dark/80 px-3 py-1 text-[11px] font-semibold tracking-wide text-white backdrop-blur-xs transition-opacity ${
                 pos < 14 ? "opacity-0" : "opacity-100"
               }`}
             >
               Before
             </span>
             <span
-              className={`pointer-events-none absolute top-3 right-3 z-10 rounded-full border border-primary-dark/15 bg-gold px-3 py-1 text-[11px] font-bold tracking-wider text-primary-dark uppercase transition-opacity ${
+              className={`pointer-events-none absolute top-3 right-3 z-10 rounded-full border border-line bg-white/95 px-3 py-1 text-[11px] font-bold tracking-wide text-primary transition-opacity ${
                 pos > 86 ? "opacity-0" : "opacity-100"
               }`}
             >
               After · New Star Work
             </span>
 
-            {/* Crisp White Divider + Warm Gold Scrub Puck */}
+            {/* Crisp White Divider + Clean White & Navy Scrub Handle */}
             <div
-              className="absolute inset-y-0 z-20 w-0.5 -translate-x-1/2 bg-white"
+              className="absolute inset-y-0 z-20 w-0.5 -translate-x-1/2 bg-white shadow-[0_0_10px_rgb(15_28_46/35%)]"
               style={{ left: `${pos}%` }}
             >
               <div
@@ -264,13 +260,13 @@ export default function FresnoBeforeAfterSlider({
                 aria-valuemax={95}
                 aria-valuenow={Math.round(pos)}
                 onKeyDown={handleSliderKeyDown}
-                className="absolute top-1/2 left-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 touch-none place-items-center rounded-full border-2 border-white bg-gold text-primary-dark focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute top-1/2 left-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 touch-none place-items-center rounded-full border-2 border-primary bg-white text-primary shadow-md focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth={2.5}
+                  strokeWidth={2.25}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   aria-hidden="true"
@@ -288,7 +284,7 @@ export default function FresnoBeforeAfterSlider({
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <strong className="text-sm font-bold text-ink">{activeSurface.title}</strong>
-                <span className="rounded-md border border-line bg-white px-2 py-0.5 text-[11px] font-semibold text-primary">
+                <span className="rounded-md border border-line bg-white px-2 py-0.5 text-[11px] font-semibold text-mute">
                   {activeSurface.badge}
                 </span>
               </div>
@@ -328,9 +324,9 @@ export default function FresnoBeforeAfterSlider({
                 type="button"
                 onClick={() => setPos(5)}
                 aria-pressed={activePreset === "after"}
-                className={`min-h-[34px] cursor-pointer rounded-lg px-2.5 py-1 text-xs font-bold transition-colors ${
+                className={`min-h-[34px] cursor-pointer rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors ${
                   activePreset === "after"
-                    ? "bg-gold text-primary-dark"
+                    ? "bg-primary text-white"
                     : "text-ink-soft hover:bg-surface hover:text-ink"
                 }`}
               >
@@ -344,7 +340,7 @@ export default function FresnoBeforeAfterSlider({
         <div className="flex flex-col justify-between gap-3 lg:col-span-4">
           <div className="space-y-2.5">
             <p className="text-xs font-bold tracking-wider text-mute uppercase">
-              Inspect more verified pairs
+              More real job comparisons
             </p>
             <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
               {secondarySurfaces.map((surface) => {
@@ -360,7 +356,7 @@ export default function FresnoBeforeAfterSlider({
                         : "border-line bg-cream-2 hover:border-primary/60 hover:bg-white"
                     }`}
                   >
-                    <div className="grid h-14 w-24 shrink-0 grid-cols-2 overflow-hidden rounded-lg border border-line bg-primary-dark">
+                    <div className="grid h-14 w-24 shrink-0 grid-cols-2 overflow-hidden rounded-lg border border-line bg-surface">
                       <div className="relative h-full w-full">
                         <Image
                           src={surface.beforeSrc!}
@@ -370,7 +366,7 @@ export default function FresnoBeforeAfterSlider({
                           className="object-cover"
                         />
                       </div>
-                      <div className="relative h-full w-full border-l border-white/60">
+                      <div className="relative h-full w-full border-l border-white/80">
                         <Image
                           src={surface.afterSrc!}
                           alt={surface.afterAlt!}
@@ -381,20 +377,14 @@ export default function FresnoBeforeAfterSlider({
                       </div>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <span
-                        className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                          surface.isAddon
-                            ? "bg-gold/25 text-primary-dark"
-                            : "bg-white text-primary"
-                        }`}
-                      >
+                      <span className="text-[11px] font-medium text-mute">
                         {surface.badge}
                       </span>
-                      <div className="mt-0.5 truncate text-sm font-bold text-ink group-hover:text-primary">
+                      <div className="truncate text-sm font-bold text-ink group-hover:text-primary">
                         {surface.title}
                       </div>
                       <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                        {isCurrent ? "Active in slider" : "Compare in slider ->"}
+                        {isCurrent ? "Showing in slider" : "Compare in slider →"}
                       </span>
                     </div>
                   </button>
@@ -413,7 +403,7 @@ export default function FresnoBeforeAfterSlider({
               className="mt-2 inline-flex min-h-[40px] items-center gap-1.5 text-sm font-bold text-primary underline underline-offset-4 hover:text-primary-light"
             >
               <span>Browse full work gallery</span>
-              <span aria-hidden="true">-&gt;</span>
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>

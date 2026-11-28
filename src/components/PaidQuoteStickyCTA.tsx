@@ -69,7 +69,7 @@ export default function PaidQuoteStickyCTA({ formRef, isSubmitting, label, onCli
           type="button"
           onClick={onClick}
           data-cta-location="sticky_paid"
-          className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-gold px-4 py-3 text-base font-extrabold text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-primary px-4 py-3 text-base font-bold text-white transition-colors hover:bg-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           {label}
         </button>

@@ -1,16 +1,16 @@
 @layer components {
-  /* Flagship Deep Navy + Warm Gold + Crisp White Hospitality Layout for New Star Cleaning */
+  /* Daylight Residential Layout for New Star Cleaning Homepage */
   .home-reference .fresno-container {
     max-width: 1280px;
     margin-inline: auto;
     padding-inline: 16px;
   }
 
-  /* Band 1: Deep Navy Split Hero */
+  /* Band 1: Sunlit Porcelain-to-White Split Hero */
   .home-reference .fresno-hero {
-    background: var(--color-primary-dark);
-    color: #ffffff;
-    border-bottom: 1px solid rgb(255 255 255 / 12%);
+    background: linear-gradient(180deg, #f5f8fc 0%, #ffffff 100%);
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-line);
   }
 
   .home-reference .fresno-hero-grid {
@@ -28,88 +28,42 @@
   .home-reference .fresno-hero-copy { grid-area: copy; }
   .home-reference .fresno-hero-calc { grid-area: calc; }
 
-  .home-reference .fresno-eyebrow-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    border: 1px solid rgb(235 175 60 / 45%);
-    background: var(--color-primary);
-    color: #ffffff;
+  .home-reference .fresno-eyebrow {
     font-size: 12.5px;
     line-height: 18px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-  }
-
-  .home-reference .fresno-eyebrow-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    background: var(--color-gold);
-    flex-shrink: 0;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary-light);
   }
 
   .home-reference .fresno-hero h1 {
-    margin-top: 16px;
-    max-width: 640px;
+    margin-top: 10px;
+    max-width: 620px;
     font-size: clamp(2.125rem, 1.5rem + 2.5vw, 3.35rem);
     line-height: 1.06;
-    letter-spacing: -0.025em;
-    font-weight: 700;
-    color: #ffffff;
+    letter-spacing: -0.028em;
+    font-weight: 800;
+    color: var(--color-ink);
   }
 
   .home-reference .fresno-hero-lead {
     margin-top: 14px;
-    max-width: 580px;
+    max-width: 560px;
     font-size: 16px;
     line-height: 1.6;
-    color: rgb(255 255 255 / 86%);
-  }
-
-  .home-reference .fresno-hero-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 16px 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .home-reference .fresno-hero-pills li {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid rgb(255 255 255 / 16%);
-    background: var(--color-primary);
-    font-size: 12.5px;
-    font-weight: 600;
-    color: rgb(255 255 255 / 95%);
-  }
-
-  .home-reference .fresno-hero-pills .ns-icon {
-    width: 14px;
-    height: 14px;
-    color: var(--color-gold);
+    color: var(--color-ink-soft);
   }
 
   /* 2-Up Real Fresno Work Showcase inside Hero */
   .home-reference .fresno-hero-showcase {
     grid-area: showcase;
-    padding: 12px;
-    border-radius: 16px;
-    border: 1px solid rgb(255 255 255 / 16%);
-    background: var(--color-primary);
   }
 
   .home-reference .fresno-hero-photos {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 12px;
   }
 
   .home-reference .fresno-hero .hx-photo,
@@ -127,9 +81,9 @@
     position: relative;
     aspect-ratio: 16 / 11;
     overflow: hidden;
-    border-radius: 10px;
-    border: 1px solid rgb(255 255 255 / 12%);
-    background: var(--color-primary-dark);
+    border-radius: 14px;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
   }
 
   .home-reference .fresno-hero .hx-photo img,
@@ -141,21 +95,22 @@
   .home-reference .fresno-hero .hx-photo figcaption,
   .home-reference .fresno-hero-secondary figcaption {
     margin-top: 6px;
-    font-size: 11.5px;
-    line-height: 16px;
+    padding-inline: 2px;
+    font-size: 12px;
+    line-height: 17px;
     font-weight: 500;
-    color: rgb(255 255 255 / 80%);
+    color: var(--color-mute);
   }
 
   .home-reference .fresno-hero-bar {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgb(255 255 255 / 14%);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-line);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 12px 20px;
+    gap: 10px 20px;
   }
 
   .home-reference .fresno-hero-contact {
@@ -169,48 +124,36 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    min-height: 42px;
+    min-height: 40px;
     padding: 6px 12px;
     border-radius: 10px;
-    border: 1px solid rgb(255 255 255 / 26%);
-    background: var(--color-primary-dark);
-    color: #ffffff;
+    border: 1px solid var(--color-line-strong);
+    background: #ffffff;
+    color: var(--color-primary);
     font-size: 15px;
     font-weight: 700;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, background-color 0.15s;
   }
 
   .home-reference .fresno-hero-phone:hover {
-    border-color: var(--color-gold);
+    border-color: var(--color-primary);
+    background: var(--color-cream-2);
   }
 
   .home-reference .fresno-hero-phone .ns-icon {
     width: 16px;
     height: 16px;
-    color: var(--color-gold);
+    color: var(--color-primary);
   }
 
   .home-reference .fresno-hero-hours {
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 500;
-    color: rgb(255 255 255 / 80%);
-  }
-
-  .home-reference .fresno-hero-direct {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .home-reference .fresno-hero-direct .home-button {
-    min-height: 42px;
-    padding: 8px 16px;
-    font-size: 14px;
+    color: var(--color-mute);
   }
 
   .home-reference .fresno-calc-skeleton {
-    min-height: 460px;
+    min-height: 440px;
     display: grid;
     place-items: center;
     padding: 24px;
@@ -222,24 +165,19 @@
     font-weight: 600;
   }
 
-  /* Shared Flagship Section Bands */
+  /* Shared Daylight Section Bands */
   .home-reference .fresno-band {
-    padding-block: 56px;
+    scroll-margin-top: 84px;
+    padding-block: 52px;
     background: #ffffff;
     border-bottom: 1px solid var(--color-line);
   }
 
   .home-reference .fresno-band-soft {
-    padding-block: 56px;
+    scroll-margin-top: 84px;
+    padding-block: 52px;
     background: var(--color-cream-2);
     border-bottom: 1px solid var(--color-line);
-  }
-
-  .home-reference .fresno-band-navy {
-    padding-block: 56px;
-    background: var(--color-primary-dark);
-    color: #ffffff;
-    border-bottom: 1px solid rgb(255 255 255 / 12%);
   }
 
   .home-reference .fresno-section-head {
@@ -250,517 +188,48 @@
   }
 
   .home-reference .fresno-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
+    display: block;
+    font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-primary);
-  }
-
-  .home-reference .fresno-band-navy .fresno-kicker {
-    color: var(--color-gold);
+    color: var(--color-primary-light);
   }
 
   .home-reference .fresno-h2 {
     margin-top: 6px;
-    font-size: clamp(1.75rem, 1.35rem + 1.3vw, 2.35rem);
-    font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.022em;
     color: var(--color-ink);
-  }
-
-  .home-reference .fresno-band-navy .fresno-h2 {
-    color: #ffffff;
   }
 
   .home-reference .fresno-sublead {
     margin-top: 8px;
-    max-width: 620px;
+    max-width: 600px;
     font-size: 16px;
     line-height: 1.55;
     color: var(--color-ink-soft);
   }
 
-  .home-reference .fresno-band-navy .fresno-sublead {
-    color: rgb(255 255 255 / 82%);
-  }
-
-  .home-reference .fresno-link-arrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 42px;
-    font-size: 14.5px;
-    font-weight: 700;
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  .home-reference .fresno-link-arrow:hover {
-    color: var(--color-primary-light);
-  }
-
-  /* Band 3: 3-Column Photo-Topped HomeServices Grid */
-  .home-reference .home-service-rows {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-    border-top: 0;
-  }
-
-  .home-reference .home-service-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 0;
-    border: 1px solid var(--color-line);
-    border-radius: 16px;
-    background: #ffffff;
-    overflow: hidden;
-  }
-
-  .home-reference .home-service-row[data-service="deep-cleaning"] {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 1px var(--color-primary);
-  }
-
-  .home-reference .home-service-photo {
-    border-radius: 0;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .home-reference .home-service-row[data-service="deep-cleaning"] .home-service-badge {
-    background: var(--color-gold);
-    color: var(--color-primary-dark);
-  }
-
-  .home-reference .home-service-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 16px;
-    padding: 22px 20px;
-  }
-
-  .home-reference .home-service-row h3 {
-    font-size: 22px;
-    line-height: 28px;
-    font-weight: 700;
-    color: var(--color-ink);
-  }
-
-  .home-reference .home-service-row p {
-    margin-top: 4px;
-    font-size: 14.5px;
-    line-height: 22px;
-    color: var(--color-ink-soft);
-  }
-
-  .home-reference .home-service-start {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid var(--color-surface);
-  }
-
-  .home-reference .home-service-row ul {
-    gap: 8px;
-  }
-
-  .home-reference .home-service-row li {
-    font-size: 14.5px;
-    line-height: 22px;
-    color: var(--color-ink);
-  }
-
-  .home-reference .home-service-row-actions {
-    margin-top: auto;
-    padding-top: 16px;
-    border-top: 1px solid var(--color-line);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  .home-reference .home-service-book {
-    min-height: 48px;
-    border-radius: 10px;
-    border: 1px solid var(--color-primary);
-    background: var(--color-primary);
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    transition: background-color 0.15s, border-color 0.15s;
-  }
-
-  .home-reference .home-service-book:hover {
-    background: var(--color-primary-light);
-    border-color: var(--color-primary-light);
-  }
-
-  .home-reference .home-service-row[data-service="deep-cleaning"] .home-service-book {
-    border-color: var(--color-gold);
-    background: var(--color-gold);
-    color: var(--color-primary-dark);
-  }
-
-  .home-reference .home-service-row[data-service="deep-cleaning"] .home-service-book:hover {
-    border-color: var(--color-gold-hover);
-    background: var(--color-gold-hover);
-  }
-
-  .home-reference .home-service-row-actions .home-text-link {
-    justify-content: center;
-    min-height: 38px;
-    font-size: 13.5px;
-    font-weight: 600;
-  }
-
-  /* Compact 4-Tile Standards Bento */
-  .home-reference .fresno-standards-grid {
-    margin-top: 24px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
-  }
-
-  .home-reference .fresno-standard-tile {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 20px;
-    border-radius: 14px;
-    border: 1px solid var(--color-line);
-    background: #ffffff;
-  }
-
-  .home-reference .fresno-standard-icon {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    border-radius: 10px;
-    background: var(--color-selected);
-    border: 1px solid rgb(14 42 77 / 14%);
-    color: var(--color-primary);
-  }
-
-  .home-reference .fresno-standard-icon .ns-icon {
-    width: 20px;
-    height: 20px;
-  }
-
-  .home-reference .fresno-standard-tile h3 {
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 700;
-    color: var(--color-ink);
-  }
-
-  .home-reference .fresno-standard-tile p {
-    margin-top: 4px;
-    font-size: 13.5px;
-    line-height: 20px;
-    color: var(--color-ink-soft);
-  }
-
-  .home-reference .fresno-commercial-callout {
-    margin-top: 20px;
-    padding: 16px 20px;
-    border-radius: 14px;
-    border: 1px solid var(--color-line);
-    background: #ffffff;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 24px;
-    font-size: 14px;
-    color: var(--color-ink-soft);
-  }
-
-  .home-reference .fresno-commercial-callout a {
-    font-weight: 700;
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  /* Band 4: Elevated Reviews Showcase */
-  .home-reference .fresno-reviews-band .ns-reviews {
-    gap: 20px;
-  }
-
-  .home-reference .fresno-reviews-band .ns-review {
-    padding: 24px;
-    border: 1px solid rgb(255 255 255 / 14%);
-    border-radius: 16px;
-    background: #ffffff;
-    color: var(--color-ink);
-  }
-
-  .home-reference .fresno-reviews-band .ns-review-avatar {
-    background: var(--color-primary);
-    color: #ffffff;
-  }
-
-  /* Band 5: Fresno, Clovis & Madera Neighborhood Grid */
-  .home-reference .fresno-city-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
-  }
-
-  .home-reference .fresno-city-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 22px;
-    border-radius: 16px;
-    border: 1px solid var(--color-line);
-    background: var(--color-cream-2);
-    transition: border-color 0.15s, background-color 0.15s;
-  }
-
-  .home-reference .fresno-city-card:hover {
-    border-color: var(--color-primary);
-    background: #ffffff;
-  }
-
-  .home-reference .fresno-city-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  .home-reference .fresno-city-top h3 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--color-ink);
-  }
-
-  .home-reference .fresno-city-tag {
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--color-selected);
-    border: 1px solid rgb(14 42 77 / 16%);
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-
-  .home-reference .fresno-city-desc {
-    margin-top: 8px;
-    font-size: 14px;
-    line-height: 21px;
-    color: var(--color-ink-soft);
-  }
-
-  .home-reference .fresno-hood-chips {
-    margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .home-reference .fresno-hood-chip {
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--color-line);
-    background: #ffffff;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-ink);
-  }
-
-  .home-reference .fresno-city-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-
-  .home-reference .fresno-neighborhood-bar {
-    margin-top: 20px;
-    padding: 16px 20px;
-    border-radius: 14px;
-    border: 1px solid var(--color-line);
-    background: var(--color-cream-2);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 16px;
-  }
-
-  .home-reference .fresno-neighborhood-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .home-reference .fresno-neighborhood-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--color-line-strong);
-    background: #ffffff;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--color-primary);
-    transition: border-color 0.15s, background-color 0.15s;
-  }
-
-  .home-reference .fresno-neighborhood-link:hover {
-    border-color: var(--color-primary);
-    background: var(--color-selected);
-  }
-
-  /* Band 6: Accordion FAQ + Quote Concierge */
-  .home-reference .fresno-faq-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 28px;
-    align-items: start;
-  }
-
-  .home-reference .fresno-faq-card {
-    border-radius: 16px;
-    border: 1px solid var(--color-line);
-    background: #ffffff;
-    overflow: hidden;
-  }
-
-  .home-reference .fresno-faq-card details {
-    border-bottom: 1px solid var(--color-line);
-    padding-inline: 20px;
-  }
-
-  .home-reference .fresno-faq-card details:last-child {
-    border-bottom: 0;
-  }
-
-  .home-reference .fresno-faq-card summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 60px;
-    padding-block: 14px;
-    cursor: pointer;
-    list-style: none;
-    font-size: 15.5px;
-    line-height: 23px;
-    font-weight: 700;
-    color: var(--color-ink);
-  }
-
-  .home-reference .fresno-faq-card summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .home-reference .fresno-faq-plus {
-    width: 28px;
-    height: 28px;
-    display: grid;
-    place-items: center;
-    border-radius: 8px;
-    background: var(--color-cream-2);
-    color: var(--color-primary);
-    font-size: 18px;
-    font-weight: 700;
-    flex-shrink: 0;
-    transition: transform 0.15s;
-  }
-
-  .home-reference .fresno-faq-card details[open] .fresno-faq-plus {
-    transform: rotate(45deg);
-    background: var(--color-selected);
-  }
-
-  .home-reference .fresno-faq-card details p {
-    padding-bottom: 18px;
-    max-width: 640px;
-    font-size: 14.5px;
-    line-height: 23px;
-    color: var(--color-ink-soft);
-  }
-
-  .home-reference .fresno-faq-phone {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    min-height: 44px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--color-line-strong);
-    background: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-
-  .home-reference .fresno-faq-phone .ns-icon {
-    width: 17px;
-    height: 17px;
-    color: var(--color-gold);
-  }
-
-  .home-reference .fresno-quote-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 28px;
-    align-items: start;
-  }
-
-  .home-reference .fresno-quote-points {
-    margin: 20px 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 10px;
-  }
-
-  .home-reference .fresno-quote-points li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 15px;
-    line-height: 23px;
-    color: var(--color-ink);
-  }
-
-  .home-reference .fresno-quote-points .ns-icon {
-    width: 18px;
-    height: 18px;
-    margin-top: 3px;
-    color: var(--color-primary);
-  }
-
   @media (min-width: 640px) {
     .home-reference .fresno-container {
-      padding-inline: 32px;
+      padding-inline: 24px;
     }
 
     .home-reference .fresno-hero-grid {
-      padding-block: 40px 56px;
-      gap: 36px;
+      padding-block: 36px 48px;
+      gap: 28px;
     }
 
     .home-reference .fresno-hero-lead {
       font-size: 17px;
+    }
+
+    .home-reference .fresno-band,
+    .home-reference .fresno-band-soft {
+      padding-block: 68px;
     }
 
     .home-reference .fresno-section-head {
@@ -768,55 +237,29 @@
       align-items: flex-end;
       justify-content: space-between;
       gap: 24px;
-    }
-
-    .home-reference .fresno-standards-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 32px;
     }
   }
 
   @media (min-width: 1024px) {
+    .home-reference .fresno-container {
+      padding-inline: 32px;
+    }
+
     .home-reference .fresno-hero-grid {
-      grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+      grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
       grid-template-areas:
         "copy calc"
         "showcase calc";
       grid-template-rows: auto 1fr;
       column-gap: 48px;
-      row-gap: 22px;
-      padding-block: 56px 72px;
+      row-gap: 24px;
+      padding-block: 52px 68px;
     }
 
     .home-reference .fresno-band,
-    .home-reference .fresno-band-soft,
-    .home-reference .fresno-band-navy {
-      padding-block: 80px;
-    }
-
-    .home-reference .home-service-rows {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 24px;
-      align-items: stretch;
-    }
-
-    .home-reference .fresno-standards-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .home-reference .fresno-city-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .home-reference .fresno-faq-grid {
-      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-      gap: 48px;
-    }
-
-    .home-reference .fresno-quote-grid {
-      grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-      gap: 56px;
+    .home-reference .fresno-band-soft {
+      padding-block: 84px;
     }
   }
 }

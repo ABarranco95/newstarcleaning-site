@@ -111,8 +111,8 @@ const reviews = ["merle-f", "daumdatta", "joel-s"].map((id) => googleReviews.fin
 export default function ServicesPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Services" title="House cleaning services in Fresno, Clovis & Madera." description="Standard cleaning from $165, deep cleaning from $235, and move-in/move-out from $325 — plus walkthrough-scoped commercial and post-construction cleaning." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
+      <SiteHero eyebrow="Services" title="House cleaning services in Fresno, Clovis & Madera." description="Standard cleaning from $165, deep cleaning from $235, and move-in/move-out from $325 — plus walkthrough-scoped commercial and post-construction cleaning." photo={homeResultPhotos[0]} proof={<ProofRow tone="light" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><HomeBookingLink /><Suspense fallback={<Link href="/book-now" className="home-button-secondary">Get a quote</Link>}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#compare" className="home-text-link">Compare services ↓</a><MarketPhone className="site-hero-phone" location="services_hero" /></div>
       </SiteHero>
 
       <section id="compare" className="ns-section scroll-mt-24" aria-labelledby="services-compare-title">

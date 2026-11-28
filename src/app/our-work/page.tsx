@@ -254,14 +254,13 @@ export default function OurWorkPage() {
   return (
     <div className="site-reference work-page">
       <SiteHero
-        tone="dark"
         eyebrow="New Star Cleaning · Fresno, Clovis & Madera"
         title="Real photos from our cleaning jobs."
         description="Slide across real shower glass, inside-oven buildup, gas cooktops, and return vents, or inspect 14 unedited room and empty-home photos."
         breadcrumbs={[{ label: "Home", href: "/" }]}
       >
         <div className="site-proof-row">
-          <GoogleRating onDark />
+          <GoogleRating />
         </div>
         <nav className="work-category-nav" aria-label="Gallery sections">
           <a href="#before-after">Interactive Slider (6 Pairs)</a>
@@ -318,7 +317,7 @@ export default function OurWorkPage() {
                 Get a quote <span aria-hidden="true">→</span>
               </HomeQuoteLink>
             </Suspense>
-            <HomeBookingLink placement="footer" onDark />
+            <HomeBookingLink placement="footer" />
             <MarketPhone className="work-closing-phone" location="our_work_cta">
               <Icon name="phone" />{" "}
             </MarketPhone>

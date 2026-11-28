@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 
 export default function ServiceAreasPage() {
   return <div className="site-reference">
-    <SiteHero eyebrow="Service areas" title="Find your cleaning area." description="Pick your city for the local details and your price. Service depends on the address, and we confirm it before you book." photo={bathroomResultPhotos[1]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-      <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#cities" className="home-text-link">Find your area ↓</a><MarketPhone className="site-hero-phone" location="areas_hero" /></div>
+    <SiteHero eyebrow="Service areas" title="Find your cleaning area." description="Pick your city for the local details and your price. Service depends on the address, and we confirm it before you book." photo={bathroomResultPhotos[1]} proof={<ProofRow tone="light" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+      <div className="site-actions"><HomeBookingLink /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><div className="site-actions"><a href="#cities" className="home-text-link">Find your area ↓</a><MarketPhone className="site-hero-phone" location="areas_hero" /></div>
     </SiteHero>
     <MarketAreas directory />
     <section className="site-muted" aria-labelledby="service-areas-map-title">

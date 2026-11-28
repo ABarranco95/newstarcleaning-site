@@ -25,12 +25,12 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="site-reference">
-      <SiteHero title="Call, text or email." description="Have a question before you book? Call, text, or email New Star Cleaning about your home and schedule." photo={homeResultPhotos[0]} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="grid divide-y divide-on-dark-line text-lg font-semibold">
-          <MarketPhone className="flex min-h-14 items-center gap-2 text-white" location="contact_hero">Call </MarketPhone>
-          <MarketPhone text className="flex min-h-14 items-center gap-2 text-white" location="contact_hero_text">Text </MarketPhone>
-          <a href="mailto:angel@newstarcleaning.com" className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-1 py-4 text-white"><span>Email New Star</span><span className="break-all text-[15px] font-normal text-on-dark-soft">angel@newstarcleaning.com</span></a>
-          <p className="py-4 text-sm font-medium leading-relaxed text-on-dark-soft">Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM · Sun closed</p>
+      <SiteHero title="Call, text or email." description="Have a question before you book? Call, text, or email New Star Cleaning about your home and schedule." photo={homeResultPhotos[0]} proof={<ProofRow tone="light" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="grid divide-y divide-line rounded-2xl border border-line bg-white px-5 py-1 text-base font-semibold">
+          <MarketPhone className="flex min-h-14 items-center gap-2 text-primary hover:underline" location="contact_hero">Call </MarketPhone>
+          <MarketPhone text className="flex min-h-14 items-center gap-2 text-primary hover:underline" location="contact_hero_text">Text </MarketPhone>
+          <a href="mailto:angel@newstarcleaning.com" className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-1 py-4 text-primary hover:underline"><span>Email New Star</span><span className="break-all text-[15px] font-normal text-ink-soft">angel@newstarcleaning.com</span></a>
+          <p className="py-4 text-sm font-medium leading-relaxed text-mute">Mon–Fri 8 AM–6 PM · Sat 8 AM–5 PM · Sun closed</p>
         </div>
       </SiteHero>
       <section className="site-muted"><div className="site-section site-quote-layout"><div><p className="ns-kicker">Your price</p><h2 className="mt-3">Tell us about your home.</h2><p className="site-intro">Put in your ZIP and the price shows here. This form doesn&apos;t book an appointment.</p></div><QuickQuoteForm title="Tell us about your home" subtitle="We'll help with the cleaning and the price. This form doesn't book an appointment." source="contact_page" directBookingUrl={directBookingUrl} compact /></div></section>

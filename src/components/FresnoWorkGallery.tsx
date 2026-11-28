@@ -343,10 +343,10 @@ export default function FresnoWorkGallery({ pairs, photos }: FresnoWorkGalleryPr
                   href={`/book-now?service=${activePair.serviceSlug}`}
                   className="home-button work-stage-cta"
                 >
-                  Get a Quote for This Scope <span aria-hidden="true">-&gt;</span>
+                  Get a Quote for This Scope <span aria-hidden="true">→</span>
                 </Link>
                 <Link href="/checklist" className="work-stage-link">
-                  Check full 45-point checklist <span aria-hidden="true">-&gt;</span>
+                  Check full 45-point checklist <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </aside>
@@ -453,7 +453,7 @@ export default function FresnoWorkGallery({ pairs, photos }: FresnoWorkGalleryPr
             </div>
 
             <Link href="/services/move-out-cleaning" className="work-filter-side-link">
-              Move-In / Move-Out scope <span aria-hidden="true">-&gt;</span>
+              Move-In / Move-Out scope <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
@@ -575,7 +575,7 @@ export default function FresnoWorkGallery({ pairs, photos }: FresnoWorkGalleryPr
                 onClick={closeLightbox}
                 className="home-button work-lightbox-cta"
               >
-                Get a Quote Like This <span aria-hidden="true">-&gt;</span>
+                Get a Quote Like This <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>

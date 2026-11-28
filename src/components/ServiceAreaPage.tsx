@@ -16,8 +16,6 @@ import ReviewCards from "@/components/ReviewCards";
 import SiteHero from "@/components/SiteHero";
 import TrustStrip from "@/components/TrustStrip";
 import WorkPhoto from "@/components/WorkPhoto";
-import FresnoInstantPriceCalculator from "@/components/FresnoInstantPriceCalculator";
-import "@/app/fresno-flagship.css";
 import type { ServiceArea } from "@/lib/serviceAreas";
 import { getServiceAreaSchema } from "@/lib/serviceAreas";
 import { bathroomResultPhotos, cleanBathroomPhoto, emptyHomeResultPhotos, homeResultPhotos, kitchenSurfacesPhoto, vanityDetailPhoto, legacyShowerPair, ovenInteriorPair, refrigeratorFullPair, showerDetailPair, tubSurroundPair, ventDetailPair, pickUnusedPhoto, type RealWorkPhoto } from "@/lib/realWorkPhotos";
@@ -77,32 +75,9 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
   return (
     <div className="site-reference">
-      <SiteHero title={`House cleaning in ${area.name}, ${heroLocation}.`} description={area.description} photo={heroPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}>
+      <SiteHero title={`House cleaning in ${area.name}, ${heroLocation}.`} description={area.description} photo={heroPhoto} proof={<ProofRow tone="light" />} breadcrumbs={[{ label: "Home", href: "/" }, { label: "Service areas", href: "/service-areas" }]}>
         <PricePicker id="price" source={`organic_${area.slug}_price`} leadSource={`organic_${area.slug}_service_area`} defaultCity={area.name} quoteHref="#quote" />
       </SiteHero>
-
-      <section className="site-muted" aria-label={`Instant ${area.name} cleaning calculator`}>
-        <div className="site-section site-split">
-          <div className="site-copy">
-            <p className="ns-kicker">Instant Flat-Rate Preview</p>
-            <h2>Preview {area.name} pricing by room count.</h2>
-            <p className="site-intro">{area.localProof}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {area.neighborhoods.slice(0, 6).map((n) => (
-                <span key={n} className="chip">{n}</span>
-              ))}
-            </div>
-          </div>
-          <Suspense fallback={null}>
-            <FresnoInstantPriceCalculator
-              defaultCity={area.name}
-              directBookingUrl={directBookingUrl}
-              source={`area_calc_${area.slug}`}
-              compact
-            />
-          </Suspense>
-        </div>
-      </section>
 
       <section aria-labelledby="area-reviews-title"><div className="ns-section"><div className="ns-section-head"><h2 id="area-reviews-title" className="ns-h2">What customers say.</h2><GoogleRating prominent /></div><ReviewCards topic="home" reviews={reviews} lead /></div></section>
 

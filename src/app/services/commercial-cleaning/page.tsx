@@ -143,41 +143,40 @@ export default function CommercialCleaningPage() {
         title="Office & commercial cleaning in Fresno & Clovis."
         description="Consistent, walkthrough-scoped cleaning for Fresno, Clovis, and Madera offices, clinics, behavioral-health and recovery residences, retail spaces, and shared facilities."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
-        tone="dark"
-        proof={<ProofRow tone="dark" />}
+        proof={<ProofRow tone="light" />}
         aside={
-          <div className="rounded-[var(--radius-card)] border border-on-dark-line bg-white/5 p-6 text-on-dark">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-gold">Commercial walkthrough summary</p>
-            <h2 className="mt-2 text-xl font-bold text-white">Built around your facility and schedule.</h2>
-            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-on-dark-soft">
+          <div className="rounded-[var(--radius-card)] border border-line-strong bg-white p-6 text-ink">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-primary-light">Commercial walkthrough summary</p>
+            <h2 className="mt-2 text-xl font-bold text-ink">Built around your facility and schedule.</h2>
+            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-ink-soft">
               <div>
-                <dt className="font-semibold text-white">Service area</dt>
+                <dt className="font-semibold text-ink">Service area</dt>
                 <dd>Fresno, Clovis, Madera, and North Fresno business corridors.</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Insurance</dt>
+                <dt className="font-semibold text-ink">Insurance</dt>
                 <dd>We carry general liability insurance for every visit.</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Scheduling</dt>
+                <dt className="font-semibold text-ink">Scheduling</dt>
                 <dd>Daytime, after-hours, weekly, multi-day, or one-time trial cleans.</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Pricing</dt>
+                <dt className="font-semibold text-ink">Pricing</dt>
                 <dd>Walkthrough or photo review followed by a clear written proposal.</dd>
               </div>
             </dl>
           </div>
         }
       >
-        <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
+        <ul className="site-hero-points">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
         <div className="site-actions">
           <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">→</span></a>
           <MarketPhone className="site-hero-phone" location="commercial_service_hero">Call </MarketPhone>
         </div>
-        <p className="site-note text-on-dark-mute">Serving Fresno, Clovis &amp; Madera.</p>
+        <p className="site-note">Serving Fresno, Clovis &amp; Madera.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="commercial-request-title">

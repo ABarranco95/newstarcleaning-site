@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
     <div className="site-reference">
       {costGuide ? (
         <>
-          <section className="site-hero-band ns-on-dark">
+          <section className="site-hero-band">
             <div className="cost-guide-hero">
               <div className="cost-guide-copy">
                 <nav className="site-breadcrumbs" aria-label="Breadcrumb">
@@ -76,7 +76,7 @@ export default async function BlogPostPage({ params }: RouteParams) {
                 </nav>
                 <p className="site-eyebrow">{post.category} · Fresno, Clovis &amp; Madera</p>
                 <h1>{post.title}</h1>
-                <ProofRow tone="dark" />
+                <ProofRow tone="light" />
                 <p className="cost-guide-lead">{costGuide.leadLine}</p>
                 <div className="cost-guide-tiers">
                   {costGuide.snapshotCards.map((card) => (

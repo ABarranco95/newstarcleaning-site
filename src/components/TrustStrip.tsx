@@ -1,5 +1,3 @@
-
-
 const facts = [
   { token: "2020", body: "Cleaning homes since 2020." },
   { token: "24 hours", body: "Missed something in the agreed scope? Tell us within 24 hours and we come back at no charge." },
@@ -10,7 +8,7 @@ const facts = [
 export default function TrustStrip({ className = "" }: { className?: string; links?: boolean }) {
   const ownership = { token: "Locally owned", body: "Locally owned and operated in Fresno, CA." };
   return (
-    <section aria-label="Why homeowners choose New Star" className={`ns-trust ns-on-dark ${className}`.trim()}>
+    <section aria-label="Why homeowners choose New Star" className={`ns-trust ${className}`.trim()}>
       <ul className="ns-trust-list">
         {[...facts, ownership].map((fact) => (
           <li key={fact.token} className="ns-trust-item">

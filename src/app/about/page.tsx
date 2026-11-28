@@ -51,8 +51,8 @@ const steps = [
 export default function AboutPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="About New Star Cleaning" title="Locally owned Fresno house cleaning." description={<MarketAboutIntro />} visual={<OwnerPhoto />} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div>
+      <SiteHero eyebrow="About New Star Cleaning" title="Locally owned Fresno house cleaning." description={<MarketAboutIntro />} visual={<OwnerPhoto />} proof={<ProofRow tone="light" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><HomeBookingLink /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div>
         <MarketPhone className="site-hero-phone mt-4" location="about_hero" />
       </SiteHero>
       <section className="site-section site-split">

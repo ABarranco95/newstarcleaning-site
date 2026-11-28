@@ -111,7 +111,7 @@ export default async function ServiceCityPage({ params }: RouteParams) {
   const reviews = reviewIds.map((id) => googleReviews.find((review) => review.id === id)!);
   return (
     <div className="site-reference">
-      <SiteHero title={`${service.shortName} in ${cityName}, CA`} description={presentation.summary} photo={presentation.photo} proof={<ProofRow tone="dark" />} breadcrumbs={[{label: "Home", href: "/"}, {label: service.shortName, href: `/services/${service.slug}`}]}>
+      <SiteHero title={`${service.shortName} in ${cityName}, CA`} description={presentation.summary} photo={presentation.photo} proof={<ProofRow tone="light" />} breadcrumbs={[{label: "Home", href: "/"}, {label: service.shortName, href: `/services/${service.slug}`}]}>
         <PricePicker id="price" service={quoteFormService(service)} source={`organic_${service.slug}_${citySlug}_price`} leadSource={`organic_${service.slug}_${citySlug}`} defaultCity={cityName} quoteHref={quoteHref} />
       </SiteHero>
       <section id="whats-included" className="site-section scroll-mt-24" aria-labelledby="combo-included-title">

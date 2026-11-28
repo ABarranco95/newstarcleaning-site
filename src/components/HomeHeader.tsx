@@ -9,13 +9,16 @@ import HomeQuoteLink from "@/components/HomeQuoteLink";
 import HomeBookingLink from "@/components/HomeBookingLink";
 import Icon from "@/components/Icon";
 import { business } from "@/lib/business";
+import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
+
+const directBookingUrl = resolveDirectBookingUrl();
 
 type NavLink = { label: string; href: string; sub?: string; price?: string };
 
 const residentialLinks: NavLink[] = [
-  { label: "Standard cleaning", href: "/services/standard-cleaning", price: "$165+", sub: "Weekly, bi-weekly, monthly or 1x" },
-  { label: "Deep cleaning", href: "/services/deep-cleaning", price: "$235+", sub: "Buildup, baseboards & fixtures" },
-  { label: "Move-in / move-out", href: "/services/move-out-cleaning", price: "$325+", sub: "Empty home + inside cabinets" },
+  { label: "Standard cleaning", href: "/services/standard-cleaning", price: "From $165", sub: "Weekly, bi-weekly, monthly or one-time" },
+  { label: "Deep cleaning", href: "/services/deep-cleaning", price: "From $235", sub: "Shower buildup, baseboards & fixtures" },
+  { label: "Move-in / move-out", href: "/services/move-out-cleaning", price: "From $325", sub: "Empty home + inside cabinets" },
 ];
 
 const businessLinks: NavLink[] = [
@@ -101,9 +104,9 @@ export default function HomeHeader() {
   }, [open, servicesOpen, areasOpen]);
 
   return (
-    <header ref={header} className="home-header ns-on-dark" data-open={open} onClickCapture={(event) => { if ((event.target as Element).closest("a")) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }}>
+    <header ref={header} className="home-header" data-open={open} onClickCapture={(event) => { if ((event.target as Element).closest("a")) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) { setOpen(false); setServicesOpen(false); setAreasOpen(false); } }}>
       <div className="home-header-inner">
-        <Link href="/" aria-label="New Star Cleaning home" className="home-wordmark"><Image src="/brand/nsc-lockup-horizontal-reverse.svg" alt="New Star Cleaning" width={640} height={150} sizes="(min-width: 1024px) 176px, 156px" /></Link>
+        <Link href="/" aria-label="New Star Cleaning home" className="home-wordmark"><Image src="/brand/nsc-lockup-horizontal.svg" alt="New Star Cleaning" width={640} height={150} sizes="(min-width: 1024px) 174px, 154px" /></Link>
         <nav className="home-desktop-nav" aria-label="Main navigation">
           <div ref={panel} className={`home-nav-item home-nav-panel${servicesOpen ? " is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setServicesOpen(false); }}>
             <button
@@ -123,7 +126,7 @@ export default function HomeHeader() {
                 {serviceLinks.map((link) => (
                   <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} className="home-services-panel-link justify-between gap-2">
                     <span>{link.label}</span>
-                    {link.price ? <span className="rounded-full border border-line-strong bg-cream-2 px-2 py-0.5 text-xs font-bold text-primary">{link.price}</span> : null}
+                    {link.price ? <span className="text-xs font-semibold text-mute">{link.price}</span> : null}
                   </Link>
                 ))}
               </div>
@@ -159,48 +162,44 @@ export default function HomeHeader() {
         </nav>
         <div className="home-header-actions">
           <a href={business.phoneHref} className="home-header-phone" data-phone-location="header_desktop" aria-label={`Call ${business.phoneDisplay}`}><Icon name="phone" /><span className="home-header-phone-number">{business.phoneDisplay}</span></a>
-          <HomeBookingLink placement="header" />
+          {directBookingUrl ? <HomeBookingLink placement="header" /> : <Suspense fallback={<Link href={quoteHref} className="home-header-booking">Get a quote</Link>}><HomeQuoteLink className="home-header-booking">Get a quote</HomeQuoteLink></Suspense>}
           <button type="button" ref={menu} className="home-menu-button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="home-mobile-menu" onClick={() => setOpen(!open)}>
             <span className="home-menu-label">{open ? "Close" : "Menu"}</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">{open ? <path d="m5 5 14 14M5 19 19 5" /> : <path d="M3 8h18M3 16h18" />}</svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">{open ? <path d="m5 5 14 14M5 19 19 5" /> : <path d="M3 8h18M3 16h18" />}</svg>
           </button>
         </div>
       </div>
       {open ? <nav id="home-mobile-menu" className="home-mobile-menu" aria-label="Mobile navigation">
-        <div className="home-mobile-contact"><HomeBookingLink /><div className="home-mobile-contact-row"><a href={business.phoneHref} data-phone-location="header_mobile">Call {business.phoneDisplay}</a><a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_menu">Text Us</a></div></div>
-        <div className="home-mobile-group">
-          <p className="home-mobile-group-title">Quick Pricing &amp; Scope</p>
-          <div className="grid grid-cols-2 gap-2.5">
-            {serviceLinks.map((link) => (
-              <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="!flex !flex-col !items-start gap-1 rounded-xl !border !border-line bg-cream-2 !p-3">
-                <span className="flex w-full items-center justify-between gap-1 text-sm font-bold text-primary">
-                  <span>{link.label.split(" ")[0]}</span>
-                  <span className="rounded-full border border-line-strong bg-white px-2 py-0.5 text-xs">{link.price}</span>
-                </span>
-                <span className="text-xs text-ink-soft">{link.sub}</span>
+        <div className="home-mobile-menu-inner">
+          <div className="home-mobile-contact">{directBookingUrl ? <HomeBookingLink /> : <Suspense fallback={<Link href={quoteHref} className="home-button">Get a quote</Link>}><HomeQuoteLink className="home-button">Get a quote</HomeQuoteLink></Suspense>}<div className="home-mobile-contact-row"><a href={business.phoneHref} data-phone-location="header_mobile">Call {business.phoneDisplay}</a><a href={business.phoneHref.replace("tel:", "sms:")} data-phone-location="mobile_menu">Text Us</a></div></div>
+          <div className="home-mobile-group">
+            <p className="home-mobile-group-title">Residential Cleaning</p>
+            <div>
+              {serviceLinks.map((link) => (
+                <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} onClick={() => setOpen(false)}>
+                  <span className="font-semibold text-ink">{link.label}</span>
+                  <span className="text-xs font-semibold text-mute">{link.price}</span>
+                </Link>
+              ))}
+              <Link href="/checklist" aria-current={currentLocation("/checklist")} onClick={() => setOpen(false)}>
+                <span className="font-semibold text-primary">What&apos;s Included (45-Point Checklist)</span>
+                <span aria-hidden="true" className="text-primary">→</span>
               </Link>
-            ))}
-            <Link href="/checklist" onClick={() => setOpen(false)} className="!flex !flex-col !items-start gap-1 rounded-xl !border-2 !border-primary bg-selected !p-3">
-              <span className="flex w-full items-center justify-between gap-1 text-sm font-bold text-primary">
-                <span>Checklist</span>
-                <span className="rounded-full bg-gold px-2 py-0.5 text-xs font-bold text-primary-dark">45 Pts</span>
-              </span>
-              <span className="text-xs text-ink-soft">Room-by-room scope →</span>
-            </Link>
+              <Link href="/our-work" aria-current={currentLocation("/our-work")} onClick={() => setOpen(false)}>
+                <span className="font-semibold text-primary">Before &amp; After Work Photos</span>
+                <span aria-hidden="true" className="text-primary">→</span>
+              </Link>
+            </div>
           </div>
-          <Link href="/our-work" onClick={() => setOpen(false)} className="mt-2.5 !flex !flex-col !items-start gap-1 rounded-xl !border !border-primary bg-white !p-3.5">
-            <span className="rounded-full bg-primary-dark px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white">Real Job Photos</span>
-            <span className="text-base font-bold text-primary">Before &amp; After Work Gallery →</span>
-          </Link>
-        </div>
-        {mobileGroups.map((group) => (
-          <div key={group.title} className={`home-mobile-group${group.title === "Areas" ? " home-mobile-areas" : ""}`}>
-            <p className="home-mobile-group-title">{group.title}</p>
-            <div>{group.links.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} onClick={() => setOpen(false)}>{link.label}</Link>)}</div>
+          {mobileGroups.map((group) => (
+            <div key={group.title} className={`home-mobile-group${group.title === "Areas" ? " home-mobile-areas" : ""}`}>
+              <p className="home-mobile-group-title">{group.title}</p>
+              <div>{group.links.map((link) => <Link key={link.href} href={link.href} aria-current={currentLocation(link.href)} onClick={() => setOpen(false)}>{link.label}</Link>)}</div>
+            </div>
+          ))}
+          <div className="mt-4">
+            <Suspense fallback={<Link href={quoteHref}>Get a quote</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
           </div>
-        ))}
-        <div className="mt-4">
-          <Suspense fallback={<Link href={quoteHref}>Get a quote</Link>}><HomeQuoteLink className="home-text-link">Get a quote <span aria-hidden="true">→</span></HomeQuoteLink></Suspense>
         </div>
       </nav> : null}
     </header>

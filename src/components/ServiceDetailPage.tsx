@@ -14,8 +14,6 @@ import PriceCtaBand from "@/components/PriceCtaBand";
 import ProofRow from "@/components/ProofRow";
 import ReviewCards from "@/components/ReviewCards";
 import WorkPhoto from "@/components/WorkPhoto";
-import FresnoInstantPriceCalculator from "@/components/FresnoInstantPriceCalculator";
-import "@/app/fresno-flagship.css";
 import { bathroomResultPhotos, homeResultPhotos, pickUnusedPhoto } from "@/lib/realWorkPhotos";
 
 import type { ServiceDefinition } from "@/lib/services";
@@ -103,28 +101,11 @@ export default function ServiceDetailPage({ service, h1, intro }: {
         description={intro ?? heroDescriptions[service.slug]}
         descriptionBeforeProof={Boolean(intro)}
         photo={presentation.photo}
-        proof={<ProofRow tone="dark" />}
+        proof={<ProofRow tone="light" />}
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
       >
         <PricePicker id="price" source={`organic_${service.slug}_service_price`} leadSource={`organic_${service.slug}_service`} service={quoteFormService(service)} quoteHref="#quote" />
       </SiteHero>
-
-      <section className="site-section site-split" aria-label={`Instant ${service.shortName} calculator`}>
-        <div className="site-copy">
-          <p className="ns-kicker">Instant Flat-Rate Preview</p>
-          <h2>Preview your {service.shortName.toLowerCase()} rate.</h2>
-          <p className="site-intro">Tap your bedrooms, bathrooms, and home size to see New Star Cleaning&apos;s upfront Fresno &amp; Clovis flat rate before booking.</p>
-          <Link href="/checklist" className="home-text-link mt-4">Explore 45-point checklist →</Link>
-        </div>
-        <Suspense fallback={null}>
-          <FresnoInstantPriceCalculator
-            defaultService={isMoveOut ? "MOVE_OUT" : isDeep ? "DEEP" : "STANDARD"}
-            directBookingUrl={directBookingUrl}
-            source={`service_calc_${service.slug}`}
-            compact
-          />
-        </Suspense>
-      </section>
 
       <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">{isStandard ? "Our work" : "Real jobs"}</p><h2>{isStandard ? "Rooms we've cleaned." : isMoveOut ? "Move-out add-ons, before and after." : "Deep cleaning, before and after."}</h2></div></div><ServiceProof service={service} /></div></section>
 

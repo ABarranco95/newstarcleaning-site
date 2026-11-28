@@ -105,8 +105,8 @@ const comparisonRows = [
 export default function ChecklistPage() {
   return (
     <div className="site-reference">
-      <SiteHero eyebrow="Service checklist" title="House cleaning checklist for Fresno & Clovis homes." description="What each cleaning includes, which add-ons you can choose, and what we don't do. Filter all 45 room-by-room tasks across New Star Cleaning's three scopes below." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="dark" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
-        <div className="site-actions"><HomeBookingLink onDark /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><a href="#interactive-checklist" className="home-text-link mt-4">Explore 45-point checklist ↓</a>
+      <SiteHero eyebrow="Service checklist" title="House cleaning checklist for Fresno & Clovis homes." description="What each cleaning includes, which add-ons you can choose, and what we don't do. Filter all 45 room-by-room tasks across New Star Cleaning's three scopes below." photo={kitchenSurfacesPhoto} proof={<ProofRow tone="light" />} breadcrumbs={[{ label: "Home", href: "/" }]}>
+        <div className="site-actions"><HomeBookingLink /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div><a href="#interactive-checklist" className="home-text-link mt-4">Explore 45-point checklist ↓</a>
       </SiteHero>
       <section id="interactive-checklist" className="site-section scroll-mt-24">
         <FresnoInteractiveChecklist />

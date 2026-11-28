@@ -17,10 +17,11 @@ interface SiteHeroProps {
   tone?: "light" | "dark";
 }
 
-export default function SiteHero({ title, description, descriptionBeforeProof = false, eyebrow, photo, visual, breadcrumbs, children, aside, proof }: SiteHeroProps) {
+export default function SiteHero({ title, description, descriptionBeforeProof = false, eyebrow, photo, visual, breadcrumbs, children, aside, proof, tone = "light" }: SiteHeroProps) {
   const hasRightVisual = Boolean(photo || visual);
+  const isDark = tone === "dark";
   return (
-    <section className="site-hero-band ns-on-dark">
+    <section className={`site-hero-band${isDark ? " site-hero-band-dark ns-on-dark" : ""}`}>
       <div className={`site-hero${hasRightVisual || aside ? " site-hero-visual" : ""}`}>
         <div className="site-hero-copy">
           {breadcrumbs && <nav className="site-breadcrumbs" aria-label="Breadcrumb">{breadcrumbs.map((crumb) => <Link href={crumb.href} key={crumb.href}>{crumb.label}</Link>)}</nav>}

@@ -148,41 +148,40 @@ export default function PostConstructionCleaningPage() {
         title="Post-construction cleaning in Fresno & Clovis."
         description="Final interior cleaning for new homes, remodels, and commercial tenant improvements across Fresno, Clovis, and Madera — scoped in writing around your handoff date."
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]}
-        tone="dark"
-        proof={<ProofRow tone="dark" />}
+        proof={<ProofRow tone="light" />}
         aside={
-          <div className="rounded-[var(--radius-card)] border border-on-dark-line bg-white/5 p-6 text-on-dark">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-gold">Handoff summary</p>
-            <h2 className="mt-2 text-xl font-bold text-white">Clean, dust-free handoffs on deadline.</h2>
-            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-on-dark-soft">
+          <div className="rounded-[var(--radius-card)] border border-line-strong bg-white p-6 text-ink">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-primary-light">Handoff summary</p>
+            <h2 className="mt-2 text-xl font-bold text-ink">Clean, dust-free handoffs on deadline.</h2>
+            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-ink-soft">
               <div>
-                <dt className="font-semibold text-white">Service area</dt>
+                <dt className="font-semibold text-ink">Service area</dt>
                 <dd>Fresno, Clovis, Madera, and North Fresno job sites.</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Insurance</dt>
+                <dt className="font-semibold text-ink">Insurance</dt>
                 <dd>We carry general liability insurance.</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Scope options</dt>
+                <dt className="font-semibold text-ink">Scope options</dt>
                 <dd>Final interior clean, turnover detail, and punch-return visits.</dd>
               </div>
               <div>
-                <dt className="font-semibold text-white">Proposals</dt>
+                <dt className="font-semibold text-ink">Proposals</dt>
                 <dd>Site walkthrough or photo review with clear written pricing.</dd>
               </div>
             </dl>
           </div>
         }
       >
-        <ul className="site-hero-points [&_li]:text-on-dark-soft [&_.ns-icon]:text-gold">
+        <ul className="site-hero-points">
           {heroPoints.map((point) => <li key={point}><Icon name="check" />{point}</li>)}
         </ul>
         <div className="site-actions">
           <a href="#quote" className="home-button">Request a walkthrough <span aria-hidden="true">→</span></a>
           <MarketPhone className="site-hero-phone" location="construction_service_hero">Call </MarketPhone>
         </div>
-        <p className="site-note text-on-dark-mute">Serving Fresno, Clovis &amp; Madera.</p>
+        <p className="site-note">Serving Fresno, Clovis &amp; Madera.</p>
       </SiteHero>
 
       <section className="site-section site-split site-rule" aria-labelledby="construction-request-title">

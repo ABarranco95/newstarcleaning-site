@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
   const posts = [...blogPosts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   return (
     <div className="site-reference">
-      <SiteHero tone="dark" eyebrow="Cleaning notes & pricing guides" title="Fresno & Clovis cleaning guides." description="Local pricing guides, room-by-room checklists, and practical help for choosing the right cleaning service." breadcrumbs={[{ label: "Home", href: "/" }]} />
+      <SiteHero eyebrow="Cleaning notes & pricing guides" title="Fresno & Clovis cleaning guides." description="Local pricing guides, room-by-room checklists, and practical help for choosing the right cleaning service." breadcrumbs={[{ label: "Home", href: "/" }]} />
       <section className="site-section" aria-label="Cleaning guides">
         <div className="site-directory site-directory-cards">
           {posts.map((post) => (
