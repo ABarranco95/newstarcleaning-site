@@ -60,30 +60,28 @@ export default function CommercialServicePage({
 
   return (
     <>
-      <section className="relative overflow-hidden bg-primary text-white">
-
-        <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-20 lg:pt-14">
-          <nav className="mb-6 text-sm text-white/55" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white">Home</Link>
+      <section className="relative overflow-hidden border-b border-line bg-gradient-to-b from-[#f5f8fc] to-white text-ink">
+        <div className="relative mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6 lg:px-8 lg:pb-20 lg:pt-14">
+          <nav className="mb-5 text-sm text-mute" aria-label="Breadcrumb">
+            <Link href="/" className="underline underline-offset-4 hover:text-primary">Home</Link>
             <span className="px-1.5">/</span>
-            <Link href="/services" className="hover:text-white">Services</Link>
+            <Link href="/services" className="underline underline-offset-4 hover:text-primary">Services</Link>
             <span className="px-1.5">/</span>
-            <span className="font-semibold text-white">{serviceName}</span>
+            <span className="font-semibold text-ink">{serviceName}</span>
           </nav>
-          <div className="grid items-center gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16">
+          <div className="grid items-start gap-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16">
             <div className="max-w-2xl">
-              <span className="eyebrow eyebrow-dot text-accent-light">{eyebrow}</span>
-              <h1 className="mt-4 text-4xl text-white lg:text-[3.4rem]">{h1}</h1>
-              <p className="mt-5 text-lg leading-8 text-white/75">{intro}</p>
+              <p className="text-sm font-semibold text-mute">{eyebrow} · Fresno, Clovis &amp; Madera</p>
+              <h1 className="mt-3 text-4xl text-ink lg:text-[3.25rem]">{h1}</h1>
+              <p className="mt-4 text-lg leading-8 text-ink-soft">{intro}</p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link href={quoteHref} className="btn btn-accent">Request a walkthrough <ArrowIcon /></Link>
-                <a href={business.phoneHref} className="btn btn-ghost-dark">Call {business.phoneDisplay}</a>
+                <a href={business.phoneHref} className="btn btn-outline">Call {business.phoneDisplay}</a>
               </div>
-              <p className="mt-5 text-sm leading-6 text-white/70">Serving Fresno, Clovis &amp; Madera.</p>
             </div>
-            <div className="border-l border-white/25 pl-6 sm:pl-8">
-              <h2 className="text-xl text-white">{pagePath.includes("construction") ? "For the final handoff" : "For the places you work"}</h2>
-              <ul className="mt-5 space-y-4 text-base leading-7 text-white/80">
+            <div className="border-t-2 border-primary pt-5 lg:border-t-0 lg:border-l-2 lg:pt-0 lg:pl-8">
+              <h2 className="text-xl text-ink">{pagePath.includes("construction") ? "For the final handoff" : "For the places you work"}</h2>
+              <ul className="mt-4 space-y-3.5 text-base leading-7 text-ink-soft">
                 {bestFor.map((item) => <li key={item}>{item}</li>)}
               </ul>
             </div>
@@ -94,13 +92,12 @@ export default function CommercialServicePage({
       <section className="ns-section bg-cream">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <span className="eyebrow eyebrow-dot">Scope first</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">{fitTitle}</h2>
-            <p className="mt-5 leading-relaxed text-ink-soft">{fitIntro}</p>
+            <h2 className="text-3xl text-ink lg:text-4xl">{fitTitle}</h2>
+            <p className="mt-4 leading-relaxed text-ink-soft">{fitIntro}</p>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {scopes.map((scope) => (
-              <article key={scope.title} className="rounded-2xl border border-line bg-white p-6">
+              <article key={scope.title} className="rounded-[8px] border border-line border-t-[3px] border-t-primary bg-white p-6">
                 <h3 className="text-xl text-ink">{scope.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft">{scope.description}</p>
               </article>
@@ -109,19 +106,16 @@ export default function CommercialServicePage({
         </div>
       </section>
 
-      <section className="bg-cream-2 py-12 lg:py-16">
+      <section className="border-y border-line bg-cream-2 py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div>
-            <span className="eyebrow eyebrow-dot">Proposal process</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">From walkthrough to start date</h2>
+            <h2 className="text-3xl text-ink lg:text-4xl">From walkthrough to start date</h2>
             <ol className="mt-8 grid gap-7 md:grid-cols-2 lg:grid-cols-4">
               {process.map((step, index) => (
-                <li key={step.title} className="grid grid-cols-[2.25rem_1fr] gap-4">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">{index + 1}</span>
-                  <span>
-                    <strong className="block text-ink">{step.title}</strong>
-                    <span className="mt-1 block text-sm leading-relaxed text-ink-soft">{step.description}</span>
-                  </span>
+                <li key={step.title} className="border-t-2 border-line-strong pt-4">
+                  <span className="block text-base font-extrabold text-primary tabular-nums">0{index + 1}</span>
+                  <strong className="mt-2 block text-lg text-ink">{step.title}</strong>
+                  <span className="mt-1.5 block text-sm leading-relaxed text-ink-soft">{step.description}</span>
                 </li>
               ))}
             </ol>
@@ -132,11 +126,10 @@ export default function CommercialServicePage({
 
       <section className="ns-section bg-cream">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="eyebrow eyebrow-dot">FAQs</span>
-            <h2 className="mt-4 text-3xl text-ink lg:text-4xl">Questions before the walkthrough</h2>
+          <div>
+            <h2 className="text-3xl text-ink lg:text-4xl">Questions before the walkthrough</h2>
           </div>
-          <div className="mt-10 divide-y divide-line border-y border-line">
+          <div className="mt-8 divide-y divide-line border-y border-line">
             <details className="group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-ink [&::-webkit-details-marker]:hidden">
                 <span>Service limits and site preparation</span><span aria-hidden="true" className="group-open:rotate-45">+</span>
@@ -158,20 +151,19 @@ export default function CommercialServicePage({
         </div>
       </section>
 
-      <section className="bg-primary py-14 text-white lg:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <span className="eyebrow text-accent-light">Next step</span>
-          <h2 className="mt-4 text-3xl text-white lg:text-4xl">Let’s talk about your {pagePath.includes("construction") ? "project" : "workplace"}.</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/75">
-            Tell us what needs cleaning and when. We’ll review the details with you and put the work, schedule, and price in writing.
+      <section className="border-t border-line bg-cream-2 py-14 text-ink lg:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl text-ink lg:text-4xl">Let&apos;s talk about your {pagePath.includes("construction") ? "project" : "workplace"}.</h2>
+          <p className="mt-4 max-w-2xl text-lg leading-8 text-ink-soft">
+            Tell us what needs cleaning and when. We&apos;ll review the details with you and put the work, schedule, and price in writing.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link href={quoteHref} className="btn btn-accent">Start the request <ArrowIcon /></Link>
-            <a href={business.phoneHref} className="btn btn-ghost-dark">Call {business.phoneDisplay}</a>
+            <a href={business.phoneHref} className="btn btn-outline">Call {business.phoneDisplay}</a>
           </div>
-          <p className="mt-6 text-sm text-white/75">
+          <p className="mt-6 text-sm text-ink-soft">
             {pagePath.includes("construction") ? "Need ongoing workplace cleaning? " : "Finishing a build or renovation? "}
-            <Link className="underline underline-offset-4" href={pagePath.includes("construction") ? "/services/commercial-cleaning" : "/services/post-construction-cleaning"}>
+            <Link className="font-semibold text-primary underline underline-offset-4" href={pagePath.includes("construction") ? "/services/commercial-cleaning" : "/services/post-construction-cleaning"}>
               {pagePath.includes("construction") ? "See commercial cleaning" : "See post-construction cleaning"}
             </Link>
           </p>

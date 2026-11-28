@@ -129,7 +129,6 @@ export default function Home() {
         <div className="fresno-container">
           <div className="fresno-section-head">
             <div>
-              <p className="fresno-kicker">Real Unedited Work</p>
               <h2 id="home-results-title" className="fresno-h2">
                 Slide to inspect our before &amp; after work.
               </h2>
@@ -168,7 +167,6 @@ export default function Home() {
         <div className="fresno-container">
           <div className="fresno-section-head">
             <div>
-              <p className="fresno-kicker">Services &amp; Checklists</p>
               <h2 id="home-services-title" className="fresno-h2">
                 Three ways we clean.
               </h2>
@@ -245,7 +243,6 @@ export default function Home() {
       <section aria-labelledby="home-quote-title">
         <div className="site-section site-quote-layout">
           <div className="site-copy">
-            <p className="ns-kicker">Your price</p>
             <h2 id="home-quote-title" className="ns-h2">
               Prefer we text your quote and open dates?
             </h2>

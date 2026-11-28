@@ -107,13 +107,12 @@ export default function ServiceDetailPage({ service, h1, intro }: {
         <PricePicker id="price" source={`organic_${service.slug}_service_price`} leadSource={`organic_${service.slug}_service`} service={quoteFormService(service)} quoteHref="#quote" />
       </SiteHero>
 
-      <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><p className="ns-kicker">{isStandard ? "Our work" : "Real jobs"}</p><h2>{isStandard ? "Rooms we've cleaned." : isMoveOut ? "Move-out add-ons, before and after." : "Deep cleaning, before and after."}</h2></div></div><ServiceProof service={service} /></div></section>
+      <section className="site-muted"><div className="site-section"><div className="ns-section-head"><div><h2>{isStandard ? "Rooms we've cleaned." : isMoveOut ? "Move-out add-ons, before and after." : "Deep cleaning, before and after."}</h2></div></div><ServiceProof service={service} /></div></section>
 
-      <div className="service-editorial [&_.se-kicker]:text-[13px] [&_.se-kicker]:font-bold [&_.se-kicker]:uppercase [&_.se-kicker]:tracking-[.08em] [&_.se-kicker]:text-primary-light [&_.se-cadence-note]:text-base [&_.se-cadence-term]:text-base [&_.se-handoff_.se-tag]:text-[13px]">
+      <div className="service-editorial [&_.se-cadence-note]:text-base [&_.se-cadence-term]:text-base [&_.se-handoff_.se-tag]:text-[13px]">
         <section className="site-section">
           <div className="site-split">
             <div className="se-fit-copy">
-              <p className="se-kicker">Is this the right clean for your home?</p>
               {isMoveOut ? (
                 <>
                   <section>
@@ -252,7 +251,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
       )}
 
       {!isMoveOut && <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks /></div>}
-      <section className="site-muted" aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
+      <section className="site-muted" aria-labelledby="service-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><h2 id="service-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards topic={reviewTopics[service.slug]} lead /></div></section>
       {!isMoveOut && <PriceCtaBand photo={bandPhoto} line="Pick the cleaning and put in your ZIP. You'll see your price before anything is booked." phoneLocation="service_price_band" />}
       <section className="site-muted"><div className="site-section site-split">
         <div className="site-copy">
@@ -288,7 +287,7 @@ export default function ServiceDetailPage({ service, h1, intro }: {
 
       <section>
         <div className="site-section site-quote-layout">
-          <div className="site-copy"><p className="ns-kicker">Your price</p><h2>Price your {service.shortName.toLowerCase()}.</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="service_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
+          <div className="site-copy"><h2>Price your {service.shortName.toLowerCase()}.</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p><p className="site-note">Or call or text <MarketPhone location="service_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
           <QuickQuoteForm title={`Price your ${service.shortName.toLowerCase()}`} subtitle="Your service is selected. Start with your city and timing." source={`organic_${service.slug}_service`} defaultService={quoteFormService(service)} directBookingUrl={directBookingUrl} compact />
         </div>
       </section>

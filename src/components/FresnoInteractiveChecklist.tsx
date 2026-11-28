@@ -510,7 +510,6 @@ export default function FresnoInteractiveChecklist() {
       <section id="optional-addons" className="fcl-addons-box" aria-labelledby="fcl-addons-heading">
         <div className="fcl-addons-head">
           <div>
-            <span className="fcl-addons-kicker">Optional Extras · Fresno, Clovis &amp; Madera</span>
             <h3 id="fcl-addons-heading">Optional Add-Ons Quoted Upfront</h3>
           </div>
           <p>
@@ -547,8 +546,7 @@ export default function FresnoInteractiveChecklist() {
       <div className="fcl-boundaries-grid">
         <article className="fcl-boundary-card fcl-boundary-prep">
           <div>
-            <span className="fcl-pill fcl-pill-all">Quick Client Prep</span>
-            <h3 className="mt-2">5-Minute Prep Before We Arrive</h3>
+            <h3>5-Minute Prep Before We Arrive</h3>
             <p className="fcl-boundary-lead mt-1">
               Quick prep keeps counters and floors open so your cleaner spends the visit cleaning
               surfaces rather than working around items:
@@ -568,8 +566,7 @@ export default function FresnoInteractiveChecklist() {
 
         <article className="fcl-boundary-card fcl-boundary-limits">
           <div>
-            <span className="fcl-pill fcl-pill-deep">Scope Boundaries</span>
-            <h3 className="mt-2">Honest Boundaries (Not Included)</h3>
+            <h3>Honest Boundaries (Not Included)</h3>
             <p className="fcl-boundary-lead mt-1">
               Laundry, dishes, bed making, organizing, packing, moving furniture, exterior windows,
               and biohazards are outside our residential cleaning service:

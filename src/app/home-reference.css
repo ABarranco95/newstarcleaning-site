@@ -1,7 +1,7 @@
 @layer components {
   .home-reference { background: var(--color-cream); color: var(--color-ink); }
   .home-wrap { max-width: 1280px; margin-inline: auto; padding-inline: 16px; }
-  .home-button, .home-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 12px 22px; border-radius: 10px; font-size: 16px; font-weight: 700; line-height: 1.35; text-align: center; transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out; }
+  .home-button, .home-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 12px 22px; border-radius: 6px; font-size: 16px; font-weight: 700; line-height: 1.35; text-align: center; transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out; }
   .home-button { border: 1.5px solid var(--color-primary); background: var(--color-primary); color: #ffffff; }
   .home-button:hover { border-color: var(--color-primary-light); background: var(--color-primary-light); }
   .home-button-secondary { border: 1.5px solid var(--color-line-strong); background: #ffffff; color: var(--color-primary); }
@@ -24,11 +24,11 @@
   .home-wordmark { min-width: 0; flex-shrink: 1; display: inline-flex; align-items: center; }
   .home-wordmark img { width: 154px; height: auto; }
   .home-header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .home-header-phone { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 42px; min-height: 42px; padding-inline: 8px; border-radius: 10px; color: var(--color-primary); font-size: 15px; font-weight: 700; transition: background-color .15s; }
+  .home-header-phone { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 42px; min-height: 42px; padding-inline: 8px; border-radius: 6px; color: var(--color-primary); font-size: 15px; font-weight: 700; transition: background-color .15s; }
   .home-header-phone:hover { background: var(--color-cream-2); }
   .home-header-phone .ns-icon { width: 19px; height: 19px; }
   .home-header-phone-number, .home-header-booking, .home-desktop-nav { display: none; }
-  .home-menu-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; padding: 6px 12px; border: 1px solid var(--color-line-strong); border-radius: 10px; background: #ffffff; color: var(--color-primary); cursor: pointer; font-size: 14px; font-weight: 700; transition: border-color .15s, background-color .15s; }
+  .home-menu-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; padding: 6px 12px; border: 1px solid var(--color-line-strong); border-radius: 6px; background: #ffffff; color: var(--color-primary); cursor: pointer; font-size: 14px; font-weight: 700; transition: border-color .15s, background-color .15s; }
   .home-menu-button:hover { border-color: var(--color-primary); background: var(--color-cream-2); }
   .home-menu-label { display: inline; }
   .home-mobile-menu { position: absolute; top: 100%; left: 0; right: 0; height: calc(100dvh - 66px); overflow-y: auto; overscroll-behavior: contain; padding: 20px 16px 56px; color: var(--color-ink); background: var(--color-cream); border-top: 1px solid var(--color-line); box-shadow: var(--shadow-float); }
@@ -41,7 +41,7 @@
   .home-mobile-menu a[aria-current] { font-weight: 700; color: var(--color-primary); }
   .home-mobile-contact { display: grid; gap: 10px; }
   .home-mobile-contact-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .home-mobile-contact-row a { justify-content: center; border: 1px solid var(--color-line-strong); border-radius: 10px; background: var(--color-cream-2); color: var(--color-primary); font-weight: 700; font-size: 14.5px; }
+  .home-mobile-contact-row a { justify-content: center; border: 1px solid var(--color-line-strong); border-radius: 6px; background: var(--color-cream-2); color: var(--color-primary); font-weight: 700; font-size: 14.5px; }
   .home-mobile-areas > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
   body:has(.home-header[data-open="true"]) { overflow: hidden; }
 
@@ -59,9 +59,9 @@
   /* Service choice cards across Home & ServiceAreaPage */
   .home-band-muted { background: var(--color-cream-2); }
   .home-service-rows { display: grid; gap: 18px; }
-  .home-service-row { display: flex; flex-direction: column; align-items: stretch; min-width: 0; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); overflow: hidden; transition: border-color 150ms ease-out, box-shadow 150ms ease-out; }
+  .home-service-row { display: flex; flex-direction: column; align-items: stretch; min-width: 0; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-cream); overflow: hidden; transition: border-color 150ms ease-out; }
   .home-service-row:hover { border-color: var(--color-line-strong); }
-  .home-service-row[data-service="deep-cleaning"] { border-color: var(--color-primary); box-shadow: 0 12px 28px -20px rgb(18 50 91 / 24%); }
+  .home-service-row[data-service="deep-cleaning"] { border-color: var(--color-line-strong); border-top: 3px solid var(--color-primary); }
   .home-service-photo { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--color-line); background: var(--color-surface); }
   .home-service-photo img { object-fit: cover; }
   .home-service-photo img[src*="dining-kitchen-turnover"] { object-position: 50% 55%; }
@@ -73,7 +73,7 @@
   .home-scope-includes li { position: relative; padding-left: 20px; color: var(--color-ink); font-size: 14px; line-height: 1.5; }
   .home-scope-includes li::before { content: "✓"; position: absolute; left: 0; font-weight: 700; color: var(--color-primary); }
   .home-service-row-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 18px 20px 20px; margin-top: auto; }
-  .home-service-book { display: inline-flex; flex: 1 1 auto; align-items: center; justify-content: center; min-height: 46px; padding: 10px 18px; border-radius: 10px; border: 1.5px solid var(--color-primary); background: #ffffff; color: var(--color-primary); font-size: 15px; font-weight: 700; line-height: 1.35; transition: background-color 150ms ease-out, color 150ms ease-out; }
+  .home-service-book { display: inline-flex; flex: 1 1 auto; align-items: center; justify-content: center; min-height: 46px; padding: 10px 18px; border-radius: 6px; border: 1.5px solid var(--color-primary); background: #ffffff; color: var(--color-primary); font-size: 15px; font-weight: 700; line-height: 1.35; transition: background-color 150ms ease-out, color 150ms ease-out; }
   .home-service-book:hover { background: var(--color-selected); }
   .home-service-row[data-service="deep-cleaning"] .home-service-book { background: var(--color-primary); color: #ffffff; }
   .home-service-row[data-service="deep-cleaning"] .home-service-book:hover { background: var(--color-primary-light); border-color: var(--color-primary-light); }
@@ -98,16 +98,16 @@
   .home-ba-pair-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .home-comparison-image { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-card); background: var(--color-surface); border: 1px solid var(--color-line); }
   .home-comparison-image img { object-fit: cover; }
-  .home-ba-tag { position: absolute; top: 8px; left: 8px; padding: 4px 9px; border-radius: 999px; background: rgb(255 255 255 / 94%); color: var(--color-primary); font-size: 12px; font-weight: 700; line-height: 1.4; }
+  .home-ba-tag { position: absolute; top: 8px; left: 8px; padding: 3px 8px; border-radius: 4px; background: rgb(255 255 255 / 94%); color: var(--color-primary); font-size: 11.5px; font-weight: 700; line-height: 1.35; }
   .home-ba-addon { top: auto; bottom: 8px; }
   .home-ba-pair-label { display: grid; gap: 6px; margin-top: 14px; }
   .home-ba-pair-label h3 { font-size: 16px; font-weight: 700; color: var(--color-ink); }
   .home-ba-pair-label p { color: var(--color-ink-soft); font-size: 13.5px; line-height: 1.45; }
 
   .home-steps { display: grid; list-style: none; border-top: 1px solid var(--color-line); }
-  .home-steps li { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; padding-block: 16px; border-bottom: 1px solid var(--color-line); }
-  .home-step-number { grid-row: 1 / span 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 999px; background: var(--color-selected); border: 1px solid #c5d6ec; color: var(--color-primary); font-size: 16px; font-weight: 800; line-height: 1; }
-  .home-steps li h3 { display: flex; align-items: center; min-height: 40px; font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--color-ink); }
+  .home-steps li { display: grid; grid-template-columns: 36px minmax(0, 1fr); column-gap: 16px; padding-block: 18px; border-bottom: 1px solid var(--color-line); }
+  .home-step-number { grid-row: 1 / span 2; display: block; padding-top: 3px; color: var(--color-primary); font-size: 18px; font-weight: 800; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .home-steps li h3 { display: flex; align-items: center; min-height: 28px; font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--color-ink); }
   .home-steps li p { max-width: 62ch; font-size: 15px; line-height: 1.55; color: var(--color-ink-soft); }
   .home-local, .home-faq { display: grid; gap: 24px; }
   .home-also-serving { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-line); }
@@ -143,7 +143,7 @@
   /* Mobile thumb dock (<768px): clean white + Coastal Navy */
   .mobile-contact-bar { position: fixed; inset: auto 0 0; z-index: 40; border-top: 1px solid var(--color-line); background: rgb(255 255 255 / 98%); backdrop-filter: blur(8px); padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -8px 24px -16px rgb(15 28 46 / 18%); }
   .mobile-contact-inner { display: grid; grid-template-columns: 1fr 1fr 1.6fr; gap: 8px; max-width: 460px; margin-inline: auto; }
-  .mobile-contact-link { display: flex; align-items: center; justify-content: center; min-height: 48px; border: 1px solid var(--color-line-strong); border-radius: 10px; background: #ffffff; color: var(--color-primary); font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .mobile-contact-link { display: flex; align-items: center; justify-content: center; min-height: 48px; border: 1px solid var(--color-line-strong); border-radius: 6px; background: #ffffff; color: var(--color-primary); font-size: 14px; font-weight: 700; white-space: nowrap; }
   .mobile-contact-inner > :last-child { border-color: var(--color-primary); background: var(--color-primary); color: #ffffff; font-weight: 700; }
   .mobile-contact-spacer { height: 68px; }
 
@@ -153,7 +153,7 @@
     .home-header-inner { height: 70px; }
     .home-mobile-menu { height: calc(100dvh - 70px); padding-inline: 24px; }
     .home-header-phone-number { display: inline; white-space: nowrap; }
-    .home-header-booking { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 8px 16px; border-radius: 10px; background: var(--color-primary); color: #ffffff; font-size: 14.5px; font-weight: 700; white-space: nowrap; transition: background-color 150ms ease-out; }
+    .home-header-booking { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 8px 16px; border-radius: 6px; background: var(--color-primary); color: #ffffff; font-size: 14.5px; font-weight: 700; white-space: nowrap; transition: background-color 150ms ease-out; }
     .home-header-booking:hover { background: var(--color-primary-light); }
     .hx-inner { padding-inline: 24px; }
     .home-service-rows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
@@ -177,7 +177,7 @@
     .home-header-inner { height: 74px; padding-inline: 32px; }
     .home-wordmark img { width: 174px; }
     .home-desktop-nav { display: flex; align-items: center; gap: 4px; }
-    .home-desktop-nav > a, .home-nav-trigger { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 8px 11px; border-radius: 8px; color: var(--color-ink-soft); font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: color .15s, background-color .15s; }
+    .home-desktop-nav > a, .home-nav-trigger { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 8px 11px; border-radius: 6px; color: var(--color-ink-soft); font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: color .15s, background-color .15s; }
     .home-desktop-nav > a:hover, .home-nav-trigger:hover { color: var(--color-primary); background: var(--color-cream-2); }
     .home-desktop-nav > a[aria-current], .home-nav-trigger[aria-current] { color: var(--color-primary); text-decoration: underline; text-decoration-color: var(--color-primary); text-decoration-thickness: 2px; text-underline-offset: 8px; }
     .home-nav-panel { position: relative; }

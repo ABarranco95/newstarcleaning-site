@@ -117,7 +117,7 @@ export default function ServicesPage() {
 
       <section id="compare" className="ns-section scroll-mt-24" aria-labelledby="services-compare-title">
         <div className="ns-section-head">
-          <div><p className="ns-kicker">Compare</p><h2 id="services-compare-title" className="ns-h2">Which cleaning do you need?</h2></div>
+          <div><h2 id="services-compare-title" className="ns-h2">Which cleaning do you need?</h2></div>
           <Link href="/checklist" className="home-text-link">Full checklists <span aria-hidden="true">→</span></Link>
         </div>
         <div className="service-editorial [&_.se-guide]:gap-6 [&_.se-guide-body_p]:text-base">
@@ -162,7 +162,7 @@ export default function ServicesPage() {
       </section>
 
       <section className="site-muted"><div className="ns-section" aria-labelledby="services-business-title">
-        <div className="ns-section-head"><div><p className="ns-kicker">For businesses</p><h2 id="services-business-title" className="ns-h2">For offices, facilities &amp; job sites.</h2><p className="ns-lead">Walkthrough or photo review first, written task list and price before we start. We carry general liability insurance.</p></div></div>
+        <div className="ns-section-head"><div><h2 id="services-business-title" className="ns-h2">For offices, facilities &amp; job sites.</h2><p className="ns-lead">Walkthrough or photo review first, written task list and price before we start. We carry general liability insurance.</p></div></div>
         <div className="site-directory site-directory-cards site-directory-two">
           {projectServices.map((service) => (
             <article key={service.href}>
@@ -176,10 +176,10 @@ export default function ServicesPage() {
         </div>
       </div></section>
       <div className="bg-white [&_.site-muted]:bg-white"><HowItWorks priceHref="/book-now#price" /></div>
-      <section className="site-muted" aria-labelledby="services-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Reviews</p><h2 id="services-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards reviews={reviews} lead /></div></section>
+      <section className="site-muted" aria-labelledby="services-reviews-title"><div className="ns-section"><div className="ns-section-head"><div><h2 id="services-reviews-title" className="ns-h2">What customers say.</h2></div><GoogleRating prominent /></div><ReviewCards reviews={reviews} lead /></div></section>
       <section aria-labelledby="services-areas-title">
         <div className="ns-section">
-          <div className="ns-section-head"><div><p className="ns-kicker">Service area</p><h2 id="services-areas-title" className="ns-h2">Near you.</h2><p className="ns-lead">Serving Fresno, Clovis, Madera, and nearby Fresno neighborhoods including North Fresno, Woodward Park, Fig Garden, and Tower District.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
+          <div className="ns-section-head"><div><h2 id="services-areas-title" className="ns-h2">Service areas near you.</h2><p className="ns-lead">Serving Fresno, Clovis, Madera, and nearby Fresno neighborhoods including North Fresno, Woodward Park, Fig Garden, and Tower District.</p></div><Link href="/service-areas" className="home-text-link">All service areas <span aria-hidden="true">→</span></Link></div>
           <div className="grid gap-6 sm:grid-cols-3">
             {primaryAreas.map((area) => <Link key={area.slug} href={`/cleaning-services-${area.slug}`} className="flex min-h-20 flex-col justify-center gap-2 border-t border-line py-4 text-primary"><strong className="text-xl">{area.name} →</strong><span className="text-sm text-mute">{area.county}</span></Link>)}
           </div>

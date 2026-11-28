@@ -56,7 +56,7 @@ export default function BeforeAfterCarousel({
   const current = showAfter ? item.after : item.before;
 
   const segmentClass = (active: boolean) =>
-    `min-h-10 flex-1 rounded-lg px-3 text-sm font-bold transition-colors ${
+    `min-h-10 flex-1 rounded-[4px] px-3 text-sm font-bold transition-colors ${
       active
         ? "bg-primary text-white"
         : "bg-transparent text-ink-soft hover:text-primary"
@@ -69,7 +69,7 @@ export default function BeforeAfterCarousel({
       role="group"
       aria-roledescription="carousel"
       aria-label={`Before and after comparison, result ${index + 1} of ${count}`}
-      className="overflow-hidden rounded-2xl border border-line bg-white shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      className="overflow-hidden rounded-[8px] border border-line bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
     >
       <button
         type="button"
@@ -84,17 +84,17 @@ export default function BeforeAfterCarousel({
           sizes="(min-width: 768px) 480px, 80vw"
           className="object-cover"
         />
-        <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">
+        <span className="absolute left-3 top-3 rounded-[4px] bg-ink/85 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white">
           {showAfter ? "After" : "Before"}
         </span>
-        <span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-[0.7rem] font-semibold text-ink-soft shadow-soft">
+        <span className="absolute bottom-3 right-3 rounded-[4px] bg-white/94 px-2.5 py-1 text-[0.7rem] font-semibold text-ink-soft">
           Tap photo to compare
         </span>
       </button>
 
       <div className="flex flex-wrap items-center gap-3 px-4 py-3">
         <div
-          className="flex flex-1 gap-1 rounded-xl border border-line bg-cream-2 p-1"
+          className="flex flex-1 gap-1 rounded-[6px] border border-line bg-cream-2 p-[3px]"
           role="group"
           aria-label="Choose before or after photo"
         >
@@ -122,7 +122,7 @@ export default function BeforeAfterCarousel({
               type="button"
               onClick={() => go(-1)}
               aria-label="Previous result"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-primary hover:text-primary"
+              className="flex h-10 w-10 items-center justify-center rounded-[6px] border border-line text-ink transition-colors hover:border-primary hover:text-primary"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -135,7 +135,7 @@ export default function BeforeAfterCarousel({
               type="button"
               onClick={() => go(1)}
               aria-label="Next result"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-primary hover:text-primary"
+              className="flex h-10 w-10 items-center justify-center rounded-[6px] border border-line text-ink transition-colors hover:border-primary hover:text-primary"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

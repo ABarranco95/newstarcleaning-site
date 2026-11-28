@@ -29,12 +29,10 @@
   .home-reference .fresno-hero-calc { grid-area: calc; }
 
   .home-reference .fresno-eyebrow {
-    font-size: 12.5px;
-    line-height: 18px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-primary-light);
+    font-size: 13.5px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--color-mute);
   }
 
   .home-reference .fresno-hero h1 {
@@ -82,7 +80,7 @@
     min-height: 46px;
     padding: 8px 34px 8px 12px;
     border: 1px solid var(--color-line-strong);
-    border-radius: 10px;
+    border-radius: 6px;
     background-color: var(--color-cream-2);
     color: var(--color-ink);
     font-size: 15px;
@@ -143,7 +141,7 @@
     position: relative;
     aspect-ratio: 16 / 11;
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 8px;
     border: 1px solid var(--color-line);
     background: var(--color-surface);
   }
@@ -187,7 +185,7 @@
     gap: 7px;
     min-height: 40px;
     padding: 6px 12px;
-    border-radius: 10px;
+    border-radius: 6px;
     border: 1px solid var(--color-line-strong);
     background: #ffffff;
     color: var(--color-primary);
@@ -218,7 +216,7 @@
     display: grid;
     place-items: center;
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 8px;
     border: 1px solid var(--color-line-strong);
     background: #ffffff;
     color: var(--color-ink-soft);

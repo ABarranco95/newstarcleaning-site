@@ -56,15 +56,15 @@ export default function AboutPage() {
         <MarketPhone className="site-hero-phone mt-4" location="about_hero" />
       </SiteHero>
       <section className="site-section site-split">
-        <div><p className="ns-kicker">Our Standard</p><h2 className="mt-3">How New Star Cleaning runs every visit.</h2></div>
+        <div><h2>How New Star Cleaning runs every visit.</h2></div>
         <div className="site-area-prose"><p>When you book, tell us about the part of the house that bothers you most. A shower with buildup takes more time than a kitchen that just needs keeping up, and the price accounts for that.</p><p>Every visit follows our checklist, and we bring our own supplies. If something in the agreed scope gets missed, tell us within 24 hours and we come back and fix it at no charge.</p><p className="font-semibold">Angel Barranco, owner</p></div>
       </section>
       <TrustStrip />
       <section className="site-section">
-        <div className="ns-section-head"><div><p className="ns-kicker">How it works</p><h2>How the work gets done.</h2></div></div>
+        <div className="ns-section-head"><div><h2>How the work gets done.</h2></div></div>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">{steps.map((step, index) => <article key={step.title} className="border-t border-line pt-6"><h3>{step.title}</h3><p className="mt-4 leading-relaxed">{step.note}</p>{index === 0 ? <Link href="/checklist" className="home-text-link mt-4">See the checklist →</Link> : null}</article>)}</div>
       </section>
-      <section className="site-muted"><div className="ns-section"><div className="ns-section-head"><div><p className="ns-kicker">Our work</p><h2 className="ns-h2">Rooms we&apos;ve cleaned.</h2></div><Link href="/our-work" className="home-text-link">See all of our work →</Link></div><PhotoStrip photos={[homeResultPhotos[0], homeResultPhotos[2], bathroomResultPhotos[1], kitchenSurfacesPhoto]} /></div></section>
+      <section className="site-muted"><div className="ns-section"><div className="ns-section-head"><div><h2 className="ns-h2">Rooms we&apos;ve cleaned.</h2></div><Link href="/our-work" className="home-text-link">See all of our work →</Link></div><PhotoStrip photos={[homeResultPhotos[0], homeResultPhotos[2], bathroomResultPhotos[1], kitchenSurfacesPhoto]} /></div></section>
       <MarketAreas />
       <section className="site-muted"><div className="site-section site-split"><h2>See your price.</h2><div><p className="site-intro">Pick the cleaning and your home size, then book a time online.</p><div className="site-actions"><HomeBookingLink placement="footer" /><Suspense fallback={null}><HomeQuoteLink className="home-button-secondary">Get a quote</HomeQuoteLink></Suspense></div></div></div></section>
       <BreadcrumbSchema items={[{ name: "Home", url: "https://newstarcleaning.com" }, { name: "About", url: "https://newstarcleaning.com/about" }]} />

@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import sharp from "sharp";
 
 // Review-proof contract: every quote traces to the recorded profile read.
 // The current score is public after the review-carrying CID correction.
@@ -62,10 +63,9 @@ for (const review of googleReviews) {
 for (const topic of ["home", "standard", "deep", "move"]) assert.equal(reviewsFor(topic, 3).length, 3);
 
 const countClaim = /(\d[\d,]*)\s*\+?\s*(?:five-star\s+|5-star\s+|google\s+|customer\s+|verified\s+|happy\s+)*reviews?\b/gi;
-function assertReviewPresentation(html, label, allowVerifiedCount = false) {
+function assertReviewPresentation(html, label) {
   assert(!/<a\b/i.test(html), `${label}: review proof has no public links`);
   for (const match of html.matchAll(countClaim)) {
-    if (allowVerifiedCount && match[1] === String(googleRating.reviewCount)) continue;
     assert.fail(`${label}: "${match[0]}" is an unverified public numerical review-count claim`);
   }
 }
@@ -76,11 +76,28 @@ const { default: GoogleRating } = load("src/components/GoogleRating.tsx", {
 });
 assert.equal(business.googleMapsUrl, "https://www.google.com/maps?cid=13545152036473270457", "rating is backed by the current review-carrying profile");
 assert.equal(googleRating.reviewCount, 34, "canonical verified Google review count is recorded in googleRating.ts");
+// Angel's 2026-11-27 owner update: graphic Google 5-star PNG badge + Hundreds of happy homeowners + Insured seals (no public review-count text).
+for (const badgeFile of [
+  "google-5-star-badge.png",
+  "google-5-star-badge-dark.png",
+  "hundreds-happy-homeowners.png",
+  "hundreds-happy-homeowners-dark.png",
+  "insured-local-guarantee.png",
+  "insured-local-guarantee-dark.png",
+]) {
+  const fullBadgePath = path.join("public", "trust", badgeFile);
+  assert(existsSync(fullBadgePath), `missing trust badge PNG: ${fullBadgePath}`);
+  const badgeMeta = await sharp(fullBadgePath).metadata();
+  assert.equal(badgeMeta.format, "png", `${badgeFile}: valid PNG format`);
+  assert(badgeMeta.width >= 600 && badgeMeta.height >= 200, `${badgeFile}: high-DPI dimensions (${badgeMeta.width}x${badgeMeta.height})`);
+  assert(!badgeMeta.exif && !badgeMeta.xmp && !badgeMeta.iptc, `${badgeFile}: metadata-clean`);
+}
 for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { rated: true }, { rated: true, onDark: true }]) {
   const html = renderToStaticMarkup(createElement(GoogleRating, props));
-  assertReviewPresentation(html, "GoogleRating", true);
+  assertReviewPresentation(html, "GoogleRating");
+  assert(html.includes(props.onDark ? "/trust/google-5-star-badge-dark.png" : "/trust/google-5-star-badge.png"), "GoogleRating renders graphic 5-star badge PNG");
   const visible = html.replace(/<[^>]*>/g, "");
-  assert(visible.includes(`${googleRating.score} · ${googleRating.reviewCount} Google reviews`), "shared proof renders the verified Google score and review count from its single source");
+  assert(visible.includes(`Rated ${googleRating.score} out of ${googleRating.scale} on Google`), "shared proof renders the verified Google score from its single source");
   assert(!visible.includes(homesServedLine), "rating placements do not imply unverified job-history slogans");
   assert(!visible.includes("Central Valley"), "Angel's 2026-11-09 override removes region labels from rating proof");
   assert(!/award|certified|top-rated|#1|best in/i.test(visible), "no unofficial issuer claims");
@@ -92,9 +109,15 @@ const { default: TrustStrip } = load("src/components/TrustStrip.tsx", {
 const { default: ProofRow } = load("src/components/ProofRow.tsx", { "@/components/GoogleRating": { default: GoogleRating } });
 for (const tone of ["dark", "light"]) {
   const html = renderToStaticMarkup(createElement(ProofRow, { tone }));
-  assertReviewPresentation(html, `${tone} hero proof`, true);
+  assertReviewPresentation(html, `${tone} hero proof`);
+  assert(html.includes("hundreds-happy-homeowners") && html.includes("insured-local-guarantee"), `${tone} hero proof renders graphic homeowner and insurance seals`);
   const visible = html.replace(/<[^>]*>/g, "");
-  assert(visible.includes(`${googleRating.score} · ${googleRating.reviewCount} Google reviews`) && visible.includes("100+ happy homeowners") && visible.includes("Insured"), "hero proof leads with the verified Google rating, homeowner count and insurance proof");
+  assert(
+    visible.includes(`Rated ${googleRating.score} out of ${googleRating.scale} on Google`) &&
+      visible.includes("Hundreds of happy homeowners") &&
+      /insured/i.test(visible),
+    "hero proof leads with the verified Google rating badge, Hundreds of happy homeowners seal, and insurance proof",
+  );
   assert(!/Central Valley|local homes/i.test(visible), "hero proof makes no regional job-history claim");
 }
 const stripHtml = renderToStaticMarkup(createElement(TrustStrip, {}));

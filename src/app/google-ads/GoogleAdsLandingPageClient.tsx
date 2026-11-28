@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import QuickQuoteForm from "@/components/QuickQuoteForm";
 import CommercialQuoteForm from "@/components/CommercialQuoteForm";
 import GoogleRating from "@/components/GoogleRating";
+import ProofRow from "@/components/ProofRow";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import TrustStrip from "@/components/TrustStrip";
 import ReviewCards from "@/components/ReviewCards";
@@ -316,12 +317,7 @@ function PaidBrand() {
 }
 
 function TrustLine({ onDark = false }: { onDark?: boolean }) {
-  return (
-    <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${onDark ? "text-white/85" : "text-ink-soft"}`}>
-      <GoogleRating onDark={onDark} rated />
-      <span className="text-xs">100+ happy homeowners · Insured</span>
-    </div>
-  );
+  return <ProofRow tone={onDark ? "dark" : "light"} />;
 }
 
 function ScopeNote({ scope }: { scope: NonNullable<PaidIntentConfig["scope"]> }) {

@@ -31,9 +31,8 @@ export default function QuotePathPanel({
   const href = quoteHref({ city, service, source });
 
   return (
-    <div className="rounded-3xl border border-line bg-white p-6 shadow-elev sm:p-7 lg:p-8">
-      <span className="eyebrow eyebrow-dot">Simple quote path</span>
-      <h2 className="mt-3 text-2xl leading-tight text-ink lg:text-[1.7rem]">
+    <div className="rounded-[8px] border border-line border-t-[3px] border-t-primary bg-white p-6 sm:p-7 lg:p-8">
+      <h2 className="text-2xl leading-tight text-ink lg:text-[1.7rem]">
         {title}
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-ink-soft">{body}</p>
@@ -45,8 +44,8 @@ export default function QuotePathPanel({
           "We confirm scope, pricing, and timing before you book.",
         ].map((item, index) => (
           <li key={item} className="flex gap-3 text-sm leading-relaxed text-ink-soft">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-              {index + 1}
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[4px] bg-selected text-xs font-extrabold text-primary tabular-nums">
+              0{index + 1}
             </span>
             <span>{item}</span>
           </li>

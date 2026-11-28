@@ -196,7 +196,6 @@ export default function FresnoWorkGallery({ pairs, photos }: FresnoWorkGalleryPr
         <div className="home-wrap">
           <div className="work-ba-head">
             <div>
-              <p className="work-ba-kicker">Interactive Surface Comparison</p>
               <h2 id="work-ba-title">Drag the slider across real New Star work.</h2>
             </div>
             <p className="work-ba-note">
@@ -228,7 +227,7 @@ export default function FresnoWorkGallery({ pairs, photos }: FresnoWorkGalleryPr
                     }}
                   />
                   <span>{item.pillLabel}</span>
-                  {item.isAddOn ? <small className="work-pill-addon">Add-On</small> : null}
+                  {item.isAddOn ? <small className="work-pill-addon">(Add-On)</small> : null}
                 </button>
               );
             })}
@@ -491,7 +490,6 @@ export default function FresnoWorkGallery({ pairs, photos }: FresnoWorkGalleryPr
                     sizes="(min-width: 1024px) 300px, (min-width: 640px) 46vw, 92vw"
                     className="work-photo-img"
                   />
-                  <span className="work-photo-cat">{photo.categoryBadge}</span>
                   <span className="work-enlarge" aria-hidden="true">
                     View photo ↗
                   </span>

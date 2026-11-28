@@ -199,18 +199,18 @@ export default function FresnoInstantPriceCalculator({
       : "Get Exact Quote →";
 
   const ctaClassName =
-    "fresno-calc-cta inline-flex min-h-[50px] w-full sm:w-auto sm:min-w-[220px] items-center justify-center rounded-xl bg-primary px-6 py-3 text-center text-[15.5px] font-bold text-white transition-colors hover:bg-primary-light whitespace-nowrap";
+    "fresno-calc-cta inline-flex min-h-[48px] w-full sm:w-auto sm:min-w-[216px] items-center justify-center rounded-[6px] bg-primary px-6 py-3 text-center text-[15.5px] font-bold text-white transition-colors hover:bg-primary-light whitespace-nowrap";
 
   return (
     <div
       data-testid="fresno-instant-calculator"
-      className="fresno-starter-card w-full rounded-2xl border border-line-strong bg-white p-4 text-ink shadow-[0_16px_38px_-24px_rgb(15_28_46/18%)] sm:p-5"
+      className="fresno-starter-card w-full rounded-[8px] border border-line-strong border-t-[3px] border-t-primary bg-white p-4 text-ink sm:p-5"
     >
-      {/* 1. Service Type Segmented Picker */}
+      {/* 1. Grounded Service Type Segmented Bar */}
       <div
         role="group"
         aria-label="Cleaning service type"
-        className="grid grid-cols-3 gap-1 rounded-xl bg-surface p-1"
+        className="grid grid-cols-3 gap-0.5 rounded-[6px] border border-line-strong bg-cream-2 p-[3px]"
       >
         {SERVICE_TABS.map((tab) => {
           const selected = service === tab.key;
@@ -223,10 +223,10 @@ export default function FresnoInstantPriceCalculator({
                 recordInteraction(tab.key);
                 setService(tab.key);
               }}
-              className={`flex min-h-[42px] cursor-pointer items-center justify-center rounded-lg px-2 py-1.5 text-center text-[13.5px] transition-colors sm:text-sm ${
+              className={`flex min-h-[40px] cursor-pointer items-center justify-center rounded-[4px] px-2 py-1.5 text-center text-[13.5px] transition-colors sm:text-sm ${
                 selected
                   ? "bg-primary font-bold text-white"
-                  : "bg-transparent font-semibold text-ink hover:bg-white/80"
+                  : "bg-transparent font-semibold text-ink hover:bg-white"
               }`}
             >
               {tab.label}
@@ -301,12 +301,12 @@ export default function FresnoInstantPriceCalculator({
         </div>
       </div>
 
-      {/* 3. Subtle Single-Line Cadence Chips (Standard only) */}
+      {/* 3. Grounded Rectangular Visit-Frequency Bar (Zero pill shapes) */}
       {service === "STANDARD" ? (
         <div
           role="group"
           aria-label="Visit frequency"
-          className="mt-2.5 flex items-center gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-3 sm:flex-wrap sm:overflow-visible"
+          className="mt-3 grid grid-cols-2 gap-1 rounded-[6px] border border-line bg-cream-2 p-[3px] sm:grid-cols-4"
         >
           {STANDARD_FREQUENCIES.map((opt) => {
             const selected = frequency === opt.key;
@@ -319,10 +319,10 @@ export default function FresnoInstantPriceCalculator({
                   recordInteraction();
                   setFrequency(opt.key);
                 }}
-                className={`inline-flex min-h-[32px] shrink-0 cursor-pointer items-center gap-1 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold whitespace-nowrap transition-colors sm:min-h-[34px] sm:px-3 sm:text-xs ${
+                className={`inline-flex min-h-[34px] cursor-pointer items-center justify-center gap-1 rounded-[4px] px-2 py-1 text-xs font-semibold whitespace-nowrap transition-colors ${
                   selected
-                    ? "border-primary bg-selected text-primary"
-                    : "border-line bg-cream-2 text-ink-soft hover:border-primary/50 hover:bg-white"
+                    ? "bg-white font-bold text-primary shadow-[0_1px_2px_rgb(15_28_46/8%)] ring-1 ring-primary/25"
+                    : "text-ink-soft hover:bg-white/70 hover:text-ink"
                 }`}
               >
                 <span>{opt.label}</span>
@@ -335,7 +335,7 @@ export default function FresnoInstantPriceCalculator({
         </div>
       ) : null}
 
-      {/* 4. Clean Estimate + Wizard Handoff Action Bar (No receipt clutter, zero hours) */}
+      {/* 4. Clean Estimate + Wizard Handoff Action Bar */}
       <div
         aria-live="polite"
         data-testid="fresno-calculator-price"
@@ -348,7 +348,7 @@ export default function FresnoInstantPriceCalculator({
               Custom walkthrough or photo quote
             </p>
           ) : (
-            <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
               <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-[34px]">
                 ${activeDollars}
               </span>
@@ -356,8 +356,8 @@ export default function FresnoInstantPriceCalculator({
                 {service === "STANDARD" && frequency !== "ONE_TIME" ? "/ visit" : "flat rate"}
               </span>
               {standardSavings > 0 ? (
-                <span className="rounded-full border border-[#bfe0ce] bg-[#eaf5ef] px-2 py-0.5 text-[11.5px] font-bold text-[#16613e] tabular-nums">
-                  Save ${standardSavings}
+                <span className="text-xs font-bold text-[#16613e] tabular-nums">
+                  Save ${standardSavings}/visit
                 </span>
               ) : null}
             </div>
@@ -397,7 +397,7 @@ export default function FresnoInstantPriceCalculator({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-mute">
-        <span>Customize add-ons &amp; pick your open date in the next step · Nothing charged today.</span>
+        <span>Customize add-ons &amp; pick your open date next · Nothing charged today.</span>
         <a
           href={pathname === "/" ? "#quote" : fallbackQuoteHref}
           className="font-semibold text-primary underline underline-offset-4 hover:text-primary-light"

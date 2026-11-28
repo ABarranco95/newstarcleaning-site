@@ -263,9 +263,9 @@ export default function OurWorkPage() {
           <GoogleRating />
         </div>
         <nav className="work-category-nav" aria-label="Gallery sections">
-          <a href="#before-after">Interactive Slider (6 Pairs)</a>
-          <a href="#photo-gallery">Room Gallery (14 Photos)</a>
-          <a href="#work-reviews">Customer Feedback</a>
+          <a href="#before-after">Interactive comparison ↓</a>
+          <a href="#photo-gallery">Finished rooms (14) ↓</a>
+          <a href="#work-reviews">Customer reviews ↓</a>
         </nav>
       </SiteHero>
 
@@ -275,7 +275,6 @@ export default function OurWorkPage() {
         <div className="home-wrap">
           <div className="ns-section-head">
             <div>
-              <p className="ns-kicker">Customer Feedback</p>
               <h2 id="work-reviews-title" className="ns-h2">
                 What customers say on Google.
               </h2>
@@ -289,7 +288,6 @@ export default function OurWorkPage() {
       <section className="home-wrap work-closing-wrap">
         <div className="work-closing-card">
           <div className="work-closing-copy">
-            <p className="work-ba-kicker">Clear Scope &amp; Pricing</p>
             <h2>Have a spot like this at home?</h2>
             <p>
               Tell New Star Cleaning which rooms or buildup areas need attention. We confirm what

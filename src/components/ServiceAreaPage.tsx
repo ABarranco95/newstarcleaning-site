@@ -104,7 +104,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
 
       <section className="ns-section" aria-labelledby="area-nearby-title"><div className="ns-section-head"><h2 id="area-nearby-title" className="ns-h2">Nearby service areas</h2></div><div className="site-links">{area.nearbyAreas.map((nearby) => <Link key={nearby} href={`/cleaning-services-${serviceAreaSlug(nearby)}`} className="home-text-link">House cleaning in {nearby}</Link>)}</div></section>
 
-      <section className="site-muted"><div className="site-section site-split"><div className="site-copy"><p className="ns-kicker">Questions</p><h2>Questions about cleaning in {area.name}.</h2></div><div><FaqList faqs={areaFaqs} /><LocalNotes title={`More about cleaning in ${area.name}.`} notes={[
+      <section className="site-muted"><div className="site-section site-split"><div className="site-copy"><h2>Questions about cleaning in {area.name}.</h2></div><div><FaqList faqs={areaFaqs} /><LocalNotes title={`More about cleaning in ${area.name}.`} notes={[
         { summary: `How we price a ${area.name} home`, children: <p>{area.localContent}</p> },
         { summary: `${area.name} neighborhoods`, children: <><p>{area.neighborhoods.join(", ")}</p>{area.neighborhoodNotes ? <dl>{area.neighborhoodNotes.map((note) => <div key={note.title}><dt>{note.title}</dt><dd>{note.body}</dd></div>)}</dl> : null}<p>If your exact area is not shown, send the address and we will confirm coverage before quoting.</p></> },
         ...(area.serviceDetails?.standard ? [{ id: "standard-cleaning", summary: `Regular cleaning in ${area.name}`, children: <p>{area.serviceDetails.standard}</p> }] : []),
@@ -116,7 +116,7 @@ export default function ServiceAreaPage({ area }: { area: ServiceArea }) {
       ]} /></div></div></section>
 
       <section><div className="site-section site-quote-layout">
-        <div className="site-copy"><p className="ns-kicker">Your price</p><h2>{`See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p>{area.slug !== "north-fresno" && <p className="site-note">{area.bookingNote}</p>}<p className="site-note"><MarketCallOrText prefix="Or " location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
+        <div className="site-copy"><h2>{`See your ${area.name} price.`}</h2><p className="site-intro">Put in your ZIP and the price shows here. Send it to yourself and we&apos;ll confirm the exact number and the days we have open. If the house needs more than a standard visit, we&apos;ll say so up front.</p>{area.slug !== "north-fresno" && <p className="site-note">{area.bookingNote}</p>}<p className="site-note"><MarketCallOrText prefix="Or " location="area_quote" />. Mon–Fri 8–6, Sat 8–5.</p></div>
         <QuickQuoteForm title={`Get your ${area.name} price`} subtitle="Start with the cleaning you need." source={`organic_${area.slug}_service_area`} defaultCity={area.name} landingCity={area.name} directBookingUrl={directBookingUrl} compact />
       </div></section>
 
