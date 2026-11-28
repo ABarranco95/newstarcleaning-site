@@ -76,26 +76,28 @@ const { default: GoogleRating } = load("src/components/GoogleRating.tsx", {
 });
 assert.equal(business.googleMapsUrl, "https://www.google.com/maps?cid=13545152036473270457", "rating is backed by the current review-carrying profile");
 assert.equal(googleRating.reviewCount, 34, "canonical verified Google review count is recorded in googleRating.ts");
-// Angel's 2026-11-27 owner update: graphic Google 5-star PNG badge + Hundreds of happy homeowners + Insured seals (no public review-count text).
+// Angel's 2026-11-27 owner update: single unified horizontal trust banner + sleek Google 5-star lockup (no multi-box badges, no public review-count text).
 for (const badgeFile of [
   "google-5-star-badge.png",
   "google-5-star-badge-dark.png",
-  "hundreds-happy-homeowners.png",
-  "hundreds-happy-homeowners-dark.png",
-  "insured-local-guarantee.png",
-  "insured-local-guarantee-dark.png",
+  "trust-banner.png",
+  "trust-banner-dark.png",
+  "trust-banner-mobile.png",
+  "trust-banner-mobile-dark.png",
 ]) {
   const fullBadgePath = path.join("public", "trust", badgeFile);
-  assert(existsSync(fullBadgePath), `missing trust badge PNG: ${fullBadgePath}`);
+  assert(existsSync(fullBadgePath), `missing trust banner PNG: ${fullBadgePath}`);
   const badgeMeta = await sharp(fullBadgePath).metadata();
   assert.equal(badgeMeta.format, "png", `${badgeFile}: valid PNG format`);
-  assert(badgeMeta.width >= 600 && badgeMeta.height >= 200, `${badgeFile}: high-DPI dimensions (${badgeMeta.width}x${badgeMeta.height})`);
+  assert(badgeMeta.width >= 900 && badgeMeta.height >= 180, `${badgeFile}: high-DPI dimensions (${badgeMeta.width}x${badgeMeta.height})`);
   assert(!badgeMeta.exif && !badgeMeta.xmp && !badgeMeta.iptc, `${badgeFile}: metadata-clean`);
 }
-for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { rated: true }, { rated: true, onDark: true }]) {
+for (const props of [{}, { onDark: true }, { prominent: true }, { onDark: true, prominent: true }, { rated: true }, { rated: true, onDark: true }, { srOnly: true }]) {
   const html = renderToStaticMarkup(createElement(GoogleRating, props));
   assertReviewPresentation(html, "GoogleRating");
-  assert(html.includes(props.onDark ? "/trust/google-5-star-badge-dark.png" : "/trust/google-5-star-badge.png"), "GoogleRating renders graphic 5-star badge PNG");
+  if (!props.srOnly) {
+    assert(html.includes(props.onDark ? "/trust/google-5-star-badge-dark.png" : "/trust/google-5-star-badge.png"), "GoogleRating renders graphic 5-star lockup PNG");
+  }
   const visible = html.replace(/<[^>]*>/g, "");
   assert(visible.includes(`Rated ${googleRating.score} out of ${googleRating.scale} on Google`), "shared proof renders the verified Google score from its single source");
   assert(!visible.includes(homesServedLine), "rating placements do not imply unverified job-history slogans");
@@ -110,13 +112,14 @@ const { default: ProofRow } = load("src/components/ProofRow.tsx", { "@/component
 for (const tone of ["dark", "light"]) {
   const html = renderToStaticMarkup(createElement(ProofRow, { tone }));
   assertReviewPresentation(html, `${tone} hero proof`);
-  assert(html.includes("hundreds-happy-homeowners") && html.includes("insured-local-guarantee"), `${tone} hero proof renders graphic homeowner and insurance seals`);
+  assert(html.includes("trust-banner") && html.includes("trust-banner-mobile"), `${tone} hero proof renders the single unified responsive trust banner`);
+  assert.equal((html.match(/<img\b/g) || []).length, 1, `${tone} hero proof uses a single unified banner img, not multiple boxed badges`);
   const visible = html.replace(/<[^>]*>/g, "");
   assert(
     visible.includes(`Rated ${googleRating.score} out of ${googleRating.scale} on Google`) &&
       visible.includes("Hundreds of happy homeowners") &&
       /insured/i.test(visible),
-    "hero proof leads with the verified Google rating badge, Hundreds of happy homeowners seal, and insurance proof",
+    "hero proof leads with the verified Google rating, Hundreds of happy homeowners, and insurance proof",
   );
   assert(!/Central Valley|local homes/i.test(visible), "hero proof makes no regional job-history claim");
 }

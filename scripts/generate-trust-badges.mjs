@@ -1,157 +1,157 @@
-import { mkdirSync } from "node:fs";
+import { mkdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 
 const OUT_DIR = path.resolve("public/trust");
 mkdirSync(OUT_DIR, { recursive: true });
 
-function starPolygon(cx, cy, outerR, innerR) {
-  const pts = [];
-  for (let i = 0; i < 10; i++) {
-    const r = i % 2 === 0 ? outerR : innerR;
-    const angle = -Math.PI / 2 + (i * Math.PI) / 5;
-    pts.push(`${(cx + r * Math.cos(angle)).toFixed(2)},${(cy + r * Math.sin(angle)).toFixed(2)}`);
-  }
-  return pts.join(" ");
+// Clean up deprecated separate-box PNGs so public/trust stays spotless
+for (const old of [
+  "hundreds-happy-homeowners.png",
+  "hundreds-happy-homeowners-dark.png",
+  "insured-local-guarantee.png",
+  "insured-local-guarantee-dark.png",
+]) {
+  rmSync(path.join(OUT_DIR, old), { force: true });
 }
 
-function fiveStarsSvg(startX, cy, outerR = 12.6, gap = 27.5) {
+// Official sharp 5-point Google Material star path (24x24 viewBox centered at 12,12)
+function googleStarsGroup(startX, centerY, size = 19, gap = 21.5) {
+  const scale = (size / 20).toFixed(4);
   let out = "";
   for (let i = 0; i < 5; i++) {
-    const cx = startX + i * gap;
-    out += `<polygon points="${starPolygon(cx, cy + 0.8, outerR, outerR * 0.44)}" fill="#D98A00" opacity="0.32"/>`;
-    out += `<polygon points="${starPolygon(cx, cy, outerR, outerR * 0.44)}" fill="url(#goldStarGrad)" stroke="#D48806" stroke-width="0.7" stroke-linejoin="round"/>`;
+    const tx = (startX + i * gap).toFixed(2);
+    const ty = (centerY - size / 2).toFixed(2);
+    out += `<g transform="translate(${tx}, ${ty}) scale(${scale})"><path fill="#FBBC04" d="M10 1.3l2.62 5.31 5.86.85-4.24 4.13 1 5.84L10 14.67l-5.24 2.76 1-5.84L1.52 7.46l5.86-.85L10 1.3z"/></g>`;
   }
   return out;
 }
 
-function buildGoogleBadgeSvg({ dark = false } = {}) {
-  const bg = dark ? "#102849" : "#FFFFFF";
-  const outerStroke = dark ? "#355582" : "#C5D1E0";
-  const innerStroke = dark ? "#1D3C69" : "#EDF2F8";
-  const labelColor = dark ? "#DCE7F5" : "#334155";
-  const scoreColor = dark ? "#FFFFFF" : "#0F1C2E";
-  const subColor = dark ? "#B8CBE4" : "#526075";
-  const medallionBg = dark ? "#FFFFFF" : "#F8FAFC";
-  const medallionStroke = dark ? "#FFFFFF" : "#E2E8F0";
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="388" height="156" viewBox="0 0 388 156">
-  <defs>
-    <linearGradient id="goldStarGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFD043"/>
-      <stop offset="55%" stop-color="#FBBC04"/>
-      <stop offset="100%" stop-color="#E59400"/>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="384" height="152" rx="8" fill="${bg}" stroke="${outerStroke}" stroke-width="2.5"/>
-  <rect x="7" y="7" width="374" height="142" rx="5" fill="none" stroke="${innerStroke}" stroke-width="1.5"/>
-  <path d="M10 3.25 H103 V7.25 H10 Z" fill="#4285F4"/>
-  <path d="M103 3.25 H196 V7.25 H103 Z" fill="#EA4335"/>
-  <path d="M196 3.25 H289 V7.25 H196 Z" fill="#FBBC05"/>
-  <path d="M289 3.25 H378 V7.25 H289 Z" fill="#34A853"/>
-
-  <rect x="20" y="28" width="100" height="100" rx="10" fill="${medallionBg}" stroke="${medallionStroke}" stroke-width="2"/>
-  <g transform="translate(38, 46) scale(1.3333)">
+function googleG(cx, cy, size = 28) {
+  const scale = (size / 48).toFixed(4);
+  const tx = (cx - size / 2).toFixed(2);
+  const ty = (cy - size / 2).toFixed(2);
+  return `<g transform="translate(${tx}, ${ty}) scale(${scale})">
     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-  </g>
+  </g>`;
+}
 
-  <text x="136" y="54" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="25" font-weight="700" letter-spacing="-0.2" fill="${labelColor}">Google Rating</text>
-  <text x="136" y="102" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="39" font-weight="800" letter-spacing="-0.8" fill="${scoreColor}">5.0</text>
-  ${fiveStarsSvg(216, 88, 12.6, 27.5)}
-  <text x="137" y="131" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="1.4" fill="${subColor}">5-STAR RATED</text>
+function homeSealIcon(cx, cy, dark = false) {
+  const navy = dark ? "#2B5B9E" : "#12325B";
+  return `<g transform="translate(${cx}, ${cy})">
+    <circle cx="0" cy="0" r="13.5" fill="${navy}"/>
+    <path d="M-7.5 1.5 L0 -5.2 L7.5 1.5" fill="none" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-5 0.8 V6.8 H5 V0.8" fill="none" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="0" cy="-8.2" r="1.6" fill="#FBBC04"/>
+  </g>`;
+}
+
+function shieldCheckIcon(cx, cy, dark = false) {
+  const fill = dark ? "#1E7A4E" : "#16613E";
+  return `<g transform="translate(${cx}, ${cy})">
+    <path d="M0 -13.5 L11.5 -9.2 V-0.5 C11.5 6.8, 6.2 11.5, 0 14 C-6.2 11.5, -11.5 6.8, -11.5 -0.5 V-9.2 Z" fill="${fill}"/>
+    <path d="M-4.6 0.4 L-1.4 3.6 L5.2 -3.4" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>`;
+}
+
+// 1. Standalone Sleek Single-Line Google Rating Lockup (for section headers & /our-work)
+function buildGoogleLockupSvg({ dark = false } = {}) {
+  const bg = dark ? "#102746" : "#F8FAFC";
+  const border = dark ? "#2D4B73" : "#D6E0EC";
+  const scoreColor = dark ? "#FFFFFF" : "#0F1C2E";
+  const wordColor = dark ? "#CBD9EC" : "#475569";
+  const dotColor = dark ? "#6884AA" : "#94A3B8";
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="256" height="48" viewBox="0 0 256 48">
+  <rect x="0.75" y="0.75" width="254.5" height="46.5" rx="6" fill="${bg}" stroke="${border}" stroke-width="1.5"/>
+  ${googleG(26, 24, 24)}
+  ${googleStarsGroup(47, 24, 17.5, 19.5)}
+  <text x="150" y="29.5" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="800" fill="${scoreColor}">5.0</text>
+  <circle cx="180" cy="24.5" r="1.7" fill="${dotColor}"/>
+  <text x="188" y="29.5" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="${wordColor}">Google</text>
 </svg>`;
 }
 
-function buildHomeownersSealSvg({ dark = false } = {}) {
-  const bg = dark ? "#102849" : "#FFFFFF";
-  const outerStroke = dark ? "#355582" : "#C5D1E0";
-  const innerStroke = dark ? "#1D3C69" : "#EDF2F8";
-  const primaryText = dark ? "#FFFFFF" : "#12325B";
-  const secondaryText = dark ? "#DCE7F5" : "#0F1C2E";
-  const goldText = dark ? "#F5C259" : "#9E6908";
-  const emblemNavy = dark ? "#1A3B68" : "#12325B";
-  const emblemStroke = dark ? "#F5C259" : "#C98C1D";
+// 2. Single Unified Horizontal Trust Banner (Desktop & Tablet >= 640px)
+function buildUnifiedBannerDesktopSvg({ dark = false } = {}) {
+  const bg = dark ? "#102746" : "#F8FAFC";
+  const border = dark ? "#2D4B73" : "#D6E0EC";
+  const divider = dark ? "#2A476E" : "#CBD5E1";
+  const ink = dark ? "#FFFFFF" : "#0F1C2E";
+  const sub = dark ? "#CBD9EC" : "#334155";
+  const dot = dark ? "#6884AA" : "#94A3B8";
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="406" height="156" viewBox="0 0 406 156">
-  <defs>
-    <linearGradient id="laurelGold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#E5AD3B"/>
-      <stop offset="50%" stop-color="#C98C1D"/>
-      <stop offset="100%" stop-color="#9E6908"/>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="402" height="152" rx="8" fill="${bg}" stroke="${outerStroke}" stroke-width="2.5"/>
-  <rect x="7" y="7" width="392" height="142" rx="5" fill="none" stroke="${innerStroke}" stroke-width="1.5"/>
-  <path d="M10 3.25 H396 V7.25 H10 Z" fill="url(#laurelGold)"/>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="724" height="50" viewBox="0 0 724 50">
+  <rect x="0.75" y="0.75" width="722.5" height="48.5" rx="6" fill="${bg}" stroke="${border}" stroke-width="1.5"/>
 
-  <g transform="translate(70, 79)">
-    <circle cx="0" cy="0" r="48" fill="${emblemNavy}" stroke="url(#laurelGold)" stroke-width="3.2"/>
-    <circle cx="0" cy="0" r="40" fill="none" stroke="${emblemStroke}" stroke-width="1.3" opacity="0.8"/>
-    <polygon points="${starPolygon(-14, -24, 4.8, 2.1)}" fill="#FFD043"/>
-    <polygon points="${starPolygon(0, -28, 6.2, 2.7)}" fill="#FFD043"/>
-    <polygon points="${starPolygon(14, -24, 4.8, 2.1)}" fill="#FFD043"/>
-    <path d="M-21 4 L0 -14 L21 4" fill="none" stroke="#FFFFFF" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M-14 2 V20 H14 V2" fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="-4.5" y="6.5" width="9" height="9" rx="1.5" fill="#FFD043"/>
-  </g>
+  <!-- Segment 1: Unboxed Google 'G' + 5 Flat Gold Stars + 5.0 · Google -->
+  ${googleG(25, 25, 23)}
+  ${googleStarsGroup(44, 25, 16.5, 18.2)}
+  <text x="140" y="30.5" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="15.5" font-weight="800" fill="${ink}">5.0</text>
+  <circle cx="168.5" cy="25.5" r="1.6" fill="${dot}"/>
+  <text x="176" y="30.5" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14.5" font-weight="700" fill="${sub}">Google</text>
 
-  <text x="136" y="45" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="15.5" font-weight="800" letter-spacing="1.4" fill="${goldText}">SERVING SINCE 2020</text>
-  <text x="136" y="84" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="33" font-weight="800" letter-spacing="-0.6" fill="${primaryText}">100s of Happy</text>
-  <text x="136" y="122" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="33" font-weight="800" letter-spacing="-0.6" fill="${secondaryText}">Homeowners</text>
+  <line x1="242" y1="12" x2="242" y2="38" stroke="${divider}" stroke-width="1.25"/>
+
+  <!-- Segment 2: 100s of Happy Homeowners -->
+  ${homeSealIcon(266, 25, dark)}
+  <text x="286" y="30.5" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14.5" font-weight="700" letter-spacing="-0.15" fill="${ink}">100s of Happy Homeowners</text>
+
+  <line x1="494" y1="12" x2="494" y2="38" stroke="${divider}" stroke-width="1.25"/>
+
+  <!-- Segment 3: Insured · 24-Hr Guarantee -->
+  ${shieldCheckIcon(516, 25, dark)}
+  <text x="535" y="30.5" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14.5" font-weight="700" letter-spacing="-0.15" fill="${ink}">Insured · 24-Hr Guarantee</text>
 </svg>`;
 }
 
-function buildInsuredShieldSvg({ dark = false } = {}) {
-  const bg = dark ? "#102849" : "#FFFFFF";
-  const outerStroke = dark ? "#355582" : "#C5D1E0";
-  const innerStroke = dark ? "#1D3C69" : "#EDF2F8";
-  const primaryText = dark ? "#FFFFFF" : "#0F1C2E";
-  const subText = dark ? "#8CE0B5" : "#16613E";
-  const overlineText = dark ? "#B8CBE4" : "#12325B";
+// 3. Single Unified Mobile Trust Banner (< 640px — ONE single banner, never multiple boxes)
+function buildUnifiedBannerMobileSvg({ dark = false } = {}) {
+  const bg = dark ? "#102746" : "#F8FAFC";
+  const border = dark ? "#2D4B73" : "#D6E0EC";
+  const divider = dark ? "#254063" : "#E2E8F0";
+  const ink = dark ? "#FFFFFF" : "#0F1C2E";
+  const sub = dark ? "#CBD9EC" : "#334155";
+  const dot = dark ? "#6884AA" : "#94A3B8";
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="388" height="156" viewBox="0 0 388 156">
-  <defs>
-    <linearGradient id="shieldNavy" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1A4378"/>
-      <stop offset="100%" stop-color="#0E2749"/>
-    </linearGradient>
-    <linearGradient id="shieldGold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#F0B946"/>
-      <stop offset="100%" stop-color="#B97B10"/>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="384" height="152" rx="8" fill="${bg}" stroke="${outerStroke}" stroke-width="2.5"/>
-  <rect x="7" y="7" width="374" height="142" rx="5" fill="none" stroke="${innerStroke}" stroke-width="1.5"/>
-  <path d="M10 3.25 H378 V7.25 H10 Z" fill="#12325B"/>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="358" height="78" viewBox="0 0 358 78">
+  <rect x="0.75" y="0.75" width="356.5" height="76.5" rx="6" fill="${bg}" stroke="${border}" stroke-width="1.5"/>
 
-  <g transform="translate(68, 79)">
-    <path d="M0 -48 L40 -33 V-2 C40 24, 21 41, 0 50 C-21 41, -40 24, -40 -2 V-33 Z" fill="url(#shieldNavy)" stroke="url(#shieldGold)" stroke-width="3.2" stroke-linejoin="round"/>
-    <path d="M0 -40 L32 -28 V-2 C32 19, 17 34, 0 42 C-17 34, -32 19, -32 -2 V-28 Z" fill="none" stroke="#EAB543" stroke-width="1.2" opacity="0.75"/>
-    <path d="M-15 2 L-4 13 L18 -11" fill="none" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <polygon points="${starPolygon(0, -24, 5.8, 2.6)}" fill="#FFD043"/>
-  </g>
+  <!-- Top Row: Google 5.0 5-Star Lockup -->
+  ${googleG(22, 21, 20)}
+  ${googleStarsGroup(39, 21, 15.5, 17)}
+  <text x="129" y="26" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14.5" font-weight="800" fill="${ink}">5.0</text>
+  <circle cx="155" cy="21.5" r="1.5" fill="${dot}"/>
+  <text x="162" y="26" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="13.5" font-weight="700" fill="${sub}">Google Rating</text>
 
-  <text x="128" y="45" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="15.5" font-weight="800" letter-spacing="1.4" fill="${overlineText}">LOCAL PROTECTION</text>
-  <text x="128" y="85" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="34" font-weight="800" letter-spacing="-0.6" fill="${primaryText}">Fully Insured</text>
-  <text x="128" y="122" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="23" font-weight="700" letter-spacing="-0.2" fill="${subText}">24-Hr Guarantee</text>
+  <line x1="12" y1="39.5" x2="346" y2="39.5" stroke="${divider}" stroke-width="1"/>
+
+  <!-- Bottom Row: 100s of Happy Homeowners | Insured · 24-Hr -->
+  ${homeSealIcon(21, 58.5, dark)}
+  <text x="39" y="63" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="12.5" font-weight="700" letter-spacing="-0.15" fill="${ink}">100s of Happy Homeowners</text>
+
+  <line x1="210" y1="47" x2="210" y2="70" stroke="${divider}" stroke-width="1.1"/>
+
+  ${shieldCheckIcon(226, 58.5, dark)}
+  <text x="242" y="63" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="12.5" font-weight="700" letter-spacing="-0.15" fill="${ink}">Insured · 24-Hr</text>
 </svg>`;
 }
 
 const assets = [
-  { name: "google-5-star-badge.png", svg: buildGoogleBadgeSvg({ dark: false }) },
-  { name: "google-5-star-badge-dark.png", svg: buildGoogleBadgeSvg({ dark: true }) },
-  { name: "hundreds-happy-homeowners.png", svg: buildHomeownersSealSvg({ dark: false }) },
-  { name: "hundreds-happy-homeowners-dark.png", svg: buildHomeownersSealSvg({ dark: true }) },
-  { name: "insured-local-guarantee.png", svg: buildInsuredShieldSvg({ dark: false }) },
-  { name: "insured-local-guarantee-dark.png", svg: buildInsuredShieldSvg({ dark: true }) },
+  { name: "google-5-star-badge.png", svg: buildGoogleLockupSvg({ dark: false }) },
+  { name: "google-5-star-badge-dark.png", svg: buildGoogleLockupSvg({ dark: true }) },
+  { name: "trust-banner.png", svg: buildUnifiedBannerDesktopSvg({ dark: false }) },
+  { name: "trust-banner-dark.png", svg: buildUnifiedBannerDesktopSvg({ dark: true }) },
+  { name: "trust-banner-mobile.png", svg: buildUnifiedBannerMobileSvg({ dark: false }) },
+  { name: "trust-banner-mobile-dark.png", svg: buildUnifiedBannerMobileSvg({ dark: true }) },
 ];
 
 for (const asset of assets) {
   const target = path.join(OUT_DIR, asset.name);
-  await sharp(Buffer.from(asset.svg), { density: 216 })
+  await sharp(Buffer.from(asset.svg), { density: 288 })
     .png({ compressionLevel: 9, adaptiveFiltering: true })
     .toFile(target);
   const meta = await sharp(target).metadata();

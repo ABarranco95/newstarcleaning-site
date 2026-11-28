@@ -125,6 +125,20 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="reviews" className="fresno-band-soft" aria-labelledby="home-reviews-title">
+        <div className="ns-section">
+          <div className="ns-section-head">
+            <div>
+              <h2 id="home-reviews-title" className="ns-h2">
+                What Fresno &amp; Clovis homeowners say.
+              </h2>
+            </div>
+            <GoogleRating prominent />
+          </div>
+          <ReviewCards reviews={reviews} lead />
+        </div>
+      </section>
+
       <section id="results" className="fresno-band" aria-labelledby="home-results-title">
         <div className="fresno-container">
           <div className="fresno-section-head">
@@ -211,16 +225,6 @@ export default function Home() {
       </section>
 
       <TrustStrip />
-
-      <section id="reviews" className="ns-section" aria-labelledby="home-reviews-title">
-        <div className="ns-section-head">
-          <h2 id="home-reviews-title" className="ns-h2">
-            What customers say.
-          </h2>
-          <GoogleRating prominent />
-        </div>
-        <ReviewCards reviews={reviews} lead />
-      </section>
 
       <HowItWorks />
 

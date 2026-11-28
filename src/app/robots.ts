@@ -8,6 +8,18 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/api/"],
       },
+      {
+        userAgent: [
+          "OAI-SearchBot",
+          "ChatGPT-User",
+          "Claude-SearchBot",
+          "PerplexityBot",
+          "Google-Extended",
+          "Bingbot",
+        ],
+        allow: "/",
+        disallow: ["/api/"],
+      },
     ],
     sitemap: "https://newstarcleaning.com/sitemap.xml",
   };
