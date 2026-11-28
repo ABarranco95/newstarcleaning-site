@@ -63,14 +63,13 @@ export default function Home() {
             <ProofRow tone="light" />
 
             <p className="fresno-hero-lead">
-              New Star Cleaning handles recurring upkeep, deep cleans, and empty-home move-outs
-              across Fresno, Clovis, and Madera. Supplies, equipment, and liability insurance are
-              included on every visit.
+              Recurring upkeep, deep cleans, and empty-home move-outs across Fresno, Clovis, and
+              Madera with supplies and liability insurance included.
             </p>
           </div>
 
           <div className="fresno-hero-calc min-w-0">
-            <Suspense fallback={<div className="fresno-calc-skeleton">Loading instant price calculator...</div>}>
+            <Suspense fallback={<div className="fresno-calc-skeleton">Loading instant estimate...</div>}>
               <FresnoInstantPriceCalculator
                 directBookingUrl={directBookingUrl}
                 source="home_hero_calc"
@@ -98,7 +97,7 @@ export default function Home() {
                     src={heroKitchen.src}
                     alt={heroKitchen.alt}
                     fill
-                    sizes="(min-width: 1024px) 320px, 50vw"
+                    sizes="(min-width: 1024px) 560px, 50vw"
                   />
                 </div>
                 <figcaption>{heroKitchen.caption} · New Star work</figcaption>
@@ -118,9 +117,9 @@ export default function Home() {
                 <span className="fresno-hero-hours">Mon-Fri 8-6 · Sat 8-5</span>
               </div>
 
-              <a href="#quote" className="home-text-link">
-                Prefer a quote by text? <span aria-hidden="true">↓</span>
-              </a>
+              <Link href="/checklist" className="home-text-link">
+                45-point checklist <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </div>
         </div>

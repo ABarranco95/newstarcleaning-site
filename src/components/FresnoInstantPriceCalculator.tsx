@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import BookingPortalLink from "@/components/BookingPortalLink";
 import { resolveDirectBookingUrl } from "@/lib/bookingPortal";
@@ -27,28 +27,24 @@ const configuredDirectBookingUrl = resolveDirectBookingUrl();
 const SERVICE_TABS: ReadonlyArray<{
   key: FresnoResidentialService;
   label: string;
-  floorText: string;
   slug: string;
   portalName: string;
 }> = [
   {
     key: "STANDARD",
     label: "Standard",
-    floorText: "$165+",
     slug: "standard-cleaning",
     portalName: "Standard recurring cleaning",
   },
   {
     key: "DEEP",
     label: "Deep Clean",
-    floorText: "$235+",
     slug: "deep-cleaning",
     portalName: "Deep cleaning",
   },
   {
     key: "MOVE_OUT",
-    label: "Move-In/Out",
-    floorText: "$325+",
+    label: "Move-Out",
     slug: "move-out-cleaning",
     portalName: "Move-in / move-out cleaning",
   },
@@ -60,13 +56,13 @@ const BATHROOM_OPTIONS = [1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
 const STANDARD_FREQUENCIES: ReadonlyArray<{
   key: FresnoFrequency;
   label: string;
-  badge?: string;
+  shortTag?: string;
   portalValue?: string;
 }> = [
-  { key: "BIWEEKLY", label: "Bi-Weekly", badge: "-15%", portalValue: "bi-weekly" },
-  { key: "WEEKLY", label: "Weekly", badge: "-20%", portalValue: "weekly" },
-  { key: "MONTHLY", label: "Monthly", badge: "-10%", portalValue: "monthly" },
-  { key: "ONE_TIME", label: "One-Time" },
+  { key: "BIWEEKLY", label: "Bi-weekly", shortTag: "-15%", portalValue: "bi-weekly" },
+  { key: "WEEKLY", label: "Weekly", shortTag: "-20%", portalValue: "weekly" },
+  { key: "MONTHLY", label: "Monthly", shortTag: "-10%", portalValue: "monthly" },
+  { key: "ONE_TIME", label: "One-time" },
 ];
 
 export default function FresnoInstantPriceCalculator({
@@ -74,9 +70,9 @@ export default function FresnoInstantPriceCalculator({
   defaultCity,
   directBookingUrl,
   source = "instant_calculator",
-  compact = false,
 }: FresnoInstantPriceCalculatorProps) {
   const pathname = usePathname();
+  const uid = useId();
   const resolvedBookingUrl =
     directBookingUrl === undefined ? configuredDirectBookingUrl : directBookingUrl;
 
@@ -187,317 +183,188 @@ export default function FresnoInstantPriceCalculator({
     });
   };
 
+  const priceCaption =
+    service === "STANDARD"
+      ? frequency === "ONE_TIME"
+        ? "One-time standard estimate"
+        : `${activeFrequencyMeta.label} recurring estimate`
+      : service === "DEEP"
+        ? "Deep cleaning estimate"
+        : "Empty-home move-out estimate";
+
   const ctaLabel = isCustomLarge
-    ? "Request 3,500+ Sq Ft Quote"
+    ? "Request Custom Quote →"
     : resolvedBookingUrl
-      ? `Book Online · $${activeDollars}${service === "STANDARD" && frequency !== "ONE_TIME" ? "/visit" : ""}`
-      : `Get Exact Quote · $${activeDollars}`;
+      ? "Continue to Booking →"
+      : "Get Exact Quote →";
 
   const ctaClassName =
-    "fresno-calc-cta flex min-h-[52px] w-full items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-center text-[15.5px] font-bold text-white transition-colors hover:bg-primary-light sm:text-base";
+    "fresno-calc-cta inline-flex min-h-[50px] w-full sm:w-auto sm:min-w-[220px] items-center justify-center rounded-xl bg-primary px-6 py-3 text-center text-[15.5px] font-bold text-white transition-colors hover:bg-primary-light whitespace-nowrap";
 
   return (
     <div
       data-testid="fresno-instant-calculator"
-      className={`fresno-calc-card w-full overflow-hidden rounded-2xl border border-line-strong bg-white text-ink shadow-[0_18px_44px_-24px_rgb(15_28_46/18%)] ${
-        compact ? "fresno-calc-compact" : ""
-      }`}
+      className="fresno-starter-card w-full rounded-2xl border border-line-strong bg-white p-4 text-ink shadow-[0_16px_38px_-24px_rgb(15_28_46/18%)] sm:p-5"
     >
-      {/* Header Bar */}
-      <div className="border-b border-line bg-cream-2 px-4 py-3.5 sm:px-5">
-        <p className="text-[15px] font-bold tracking-tight text-ink">
-          Instant Price Estimate
-        </p>
-        {!compact ? (
-          <p className="mt-0.5 text-xs leading-4 text-ink-soft">
-            Select your cleaning type, rooms, and home size to see your flat rate.
-          </p>
-        ) : null}
+      {/* 1. Service Type Segmented Picker */}
+      <div
+        role="group"
+        aria-label="Cleaning service type"
+        className="grid grid-cols-3 gap-1 rounded-xl bg-surface p-1"
+      >
+        {SERVICE_TABS.map((tab) => {
+          const selected = service === tab.key;
+          return (
+            <button
+              key={tab.key}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => {
+                recordInteraction(tab.key);
+                setService(tab.key);
+              }}
+              className={`flex min-h-[42px] cursor-pointer items-center justify-center rounded-lg px-2 py-1.5 text-center text-[13.5px] transition-colors sm:text-sm ${
+                selected
+                  ? "bg-primary font-bold text-white"
+                  : "bg-transparent font-semibold text-ink hover:bg-white/80"
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
-      <div className={compact ? "space-y-3 p-3.5 sm:p-4" : "space-y-3.5 p-4 sm:p-5"}>
-        {/* 1. Service Tabs */}
+      {/* 2. Clean 3-Dropdown Home Selectors */}
+      <div className="fresno-starter-fields mt-3.5">
+        <div>
+          <label htmlFor={`${uid}-beds`} className="fresno-starter-label">
+            Bedrooms
+          </label>
+          <select
+            id={`${uid}-beds`}
+            value={beds}
+            onChange={(e) => {
+              recordInteraction();
+              setBeds(Number(e.target.value));
+            }}
+            className="fresno-starter-select"
+          >
+            {BEDROOM_OPTIONS.map((count) => (
+              <option key={count} value={count}>
+                {count} {count === 1 ? "Bedroom" : "Bedrooms"}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor={`${uid}-baths`} className="fresno-starter-label">
+            Bathrooms
+          </label>
+          <select
+            id={`${uid}-baths`}
+            value={baths}
+            onChange={(e) => {
+              recordInteraction();
+              setBaths(Number(e.target.value));
+            }}
+            className="fresno-starter-select"
+          >
+            {BATHROOM_OPTIONS.map((count) => (
+              <option key={count} value={count}>
+                {count} {count === 1 ? "Bathroom" : "Bathrooms"}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="fresno-starter-sqft">
+          <label htmlFor={`${uid}-sqft`} className="fresno-starter-label">
+            Home size
+          </label>
+          <select
+            id={`${uid}-sqft`}
+            value={sqftId}
+            onChange={(e) => {
+              recordInteraction();
+              setSqftId(e.target.value);
+            }}
+            className="fresno-starter-select"
+          >
+            {FRESNO_SQFT_PRESETS.map((preset) => (
+              <option key={preset.id} value={preset.id}>
+                {preset.isCustom ? "3,500+ sq ft" : `${preset.label} sq ft`}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* 3. Subtle Single-Line Cadence Chips (Standard only) */}
+      {service === "STANDARD" ? (
         <div
           role="group"
-          aria-label="Cleaning service type"
-          className="grid grid-cols-3 gap-1 rounded-xl bg-surface p-1"
+          aria-label="Visit frequency"
+          className="mt-2.5 flex items-center gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-3 sm:flex-wrap sm:overflow-visible"
         >
-          {SERVICE_TABS.map((tab) => {
-            const selected = service === tab.key;
+          {STANDARD_FREQUENCIES.map((opt) => {
+            const selected = frequency === opt.key;
             return (
               <button
-                key={tab.key}
+                key={opt.key}
                 type="button"
                 aria-pressed={selected}
                 onClick={() => {
-                  recordInteraction(tab.key);
-                  setService(tab.key);
+                  recordInteraction();
+                  setFrequency(opt.key);
                 }}
-                className={`flex min-h-[46px] cursor-pointer flex-col items-center justify-center rounded-lg px-2 py-1.5 text-center transition-colors ${
+                className={`inline-flex min-h-[32px] shrink-0 cursor-pointer items-center gap-1 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold whitespace-nowrap transition-colors sm:min-h-[34px] sm:px-3 sm:text-xs ${
                   selected
-                    ? "bg-primary font-bold text-white"
-                    : "bg-transparent font-semibold text-ink hover:bg-white/80"
+                    ? "border-primary bg-selected text-primary"
+                    : "border-line bg-cream-2 text-ink-soft hover:border-primary/50 hover:bg-white"
                 }`}
               >
-                <span className="text-xs leading-tight sm:text-[13px]">{tab.label}</span>
-                <span
-                  className={`mt-0.5 text-[11px] leading-tight tabular-nums ${
-                    selected ? "text-white/80" : "text-mute"
-                  }`}
-                >
-                  {tab.floorText}
-                </span>
+                <span>{opt.label}</span>
+                {opt.shortTag ? (
+                  <span className="font-bold text-success">{opt.shortTag}</span>
+                ) : null}
               </button>
             );
           })}
         </div>
+      ) : null}
 
-        {/* Standard Frequency Toggle (Bi-Weekly savings vs One-Time) */}
-        {service === "STANDARD" ? (
-          <div>
-            <div className="mb-1 flex items-center justify-between text-xs">
-              <span className="font-semibold text-ink-soft">Visit Schedule</span>
-              <span className="font-medium text-mute">No contract · pause anytime</span>
-            </div>
-            <div
-              role="group"
-              aria-label="Recurring cleaning frequency"
-              className="grid grid-cols-4 gap-1.5"
-            >
-              {STANDARD_FREQUENCIES.map((opt) => {
-                const selected = frequency === opt.key;
-                return (
-                  <button
-                    key={opt.key}
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => {
-                      recordInteraction();
-                      setFrequency(opt.key);
-                    }}
-                    className={`flex min-h-[40px] cursor-pointer flex-col items-center justify-center rounded-lg border px-1.5 py-1 text-center transition-colors ${
-                      selected
-                        ? "border-primary bg-selected text-primary"
-                        : "border-line bg-white text-ink hover:border-primary/60"
-                    }`}
-                  >
-                    <span className="text-[11px] leading-tight font-bold sm:text-xs">
-                      {opt.label}
-                    </span>
-                    {opt.badge ? (
-                      <span className="text-[10px] font-semibold text-success">{opt.badge}</span>
-                    ) : (
-                      <span className="text-[10px] text-mute">Single</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
-
-        {/* 2. Bedrooms Pill Row (1 to 6) */}
-        <div>
-          <div className="mb-1 flex items-center justify-between text-xs">
-            <span className="font-semibold text-ink-soft">Bedrooms</span>
-            <span className="font-semibold text-ink tabular-nums">
-              {beds} {beds === 1 ? "Bedroom" : "Bedrooms"}
-            </span>
-          </div>
-          <div
-            role="group"
-            aria-label="Number of bedrooms"
-            className="grid grid-cols-6 gap-1.5"
-          >
-            {BEDROOM_OPTIONS.map((count) => {
-              const selected = beds === count;
-              return (
-                <button
-                  key={count}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => {
-                    recordInteraction();
-                    setBeds(count);
-                  }}
-                  className={`min-h-[38px] cursor-pointer rounded-lg border text-sm font-bold tabular-nums transition-colors ${
-                    selected
-                      ? "border-primary bg-primary text-white"
-                      : "border-line bg-cream-2 text-ink hover:border-primary/60 hover:bg-white"
-                  }`}
-                >
-                  {count}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 3. Bathrooms Pill Row (1 to 4 in 0.5 steps) */}
-        <div>
-          <div className="mb-1 flex items-center justify-between text-xs">
-            <span className="font-semibold text-ink-soft">Bathrooms</span>
-            <span className="font-semibold text-ink tabular-nums">
-              {baths} {baths === 1 ? "Bathroom" : "Bathrooms"}
-            </span>
-          </div>
-          <div
-            role="group"
-            aria-label="Number of bathrooms"
-            className="grid grid-cols-7 gap-1"
-          >
-            {BATHROOM_OPTIONS.map((count) => {
-              const selected = baths === count;
-              return (
-                <button
-                  key={count}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => {
-                    recordInteraction();
-                    setBaths(count);
-                  }}
-                  className={`min-h-[38px] cursor-pointer rounded-lg border px-1 text-xs font-bold tabular-nums transition-colors sm:text-[13px] ${
-                    selected
-                      ? "border-primary bg-primary text-white"
-                      : "border-line bg-cream-2 text-ink hover:border-primary/60 hover:bg-white"
-                  }`}
-                >
-                  {count}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 4. Home Size Presets */}
-        <div>
-          <div className="mb-1 flex items-center justify-between text-xs">
-            <span className="font-semibold text-ink-soft">Home Size (Sq Ft)</span>
-            <span className="text-mute tabular-nums">{activePreset.approxLabel}</span>
-          </div>
-          <div
-            role="group"
-            aria-label="Approximate square footage"
-            className="grid grid-cols-2 gap-1.5 sm:grid-cols-3"
-          >
-            {FRESNO_SQFT_PRESETS.map((preset) => {
-              const selected = preset.id === activePreset.id;
-              return (
-                <button
-                  key={preset.id}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => {
-                    recordInteraction();
-                    setSqftId(preset.id);
-                  }}
-                  className={`min-h-[38px] cursor-pointer rounded-lg border px-2 py-1 text-xs font-semibold tabular-nums transition-colors ${
-                    selected
-                      ? "border-primary bg-selected text-primary"
-                      : "border-line bg-white text-ink hover:border-primary/60"
-                  }`}
-                >
-                  {preset.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 5. Live Transparent Price Readout */}
-        <div
-          aria-live="polite"
-          data-testid="fresno-calculator-price"
-          className="rounded-xl border border-line bg-cream-2 p-3.5 sm:p-4"
-        >
-          <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2 text-xs text-mute">
-            <span className="font-semibold text-ink-soft tabular-nums">
-              {beds} bd / {baths} ba · {activePreset.approxLabel}
-            </span>
-            {!isCustomLarge ? (
-              <span className="text-[11.5px] font-medium text-mute tabular-nums">
-                Est. {estimate.estimatedHoursRange}
-              </span>
-            ) : null}
-          </div>
-
+      {/* 4. Clean Estimate + Wizard Handoff Action Bar (No receipt clutter, zero hours) */}
+      <div
+        aria-live="polite"
+        data-testid="fresno-calculator-price"
+        className="mt-4 flex flex-col gap-3.5 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div className="min-w-0">
+          <p className="text-xs font-semibold text-mute">{priceCaption}</p>
           {isCustomLarge ? (
-            <div>
-              <p className="text-lg font-bold tracking-tight text-primary sm:text-xl">
-                {service === "STANDARD"
-                  ? "Custom quote for 3,500+ sq ft"
-                  : "Photo review for 3,500+ sq ft"}
-              </p>
-              <p className="mt-1 text-xs leading-5 text-ink-soft">
-                For larger Fresno &amp; Clovis homes, we confirm room count and condition first so
-                your price and crew schedule are accurate.
-              </p>
-            </div>
-          ) : service === "STANDARD" ? (
-            <div>
-              <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-4xl">
-                  ${activeStandardPrice}
-                </span>
-                <span className="text-sm font-semibold text-ink-soft">
-                  {frequency === "ONE_TIME" ? "one-time visit" : "/ visit"}
-                </span>
-                {standardSavings > 0 ? (
-                  <span className="rounded-full border border-[#bfe0ce] bg-[#eaf5ef] px-2.5 py-0.5 text-xs font-bold text-[#16613e] tabular-nums">
-                    Save ${standardSavings}/visit
-                  </span>
-                ) : null}
-              </div>
-              <p className="mt-1 text-xs text-ink-soft tabular-nums">
-                {frequency !== "ONE_TIME" ? (
-                  <>
-                    One-time Standard: <strong>${estimate.standardOneTime}</strong> ·{" "}
-                    {activeFrequencyMeta.label} maintenance rate
-                  </>
-                ) : (
-                  <>
-                    Switch to Bi-Weekly for <strong>${estimate.standardBiweekly}/visit</strong>{" "}
-                    (15% recurring savings)
-                  </>
-                )}
-              </p>
-            </div>
-          ) : service === "DEEP" ? (
-            <div>
-              <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-4xl">
-                  ${estimate.deepClean}
-                </span>
-                <span className="text-sm font-semibold text-ink-soft">flat-rate deep clean</span>
-              </div>
-              <p className="mt-1 text-xs text-ink-soft tabular-nums">
-                Includes baseboards, trim, reachable fans, and detail scrubbing · Ongoing bi-weekly
-                after: <strong>${estimate.standardBiweekly}/visit</strong>
-              </p>
-            </div>
+            <p className="mt-0.5 text-lg font-bold tracking-tight text-primary">
+              Custom walkthrough or photo quote
+            </p>
           ) : (
-            <div>
-              <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-4xl">
-                  ${estimate.moveOut}
+            <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <span className="text-3xl font-extrabold tracking-tight text-primary tabular-nums sm:text-[34px]">
+                ${activeDollars}
+              </span>
+              <span className="text-sm font-medium text-ink-soft">
+                {service === "STANDARD" && frequency !== "ONE_TIME" ? "/ visit" : "flat rate"}
+              </span>
+              {standardSavings > 0 ? (
+                <span className="rounded-full border border-[#bfe0ce] bg-[#eaf5ef] px-2 py-0.5 text-[11.5px] font-bold text-[#16613e] tabular-nums">
+                  Save ${standardSavings}
                 </span>
-                <span className="text-sm font-semibold text-ink-soft">empty-home flat rate</span>
-              </div>
-              <p className="mt-1 text-xs text-ink-soft">
-                Empty cabinet, drawer, and closet interiors included · Oven ($45) &amp; fridge ($35)
-                optional
-              </p>
+              ) : null}
             </div>
           )}
-
-          <p className="mt-2.5 border-t border-line pt-2 text-[11.5px] font-medium leading-4 text-mute sm:text-xs">
-            Nothing charged when you book · Supplies &amp; insurance included
-          </p>
         </div>
 
-        {/* 6. Primary CTA Action */}
-        <div>
+        <div className="shrink-0">
           {resolvedBookingUrl && !isCustomLarge ? (
             <Suspense
               fallback={
@@ -511,6 +378,9 @@ export default function FresnoInstantPriceCalculator({
                 service={activeTabMeta.portalName}
                 city={effectiveCity || undefined}
                 frequency={portalFrequency}
+                bedrooms={String(beds)}
+                bathrooms={String(baths)}
+                sqft={String(activePreset.sqft)}
                 sourcePage={pathname}
                 ctaLocation="instant_calculator"
                 label={ctaLabel}
@@ -523,22 +393,17 @@ export default function FresnoInstantPriceCalculator({
               {ctaLabel}
             </Link>
           )}
-
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5 text-xs">
-            <Link
-              href="/checklist"
-              className="inline-flex min-h-[34px] items-center font-semibold text-primary underline underline-offset-4 hover:text-primary-light"
-            >
-              See 45-point checklist
-            </Link>
-            <a
-              href={pathname === "/" ? "#quote" : fallbackQuoteHref}
-              className="inline-flex min-h-[34px] items-center font-semibold text-ink-soft underline underline-offset-4 hover:text-primary"
-            >
-              Prefer a text quote?
-            </a>
-          </div>
         </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-mute">
+        <span>Customize add-ons &amp; pick your open date in the next step · Nothing charged today.</span>
+        <a
+          href={pathname === "/" ? "#quote" : fallbackQuoteHref}
+          className="font-semibold text-primary underline underline-offset-4 hover:text-primary-light"
+        >
+          Prefer a text quote?
+        </a>
       </div>
     </div>
   );

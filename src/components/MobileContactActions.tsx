@@ -15,7 +15,7 @@ export default function MobileContactActions() {
   const [quoteInView, setQuoteInView] = useState<string | null>(null);
 
   useEffect(() => {
-    const targets = document.querySelectorAll("#quote, #quote-form, main form, [data-price-picker]");
+    const targets = document.querySelectorAll("#quote, #quote-form, main form, [data-price-picker], [data-testid='fresno-instant-calculator']");
     const visible = new Set<Element>();
     const syncInitial = () => {
       const vh = window.innerHeight || 0;

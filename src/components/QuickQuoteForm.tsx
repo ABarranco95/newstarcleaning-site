@@ -55,6 +55,11 @@ export default function QuickQuoteForm({
           {title ? <h2>{title}</h2> : null}
           {subtitle ? <p>{subtitle}</p> : null}
         </div>
+      ) : !paidSearch && (title || subtitle) ? (
+        <div className="qf-head qf-head-organic">
+          {title ? <p className="qf-organic-title">{title}</p> : null}
+          {subtitle ? <p>{subtitle}</p> : null}
+        </div>
       ) : null}
       <PriceLeadForm
         placement="page"
